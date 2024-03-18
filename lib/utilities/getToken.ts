@@ -1,7 +1,7 @@
-import * as constants from "./constants";
+import * as constants from "../constants";
 import { setToken } from "./setToken";
 import { jwtDecode } from "./jwt-decode";
-import { kindeConfig } from "./config";
+import { kindeConfig } from "../config";
 import { OpenAPI } from "../api";
 import { LIB_VERSION } from "../version";
 
@@ -10,7 +10,12 @@ import { LIB_VERSION } from "../version";
  * @param token - The token to be used for requests
  */
 export const getToken = async (): Promise<string> => {
-  if (kindeConfig.token) {
+  let token: string = "";
+  if (kindeConfig.tokenStore?.getToken) {
+    token = await kindeConfig.tokenStore.getToken();
+  }
+
+  if (kindeConfig.token || token) {
     const decoded = jwtDecode(kindeConfig.token);
     if (decoded.exp && decoded.exp * 1000 > Date.now()) {
       return kindeConfig.token;

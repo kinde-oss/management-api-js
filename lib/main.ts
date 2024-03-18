@@ -5,7 +5,7 @@ export * from "./api/index";
 export * from "./utilities/index";
 
 import { OpenAPI } from "./api/index";
-import { kindeConfig } from "./utilities/config";
+import { kindeConfig } from "./config";
 import { getToken } from "./utilities/getToken";
 
 if (!process.env.KINDE_DOMAIN) {
