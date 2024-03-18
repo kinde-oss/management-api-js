@@ -3,6 +3,7 @@ import { setToken } from "./setToken";
 import { jwtDecode } from "./jwt-decode";
 import { kindeConfig } from "./config";
 import { OpenAPI } from "../api";
+import { LIB_VERSION } from "../version";
 
 /**
  * Set the token to be used for requests
@@ -29,12 +30,9 @@ export const getToken = async (): Promise<string> => {
     "Content-Type",
     "application/x-www-form-urlencoded; charset=UTF-8",
   );
-  //   headers.append(
-  //     ...getSDKHeader({
-  //       frameworkVersion: this.config.frameworkVersion,
-  //       framework: this.config.framework,
-  //     })
-  //   );
+  headers.append('frameworkVersion', LIB_VERSION);
+  headers.append('framework', 'management-api-js');
+
   const config: RequestInit = { method: "POST", headers, body };
   const response = await fetch(constants.TOKEN_ENDPOINT, config);
   const payload: {
