@@ -37,11 +37,11 @@ export const getToken = async (): Promise<string> => {
 
 async function generateM2MToken() {
   if (!kindeConfig.clientId) {
-    throw new Error("Required KINDE_CLIENT_ID is not set");
+    throw new Error("Required KINDE_MANAGEMENT_CLIENT_ID is not set");
   }
 
   if (!kindeConfig.clientSecret) {
-    throw new Error("Required KINDE_CLIENT_SECRET is not set");
+    throw new Error("Required KINDE_MANAGEMENT_CLIENT_SECRET is not set");
   }
 
   const body = new URLSearchParams({

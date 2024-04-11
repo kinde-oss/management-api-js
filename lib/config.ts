@@ -27,8 +27,8 @@ export const init = () => {
     throw new Error("KINDE_DOMAIN is not set");
   }
 
-  kindeConfig.clientId = process.env.KINDE_CLIENT_ID;
-  kindeConfig.clientSecret = process.env.KINDE_CLIENT_SECRET;
+  kindeConfig.clientId = process.env.KINDE_MANAGEMENT_CLIENT_ID;
+  kindeConfig.clientSecret = process.env.KINDE_MANAGEMENT_CLIENT_SECRET;
   kindeConfig.audience = process.env.KINDE_DOMAIN + "/api";
 
   OpenAPI.BASE = process.env.KINDE_DOMAIN;

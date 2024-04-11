@@ -1,8 +1,27 @@
 import type { ApiRequestOptions } from "./ApiRequestOptions";
-import type { TConfig, TResult } from "./types";
 
-type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 type Headers = Record<string, string>;
+type Middleware<T> = (value: T) => T | Promise<T>;
+type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
+
+export class Interceptors<T> {
+  _fns: Middleware<T>[];
+
+  constructor() {
+    this._fns = [];
+  }
+
+  eject(fn: Middleware<T>) {
+    const index = this._fns.indexOf(fn);
+    if (index !== -1) {
+      this._fns = [...this._fns.slice(0, index), ...this._fns.slice(index + 1)];
+    }
+  }
+
+  use(fn: Middleware<T>) {
+    this._fns = [...this._fns, fn];
+  }
+}
 
 export type OpenAPIConfig = {
   BASE: string;
@@ -10,11 +29,14 @@ export type OpenAPIConfig = {
   ENCODE_PATH?: ((path: string) => string) | undefined;
   HEADERS?: Headers | Resolver<Headers> | undefined;
   PASSWORD?: string | Resolver<string> | undefined;
-  RESULT?: TResult;
   TOKEN?: string | Resolver<string> | undefined;
   USERNAME?: string | Resolver<string> | undefined;
   VERSION: string;
   WITH_CREDENTIALS: boolean;
+  interceptors: {
+    request: Interceptors<RequestInit>;
+    response: Interceptors<Response>;
+  };
 };
 
 export const OpenAPI: OpenAPIConfig = {
@@ -23,26 +45,9 @@ export const OpenAPI: OpenAPIConfig = {
   ENCODE_PATH: undefined,
   HEADERS: undefined,
   PASSWORD: undefined,
-  RESULT: "body",
   TOKEN: undefined,
   USERNAME: undefined,
   VERSION: "1",
   WITH_CREDENTIALS: false,
-};
-
-export const mergeOpenApiConfig = <T extends TResult>(
-  config: OpenAPIConfig,
-  overrides: TConfig<T>,
-) => {
-  const merged = { ...config };
-  Object.entries(overrides)
-    .filter(([key]) => key.startsWith("_"))
-    .forEach(([key, value]) => {
-      const k = key.slice(1).toLocaleUpperCase() as keyof typeof merged;
-      if (merged.hasOwnProperty(k)) {
-        // @ts-ignore
-        merged[k] = value;
-      }
-    });
-  return merged;
+  interceptors: { request: new Interceptors(), response: new Interceptors() },
 };
