@@ -8,7 +8,7 @@ export default defineConfig({
     copyPublicDir: false,
     lib: {
       entry: resolve(__dirname, "lib/main.ts"),
-      formats: ["es"],
+      formats: ["es", "cjs"],
       name: "@kinde/management-api-js",
       fileName: "kinde-management-api-js",
     },
