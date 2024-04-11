@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "version": "0.0.1-2",
+  "version": "0.0.1-3",
   "scripts": {
     "dev": "vite",
     "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > lib/version.ts",
@@ -20,7 +20,8 @@
   "main": "lib/main.ts",
   "exports": {
     ".": {
-      "import": "./dist/kinde-management-api-js.mjs"
+      "import": "./dist/kinde-management-api-js.mjs",
+      "require": "./dist/kinde-management-api-js.js"
     }
   },
   "devDependencies": {
