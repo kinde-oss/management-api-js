@@ -24,11 +24,10 @@ export const kindeConfig: {
 };
 
 export const init = () => {
+  dotenv.config();
   if (!process.env.KINDE_DOMAIN) {
     throw new Error("KINDE_DOMAIN is not set");
   }
-
-  dotenv.config();
 
   kindeConfig.clientId = process.env.KINDE_CLIENT_ID;
   kindeConfig.clientSecret = process.env.KINDE_CLIENT_SECRET;
