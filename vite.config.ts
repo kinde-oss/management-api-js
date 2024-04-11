@@ -9,7 +9,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "lib/main.ts"),
       formats: ["es"],
-      name: "kinde-management-api-js",
+      name: "@kinde/management-api-js",
       fileName: "kinde-management-api-js",
     },
     target: "esnext",
