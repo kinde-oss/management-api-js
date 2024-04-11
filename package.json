@@ -1,5 +1,5 @@
 {
-  "name": "kinde-management-sdk-js",
+  "name": "@kinde/management-api-js",
   "private": false,
   "version": "0.0.1",
   "scripts": {
@@ -7,16 +7,21 @@
     "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > lib/version.ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write ."
   },
+  "module": "lib/main.js",
   "main": "lib/main.ts",
   "devDependencies": {
     "@types/node": "^20.11.28",
+    "@vitest/coverage-v8": "^1.4.0",
     "prettier": "^3.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
-    "vite-plugin-dts": "^3.7.3"
+    "vite-plugin-dts": "^3.7.3",
+    "vitest": "^1.4.0"
   },
   "dependencies": {
     "dotenv": "^16.4.5"

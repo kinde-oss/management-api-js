@@ -1,3 +1,6 @@
+import { OpenAPI } from "./api/index";
+import { getToken } from "./utilities/getToken";
+
 export interface TokenStore {
   getToken(): Promise<string>;
   setToken(tokens: string): Promise<void>;
@@ -5,8 +8,8 @@ export interface TokenStore {
 }
 
 export const kindeConfig: {
-  clientId: string;
-  clientSecret: string;
+  clientId?: string;
+  clientSecret?: string;
   kinde_domain: string;
   audience: string;
   token: string;
@@ -17,4 +20,20 @@ export const kindeConfig: {
   kinde_domain: "https://kinde.com",
   audience: "audience",
   token: "",
+};
+
+export const init = () => {
+  if (!process.env.KINDE_DOMAIN) {
+    throw new Error("KINDE_DOMAIN is not set");
+  }
+
+  kindeConfig.clientId = process.env.KINDE_CLIENT_ID;
+  kindeConfig.clientSecret = process.env.KINDE_CLIENT_SECRET;
+  kindeConfig.audience = process.env.KINDE_DOMAIN + "/api";
+
+  OpenAPI.BASE = process.env.KINDE_DOMAIN;
+
+  OpenAPI.TOKEN = async () => {
+    return await getToken();
+  };
 };
