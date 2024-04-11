@@ -1,3 +1,4 @@
+import * as dotenv from "dotenv";
 import { OpenAPI } from "./api/index";
 import { getToken } from "./utilities/getToken";
 
@@ -26,6 +27,8 @@ export const init = () => {
   if (!process.env.KINDE_DOMAIN) {
     throw new Error("KINDE_DOMAIN is not set");
   }
+
+  dotenv.config();
 
   kindeConfig.clientId = process.env.KINDE_CLIENT_ID;
   kindeConfig.clientSecret = process.env.KINDE_CLIENT_SECRET;
