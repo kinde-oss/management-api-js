@@ -8,8 +8,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "lib/main.ts"),
       formats: ["es", "cjs"],
-      name: "KindeManagementApiJs",
-      fileName: "kinde-management-api-js",
     },
     target: "esnext",
   },
