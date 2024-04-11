@@ -15,13 +15,13 @@
   "module": "lib/main.js",
   "main": "lib/main.ts",
   "devDependencies": {
-    "@types/node": "^20.11.28",
-    "@vitest/coverage-v8": "^1.4.0",
+    "@types/node": "^20.12.7",
+    "@vitest/coverage-v8": "^1.5.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.2.2",
-    "vite": "^5.1.6",
-    "vite-plugin-dts": "^3.7.3",
-    "vitest": "^1.4.0"
+    "typescript": "^5.4.5",
+    "vite": "^5.2.8",
+    "vite-plugin-dts": "^3.8.1",
+    "vitest": "^1.5.0"
   },
   "dependencies": {
     "dotenv": "^16.4.5"
