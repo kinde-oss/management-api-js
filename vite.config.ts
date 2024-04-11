@@ -6,7 +6,7 @@ import dts from "vite-plugin-dts";
 export default defineConfig({
   build: {
     copyPublicDir: false,
-    lib: { entry: resolve(__dirname, "lib/main.ts"), formats: ["es"] },
+    lib: { entry: resolve(__dirname, "lib/main.ts"), formats: ["es"], name: "kinde-management-api-js", fileName: "kinde-management-api-js"},
     target: "esnext",
   },
   resolve: { alias: { src: resolve("lib/") } },

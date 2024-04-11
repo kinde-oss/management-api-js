@@ -1,6 +1,8 @@
 {
   "name": "@kinde/management-api-js",
   "private": false,
+  "type": "module",
+  "files": ["dist"],
   "version": "0.0.1-1",
   "scripts": {
     "dev": "vite",
@@ -14,6 +16,11 @@
   },
   "module": "lib/main.js",
   "main": "lib/main.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/kinde-management-api-js.mjs"
+    }
+  },
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@vitest/coverage-v8": "^1.5.0",
