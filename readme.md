@@ -1,4 +1,4 @@
-# Project Name
+# Kinde Management API JS
 
 ## Description
 
