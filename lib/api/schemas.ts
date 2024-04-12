@@ -53,6 +53,10 @@ export const $user = {
       type: "string",
       description: "Default email address of the user in Kinde.",
     },
+    username: {
+      type: "string",
+      description: "Primary username of the user in Kinde.",
+    },
     last_name: {
       type: "string",
       description: "User's last name.",
@@ -183,6 +187,10 @@ export const $users_response = {
           email: {
             type: "string",
             description: "Default email address of the user in Kinde.",
+          },
+          username: {
+            type: "string",
+            description: "Primary username of the user in Kinde.",
           },
           last_name: {
             type: "string",
@@ -324,6 +332,10 @@ export const $user_profile = {
       type: "string",
       description: "Default email address of the user in Kinde.",
     },
+    username: {
+      type: "string",
+      description: "Primary username of the user in Kinde.",
+    },
     provided_id: {
       type: "string",
       description:
@@ -341,6 +353,120 @@ export const $user_profile = {
     picture: {
       type: "string",
       description: "URL that point's to the user's picture or avatar",
+    },
+  },
+} as const;
+
+export const $create_property_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    property: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The property's ID.",
+          type: "string",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_properties_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    properties: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/property",
+      },
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+  },
+} as const;
+
+export const $get_property_values_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    properties: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/property_value",
+      },
+    },
+    next_token: {
+      description: "Pagination token.",
+      type: "string",
+    },
+  },
+} as const;
+
+export const $create_category_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    category: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The category's ID.",
+          type: "string",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_categories_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    categories: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/category",
+      },
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
     },
   },
 } as const;
@@ -473,6 +599,63 @@ export const $organization_user = {
       items: {
         type: "string",
       },
+    },
+  },
+} as const;
+
+export const $category = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    name: {
+      type: "boolean",
+    },
+  },
+} as const;
+
+export const $property = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    key: {
+      type: "string",
+    },
+    name: {
+      type: "boolean",
+    },
+    is_private: {
+      type: "boolean",
+    },
+    description: {
+      type: "string",
+    },
+    is_kinde_property: {
+      type: "boolean",
+    },
+  },
+} as const;
+
+export const $property_value = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    name: {
+      type: "string",
+    },
+    description: {
+      type: "string",
+    },
+    key: {
+      type: "string",
+    },
+    value: {
+      type: "string",
     },
   },
 } as const;

@@ -34,6 +34,10 @@ export type user = {
    */
   preferred_email?: string;
   /**
+   * Primary username of the user in Kinde.
+   */
+  username?: string;
+  /**
    * User's last name.
    */
   last_name?: string;
@@ -137,6 +141,10 @@ export type users_response = {
      */
     email?: string;
     /**
+     * Primary username of the user in Kinde.
+     */
+    username?: string;
+    /**
      * User's last name.
      */
     last_name?: string;
@@ -235,6 +243,10 @@ export type user_profile = {
    */
   preferred_email?: string;
   /**
+   * Primary username of the user in Kinde.
+   */
+  username?: string;
+  /**
    * Value of the user's id in a third-party system when the user is imported into Kinde.
    */
   provided_id?: string | null;
@@ -250,6 +262,76 @@ export type user_profile = {
    * URL that point's to the user's picture or avatar
    */
   picture?: string;
+};
+
+export type create_property_response = {
+  message?: string;
+  code?: string;
+  property?: {
+    /**
+     * The property's ID.
+     */
+    id?: string;
+  };
+};
+
+export type get_properties_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  properties?: Array<property>;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+};
+
+export type get_property_values_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  properties?: Array<property_value>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string;
+};
+
+export type create_category_response = {
+  message?: string;
+  code?: string;
+  category?: {
+    /**
+     * The category's ID.
+     */
+    id?: string;
+  };
+};
+
+export type get_categories_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  categories?: Array<category>;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
 };
 
 export type token_introspect = {
@@ -339,6 +421,28 @@ export type organization_user = {
   last_name?: string;
   first_name?: string;
   roles?: Array<string>;
+};
+
+export type category = {
+  id?: string;
+  name?: boolean;
+};
+
+export type property = {
+  id?: string;
+  key?: string;
+  name?: boolean;
+  is_private?: boolean;
+  description?: string;
+  is_kinde_property?: boolean;
+};
+
+export type property_value = {
+  id?: string;
+  name?: string;
+  description?: string;
+  key?: string;
+  value?: string;
 };
 
 export type role = {
@@ -889,198 +993,95 @@ export type $OpenApiTs = {
       };
     };
   };
-  "/api/v1/users": {
+  "/api/v1/apis": {
     get: {
-      req: {
-        /**
-         * Filter the results by email address. The query string should be comma separated and url encoded.
-         */
-        email?: string | null;
-        /**
-         * Specify additional data to retrieve. Use "organizations" and/or "identities".
-         */
-        expand?: string | null;
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * ID of the user to filter by.
-         */
-        userId?: string | null;
-      };
       res: {
         /**
-         * Users successfully retrieved.
+         * APIs successfully retrieved.
          */
-        200: users_response;
+        200: apis;
       };
     };
-  };
-  "/api/v1/users/{user_id}/refresh_claims": {
     post: {
       req: {
         /**
-         * The id of the user whose claims needs to be updated.
+         * API details.
          */
-        userId: string;
+        requestBody: {
+          name: string;
+          audience: string;
+        };
       };
       res: {
         /**
-         * Claims successfully refreshed.
+         * APIs successfully updated
          */
         200: success_response;
       };
     };
   };
-  "/api/v1/user": {
+  "/api/v1/apis/{api_id}": {
     get: {
       req: {
         /**
-         * Specify additional data to retrieve. Use "organizations" and/or "identities".
+         * The API's id.
          */
-        expand?: string | null;
-        /**
-         * The user's id.
-         */
-        id: string;
+        apiId: string;
       };
       res: {
         /**
-         * User successfully updated.
+         * API successfully retrieved.
          */
-        200: user;
-      };
-    };
-    post: {
-      req: {
-        /**
-         * The details of the user to create.
-         */
-        requestBody?: {
-          /**
-           * Basic information required to create a user.
-           */
-          profile?: {
-            /**
-             * User's first name.
-             */
-            given_name?: string;
-            /**
-             * User's last name.
-             */
-            family_name?: string;
-          };
-          /**
-           * Array of identities to assign to the created user
-           */
-          identities?: Array<{
-            /**
-             * The type of identity to create, for e.g. email.
-             */
-            type?: "email";
-            /**
-             * Additional details required to create the user.
-             */
-            details?: {
-              /**
-               * The email address of the user.
-               */
-              email?: string;
-            };
-          }>;
-        };
-      };
-      res: {
-        /**
-         * User successfully created.
-         */
-        200: create_user_response;
-      };
-    };
-    patch: {
-      req: {
-        /**
-         * The user's id.
-         */
-        id: string;
-        /**
-         * The user to update.
-         */
-        requestBody: {
-          /**
-           * User's first name.
-           */
-          given_name?: string;
-          /**
-           * User's last name.
-           */
-          family_name?: string;
-          /**
-           * Whether the user is currently suspended or not.
-           */
-          is_suspended?: boolean;
-          /**
-           * Prompt the user to change their password on next sign in.
-           */
-          is_password_reset_requested?: boolean;
-        };
-      };
-      res: {
-        /**
-         * User successfully updated.
-         */
-        200: update_user_response;
+        200: api;
       };
     };
     delete: {
       req: {
         /**
-         * The user's id.
+         * The API's id.
          */
-        id: string;
-        /**
-         * Delete all data and remove the user's profile from all of Kinde, including the subscriber list
-         */
-        isDeleteProfile?: boolean;
+        apiId: string;
       };
       res: {
         /**
-         * User successfully deleted.
+         * API successfully deleted.
          */
         200: success_response;
       };
     };
   };
-  "/api/v1/users/{user_id}/feature_flags/{feature_flag_key}": {
+  "/api/v1/apis/{api_id}/applications": {
     patch: {
       req: {
         /**
-         * The identifier for the feature flag
+         * The identifier for the API.
          */
-        featureFlagKey: string;
+        apiId: string;
         /**
-         * The identifier for the user
+         * The applications you want to connect or disconnect.
          */
-        userId: string;
-        /**
-         * Override value
-         */
-        value: string;
+        requestBody: {
+          applications: Array<{
+            /**
+             * The application's id.
+             */
+            id: string;
+            /**
+             * Optional operation, set to 'delete' to remove the user from the organization.
+             */
+            operation?: string;
+          }>;
+        };
       };
       res: {
         /**
-         * Feature flag override successfully updated.
+         * API applications updated.
          */
         200: success_response;
       };
     };
   };
-  "/api/v1/subscribers": {
+  "/api/v1/applications": {
     get: {
       req: {
         /**
@@ -1094,51 +1095,603 @@ export type $OpenApiTs = {
         /**
          * Field and order to sort the result by.
          */
-        sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
+        sort?: "name_asc" | "name_desc" | null;
       };
       res: {
         /**
-         * Subscriber successfully retrieved.
+         * A successful response with a list of applications or an empty list.
          */
-        200: get_subscribers_response;
+        200: get_applications_response;
       };
     };
     post: {
       req: {
         /**
-         * The email address of the subscriber.
+         * Application details.
          */
-        email: string | null;
-        /**
-         * Subscriber's first name.
-         */
-        firstName: string;
-        /**
-         * Subscriber's last name.
-         */
-        lastName: string | null;
+        requestBody?: {
+          /**
+           * The application's name.
+           */
+          name?: string;
+          /**
+           * The application's type.
+           */
+          type?: "reg" | "spa" | "m2m";
+        };
       };
       res: {
         /**
-         * Subscriber successfully created
+         * Application successfully created.
          */
-        201: create_subscriber_success_response;
+        200: create_application_response;
       };
     };
   };
-  "/api/v1/subscribers/{subscriber_id}": {
+  "/api/v1/applications/{application_id}": {
     get: {
       req: {
         /**
-         * The subscriber's id.
+         * The identifier for the application.
          */
-        subscriberId: string;
+        applicationId: string;
       };
       res: {
         /**
-         * Subscriber successfully retrieved.
+         * Application successfully retrieved.
          */
-        200: get_subscriber_response;
+        200: get_application_response;
+      };
+    };
+    patch: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        applicationId: string;
+        /**
+         * Application details.
+         */
+        requestBody?: {
+          /**
+           * The application's name.
+           */
+          name?: string;
+          /**
+           * The application's language key.
+           */
+          language_key?: string;
+          /**
+           * The application's logout uris.
+           */
+          logout_uris?: Array<string>;
+          /**
+           * The application's redirect uris.
+           */
+          redirect_uris?: Array<string>;
+        };
+      };
+      res: {
+        /**
+         * Application successfully updated.
+         */
+        200: any;
+      };
+    };
+    delete: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        applicationId: string;
+      };
+      res: {
+        /**
+         * Application successfully deleted.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/business": {
+    get: {
+      req: {
+        /**
+         * Business code.
+         */
+        code: string;
+        /**
+         * Email associated with business.
+         */
+        email: string;
+        /**
+         * The industry your business is in.
+         */
+        industry?: string;
+        /**
+         * Business name.
+         */
+        name: string;
+        /**
+         * Phone number associated with business.
+         */
+        phone?: string | null;
+        /**
+         * Your Privacy policy URL.
+         */
+        privacyUrl?: string | null;
+        /**
+         * Your Terms and Conditions URL.
+         */
+        termsUrl?: string | null;
+        /**
+         * The timezone your business is in.
+         */
+        timezone?: string;
+      };
+      res: {
+        /**
+         * A successful response with your business details.
+         */
+        201: success_response;
+      };
+    };
+    patch: {
+      req: {
+        /**
+         * Business name.
+         */
+        businessName: string;
+        /**
+         * The key of the industry your business is in.
+         */
+        industryKey?: string;
+        /**
+         * Show a policy acceptance checkbox on sign up.
+         */
+        isClickWrap?: boolean | null;
+        /**
+         * Display "Powered by Kinde" on your sign up, sign in, and subscription pages.
+         */
+        isShowKindeBranding?: string | null;
+        /**
+         * Your Kinde Perk code.
+         */
+        partnerCode?: string | null;
+        /**
+         * Email associated with business.
+         */
+        primaryEmail: string;
+        /**
+         * Phone number associated with business.
+         */
+        primaryPhone?: string | null;
+        /**
+         * Your Privacy policy URL.
+         */
+        privacyUrl?: string | null;
+        /**
+         * Your Terms and Conditions URL.
+         */
+        termsUrl?: string | null;
+        /**
+         * The ID of the timezone your business is in.
+         */
+        timezoneId?: string;
+      };
+      res: {
+        /**
+         * Business successfully updated.
+         */
+        201: success_response;
+      };
+    };
+  };
+  "/api/v1/industries": {
+    get: {
+      req: {
+        /**
+         * Industry Key.
+         */
+        industryKey?: string;
+        /**
+         * Industry name.
+         */
+        name?: string;
+      };
+      res: {
+        /**
+         * A successful response with a list of industries and industry keys.
+         */
+        201: success_response;
+      };
+    };
+  };
+  "/api/v1/timezones": {
+    get: {
+      req: {
+        /**
+         * Timezone.
+         */
+        name?: string;
+        /**
+         * Timezone Key.
+         */
+        timezoneKey?: string;
+      };
+      res: {
+        /**
+         * A successful response with a list of timezones and timezone keys.
+         */
+        201: success_response;
+      };
+    };
+  };
+  "/api/v1/applications/{app_id}/auth_redirect_urls": {
+    get: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+      };
+      res: {
+        /**
+         * Callback URLs successfully retrieved.
+         */
+        200: redirect_callback_urls;
+      };
+    };
+    post: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+        /**
+         * Callback details.
+         */
+        requestBody: {
+          /**
+           * Array of callback urls.
+           */
+          urls?: Array<string>;
+        };
+      };
+      res: {
+        /**
+         * Callbacks successfully updated
+         */
+        200: success_response;
+      };
+    };
+    put: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+        /**
+         * Callback details.
+         */
+        requestBody: {
+          /**
+           * Array of callback urls.
+           */
+          urls?: Array<string>;
+        };
+      };
+      res: {
+        /**
+         * Callbacks successfully updated
+         */
+        200: success_response;
+      };
+    };
+    delete: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+        /**
+         * Urls to delete, comma separated and url encoded.
+         */
+        urls: string;
+      };
+      res: {
+        /**
+         * Callback URLs successfully deleted.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/applications/{app_id}/auth_logout_urls": {
+    get: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+      };
+      res: {
+        /**
+         * Logout URLs successfully retrieved.
+         */
+        200: logout_redirect_urls;
+      };
+    };
+    post: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+        /**
+         * Callback details.
+         */
+        requestBody: {
+          /**
+           * Array of logout urls.
+           */
+          urls?: Array<string>;
+        };
+      };
+      res: {
+        /**
+         * Logouts successfully updated
+         */
+        200: success_response;
+      };
+    };
+    put: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+        /**
+         * Callback details.
+         */
+        requestBody: {
+          /**
+           * Array of logout urls.
+           */
+          urls?: Array<string>;
+        };
+      };
+      res: {
+        /**
+         * Logout URLs successfully updated
+         */
+        200: success_response;
+      };
+    };
+    delete: {
+      req: {
+        /**
+         * The identifier for the application.
+         */
+        appId: string;
+        /**
+         * Urls to delete, comma separated and url encoded.
+         */
+        urls: string;
+      };
+      res: {
+        /**
+         * Logout URLs successfully deleted.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/connected_apps/auth_url": {
+    get: {
+      req: {
+        /**
+         * The unique key code reference of the connected app to authenticate against.
+         */
+        keyCodeRef: string;
+        /**
+         * The code of the Kinde organization that needs to authenticate to the third-party connected app.
+         */
+        orgCode?: string;
+        /**
+         * A URL that overrides the default callback URL setup in your connected app configuration
+         */
+        overrideCallbackUrl?: string;
+        /**
+         * The id of the user that needs to authenticate to the third-party connected app.
+         */
+        userId?: string;
+      };
+      res: {
+        /**
+         * A URL that can be used to authenticate and a session id to identify this authentication session.
+         */
+        200: connected_apps_auth_url;
+      };
+    };
+  };
+  "/api/v1/connected_apps/token": {
+    get: {
+      req: {
+        /**
+         * The unique sesssion id reprensenting the login session of a user.
+         */
+        sessionId: string;
+      };
+      res: {
+        /**
+         * An access token that can be used to query a third-party provider, as well as the token's expiry time.
+         */
+        200: connected_apps_access_token;
+      };
+    };
+  };
+  "/api/v1/connected_apps/revoke": {
+    post: {
+      req: {
+        /**
+         * The unique sesssion id reprensenting the login session of a user.
+         */
+        sessionId: string;
+      };
+      res: {
+        /**
+         * An access token that can be used to query a third-party provider, as well as the token's expiry time.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/environment/feature_flags": {
+    delete: {
+      res: {
+        /**
+         * Feature flag overrides deleted successfully.
+         */
+        200: success_response;
+      };
+    };
+    get: {
+      res: {
+        /**
+         * Feature flags retrieved successfully.
+         */
+        200: get_environment_feature_flags_response;
+      };
+    };
+  };
+  "/api/v1/environment/feature_flags/{feature_flag_key}": {
+    delete: {
+      req: {
+        /**
+         * The identifier for the feature flag.
+         */
+        featureFlagKey: string;
+      };
+      res: {
+        /**
+         * Feature flag deleted successfully.
+         */
+        200: success_response;
+      };
+    };
+    patch: {
+      req: {
+        /**
+         * The identifier for the feature flag.
+         */
+        featureFlagKey: string;
+        /**
+         * Flag details.
+         */
+        requestBody: {
+          /**
+           * The flag override value.
+           */
+          value: string;
+        };
+      };
+      res: {
+        /**
+         * Feature flag override successful
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/feature_flags": {
+    post: {
+      req: {
+        /**
+         * Flag details.
+         */
+        requestBody: {
+          /**
+           * The name of the flag.
+           */
+          name: string;
+          /**
+           * Description of the flag purpose.
+           */
+          description?: string;
+          /**
+           * The flag identifier to use in code.
+           */
+          key: string;
+          /**
+           * The variable type.
+           */
+          type: "str" | "int" | "bool";
+          /**
+           * Allow the flag to be overridden at a different level.
+           */
+          allow_override_level?: "env" | "org" | "usr";
+          /**
+           * Default value for the flag used by environments and organizations.
+           */
+          default_value: string;
+        };
+      };
+      res: {
+        /**
+         * Feature flag successfully created
+         */
+        201: success_response;
+      };
+    };
+  };
+  "/api/v1/feature_flags/{feature_flag_key}": {
+    delete: {
+      req: {
+        /**
+         * The identifier for the feature flag.
+         */
+        featureFlagKey: string;
+      };
+      res: {
+        /**
+         * Feature flag successfully updated.
+         */
+        200: success_response;
+      };
+    };
+    put: {
+      req: {
+        /**
+         * Allow the flag to be overridden at a different level.
+         */
+        allowOverrideLevel: "env" | "org";
+        /**
+         * Default value for the flag used by environments and organizations.
+         */
+        defaultValue: string;
+        /**
+         * Description of the flag purpose.
+         */
+        description: string;
+        /**
+         * The key identifier for the feature flag.
+         */
+        featureFlagKey: string;
+        /**
+         * The name of the flag.
+         */
+        name: string;
+        /**
+         * The variable type
+         */
+        type: "str" | "int" | "bool";
+      };
+      res: {
+        /**
+         * Feature flag successfully updated.
+         */
+        200: success_response;
       };
     };
   };
@@ -1192,9 +1745,33 @@ export type $OpenApiTs = {
            */
           link_color?: string;
           /**
+           * The organization's brand settings - dark mode background color.
+           */
+          background_color_dark?: string;
+          /**
+           * The organization's brand settings - dark mode button color.
+           */
+          button_color_dark?: string;
+          /**
+           * The organization's brand settings - dark mode button text color.
+           */
+          button_text_color_dark?: string;
+          /**
+           * The organization's brand settings - dark mode link color.
+           */
+          link_color_dark?: string;
+          /**
+           * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
+           */
+          theme_code?: string;
+          /**
            * The organization's handle.
            */
           handle?: string;
+          /**
+           * Users can sign up to this organization.
+           */
+          is_allow_registrations?: boolean;
         };
       };
       res: {
@@ -1241,9 +1818,33 @@ export type $OpenApiTs = {
            */
           link_color?: string;
           /**
+           * The organization's brand settings - dark mode background color.
+           */
+          background_color_dark?: string;
+          /**
+           * The organization's brand settings - dark mode button color.
+           */
+          button_color_dark?: string;
+          /**
+           * The organization's brand settings - dark mode button text color.
+           */
+          button_text_color_dark?: string;
+          /**
+           * The organization's brand settings - dark mode link color.
+           */
+          link_color_dark?: string;
+          /**
+           * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
+           */
+          theme_code?: string;
+          /**
            * The organization's handle.
            */
           handle?: string;
+          /**
+           * Users can sign up to this organization.
+           */
+          is_allow_registrations?: boolean;
         };
       };
       res: {
@@ -1640,205 +2241,80 @@ export type $OpenApiTs = {
       };
     };
   };
-  "/api/v1/connected_apps/auth_url": {
-    get: {
-      req: {
-        /**
-         * The unique key code reference of the connected app to authenticate against.
-         */
-        keyCodeRef: string;
-        /**
-         * The code of the Kinde organization that needs to authenticate to the third-party connected app.
-         */
-        orgCode?: string;
-        /**
-         * The id of the user that needs to authenticate to the third-party connected app.
-         */
-        userId?: string;
-      };
-      res: {
-        /**
-         * A URL that can be used to authenticate and a session id to identify this authentication session.
-         */
-        200: connected_apps_auth_url;
-      };
-    };
-  };
-  "/api/v1/connected_apps/token": {
-    get: {
-      req: {
-        /**
-         * The unique sesssion id reprensenting the login session of a user.
-         */
-        sessionId: string;
-      };
-      res: {
-        /**
-         * An access token that can be used to query a third-party provider, as well as the token's expiry time.
-         */
-        200: connected_apps_access_token;
-      };
-    };
-  };
-  "/api/v1/connected_apps/revoke": {
-    post: {
-      req: {
-        /**
-         * The unique sesssion id reprensenting the login session of a user.
-         */
-        sessionId: string;
-      };
-      res: {
-        /**
-         * An access token that can be used to query a third-party provider, as well as the token's expiry time.
-         */
-        200: success_response;
-      };
-    };
-  };
-  "/api/v1/feature_flags": {
-    post: {
-      req: {
-        /**
-         * Flag details.
-         */
-        requestBody: {
-          /**
-           * The name of the flag.
-           */
-          name: string;
-          /**
-           * Description of the flag purpose.
-           */
-          description?: string;
-          /**
-           * The flag identifier to use in code.
-           */
-          key: string;
-          /**
-           * The variable type.
-           */
-          type: "str" | "int" | "bool";
-          /**
-           * Allow the flag to be overridden at a different level.
-           */
-          allow_override_level?: "env" | "org" | "usr";
-          /**
-           * Default value for the flag used by environments and organizations.
-           */
-          default_value: string;
-        };
-      };
-      res: {
-        /**
-         * Feature flag successfully created
-         */
-        201: success_response;
-      };
-    };
-  };
-  "/api/v1/feature_flags/{feature_flag_key}": {
-    delete: {
-      req: {
-        /**
-         * The identifier for the feature flag.
-         */
-        featureFlagKey: string;
-      };
-      res: {
-        /**
-         * Feature flag successfully updated.
-         */
-        200: success_response;
-      };
-    };
+  "/api/v1/organizations/{org_code}/properties/{property_key}": {
     put: {
       req: {
         /**
-         * Allow the flag to be overridden at a different level.
+         * The identifier for the organization
          */
-        allowOverrideLevel: "env" | "org";
+        orgCode: string;
         /**
-         * Default value for the flag used by environments and organizations.
+         * The identifier for the property
          */
-        defaultValue: string;
+        propertyKey: string;
         /**
-         * Description of the flag purpose.
+         * The new property value
          */
-        description: string;
-        /**
-         * The key identifier for the feature flag.
-         */
-        featureFlagKey: string;
-        /**
-         * The name of the flag.
-         */
-        name: string;
-        /**
-         * The variable type
-         */
-        type: "str" | "int" | "bool";
+        value: string;
       };
       res: {
         /**
-         * Feature flag successfully updated.
+         * Property successfully updated.
          */
         200: success_response;
       };
     };
   };
-  "/api/v1/environment/feature_flags": {
-    delete: {
-      res: {
-        /**
-         * Feature flag overrides deleted successfully.
-         */
-        200: success_response;
-      };
-    };
+  "/api/v1/organizations/{org_code}/properties": {
     get: {
-      res: {
-        /**
-         * Feature flags retrieved successfully.
-         */
-        200: get_environment_feature_flags_response;
-      };
-    };
-  };
-  "/api/v1/environment/feature_flags/{feature_flag_key}": {
-    delete: {
       req: {
         /**
-         * The identifier for the feature flag.
+         * The organization's code.
          */
-        featureFlagKey: string;
+        orgCode: string;
       };
       res: {
         /**
-         * Feature flag deleted successfully.
+         * Properties successfully retrieved.
          */
-        200: success_response;
+        200: get_property_values_response;
       };
     };
     patch: {
       req: {
         /**
-         * The identifier for the feature flag.
+         * The identifier for the organization
          */
-        featureFlagKey: string;
+        orgCode: string;
         /**
-         * Flag details.
+         * Properties to update.
          */
         requestBody: {
           /**
-           * The flag override value.
+           * Property keys and values
            */
-          value: string;
+          properties: Record<string, unknown>;
         };
       };
       res: {
         /**
-         * Feature flag override successful
+         * Properties successfully updated.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/organization/{org_code}/handle": {
+    delete: {
+      req: {
+        /**
+         * The organization's code.
+         */
+        orgCode: string;
+      };
+      res: {
+        /**
+         * Handle successfully deleted.
          */
         200: success_response;
       };
@@ -1937,6 +2413,186 @@ export type $OpenApiTs = {
       res: {
         /**
          * permission successfully updated.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/properties": {
+    get: {
+      req: {
+        /**
+         * Filter results by User or Organization context
+         */
+        context?: "usr" | "org" | null;
+        /**
+         * The ID of the property to end before.
+         */
+        endingBefore?: string | null;
+        /**
+         * Number of results per page. Defaults to 10 if parameter not sent.
+         */
+        pageSize?: number | null;
+        /**
+         * The ID of the property to start after.
+         */
+        startingAfter?: string | null;
+      };
+      res: {
+        /**
+         * Properties successfully retrieved.
+         */
+        200: get_properties_response;
+      };
+    };
+    post: {
+      req: {
+        /**
+         * Property details.
+         */
+        requestBody: {
+          /**
+           * The name of the property.
+           */
+          name: string;
+          /**
+           * Description of the property purpose.
+           */
+          description?: string;
+          /**
+           * The property identifier to use in code.
+           */
+          key: string;
+          /**
+           * The property type.
+           */
+          type: "single_line_text" | "multi_line_text";
+          /**
+           * The context that the property applies to.
+           */
+          context: "org" | "usr";
+          /**
+           * Whether the property can be included in id and access tokens.
+           */
+          is_private: boolean;
+          /**
+           * Which category the property belongs to.
+           */
+          category_id: string;
+        };
+      };
+      res: {
+        /**
+         * Property successfully created
+         */
+        201: create_property_response;
+      };
+    };
+  };
+  "/api/v1/properties/{property_id}": {
+    put: {
+      req: {
+        /**
+         * The unique identifier for the property.
+         */
+        propertyId: string;
+        /**
+         * The fields of the property to update.
+         */
+        requestBody: {
+          /**
+           * The name of the property.
+           */
+          name?: string;
+          /**
+           * Description of the property purpose.
+           */
+          description?: string;
+          /**
+           * Whether the property can be included in id and access tokens.
+           */
+          is_private?: boolean;
+        };
+      };
+      res: {
+        /**
+         * Property successfully updated.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/property_categories": {
+    get: {
+      req: {
+        /**
+         * Filter the results by User or Organization context
+         */
+        context?: "usr" | "org" | null;
+        /**
+         * The ID of the category to end before.
+         */
+        endingBefore?: string | null;
+        /**
+         * Number of results per page. Defaults to 10 if parameter not sent.
+         */
+        pageSize?: number | null;
+        /**
+         * The ID of the category to start after.
+         */
+        startingAfter?: string | null;
+      };
+      res: {
+        /**
+         * Categories successfully retrieved.
+         */
+        200: get_categories_response;
+      };
+    };
+    post: {
+      req: {
+        /**
+         * Category details.
+         */
+        requestBody: {
+          /**
+           * The name of the category.
+           */
+          name: string;
+          /**
+           * The context that the category applies to.
+           */
+          context: "org" | "usr";
+        };
+      };
+      res: {
+        /**
+         * Category successfully created
+         */
+        201: create_category_response;
+      };
+    };
+  };
+  "/api/v1/property_categories/{category_id}": {
+    put: {
+      req: {
+        /**
+         * The unique identifier for the category.
+         */
+        categoryId: string;
+        /**
+         * The fields of the category to update.
+         */
+        requestBody: {
+          /**
+           * The name of the category.
+           */
+          name?: string;
+        };
+      };
+      res: {
+        /**
+         * category successfully updated.
          */
         200: success_response;
       };
@@ -2125,141 +2781,7 @@ export type $OpenApiTs = {
       };
     };
   };
-  "/api/v1/business": {
-    get: {
-      req: {
-        /**
-         * Business code.
-         */
-        code: string;
-        /**
-         * Email associated with business.
-         */
-        email: string;
-        /**
-         * The industry your business is in.
-         */
-        industry?: string;
-        /**
-         * Business name.
-         */
-        name: string;
-        /**
-         * Phone number associated with business.
-         */
-        phone?: string | null;
-        /**
-         * Your Privacy policy URL.
-         */
-        privacyUrl?: string | null;
-        /**
-         * Your Terms and Conditions URL.
-         */
-        termsUrl?: string | null;
-        /**
-         * The timezone your business is in.
-         */
-        timezone?: string;
-      };
-      res: {
-        /**
-         * A successful response with your business details.
-         */
-        201: success_response;
-      };
-    };
-    patch: {
-      req: {
-        /**
-         * Business name.
-         */
-        businessName: string;
-        /**
-         * The key of the industry your business is in.
-         */
-        industryKey?: string;
-        /**
-         * Show a policy acceptance checkbox on sign up.
-         */
-        isClickWrap?: boolean | null;
-        /**
-         * Display "Powered by Kinde" on your sign up, sign in, and subscription pages.
-         */
-        isShowKindeBranding?: string | null;
-        /**
-         * Your Kinde Perk code.
-         */
-        partnerCode?: string | null;
-        /**
-         * Email associated with business.
-         */
-        primaryEmail: string;
-        /**
-         * Phone number associated with business.
-         */
-        primaryPhone?: string | null;
-        /**
-         * Your Privacy policy URL.
-         */
-        privacyUrl?: string | null;
-        /**
-         * Your Terms and Conditions URL.
-         */
-        termsUrl?: string | null;
-        /**
-         * The ID of the timezone your business is in.
-         */
-        timezoneId?: string;
-      };
-      res: {
-        /**
-         * Business successfully updated.
-         */
-        201: success_response;
-      };
-    };
-  };
-  "/api/v1/industries": {
-    get: {
-      req: {
-        /**
-         * Industry Key.
-         */
-        industryKey?: string;
-        /**
-         * Industry name.
-         */
-        name?: string;
-      };
-      res: {
-        /**
-         * A successful response with a list of industries and industry keys.
-         */
-        201: success_response;
-      };
-    };
-  };
-  "/api/v1/timezones": {
-    get: {
-      req: {
-        /**
-         * Timezone.
-         */
-        name?: string;
-        /**
-         * Timezone Key.
-         */
-        timezoneKey?: string;
-      };
-      res: {
-        /**
-         * A successful response with a list of timezones and timezone keys.
-         */
-        201: success_response;
-      };
-    };
-  };
-  "/api/v1/applications": {
+  "/api/v1/subscribers": {
     get: {
       req: {
         /**
@@ -2273,347 +2795,356 @@ export type $OpenApiTs = {
         /**
          * Field and order to sort the result by.
          */
-        sort?: "name_asc" | "name_desc" | null;
+        sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
       };
       res: {
         /**
-         * A successful response with a list of applications or an empty list.
+         * Subscriber successfully retrieved.
          */
-        200: get_applications_response;
+        200: get_subscribers_response;
       };
     };
     post: {
       req: {
         /**
-         * Application details.
+         * The email address of the subscriber.
+         */
+        email: string | null;
+        /**
+         * Subscriber's first name.
+         */
+        firstName: string;
+        /**
+         * Subscriber's last name.
+         */
+        lastName: string | null;
+      };
+      res: {
+        /**
+         * Subscriber successfully created
+         */
+        201: create_subscriber_success_response;
+      };
+    };
+  };
+  "/api/v1/subscribers/{subscriber_id}": {
+    get: {
+      req: {
+        /**
+         * The subscriber's id.
+         */
+        subscriberId: string;
+      };
+      res: {
+        /**
+         * Subscriber successfully retrieved.
+         */
+        200: get_subscriber_response;
+      };
+    };
+  };
+  "/api/v1/users": {
+    get: {
+      req: {
+        /**
+         * Filter the results by email address. The query string should be comma separated and url encoded.
+         */
+        email?: string | null;
+        /**
+         * Specify additional data to retrieve. Use "organizations" and/or "identities".
+         */
+        expand?: string | null;
+        /**
+         * A string to get the next page of results if there are more results.
+         */
+        nextToken?: string | null;
+        /**
+         * Number of results per page. Defaults to 10 if parameter not sent.
+         */
+        pageSize?: number | null;
+        /**
+         * ID of the user to filter by.
+         */
+        userId?: string | null;
+      };
+      res: {
+        /**
+         * Users successfully retrieved.
+         */
+        200: users_response;
+      };
+    };
+  };
+  "/api/v1/users/{user_id}/refresh_claims": {
+    post: {
+      req: {
+        /**
+         * The id of the user whose claims needs to be updated.
+         */
+        userId: string;
+      };
+      res: {
+        /**
+         * Claims successfully refreshed.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/user": {
+    get: {
+      req: {
+        /**
+         * Specify additional data to retrieve. Use "organizations" and/or "identities".
+         */
+        expand?: string | null;
+        /**
+         * The user's id.
+         */
+        id: string;
+      };
+      res: {
+        /**
+         * User successfully updated.
+         */
+        200: user;
+      };
+    };
+    post: {
+      req: {
+        /**
+         * The details of the user to create.
          */
         requestBody?: {
           /**
-           * The application's name.
+           * Basic information required to create a user.
            */
-          name?: string;
-          /**
-           * The application's type.
-           */
-          type?: "reg" | "spa" | "m2m";
-        };
-      };
-      res: {
-        /**
-         * Application successfully created.
-         */
-        200: create_application_response;
-      };
-    };
-  };
-  "/api/v1/applications/{application_id}": {
-    get: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        applicationId: string;
-      };
-      res: {
-        /**
-         * Application successfully retrieved.
-         */
-        200: get_application_response;
-      };
-    };
-    patch: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        applicationId: string;
-        /**
-         * Application details.
-         */
-        requestBody?: {
-          /**
-           * The application's name.
-           */
-          name?: string;
-          /**
-           * The application's language key.
-           */
-          language_key?: string;
-          /**
-           * The application's logout uris.
-           */
-          logout_uris?: Array<string>;
-          /**
-           * The application's redirect uris.
-           */
-          redirect_uris?: Array<string>;
-        };
-      };
-      res: {
-        /**
-         * Application successfully updated.
-         */
-        200: any;
-      };
-    };
-    delete: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        applicationId: string;
-      };
-      res: {
-        /**
-         * Application successfully deleted.
-         */
-        200: success_response;
-      };
-    };
-  };
-  "/api/v1/applications/{app_id}/auth_redirect_urls": {
-    get: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-      };
-      res: {
-        /**
-         * Callback URLs successfully retrieved.
-         */
-        200: redirect_callback_urls;
-      };
-    };
-    post: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of callback urls.
-           */
-          urls?: Array<string>;
-        };
-      };
-      res: {
-        /**
-         * Callbacks successfully updated
-         */
-        200: success_response;
-      };
-    };
-    put: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of callback urls.
-           */
-          urls?: Array<string>;
-        };
-      };
-      res: {
-        /**
-         * Callbacks successfully updated
-         */
-        200: success_response;
-      };
-    };
-    delete: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Urls to delete, comma separated and url encoded.
-         */
-        urls: string;
-      };
-      res: {
-        /**
-         * Callback URLs successfully deleted.
-         */
-        200: success_response;
-      };
-    };
-  };
-  "/api/v1/applications/{app_id}/auth_logout_urls": {
-    get: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-      };
-      res: {
-        /**
-         * Logout URLs successfully retrieved.
-         */
-        200: logout_redirect_urls;
-      };
-    };
-    post: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of logout urls.
-           */
-          urls?: Array<string>;
-        };
-      };
-      res: {
-        /**
-         * Logouts successfully updated
-         */
-        200: success_response;
-      };
-    };
-    put: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of logout urls.
-           */
-          urls?: Array<string>;
-        };
-      };
-      res: {
-        /**
-         * Logout URLs successfully updated
-         */
-        200: success_response;
-      };
-    };
-    delete: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Urls to delete, comma separated and url encoded.
-         */
-        urls: string;
-      };
-      res: {
-        /**
-         * Logout URLs successfully deleted.
-         */
-        200: success_response;
-      };
-    };
-  };
-  "/api/v1/apis": {
-    get: {
-      res: {
-        /**
-         * APIs successfully retrieved.
-         */
-        200: apis;
-      };
-    };
-    post: {
-      req: {
-        /**
-         * API details.
-         */
-        requestBody: {
-          name: string;
-          audience: string;
-        };
-      };
-      res: {
-        /**
-         * APIs successfully updated
-         */
-        200: success_response;
-      };
-    };
-  };
-  "/api/v1/apis/{api_id}": {
-    get: {
-      req: {
-        /**
-         * The API's id.
-         */
-        apiId: string;
-      };
-      res: {
-        /**
-         * API successfully retrieved.
-         */
-        200: api;
-      };
-    };
-    delete: {
-      req: {
-        /**
-         * The API's id.
-         */
-        apiId: string;
-      };
-      res: {
-        /**
-         * API successfully deleted.
-         */
-        200: success_response;
-      };
-    };
-  };
-  "/api/v1/apis/{api_id}/applications": {
-    patch: {
-      req: {
-        /**
-         * The identifier for the API.
-         */
-        apiId: string;
-        /**
-         * The applications you want to connect or disconnect.
-         */
-        requestBody: {
-          applications: Array<{
+          profile?: {
             /**
-             * The application's id.
+             * User's first name.
              */
-            id: string;
+            given_name?: string;
             /**
-             * Optional operation, set to 'delete' to remove the user from the organization.
+             * User's last name.
              */
-            operation?: string;
+            family_name?: string;
+          };
+          /**
+           * The unique code associated with the organization you want the user to join.
+           */
+          organization_code?: string;
+          /**
+           * Array of identities to assign to the created user
+           */
+          identities?: Array<{
+            /**
+             * The type of identity to create, for e.g. email.
+             */
+            type?: "email" | "username";
+            /**
+             * Additional details required to create the user.
+             */
+            details?: {
+              /**
+               * The email address of the user.
+               */
+              email?: string;
+              /**
+               * The phone number of the user.
+               */
+              phone?: string;
+              /**
+               * The username of the user.
+               */
+              username?: string;
+            };
           }>;
         };
       };
       res: {
         /**
-         * API applications updated.
+         * User successfully created.
+         */
+        200: create_user_response;
+      };
+    };
+    patch: {
+      req: {
+        /**
+         * The user's id.
+         */
+        id: string;
+        /**
+         * The user to update.
+         */
+        requestBody: {
+          /**
+           * User's first name.
+           */
+          given_name?: string;
+          /**
+           * User's last name.
+           */
+          family_name?: string;
+          /**
+           * Whether the user is currently suspended or not.
+           */
+          is_suspended?: boolean;
+          /**
+           * Prompt the user to change their password on next sign in.
+           */
+          is_password_reset_requested?: boolean;
+        };
+      };
+      res: {
+        /**
+         * User successfully updated.
+         */
+        200: update_user_response;
+      };
+    };
+    delete: {
+      req: {
+        /**
+         * The user's id.
+         */
+        id: string;
+        /**
+         * Delete all data and remove the user's profile from all of Kinde, including the subscriber list
+         */
+        isDeleteProfile?: boolean;
+      };
+      res: {
+        /**
+         * User successfully deleted.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/users/{user_id}/feature_flags/{feature_flag_key}": {
+    patch: {
+      req: {
+        /**
+         * The identifier for the feature flag
+         */
+        featureFlagKey: string;
+        /**
+         * The identifier for the user
+         */
+        userId: string;
+        /**
+         * Override value
+         */
+        value: string;
+      };
+      res: {
+        /**
+         * Feature flag override successfully updated.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/users/{user_id}/properties/{property_key}": {
+    put: {
+      req: {
+        /**
+         * The identifier for the property
+         */
+        propertyKey: string;
+        /**
+         * The identifier for the user
+         */
+        userId: string;
+        /**
+         * The new property value
+         */
+        value: string;
+      };
+      res: {
+        /**
+         * Property successfully updated.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/users/{user_id}/properties": {
+    get: {
+      req: {
+        /**
+         * The user's ID.
+         */
+        userId: string;
+      };
+      res: {
+        /**
+         * Properties successfully retrieved.
+         */
+        200: get_property_values_response;
+      };
+    };
+    patch: {
+      req: {
+        /**
+         * Properties to update.
+         */
+        requestBody: {
+          /**
+           * Property keys and values
+           */
+          properties: Record<string, unknown>;
+        };
+        /**
+         * The identifier for the user
+         */
+        userId: string;
+      };
+      res: {
+        /**
+         * Properties successfully updated.
+         */
+        200: success_response;
+      };
+    };
+  };
+  "/api/v1/users/{user_id}/password": {
+    put: {
+      req: {
+        /**
+         * Password details.
+         */
+        requestBody: {
+          /**
+           * The hashed password.
+           */
+          hashed_password: string;
+          /**
+           * The hashing method or algorithm used to encrypt the user’s password. Default is bcrypt.
+           */
+          hashing_method?: "bcrypt" | "crypt" | "md5" | "wordpress";
+          /**
+           * Extra characters added to passwords to make them stronger. Not required for bcrypt.
+           */
+          salt?: string;
+          /**
+           * Position of salt in password string. Not required for bcrypt.
+           */
+          salt_position?: "prefix" | "suffix";
+          /**
+           * The user will be prompted to set a new password after entering this one.
+           */
+          is_temporary_password?: boolean;
+        };
+        /**
+         * The identifier for the user
+         */
+        userId: string;
+      };
+      res: {
+        /**
+         * User successfully created.
          */
         200: success_response;
       };
