@@ -10,9 +10,9 @@ Javascript SDK to interact with the Kinde Management API.
 # npm
 npm install @kinde/management-api-js
 # yarn
-npm install @kinde/management-api-js
+yarn add @kinde/management-api-js
 # pnpm
-pnpm iall @kinde/management-api-js
+pnpm install @kinde/management-api-js
 ```
 
 ## Configuration
@@ -31,6 +31,10 @@ import { Users, init } from "@kinde/management-api-js";
 init();
 const { users } = await Users.getUsers();
 ```
+
+## API documentation
+You can find management API documentation here: https://kinde.com/api/docs/#kinde-management-api
+
 
 ## Contributing
 
