@@ -12,7 +12,10 @@ export default defineConfig({
       fileName: "kinde-management-api-js",
     },
     target: "esnext",
+    outDir: "../dist",
   },
-  resolve: { alias: { src: resolve(__dirname, "lib/") } },
-  plugins: [dts({ insertTypesEntry: true })],
+  root: "lib",
+  base: "",
+  resolve: { alias: { src: resolve(__dirname, "./lib") } },
+  plugins: [dts({ insertTypesEntry: true, outDir: "../dist" })],
 });

@@ -16,14 +16,9 @@
     "lint": "prettier --check .",
     "lint:fix": "prettier --write ."
   },
-  "module": "lib/main.js",
-  "main": "lib/main.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/kinde-management-api-js.js",
-      "require": "./dist/kinde-management-api-js.js"
-    }
-  },
+  "module": "dist/kinde-management-api-js.cjs",
+  "main": "dist/kinde-management-api-js.cjs",
+  "types": "dist/main.d.ts",
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@vitest/coverage-v8": "^1.5.0",
