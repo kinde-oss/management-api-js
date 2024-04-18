@@ -33,6 +33,7 @@ const { users } = await Users.getUsers();
 ```
 
 ## API documentation
+
 You can find management API documentation here: [Kinde Management API Documentation](https://kinde.com/api/docs/#kinde-management-api)
 
 ## Contributing
