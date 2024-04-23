@@ -29,6 +29,7 @@
     "vitest": "^1.5.0"
   },
   "dependencies": {
+    "aws-jwt-verify": "^4.0.1",
     "dotenv": "^16.4.5"
   },
   "publishConfig": {
