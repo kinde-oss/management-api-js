@@ -15,5 +15,5 @@ export const checkAudience = (
   if (!decoded) {
     return false;
   }
-  return decoded.aud.includes(audience);
+  return decoded.aud?.includes(audience) || false;
 };
