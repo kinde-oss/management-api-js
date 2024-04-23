@@ -4,7 +4,7 @@ import { kindeConfig } from "../config";
 import { OpenAPI } from "../api";
 import { LIB_VERSION } from "../version";
 import { checkAudience } from "./token/checkAudience";
-import { hasTokenExpired } from "./token/hasExpired";
+import { hasTokenExpired } from "./token/hasTokenExpired";
 
 /**
  * Set the token to be used for requests

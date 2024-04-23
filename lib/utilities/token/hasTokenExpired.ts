@@ -9,5 +9,5 @@ export const hasTokenExpired = (token?: string | JWTDecoded): boolean => {
   if (!decoded) {
     return false;
   }
-  return !!decoded.exp && decoded.exp * 1000 > Date.now();
+  return !!decoded.exp && decoded.exp * 1000 < Date.now();
 };
