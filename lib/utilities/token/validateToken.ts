@@ -1,7 +1,11 @@
 import { kindeConfig } from "../../config";
-import { JwtRsaVerifier } from 'aws-jwt-verify';
+import { JwtRsaVerifier } from "aws-jwt-verify";
 
-async function verifyJwt(token: string, domain: string, audience?: string): Promise<boolean> {
+async function verifyJwt(
+  token: string,
+  domain: string,
+  audience?: string,
+): Promise<boolean> {
   const verifier = JwtRsaVerifier.create({
     issuer: domain,
     audience: audience || null,
