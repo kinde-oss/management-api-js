@@ -62,7 +62,10 @@ async function generateM2MToken() {
 
   const config: RequestInit = { method: "POST", headers, body };
 
-  const response = await fetch(`${kindeConfig.kindeDomain}/oauth2/token`, config);
+  const response = await fetch(
+    `${kindeConfig.kindeDomain}/oauth2/token`,
+    config,
+  );
   const payload: {
     access_token: string;
   } = (await response.json()) as { access_token: string };
