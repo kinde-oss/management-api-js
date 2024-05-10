@@ -334,6 +334,33 @@ export type get_categories_response = {
   has_more?: boolean;
 };
 
+export type create_connection_response = {
+  message?: string;
+  code?: string;
+  connection?: {
+    /**
+     * The connection's ID.
+     */
+    id?: string;
+  };
+};
+
+export type get_connections_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  connections?: Array<connection>;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+};
+
 export type token_introspect = {
   /**
    * Indicates the status of the token.
@@ -425,13 +452,20 @@ export type organization_user = {
 
 export type category = {
   id?: string;
-  name?: boolean;
+  name?: string;
+};
+
+export type connection = {
+  id?: string;
+  name?: string;
+  display_name?: string;
+  strategy?: string;
 };
 
 export type property = {
   id?: string;
   key?: string;
-  name?: boolean;
+  name?: string;
   is_private?: boolean;
   description?: string;
   is_kinde_property?: boolean;
@@ -1099,6 +1133,41 @@ export type DeleteApplicationData = {
 
 export type DeleteApplicationResponse = success_response;
 
+export type GetApplicationConnectionsData = {
+  /**
+   * The identifier/client ID for the application.
+   */
+  applicationId: string;
+};
+
+export type GetApplicationConnectionsResponse = get_connections_response;
+
+export type EnableConnectionData = {
+  /**
+   * The identifier/client ID for the application.
+   */
+  applicationId: string;
+  /**
+   * The identifier for the connection.
+   */
+  connectionId: string;
+};
+
+export type EnableConnectionResponse = unknown;
+
+export type RemoveConnectionData = {
+  /**
+   * The identifier/client ID for the application.
+   */
+  applicationId: string;
+  /**
+   * The identifier for the connection.
+   */
+  connectionId: string;
+};
+
+export type RemoveConnectionResponse = success_response;
+
 export type GetBusinessData = {
   /**
    * Business code.
@@ -1361,6 +1430,114 @@ export type RevokeConnectedAppTokenData = {
 };
 
 export type RevokeConnectedAppTokenResponse = success_response;
+
+export type GetConnectionsData = {
+  /**
+   * The ID of the connection to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The ID of the connection to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type GetConnectionsResponse = get_connections_response;
+
+export type CreateConnectionData = {
+  /**
+   * Connection details.
+   */
+  requestBody: {
+    /**
+     * The internal name of the connection.
+     */
+    name: string;
+    /**
+     * The public facing name of the connection.
+     */
+    display_name: string;
+    /**
+     * The identity provider identifier for the connection.
+     */
+    strategy:
+      | "oauth2:apple"
+      | "oauth2:azure_ad"
+      | "oauth2:bitbucket"
+      | "oauth2:discord"
+      | "oauth2:facebook"
+      | "oauth2:github"
+      | "oauth2:gitlab"
+      | "oauth2:google"
+      | "oauth2:linkedin"
+      | "oauth2:microsoft"
+      | "oauth2:patreon"
+      | "oauth2:slack"
+      | "oauth2:stripe"
+      | "oauth2:twitch"
+      | "oauth2:twitter"
+      | "oauth2:xero"
+      | "saml:custom"
+      | "wsfed:azure_ad";
+    /**
+     * Client IDs of applications in which this connection is to be enabled.
+     */
+    enabled_applications?: Array<string>;
+    /**
+     * The connection's options (varies by strategy).
+     */
+    options?: {
+      [key: string]: unknown;
+    };
+  };
+};
+
+export type CreateConnectionResponse = create_connection_response;
+
+export type GetConnectionData = {
+  /**
+   * The unique identifier for the connection.
+   */
+  connectionId: string;
+};
+
+export type GetConnectionResponse = connection;
+
+export type UpdateConnectionData = {
+  /**
+   * The unique identifier for the connection.
+   */
+  connectionId: string;
+  /**
+   * The fields of the connection to update.
+   */
+  requestBody: {
+    /**
+     * The internal name of the connection.
+     */
+    name?: string;
+    /**
+     * The public facing name of the connection.
+     */
+    display_name?: string;
+    /**
+     * Client IDs of applications in which this connection is to be enabled.
+     */
+    enabled_applications?: Array<string>;
+    /**
+     * The connection's options (varies by strategy).
+     */
+    options?: {
+      [key: string]: unknown;
+    };
+  };
+};
+
+export type UpdateConnectionResponse = success_response;
 
 export type DeleteEnvironementFeatureFlagOverridesResponse = success_response;
 
@@ -2099,7 +2276,7 @@ export type UpdatePropertyData = {
     /**
      * The name of the property.
      */
-    name?: string;
+    name: string;
     /**
      * Description of the property purpose.
      */
@@ -2107,7 +2284,11 @@ export type UpdatePropertyData = {
     /**
      * Whether the property can be included in id and access tokens.
      */
-    is_private?: boolean;
+    is_private: boolean;
+    /**
+     * Which category the property belongs to.
+     */
+    category_id: string;
   };
 };
 
@@ -3020,6 +3201,96 @@ export type $OpenApiTs = {
       };
     };
   };
+  "/api/v1/applications/{application_id}/connections": {
+    get: {
+      req: {
+        /**
+         * The identifier/client ID for the application.
+         */
+        applicationId: string;
+      };
+      res: {
+        /**
+         * Application connections successfully retrieved.
+         */
+        200: get_connections_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/applications/{application_id}/connections/{connection_id}": {
+    post: {
+      req: {
+        /**
+         * The identifier/client ID for the application.
+         */
+        applicationId: string;
+        /**
+         * The identifier for the connection.
+         */
+        connectionId: string;
+      };
+      res: {
+        /**
+         * Connection successfully enabled.
+         */
+        200: unknown;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    delete: {
+      req: {
+        /**
+         * The identifier/client ID for the application.
+         */
+        applicationId: string;
+        /**
+         * The identifier for the connection.
+         */
+        connectionId: string;
+      };
+      res: {
+        /**
+         * Connection successfully removed.
+         */
+        200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
   "/api/v1/business": {
     get: {
       req: {
@@ -3543,6 +3814,186 @@ export type $OpenApiTs = {
          * Invalid HTTP method used.
          */
         405: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/connections": {
+    get: {
+      req: {
+        /**
+         * The ID of the connection to end before.
+         */
+        endingBefore?: string | null;
+        /**
+         * Number of results per page. Defaults to 10 if parameter not sent.
+         */
+        pageSize?: number | null;
+        /**
+         * The ID of the connection to start after.
+         */
+        startingAfter?: string | null;
+      };
+      res: {
+        /**
+         * Connections successfully retrieved.
+         */
+        200: get_connections_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    post: {
+      req: {
+        /**
+         * Connection details.
+         */
+        requestBody: {
+          /**
+           * The internal name of the connection.
+           */
+          name: string;
+          /**
+           * The public facing name of the connection.
+           */
+          display_name: string;
+          /**
+           * The identity provider identifier for the connection.
+           */
+          strategy:
+            | "oauth2:apple"
+            | "oauth2:azure_ad"
+            | "oauth2:bitbucket"
+            | "oauth2:discord"
+            | "oauth2:facebook"
+            | "oauth2:github"
+            | "oauth2:gitlab"
+            | "oauth2:google"
+            | "oauth2:linkedin"
+            | "oauth2:microsoft"
+            | "oauth2:patreon"
+            | "oauth2:slack"
+            | "oauth2:stripe"
+            | "oauth2:twitch"
+            | "oauth2:twitter"
+            | "oauth2:xero"
+            | "saml:custom"
+            | "wsfed:azure_ad";
+          /**
+           * Client IDs of applications in which this connection is to be enabled.
+           */
+          enabled_applications?: Array<string>;
+          /**
+           * The connection's options (varies by strategy).
+           */
+          options?: {
+            [key: string]: unknown;
+          };
+        };
+      };
+      res: {
+        /**
+         * Connection successfully created
+         */
+        201: create_connection_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/connections/{connection_id}": {
+    get: {
+      req: {
+        /**
+         * The unique identifier for the connection.
+         */
+        connectionId: string;
+      };
+      res: {
+        /**
+         * Connection successfully retrieved.
+         */
+        200: connection;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    patch: {
+      req: {
+        /**
+         * The unique identifier for the connection.
+         */
+        connectionId: string;
+        /**
+         * The fields of the connection to update.
+         */
+        requestBody: {
+          /**
+           * The internal name of the connection.
+           */
+          name?: string;
+          /**
+           * The public facing name of the connection.
+           */
+          display_name?: string;
+          /**
+           * Client IDs of applications in which this connection is to be enabled.
+           */
+          enabled_applications?: Array<string>;
+          /**
+           * The connection's options (varies by strategy).
+           */
+          options?: {
+            [key: string]: unknown;
+          };
+        };
+      };
+      res: {
+        /**
+         * Connection successfully updated.
+         */
+        200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
         /**
          * Request was throttled.
          */
@@ -4922,7 +5373,7 @@ export type $OpenApiTs = {
           /**
            * The name of the property.
            */
-          name?: string;
+          name: string;
           /**
            * Description of the property purpose.
            */
@@ -4930,7 +5381,11 @@ export type $OpenApiTs = {
           /**
            * Whether the property can be included in id and access tokens.
            */
-          is_private?: boolean;
+          is_private: boolean;
+          /**
+           * Which category the property belongs to.
+           */
+          category_id: string;
         };
       };
       res: {

@@ -29,6 +29,12 @@ import type {
   UpdateApplicationResponse,
   DeleteApplicationData,
   DeleteApplicationResponse,
+  GetApplicationConnectionsData,
+  GetApplicationConnectionsResponse,
+  EnableConnectionData,
+  EnableConnectionResponse,
+  RemoveConnectionData,
+  RemoveConnectionResponse,
   GetBusinessData,
   GetBusinessResponse,
   UpdateBusinessData,
@@ -59,6 +65,14 @@ import type {
   GetConnectedAppTokenResponse,
   RevokeConnectedAppTokenData,
   RevokeConnectedAppTokenResponse,
+  GetConnectionsData,
+  GetConnectionsResponse,
+  CreateConnectionData,
+  CreateConnectionResponse,
+  GetConnectionData,
+  GetConnectionResponse,
+  UpdateConnectionData,
+  UpdateConnectionResponse,
   DeleteEnvironementFeatureFlagOverridesResponse,
   GetEnvironementFeatureFlagsResponse,
   DeleteEnvironementFeatureFlagOverrideData,
@@ -522,6 +536,85 @@ export class Applications {
       },
     });
   }
+
+  /**
+   * Get connections
+   * Gets all connections for an application.
+   * @param data The data for the request.
+   * @param data.applicationId The identifier/client ID for the application.
+   * @returns get_connections_response Application connections successfully retrieved.
+   * @throws ApiError
+   */
+  public static getApplicationConnections(
+    data: GetApplicationConnectionsData,
+  ): CancelablePromise<GetApplicationConnectionsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/applications/{application_id}/connections",
+      path: {
+        application_id: data.applicationId,
+      },
+      errors: {
+        400: "Bad request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Enable connection
+   * Enable an auth connection for an application.
+   * @param data The data for the request.
+   * @param data.applicationId The identifier/client ID for the application.
+   * @param data.connectionId The identifier for the connection.
+   * @returns unknown Connection successfully enabled.
+   * @throws ApiError
+   */
+  public static enableConnection(
+    data: EnableConnectionData,
+  ): CancelablePromise<EnableConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/applications/{application_id}/connections/{connection_id}",
+      path: {
+        application_id: data.applicationId,
+        connection_id: data.connectionId,
+      },
+      errors: {
+        400: "Bad request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Remove connection
+   * Turn off an auth connection for an application
+   * @param data The data for the request.
+   * @param data.applicationId The identifier/client ID for the application.
+   * @param data.connectionId The identifier for the connection.
+   * @returns success_response Connection successfully removed.
+   * @throws ApiError
+   */
+  public static removeConnection(
+    data: RemoveConnectionData,
+  ): CancelablePromise<RemoveConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/applications/{application_id}/connections/{connection_id}",
+      path: {
+        application_id: data.applicationId,
+        connection_id: data.connectionId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
 }
 
 export class Business {
@@ -972,6 +1065,115 @@ export class ConnectedApps {
         400: "Bad request.",
         403: "Invalid credentials.",
         405: "Invalid HTTP method used.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+}
+
+export class Connections {
+  /**
+   * List Connections
+   * Returns a list of Connections
+   *
+   * @param data The data for the request.
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.startingAfter The ID of the connection to start after.
+   * @param data.endingBefore The ID of the connection to end before.
+   * @returns get_connections_response Connections successfully retrieved.
+   * @throws ApiError
+   */
+  public static getConnections(
+    data: GetConnectionsData = {},
+  ): CancelablePromise<GetConnectionsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/connections",
+      query: {
+        page_size: data.pageSize,
+        starting_after: data.startingAfter,
+        ending_before: data.endingBefore,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create Connection
+   * Create Connection.
+   * @param data The data for the request.
+   * @param data.requestBody Connection details.
+   * @returns create_connection_response Connection successfully created
+   * @throws ApiError
+   */
+  public static createConnection(
+    data: CreateConnectionData,
+  ): CancelablePromise<CreateConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/connections",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get Connection
+   * Get Connection.
+   * @param data The data for the request.
+   * @param data.connectionId The unique identifier for the connection.
+   * @returns connection Connection successfully retrieved.
+   * @throws ApiError
+   */
+  public static getConnection(
+    data: GetConnectionData,
+  ): CancelablePromise<GetConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/connections/{connection_id}",
+      path: {
+        connection_id: data.connectionId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update Connection
+   * Update Connection.
+   * @param data The data for the request.
+   * @param data.connectionId The unique identifier for the connection.
+   * @param data.requestBody The fields of the connection to update.
+   * @returns success_response Connection successfully updated.
+   * @throws ApiError
+   */
+  public static updateConnection(
+    data: UpdateConnectionData,
+  ): CancelablePromise<UpdateConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/connections/{connection_id}",
+      path: {
+        connection_id: data.connectionId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
         429: "Request was throttled.",
       },
     });
