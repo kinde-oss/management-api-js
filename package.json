@@ -14,7 +14,8 @@
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "lint": "prettier --check .",
-    "lint:fix": "prettier --write ."
+    "lint:fix": "prettier --write .",
+    "spec:update": "curl -o spec/kinde-mgmt-api-specs.yaml https://kinde.com/api/kinde-mgmt-api-specs.yaml"
   },
   "module": "dist/kinde-management-api-js.cjs",
   "main": "dist/kinde-management-api-js.cjs",
