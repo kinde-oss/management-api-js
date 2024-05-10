@@ -610,13 +610,12 @@ export type get_organization_feature_flags_response = {
   /**
    * The environment's feature flag settings.
    */
-  feature_flags?: Record<
-    string,
-    {
+  feature_flags?: {
+    [key: string]: {
       type?: "str" | "int" | "bool";
       value?: string;
-    }
-  >;
+    };
+  };
 };
 
 export type get_environment_feature_flags_response = {
@@ -631,13 +630,12 @@ export type get_environment_feature_flags_response = {
   /**
    * The environment's feature flag settings.
    */
-  feature_flags?: Record<
-    string,
-    {
+  feature_flags?: {
+    [key: string]: {
       type?: "str" | "int" | "bool";
       value?: string;
-    }
-  >;
+    };
+  };
   /**
    * Pagination token.
    */
@@ -918,6 +916,1683 @@ export type api = {
   }>;
 };
 
+export type GetUserResponse = user_profile;
+
+export type TokenIntrospectionData = {
+  /**
+   * Token details.
+   */
+  formData: {
+    /**
+     * The token to be introspected.
+     */
+    token?: string;
+    /**
+     * The provided token's type.
+     */
+    token_type?: string;
+  };
+};
+
+export type TokenIntrospectionResponse = token_introspect;
+
+export type TokenRevocationData = {
+  /**
+   * Details of the token to be revoked.
+   */
+  formData: {
+    /**
+     * The token to be revoked.
+     */
+    token?: string;
+    /**
+     * The identifier for your client.
+     */
+    client_id?: string;
+    /**
+     * The secret associated with your client.
+     */
+    client_secret?: string;
+  };
+};
+
+export type TokenRevocationResponse = unknown;
+
+export type GetUserProfileV2Response = user_profile_v2;
+
+export type GetApIsResponse = apis;
+
+export type AddApIsData = {
+  /**
+   * API details.
+   */
+  requestBody: {
+    name: string;
+    audience: string;
+  };
+};
+
+export type AddApIsResponse = success_response;
+
+export type GetApiData = {
+  /**
+   * The API's id.
+   */
+  apiId: string;
+};
+
+export type GetApiResponse = api;
+
+export type DeleteApiData = {
+  /**
+   * The API's id.
+   */
+  apiId: string;
+};
+
+export type DeleteApiResponse = success_response;
+
+export type UpdateApiApplicationsData = {
+  /**
+   * The identifier for the API.
+   */
+  apiId: string;
+  /**
+   * The applications you want to connect or disconnect.
+   */
+  requestBody: {
+    applications: Array<{
+      /**
+       * The application's id.
+       */
+      id: string;
+      /**
+       * Optional operation, set to 'delete' to remove the user from the organization.
+       */
+      operation?: string;
+    }>;
+  };
+};
+
+export type UpdateApiApplicationsResponse = success_response;
+
+export type GetApplicationsData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | null;
+};
+
+export type GetApplicationsResponse = get_applications_response;
+
+export type CreateApplicationData = {
+  /**
+   * Application details.
+   */
+  requestBody?: {
+    /**
+     * The application's name.
+     */
+    name?: string;
+    /**
+     * The application's type.
+     */
+    type?: "reg" | "spa" | "m2m";
+  };
+};
+
+export type CreateApplicationResponse = create_application_response;
+
+export type GetApplicationData = {
+  /**
+   * The identifier for the application.
+   */
+  applicationId: string;
+};
+
+export type GetApplicationResponse = get_application_response;
+
+export type UpdateApplicationData = {
+  /**
+   * The identifier for the application.
+   */
+  applicationId: string;
+  /**
+   * Application details.
+   */
+  requestBody?: {
+    /**
+     * The application's name.
+     */
+    name?: string;
+    /**
+     * The application's language key.
+     */
+    language_key?: string;
+    /**
+     * The application's logout uris.
+     */
+    logout_uris?: Array<string>;
+    /**
+     * The application's redirect uris.
+     */
+    redirect_uris?: Array<string>;
+  };
+};
+
+export type UpdateApplicationResponse = unknown;
+
+export type DeleteApplicationData = {
+  /**
+   * The identifier for the application.
+   */
+  applicationId: string;
+};
+
+export type DeleteApplicationResponse = success_response;
+
+export type GetBusinessData = {
+  /**
+   * Business code.
+   */
+  code: string;
+  /**
+   * Email associated with business.
+   */
+  email: string;
+  /**
+   * The industry your business is in.
+   */
+  industry?: string;
+  /**
+   * Business name.
+   */
+  name: string;
+  /**
+   * Phone number associated with business.
+   */
+  phone?: string | null;
+  /**
+   * Your Privacy policy URL.
+   */
+  privacyUrl?: string | null;
+  /**
+   * Your Terms and Conditions URL.
+   */
+  termsUrl?: string | null;
+  /**
+   * The timezone your business is in.
+   */
+  timezone?: string;
+};
+
+export type GetBusinessResponse = success_response;
+
+export type UpdateBusinessData = {
+  /**
+   * Business name.
+   */
+  businessName: string;
+  /**
+   * The key of the industry your business is in.
+   */
+  industryKey?: string;
+  /**
+   * Show a policy acceptance checkbox on sign up.
+   */
+  isClickWrap?: boolean | null;
+  /**
+   * Display "Powered by Kinde" on your sign up, sign in, and subscription pages.
+   */
+  isShowKindeBranding?: string | null;
+  /**
+   * Your Kinde Perk code.
+   */
+  partnerCode?: string | null;
+  /**
+   * Email associated with business.
+   */
+  primaryEmail: string;
+  /**
+   * Phone number associated with business.
+   */
+  primaryPhone?: string | null;
+  /**
+   * Your Privacy policy URL.
+   */
+  privacyUrl?: string | null;
+  /**
+   * Your Terms and Conditions URL.
+   */
+  termsUrl?: string | null;
+  /**
+   * The ID of the timezone your business is in.
+   */
+  timezoneId?: string;
+};
+
+export type UpdateBusinessResponse = success_response;
+
+export type GetIndustriesData = {
+  /**
+   * Industry Key.
+   */
+  industryKey?: string;
+  /**
+   * Industry name.
+   */
+  name?: string;
+};
+
+export type GetIndustriesResponse = success_response;
+
+export type GetTimezonesData = {
+  /**
+   * Timezone.
+   */
+  name?: string;
+  /**
+   * Timezone Key.
+   */
+  timezoneKey?: string;
+};
+
+export type GetTimezonesResponse = success_response;
+
+export type GetCallbackUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+};
+
+export type GetCallbackUrLsResponse = redirect_callback_urls;
+
+export type AddRedirectCallbackUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+  /**
+   * Callback details.
+   */
+  requestBody: {
+    /**
+     * Array of callback urls.
+     */
+    urls?: Array<string>;
+  };
+};
+
+export type AddRedirectCallbackUrLsResponse = success_response;
+
+export type ReplaceRedirectCallbackUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+  /**
+   * Callback details.
+   */
+  requestBody: {
+    /**
+     * Array of callback urls.
+     */
+    urls?: Array<string>;
+  };
+};
+
+export type ReplaceRedirectCallbackUrLsResponse = success_response;
+
+export type DeleteCallbackUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+  /**
+   * Urls to delete, comma separated and url encoded.
+   */
+  urls: string;
+};
+
+export type DeleteCallbackUrLsResponse = success_response;
+
+export type GetLogoutUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+};
+
+export type GetLogoutUrLsResponse = logout_redirect_urls;
+
+export type AddLogoutRedirectUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+  /**
+   * Callback details.
+   */
+  requestBody: {
+    /**
+     * Array of logout urls.
+     */
+    urls?: Array<string>;
+  };
+};
+
+export type AddLogoutRedirectUrLsResponse = success_response;
+
+export type ReplaceLogoutRedirectUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+  /**
+   * Callback details.
+   */
+  requestBody: {
+    /**
+     * Array of logout urls.
+     */
+    urls?: Array<string>;
+  };
+};
+
+export type ReplaceLogoutRedirectUrLsResponse = success_response;
+
+export type DeleteLogoutUrLsData = {
+  /**
+   * The identifier for the application.
+   */
+  appId: string;
+  /**
+   * Urls to delete, comma separated and url encoded.
+   */
+  urls: string;
+};
+
+export type DeleteLogoutUrLsResponse = success_response;
+
+export type GetConnectedAppAuthUrlData = {
+  /**
+   * The unique key code reference of the connected app to authenticate against.
+   */
+  keyCodeRef: string;
+  /**
+   * The code of the Kinde organization that needs to authenticate to the third-party connected app.
+   */
+  orgCode?: string;
+  /**
+   * A URL that overrides the default callback URL setup in your connected app configuration
+   */
+  overrideCallbackUrl?: string;
+  /**
+   * The id of the user that needs to authenticate to the third-party connected app.
+   */
+  userId?: string;
+};
+
+export type GetConnectedAppAuthUrlResponse = connected_apps_auth_url;
+
+export type GetConnectedAppTokenData = {
+  /**
+   * The unique sesssion id reprensenting the login session of a user.
+   */
+  sessionId: string;
+};
+
+export type GetConnectedAppTokenResponse = connected_apps_access_token;
+
+export type RevokeConnectedAppTokenData = {
+  /**
+   * The unique sesssion id reprensenting the login session of a user.
+   */
+  sessionId: string;
+};
+
+export type RevokeConnectedAppTokenResponse = success_response;
+
+export type DeleteEnvironementFeatureFlagOverridesResponse = success_response;
+
+export type GetEnvironementFeatureFlagsResponse =
+  get_environment_feature_flags_response;
+
+export type DeleteEnvironementFeatureFlagOverrideData = {
+  /**
+   * The identifier for the feature flag.
+   */
+  featureFlagKey: string;
+};
+
+export type DeleteEnvironementFeatureFlagOverrideResponse = success_response;
+
+export type UpdateEnvironementFeatureFlagOverrideData = {
+  /**
+   * The identifier for the feature flag.
+   */
+  featureFlagKey: string;
+  /**
+   * Flag details.
+   */
+  requestBody: {
+    /**
+     * The flag override value.
+     */
+    value: string;
+  };
+};
+
+export type UpdateEnvironementFeatureFlagOverrideResponse = success_response;
+
+export type CreateFeatureFlagData = {
+  /**
+   * Flag details.
+   */
+  requestBody: {
+    /**
+     * The name of the flag.
+     */
+    name: string;
+    /**
+     * Description of the flag purpose.
+     */
+    description?: string;
+    /**
+     * The flag identifier to use in code.
+     */
+    key: string;
+    /**
+     * The variable type.
+     */
+    type: "str" | "int" | "bool";
+    /**
+     * Allow the flag to be overridden at a different level.
+     */
+    allow_override_level?: "env" | "org" | "usr";
+    /**
+     * Default value for the flag used by environments and organizations.
+     */
+    default_value: string;
+  };
+};
+
+export type CreateFeatureFlagResponse = success_response;
+
+export type DeleteFeatureFlagData = {
+  /**
+   * The identifier for the feature flag.
+   */
+  featureFlagKey: string;
+};
+
+export type DeleteFeatureFlagResponse = success_response;
+
+export type UpdateFeatureFlagData = {
+  /**
+   * Allow the flag to be overridden at a different level.
+   */
+  allowOverrideLevel: "env" | "org";
+  /**
+   * Default value for the flag used by environments and organizations.
+   */
+  defaultValue: string;
+  /**
+   * Description of the flag purpose.
+   */
+  description: string;
+  /**
+   * The key identifier for the feature flag.
+   */
+  featureFlagKey: string;
+  /**
+   * The name of the flag.
+   */
+  name: string;
+  /**
+   * The variable type
+   */
+  type: "str" | "int" | "bool";
+};
+
+export type UpdateFeatureFlagResponse = success_response;
+
+export type GetOrganizationData = {
+  /**
+   * The organization's code.
+   */
+  code?: string;
+};
+
+export type GetOrganizationResponse = organization;
+
+export type CreateOrganizationData = {
+  /**
+   * Organization details.
+   */
+  requestBody: {
+    /**
+     * The organization's name.
+     */
+    name: string;
+    /**
+     * The organization's feature flag settings.
+     */
+    feature_flags?: {
+      [key: string]: "str" | "int" | "bool";
+    };
+    /**
+     * The organization's ID.
+     */
+    external_id?: string;
+    /**
+     * The organization's brand settings - background color.
+     */
+    background_color?: string;
+    /**
+     * The organization's brand settings - button color.
+     */
+    button_color?: string;
+    /**
+     * The organization's brand settings - button text color.
+     */
+    button_text_color?: string;
+    /**
+     * The organization's brand settings - link color.
+     */
+    link_color?: string;
+    /**
+     * The organization's brand settings - dark mode background color.
+     */
+    background_color_dark?: string;
+    /**
+     * The organization's brand settings - dark mode button color.
+     */
+    button_color_dark?: string;
+    /**
+     * The organization's brand settings - dark mode button text color.
+     */
+    button_text_color_dark?: string;
+    /**
+     * The organization's brand settings - dark mode link color.
+     */
+    link_color_dark?: string;
+    /**
+     * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
+     */
+    theme_code?: string;
+    /**
+     * The organization's handle.
+     */
+    handle?: string;
+    /**
+     * Users can sign up to this organization.
+     */
+    is_allow_registrations?: boolean;
+  };
+};
+
+export type CreateOrganizationResponse = create_organization_response;
+
+export type UpdateOrganizationData = {
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+  /**
+   * Organization details.
+   */
+  requestBody?: {
+    /**
+     * The organization's name.
+     */
+    name?: string;
+    /**
+     * The organization's ID.
+     */
+    external_id?: string;
+    /**
+     * The organization's brand settings - background color.
+     */
+    background_color?: string;
+    /**
+     * The organization's brand settings - button color.
+     */
+    button_color?: string;
+    /**
+     * The organization's brand settings - button text color.
+     */
+    button_text_color?: string;
+    /**
+     * The organization's brand settings - link color.
+     */
+    link_color?: string;
+    /**
+     * The organization's brand settings - dark mode background color.
+     */
+    background_color_dark?: string;
+    /**
+     * The organization's brand settings - dark mode button color.
+     */
+    button_color_dark?: string;
+    /**
+     * The organization's brand settings - dark mode button text color.
+     */
+    button_text_color_dark?: string;
+    /**
+     * The organization's brand settings - dark mode link color.
+     */
+    link_color_dark?: string;
+    /**
+     * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
+     */
+    theme_code?: string;
+    /**
+     * The organization's handle.
+     */
+    handle?: string;
+    /**
+     * Users can sign up to this organization.
+     */
+    is_allow_registrations?: boolean;
+  };
+};
+
+export type UpdateOrganizationResponse = success_response;
+
+export type DeleteOrganizationData = {
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+};
+
+export type DeleteOrganizationResponse = unknown;
+
+export type GetOrganizationsData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
+};
+
+export type GetOrganizationsResponse = get_organizations_response;
+
+export type GetOrganizationUsersData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Filter by user permissions comma separated (where all match)
+   */
+  permissions?: string;
+  /**
+   * Filter by user roles comma separated (where all match)
+   */
+  roles?: string;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
+};
+
+export type GetOrganizationUsersResponse = get_organization_users_response;
+
+export type AddOrganizationUsersData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  requestBody?: {
+    /**
+     * Users to be added to the organization.
+     */
+    users?: Array<{
+      /**
+       * The users id.
+       */
+      id?: string;
+      /**
+       * Role keys to assign to the user.
+       */
+      roles?: Array<string>;
+      /**
+       * Permission keys to assign to the user.
+       */
+      permissions?: Array<string>;
+    }>;
+  };
+};
+
+export type AddOrganizationUsersResponse =
+  add_organization_users_response | void;
+
+export type UpdateOrganizationUsersData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  requestBody?: {
+    /**
+     * Users to add, update or remove from the organization.
+     */
+    users?: Array<{
+      /**
+       * The users id.
+       */
+      id?: string;
+      /**
+       * Optional operation, set to 'delete' to remove the user from the organization.
+       */
+      operation?: string;
+      /**
+       * Role keys to assign to the user.
+       */
+      roles?: Array<string>;
+      /**
+       * Permission keys to assign to the user.
+       */
+      permissions?: Array<string>;
+    }>;
+  };
+};
+
+export type UpdateOrganizationUsersResponse =
+  update_organization_users_response;
+
+export type GetOrganizationUserRolesData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type GetOrganizationUserRolesResponse =
+  get_organizations_user_roles_response;
+
+export type CreateOrganizationUserRoleData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Role details.
+   */
+  requestBody: {
+    /**
+     * The role id.
+     */
+    role_id?: string;
+  };
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type CreateOrganizationUserRoleResponse = success_response;
+
+export type DeleteOrganizationUserRoleData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The role id.
+   */
+  roleId: string;
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type DeleteOrganizationUserRoleResponse = success_response;
+
+export type GetOrganizationUserPermissionsData = {
+  /**
+   * Specify additional data to retrieve. Use "roles".
+   */
+  expand?: string | null;
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type GetOrganizationUserPermissionsResponse =
+  get_organizations_user_permissions_response;
+
+export type CreateOrganizationUserPermissionData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Permission details.
+   */
+  requestBody: {
+    /**
+     * The permission id.
+     */
+    permission_id?: string;
+  };
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type CreateOrganizationUserPermissionResponse = success_response;
+
+export type DeleteOrganizationUserPermissionData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The permission id.
+   */
+  permissionId: string;
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type DeleteOrganizationUserPermissionResponse = success_response;
+
+export type RemoveOrganizationUserData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The user's id.
+   */
+  userId: string;
+};
+
+export type RemoveOrganizationUserResponse = success_response;
+
+export type GetOrganizationFeatureFlagsData = {
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+};
+
+export type GetOrganizationFeatureFlagsResponse =
+  get_organization_feature_flags_response;
+
+export type DeleteOrganizationFeatureFlagOverridesData = {
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+};
+
+export type DeleteOrganizationFeatureFlagOverridesResponse = success_response;
+
+export type DeleteOrganizationFeatureFlagOverrideData = {
+  /**
+   * The identifier for the feature flag.
+   */
+  featureFlagKey: string;
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+};
+
+export type DeleteOrganizationFeatureFlagOverrideResponse = success_response;
+
+export type UpdateOrganizationFeatureFlagOverrideData = {
+  /**
+   * The identifier for the feature flag
+   */
+  featureFlagKey: string;
+  /**
+   * The identifier for the organization
+   */
+  orgCode: string;
+  /**
+   * Override value
+   */
+  value: string;
+};
+
+export type UpdateOrganizationFeatureFlagOverrideResponse = success_response;
+
+export type UpdateOrganizationPropertyData = {
+  /**
+   * The identifier for the organization
+   */
+  orgCode: string;
+  /**
+   * The identifier for the property
+   */
+  propertyKey: string;
+  /**
+   * The new property value
+   */
+  value: string;
+};
+
+export type UpdateOrganizationPropertyResponse = success_response;
+
+export type GetOrganizationPropertyValuesData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+};
+
+export type GetOrganizationPropertyValuesResponse =
+  get_property_values_response;
+
+export type UpdateOrganizationPropertiesData = {
+  /**
+   * The identifier for the organization
+   */
+  orgCode: string;
+  /**
+   * Properties to update.
+   */
+  requestBody: {
+    /**
+     * Property keys and values
+     */
+    properties: {
+      [key: string]: unknown;
+    };
+  };
+};
+
+export type UpdateOrganizationPropertiesResponse = success_response;
+
+export type DeleteOrganizationHandleData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+};
+
+export type DeleteOrganizationHandleResponse = success_response;
+
+export type GetPermissionsData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc" | null;
+};
+
+export type GetPermissionsResponse = get_permissions_response;
+
+export type CreatePermissionData = {
+  /**
+   * Permission details.
+   */
+  requestBody?: {
+    /**
+     * The permission's name.
+     */
+    name?: string;
+    /**
+     * The permission's description.
+     */
+    description?: string;
+    /**
+     * The permission identifier to use in code.
+     */
+    key?: string;
+  };
+};
+
+export type CreatePermissionResponse = success_response;
+
+export type UpdatePermissionsData = {
+  /**
+   * The identifier for the permission.
+   */
+  permissionId: number;
+  /**
+   * Permission details.
+   */
+  requestBody?: {
+    /**
+     * The permission's name.
+     */
+    name?: string;
+    /**
+     * The permission's description.
+     */
+    description?: string;
+    /**
+     * The permission identifier to use in code.
+     */
+    key?: string;
+  };
+};
+
+export type UpdatePermissionsResponse = success_response;
+
+export type DeletePermissionData = {
+  /**
+   * The identifier for the permission.
+   */
+  permissionId: string;
+};
+
+export type DeletePermissionResponse = success_response;
+
+export type GetPropertiesData = {
+  /**
+   * Filter results by User or Organization context
+   */
+  context?: "usr" | "org" | null;
+  /**
+   * The ID of the property to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The ID of the property to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type GetPropertiesResponse = get_properties_response;
+
+export type CreatePropertyData = {
+  /**
+   * Property details.
+   */
+  requestBody: {
+    /**
+     * The name of the property.
+     */
+    name: string;
+    /**
+     * Description of the property purpose.
+     */
+    description?: string;
+    /**
+     * The property identifier to use in code.
+     */
+    key: string;
+    /**
+     * The property type.
+     */
+    type: "single_line_text" | "multi_line_text";
+    /**
+     * The context that the property applies to.
+     */
+    context: "org" | "usr";
+    /**
+     * Whether the property can be included in id and access tokens.
+     */
+    is_private: boolean;
+    /**
+     * Which category the property belongs to.
+     */
+    category_id: string;
+  };
+};
+
+export type CreatePropertyResponse = create_property_response;
+
+export type UpdatePropertyData = {
+  /**
+   * The unique identifier for the property.
+   */
+  propertyId: string;
+  /**
+   * The fields of the property to update.
+   */
+  requestBody: {
+    /**
+     * The name of the property.
+     */
+    name?: string;
+    /**
+     * Description of the property purpose.
+     */
+    description?: string;
+    /**
+     * Whether the property can be included in id and access tokens.
+     */
+    is_private?: boolean;
+  };
+};
+
+export type UpdatePropertyResponse = success_response;
+
+export type GetCategoriesData = {
+  /**
+   * Filter the results by User or Organization context
+   */
+  context?: "usr" | "org" | null;
+  /**
+   * The ID of the category to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The ID of the category to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type GetCategoriesResponse = get_categories_response;
+
+export type CreateCategoryData = {
+  /**
+   * Category details.
+   */
+  requestBody: {
+    /**
+     * The name of the category.
+     */
+    name: string;
+    /**
+     * The context that the category applies to.
+     */
+    context: "org" | "usr";
+  };
+};
+
+export type CreateCategoryResponse = create_category_response;
+
+export type UpdateCategoryData = {
+  /**
+   * The unique identifier for the category.
+   */
+  categoryId: string;
+  /**
+   * The fields of the category to update.
+   */
+  requestBody: {
+    /**
+     * The name of the category.
+     */
+    name?: string;
+  };
+};
+
+export type UpdateCategoryResponse = success_response;
+
+export type GetRolesData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc" | null;
+};
+
+export type GetRolesResponse = get_roles_response;
+
+export type CreateRoleData = {
+  /**
+   * Role details.
+   */
+  requestBody?: {
+    /**
+     * The role's name.
+     */
+    name?: string;
+    /**
+     * The role's description.
+     */
+    description?: string;
+    /**
+     * The role identifier to use in code.
+     */
+    key?: string;
+    /**
+     * Set role as default for new users.
+     */
+    is_default_role?: boolean;
+  };
+};
+
+export type CreateRoleResponse = success_response;
+
+export type GetRolePermissionData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The role's public id.
+   */
+  roleId: string;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc" | null;
+};
+
+export type GetRolePermissionResponse = roles_permission_response;
+
+export type UpdateRolePermissionsData = {
+  requestBody: {
+    /**
+     * Permissions to add or remove from the role.
+     */
+    permissions?: Array<{
+      /**
+       * The permission id.
+       */
+      id?: string;
+      /**
+       * Optional operation, set to 'delete' to remove the permission from the role.
+       */
+      operation?: string;
+    }>;
+  };
+  /**
+   * The identifier for the role.
+   */
+  roleId: string;
+};
+
+export type UpdateRolePermissionsResponse = update_role_permissions_response;
+
+export type RemoveRolePermissionData = {
+  /**
+   * The permission's public id.
+   */
+  permissionId: string;
+  /**
+   * The role's public id.
+   */
+  roleId: string;
+};
+
+export type RemoveRolePermissionResponse = success_response;
+
+export type UpdateRolesData = {
+  /**
+   * Role details.
+   */
+  requestBody?: {
+    /**
+     * The role's name.
+     */
+    name: string;
+    /**
+     * The role's description.
+     */
+    description?: string;
+    /**
+     * The role identifier to use in code.
+     */
+    key: string;
+    /**
+     * Set role as default for new users.
+     */
+    is_default_role?: boolean;
+  };
+  /**
+   * The identifier for the role.
+   */
+  roleId: string;
+};
+
+export type UpdateRolesResponse = success_response;
+
+export type DeleteRoleData = {
+  /**
+   * The identifier for the role.
+   */
+  roleId: string;
+};
+
+export type DeleteRoleResponse = success_response;
+
+export type GetSubscribersData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
+};
+
+export type GetSubscribersResponse = get_subscribers_response;
+
+export type CreateSubscriberData = {
+  /**
+   * The email address of the subscriber.
+   */
+  email: string | null;
+  /**
+   * Subscriber's first name.
+   */
+  firstName: string;
+  /**
+   * Subscriber's last name.
+   */
+  lastName: string | null;
+};
+
+export type CreateSubscriberResponse = create_subscriber_success_response;
+
+export type GetSubscriberData = {
+  /**
+   * The subscriber's id.
+   */
+  subscriberId: string;
+};
+
+export type GetSubscriberResponse = get_subscriber_response;
+
+export type GetUsersData = {
+  /**
+   * Filter the results by email address. The query string should be comma separated and url encoded.
+   */
+  email?: string | null;
+  /**
+   * Specify additional data to retrieve. Use "organizations" and/or "identities".
+   */
+  expand?: string | null;
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * ID of the user to filter by.
+   */
+  userId?: string | null;
+};
+
+export type GetUsersResponse = users_response;
+
+export type RefreshUserClaimsData = {
+  /**
+   * The id of the user whose claims needs to be updated.
+   */
+  userId: string;
+};
+
+export type RefreshUserClaimsResponse = success_response;
+
+export type GetUserDataData = {
+  /**
+   * Specify additional data to retrieve. Use "organizations" and/or "identities".
+   */
+  expand?: string | null;
+  /**
+   * The user's id.
+   */
+  id: string;
+};
+
+export type GetUserDataResponse = user;
+
+export type CreateUserData = {
+  /**
+   * The details of the user to create.
+   */
+  requestBody?: {
+    /**
+     * Basic information required to create a user.
+     */
+    profile?: {
+      /**
+       * User's first name.
+       */
+      given_name?: string;
+      /**
+       * User's last name.
+       */
+      family_name?: string;
+    };
+    /**
+     * The unique code associated with the organization you want the user to join.
+     */
+    organization_code?: string;
+    /**
+     * Array of identities to assign to the created user
+     */
+    identities?: Array<{
+      /**
+       * The type of identity to create, for e.g. email.
+       */
+      type?: "email" | "username";
+      /**
+       * Additional details required to create the user.
+       */
+      details?: {
+        /**
+         * The email address of the user.
+         */
+        email?: string;
+        /**
+         * The phone number of the user.
+         */
+        phone?: string;
+        /**
+         * The username of the user.
+         */
+        username?: string;
+      };
+    }>;
+  };
+};
+
+export type CreateUserResponse = create_user_response;
+
+export type UpdateUserData = {
+  /**
+   * The user's id.
+   */
+  id: string;
+  /**
+   * The user to update.
+   */
+  requestBody: {
+    /**
+     * User's first name.
+     */
+    given_name?: string;
+    /**
+     * User's last name.
+     */
+    family_name?: string;
+    /**
+     * Whether the user is currently suspended or not.
+     */
+    is_suspended?: boolean;
+    /**
+     * Prompt the user to change their password on next sign in.
+     */
+    is_password_reset_requested?: boolean;
+  };
+};
+
+export type UpdateUserResponse = update_user_response;
+
+export type DeleteUserData = {
+  /**
+   * The user's id.
+   */
+  id: string;
+  /**
+   * Delete all data and remove the user's profile from all of Kinde, including the subscriber list
+   */
+  isDeleteProfile?: boolean;
+};
+
+export type DeleteUserResponse = success_response;
+
+export type UpdateUserFeatureFlagOverrideData = {
+  /**
+   * The identifier for the feature flag
+   */
+  featureFlagKey: string;
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+  /**
+   * Override value
+   */
+  value: string;
+};
+
+export type UpdateUserFeatureFlagOverrideResponse = success_response;
+
+export type UpdateUserPropertyData = {
+  /**
+   * The identifier for the property
+   */
+  propertyKey: string;
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+  /**
+   * The new property value
+   */
+  value: string;
+};
+
+export type UpdateUserPropertyResponse = success_response;
+
+export type GetUserPropertyValuesData = {
+  /**
+   * The user's ID.
+   */
+  userId: string;
+};
+
+export type GetUserPropertyValuesResponse = get_property_values_response;
+
+export type UpdateUserPropertiesData = {
+  /**
+   * Properties to update.
+   */
+  requestBody: {
+    /**
+     * Property keys and values
+     */
+    properties: {
+      [key: string]: unknown;
+    };
+  };
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type UpdateUserPropertiesResponse = success_response;
+
+export type SetUserPasswordData = {
+  /**
+   * Password details.
+   */
+  requestBody: {
+    /**
+     * The hashed password.
+     */
+    hashed_password: string;
+    /**
+     * The hashing method or algorithm used to encrypt the user’s password. Default is bcrypt.
+     */
+    hashing_method?: "bcrypt" | "crypt" | "md5" | "wordpress";
+    /**
+     * Extra characters added to passwords to make them stronger. Not required for bcrypt.
+     */
+    salt?: string;
+    /**
+     * Position of salt in password string. Not required for bcrypt.
+     */
+    salt_position?: "prefix" | "suffix";
+    /**
+     * The user will be prompted to set a new password after entering this one.
+     */
+    is_temporary_password?: boolean;
+  };
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type SetUserPasswordResponse = success_response;
+
 export type $OpenApiTs = {
   "/oauth2/user_profile": {
     get: {
@@ -926,6 +2601,10 @@ export type $OpenApiTs = {
          * Details of logged in user V1.
          */
         200: user_profile;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
       };
     };
   };
@@ -951,6 +2630,18 @@ export type $OpenApiTs = {
          * Details of the token.
          */
         200: token_introspect;
+        /**
+         * Bad request.
+         */
+        401: token_error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -979,7 +2670,19 @@ export type $OpenApiTs = {
         /**
          * Token successfully revoked.
          */
-        200: any;
+        200: unknown;
+        /**
+         * Bad request.
+         */
+        401: token_error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -990,6 +2693,14 @@ export type $OpenApiTs = {
          * Details of logged in user V2.
          */
         200: user_profile_v2;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1000,6 +2711,18 @@ export type $OpenApiTs = {
          * APIs successfully retrieved.
          */
         200: apis;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -1017,6 +2740,18 @@ export type $OpenApiTs = {
          * APIs successfully updated
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1033,6 +2768,18 @@ export type $OpenApiTs = {
          * API successfully retrieved.
          */
         200: api;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -1047,6 +2794,18 @@ export type $OpenApiTs = {
          * API successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1078,6 +2837,18 @@ export type $OpenApiTs = {
          * API applications updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1102,6 +2873,14 @@ export type $OpenApiTs = {
          * A successful response with a list of applications or an empty list.
          */
         200: get_applications_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -1125,6 +2904,18 @@ export type $OpenApiTs = {
          * Application successfully created.
          */
         200: create_application_response;
+        /**
+         * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1141,6 +2932,18 @@ export type $OpenApiTs = {
          * Application successfully retrieved.
          */
         200: get_application_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -1175,7 +2978,19 @@ export type $OpenApiTs = {
         /**
          * Application successfully updated.
          */
-        200: any;
+        200: unknown;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -1190,6 +3005,18 @@ export type $OpenApiTs = {
          * Application successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1234,6 +3061,14 @@ export type $OpenApiTs = {
          * A successful response with your business details.
          */
         201: success_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -1284,6 +3119,18 @@ export type $OpenApiTs = {
          * Business successfully updated.
          */
         201: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1304,6 +3151,14 @@ export type $OpenApiTs = {
          * A successful response with a list of industries and industry keys.
          */
         201: success_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1324,6 +3179,14 @@ export type $OpenApiTs = {
          * A successful response with a list of timezones and timezone keys.
          */
         201: success_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1340,6 +3203,18 @@ export type $OpenApiTs = {
          * Callback URLs successfully retrieved.
          */
         200: redirect_callback_urls;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -1363,6 +3238,18 @@ export type $OpenApiTs = {
          * Callbacks successfully updated
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     put: {
@@ -1386,6 +3273,18 @@ export type $OpenApiTs = {
          * Callbacks successfully updated
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -1404,6 +3303,18 @@ export type $OpenApiTs = {
          * Callback URLs successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1420,6 +3331,18 @@ export type $OpenApiTs = {
          * Logout URLs successfully retrieved.
          */
         200: logout_redirect_urls;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -1443,6 +3366,18 @@ export type $OpenApiTs = {
          * Logouts successfully updated
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     put: {
@@ -1466,6 +3401,18 @@ export type $OpenApiTs = {
          * Logout URLs successfully updated
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -1484,6 +3431,18 @@ export type $OpenApiTs = {
          * Logout URLs successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1512,6 +3471,22 @@ export type $OpenApiTs = {
          * A URL that can be used to authenticate and a session id to identify this authentication session.
          */
         200: connected_apps_auth_url;
+        /**
+         * Error retrieving connected app auth url.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Error retrieving connected app auth url.
+         */
+        404: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1528,6 +3503,18 @@ export type $OpenApiTs = {
          * An access token that can be used to query a third-party provider, as well as the token's expiry time.
          */
         200: connected_apps_access_token;
+        /**
+         * The session id provided points to an invalid session.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1544,6 +3531,22 @@ export type $OpenApiTs = {
          * An access token that can be used to query a third-party provider, as well as the token's expiry time.
          */
         200: success_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Invalid HTTP method used.
+         */
+        405: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1554,6 +3557,18 @@ export type $OpenApiTs = {
          * Feature flag overrides deleted successfully.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     get: {
@@ -1562,6 +3577,18 @@ export type $OpenApiTs = {
          * Feature flags retrieved successfully.
          */
         200: get_environment_feature_flags_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1578,6 +3605,18 @@ export type $OpenApiTs = {
          * Feature flag deleted successfully.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -1601,6 +3640,18 @@ export type $OpenApiTs = {
          * Feature flag override successful
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1642,6 +3693,18 @@ export type $OpenApiTs = {
          * Feature flag successfully created
          */
         201: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1658,6 +3721,18 @@ export type $OpenApiTs = {
          * Feature flag successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     put: {
@@ -1692,6 +3767,18 @@ export type $OpenApiTs = {
          * Feature flag successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1708,6 +3795,18 @@ export type $OpenApiTs = {
          * Organization successfully retrieved.
          */
         200: organization;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -1723,7 +3822,9 @@ export type $OpenApiTs = {
           /**
            * The organization's feature flag settings.
            */
-          feature_flags?: Record<string, "str" | "int" | "bool">;
+          feature_flags?: {
+            [key: string]: "str" | "int" | "bool";
+          };
           /**
            * The organization's ID.
            */
@@ -1779,6 +3880,22 @@ export type $OpenApiTs = {
          * Organization successfully created.
          */
         200: create_organization_response;
+        /**
+         * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+        /**
+         * Could not create organization.
+         */
+        500: unknown;
       };
     };
   };
@@ -1852,6 +3969,18 @@ export type $OpenApiTs = {
          * Organization successfully updated.
          */
         200: success_response;
+        /**
+         * Error updating organization.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -1865,7 +3994,19 @@ export type $OpenApiTs = {
         /**
          * Organization successfully deleted.
          */
-        200: any;
+        200: unknown;
+        /**
+         * Error deleting organization.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1890,6 +4031,14 @@ export type $OpenApiTs = {
          * A successful response with a list of organizations or an empty list.
          */
         200: get_organizations_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -1926,6 +4075,18 @@ export type $OpenApiTs = {
          * A successful response with a list of organization users or an empty list.
          */
         200: get_organization_users_response;
+        /**
+         * Error creating user
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -1963,6 +4124,18 @@ export type $OpenApiTs = {
          * No users added.
          */
         204: void;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -2000,6 +4173,18 @@ export type $OpenApiTs = {
          * Users successfully removed.
          */
         200: update_organization_users_response;
+        /**
+         * Error updating organization user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2020,6 +4205,14 @@ export type $OpenApiTs = {
          * A successful response with a list of user roles.
          */
         200: get_organizations_user_roles_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2047,6 +4240,14 @@ export type $OpenApiTs = {
          * Role successfully added.
          */
         200: success_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2071,6 +4272,18 @@ export type $OpenApiTs = {
          * User successfully removed.
          */
         200: success_response;
+        /**
+         * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2095,6 +4308,14 @@ export type $OpenApiTs = {
          * A successful response with a list of user permissions.
          */
         200: get_organizations_user_permissions_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2122,6 +4343,14 @@ export type $OpenApiTs = {
          * User permission successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2146,6 +4375,18 @@ export type $OpenApiTs = {
          * User successfully removed.
          */
         200: success_response;
+        /**
+         * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2166,6 +4407,18 @@ export type $OpenApiTs = {
          * User successfully removed from organization
          */
         200: success_response;
+        /**
+         * Error removing user
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2182,6 +4435,18 @@ export type $OpenApiTs = {
          * Feature flag overrides successfully returned.
          */
         200: get_organization_feature_flags_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -2196,6 +4461,18 @@ export type $OpenApiTs = {
          * Feature flag overrides successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2216,6 +4493,18 @@ export type $OpenApiTs = {
          * Feature flag override successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -2238,6 +4527,18 @@ export type $OpenApiTs = {
          * Feature flag override successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2262,6 +4563,18 @@ export type $OpenApiTs = {
          * Property successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2278,6 +4591,18 @@ export type $OpenApiTs = {
          * Properties successfully retrieved.
          */
         200: get_property_values_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -2293,7 +4618,9 @@ export type $OpenApiTs = {
           /**
            * Property keys and values
            */
-          properties: Record<string, unknown>;
+          properties: {
+            [key: string]: unknown;
+          };
         };
       };
       res: {
@@ -2301,6 +4628,18 @@ export type $OpenApiTs = {
          * Properties successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2317,6 +4656,18 @@ export type $OpenApiTs = {
          * Handle successfully deleted.
          */
         200: success_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2341,6 +4692,14 @@ export type $OpenApiTs = {
          * Permissions successfully retrieved.
          */
         200: get_permissions_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2368,6 +4727,18 @@ export type $OpenApiTs = {
          * Permission successfully created
          */
         201: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2401,6 +4772,18 @@ export type $OpenApiTs = {
          * Permission successfully updated
          */
         201: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -2415,6 +4798,18 @@ export type $OpenApiTs = {
          * permission successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2443,6 +4838,18 @@ export type $OpenApiTs = {
          * Properties successfully retrieved.
          */
         200: get_properties_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2486,6 +4893,18 @@ export type $OpenApiTs = {
          * Property successfully created
          */
         201: create_property_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2519,6 +4938,18 @@ export type $OpenApiTs = {
          * Property successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2547,6 +4978,18 @@ export type $OpenApiTs = {
          * Categories successfully retrieved.
          */
         200: get_categories_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2570,6 +5013,18 @@ export type $OpenApiTs = {
          * Category successfully created
          */
         201: create_category_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2595,6 +5050,18 @@ export type $OpenApiTs = {
          * category successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2619,6 +5086,14 @@ export type $OpenApiTs = {
          * Roles successfully retrieved.
          */
         200: get_roles_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2650,6 +5125,14 @@ export type $OpenApiTs = {
          * Role successfully created
          */
         201: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
       };
     };
   };
@@ -2678,6 +5161,18 @@ export type $OpenApiTs = {
          * A list of permissions for a role
          */
         200: roles_permission_response;
+        /**
+         * Error removing user
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -2707,6 +5202,14 @@ export type $OpenApiTs = {
          * Permissions successfully updated.
          */
         200: update_role_permissions_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2727,6 +5230,18 @@ export type $OpenApiTs = {
          * Permission successfully removed from role
          */
         200: success_response;
+        /**
+         * Error removing user
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2764,6 +5279,18 @@ export type $OpenApiTs = {
          * Role successfully updated
          */
         201: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -2778,6 +5305,18 @@ export type $OpenApiTs = {
          * Role successfully deleted.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2802,6 +5341,14 @@ export type $OpenApiTs = {
          * Subscriber successfully retrieved.
          */
         200: get_subscribers_response;
+        /**
+         * Bad request.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2824,6 +5371,18 @@ export type $OpenApiTs = {
          * Subscriber successfully created
          */
         201: create_subscriber_success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2840,6 +5399,18 @@ export type $OpenApiTs = {
          * Subscriber successfully retrieved.
          */
         200: get_subscriber_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2872,6 +5443,14 @@ export type $OpenApiTs = {
          * Users successfully retrieved.
          */
         200: users_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2888,6 +5467,18 @@ export type $OpenApiTs = {
          * Claims successfully refreshed.
          */
         200: success_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Bad request.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -2908,6 +5499,18 @@ export type $OpenApiTs = {
          * User successfully updated.
          */
         200: user;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     post: {
@@ -2966,6 +5569,18 @@ export type $OpenApiTs = {
          * User successfully created.
          */
         200: create_user_response;
+        /**
+         * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -3001,6 +5616,18 @@ export type $OpenApiTs = {
          * User successfully updated.
          */
         200: update_user_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     delete: {
@@ -3019,6 +5646,18 @@ export type $OpenApiTs = {
          * User successfully deleted.
          */
         200: success_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -3043,6 +5682,18 @@ export type $OpenApiTs = {
          * Feature flag override successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -3067,6 +5718,18 @@ export type $OpenApiTs = {
          * Property successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -3083,6 +5746,18 @@ export type $OpenApiTs = {
          * Properties successfully retrieved.
          */
         200: get_property_values_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
     patch: {
@@ -3094,7 +5769,9 @@ export type $OpenApiTs = {
           /**
            * Property keys and values
            */
-          properties: Record<string, unknown>;
+          properties: {
+            [key: string]: unknown;
+          };
         };
         /**
          * The identifier for the user
@@ -3106,6 +5783,18 @@ export type $OpenApiTs = {
          * Properties successfully updated.
          */
         200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
@@ -3147,6 +5836,18 @@ export type $OpenApiTs = {
          * User successfully created.
          */
         200: success_response;
+        /**
+         * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
       };
     };
   };
