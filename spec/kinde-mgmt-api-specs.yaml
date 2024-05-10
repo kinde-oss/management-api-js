@@ -3,11 +3,11 @@ info:
   version: '1'
   title: Kinde Management API
   description: Provides endpoints to manage your Kinde Businesses
-  termsOfService: https://kinde.com/docs/important-information/terms-of-service/
+  termsOfService: https://docs.kinde.com/trust-center/agreements/terms-of-service/
   contact:
     name: Kinde Support Team
     email: support@kinde.com
-    url: https://kinde.com/docs/
+    url: https://docs.kinde.com
 servers:
   - url: https://{businessName}.kinde.com
     variables:
@@ -31,6 +31,8 @@ tags:
     x-displayName: Callbacks
   - name: Connected Apps
     x-displayName: Connected Apps
+  - name: Connections
+    x-displayName: Connections
   - name: Environments
     x-displayName: Environments
   - name: Feature Flags
@@ -648,6 +650,132 @@ paths:
       responses:
         '200':
           description: Application successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/applications/{application_id}/connections:
+    get:
+      tags:
+        - Applications
+      operationId: GetApplicationConnections
+      description: Gets all connections for an application.
+      summary: Get connections
+      parameters:
+        - name: application_id
+          in: path
+          description: The identifier/client ID for the application.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: Application connections successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_connections_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_connections_response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/applications/{application_id}/connections/{connection_id}:
+    post:
+      tags:
+        - Applications
+      operationId: EnableConnection
+      description: Enable an auth connection for an application.
+      summary: Enable connection
+      parameters:
+        - name: application_id
+          in: path
+          description: The identifier/client ID for the application.
+          required: true
+          schema:
+            type: string
+        - name: connection_id
+          in: path
+          description: The identifier for the connection.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Connection successfully enabled.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Applications
+      operationId: RemoveConnection
+      description: Turn off an auth connection for an application
+      summary: Remove connection
+      parameters:
+        - name: application_id
+          in: path
+          description: The identifier/client ID for the application.
+          required: true
+          schema:
+            type: string
+        - name: connection_id
+          in: path
+          description: The identifier for the connection.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Connection successfully removed.
           content:
             application/json:
               schema:
@@ -1461,6 +1589,252 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '405':
           description: Invalid HTTP method used.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/connections:
+    get:
+      tags:
+        - Connections
+      operationId: GetConnections
+      description: |
+        Returns a list of Connections
+      summary: List Connections
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: starting_after
+          in: query
+          description: The ID of the connection to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: ending_before
+          in: query
+          description: The ID of the connection to end before.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Connections successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_connections_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_connections_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Connections
+      operationId: CreateConnection
+      description: Create Connection.
+      summary: Create Connection
+      requestBody:
+        description: Connection details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: The internal name of the connection.
+                  type: string
+                  nullable: false
+                display_name:
+                  description: The public facing name of the connection.
+                  type: string
+                  nullable: false
+                strategy:
+                  description: The identity provider identifier for the connection.
+                  type: string
+                  enum:
+                    - oauth2:apple
+                    - oauth2:azure_ad
+                    - oauth2:bitbucket
+                    - oauth2:discord
+                    - oauth2:facebook
+                    - oauth2:github
+                    - oauth2:gitlab
+                    - oauth2:google
+                    - oauth2:linkedin
+                    - oauth2:microsoft
+                    - oauth2:patreon
+                    - oauth2:slack
+                    - oauth2:stripe
+                    - oauth2:twitch
+                    - oauth2:twitter
+                    - oauth2:xero
+                    - saml:custom
+                    - wsfed:azure_ad
+                  nullable: false
+                enabled_applications:
+                  description: >-
+                    Client IDs of applications in which this connection is to be
+                    enabled.
+                  type: array
+                  items:
+                    type: string
+                options:
+                  description: The connection's options (varies by strategy).
+                  type: object
+              required:
+                - name
+                - display_name
+                - strategy
+      responses:
+        '201':
+          description: Connection successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_connection_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/create_connection_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/connections/{connection_id}:
+    get:
+      tags:
+        - Connections
+      operationId: GetConnection
+      description: Get Connection.
+      summary: Get Connection
+      parameters:
+        - name: connection_id
+          in: path
+          description: The unique identifier for the connection.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Connection successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connection'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/connection'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    patch:
+      tags:
+        - Connections
+      operationId: UpdateConnection
+      description: Update Connection.
+      summary: Update Connection
+      parameters:
+        - name: connection_id
+          in: path
+          description: The unique identifier for the connection.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The fields of the connection to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: The internal name of the connection.
+                  type: string
+                  nullable: false
+                display_name:
+                  description: The public facing name of the connection.
+                  type: string
+                  nullable: false
+                enabled_applications:
+                  description: >-
+                    Client IDs of applications in which this connection is to be
+                    enabled.
+                  type: array
+                  items:
+                    type: string
+                options:
+                  description: The connection's options (varies by strategy).
+                  type: object
+      responses:
+        '200':
+          description: Connection successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
         '429':
           description: Request was throttled.
       security:
@@ -3408,6 +3782,14 @@ paths:
                   description: >-
                     Whether the property can be included in id and access
                     tokens.
+                category_id:
+                  description: Which category the property belongs to.
+                  type: string
+                  nullable: false
+              required:
+                - name
+                - is_private
+                - category_id
       responses:
         '200':
           description: Property successfully updated.
@@ -5079,6 +5461,35 @@ components:
         has_more:
           description: Whether more records exist.
           type: boolean
+    create_connection_response:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        connection:
+          type: object
+          properties:
+            id:
+              description: The connection's ID.
+              type: string
+    get_connections_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/connection'
+        has_more:
+          description: Whether more records exist.
+          type: boolean
     token_introspect:
       type: object
       properties:
@@ -5175,7 +5586,18 @@ components:
         id:
           type: string
         name:
-          type: boolean
+          type: string
+    connection:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        display_name:
+          type: string
+        strategy:
+          type: string
     property:
       type: object
       properties:
@@ -5184,7 +5606,7 @@ components:
         key:
           type: string
         name:
-          type: boolean
+          type: string
         is_private:
           type: boolean
         description:
@@ -5751,6 +6173,9 @@ x-tagGroups:
   - name: Callbacks API
     tags:
       - Callbacks
+  - name: Connections API
+    tags:
+      - Connections
   - name: Environment API
     tags:
       - Environments

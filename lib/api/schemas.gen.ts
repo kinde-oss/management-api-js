@@ -471,6 +471,51 @@ export const $get_categories_response = {
   },
 } as const;
 
+export const $create_connection_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    connection: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The connection's ID.",
+          type: "string",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_connections_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    connections: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/connection",
+      },
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+  },
+} as const;
+
 export const $token_introspect = {
   type: "object",
   properties: {
@@ -610,7 +655,25 @@ export const $category = {
       type: "string",
     },
     name: {
-      type: "boolean",
+      type: "string",
+    },
+  },
+} as const;
+
+export const $connection = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    name: {
+      type: "string",
+    },
+    display_name: {
+      type: "string",
+    },
+    strategy: {
+      type: "string",
     },
   },
 } as const;
@@ -625,7 +688,7 @@ export const $property = {
       type: "string",
     },
     name: {
-      type: "boolean",
+      type: "string",
     },
     is_private: {
       type: "boolean",
