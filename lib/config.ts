@@ -7,33 +7,48 @@ export interface TokenStore {
   clearToken(): Promise<void>;
 }
 
-export const kindeConfig: {
+export type configType = {
+  kindeDomain: string;
   clientId?: string;
   clientSecret?: string;
-  kindeDomain: string;
-  audience: string;
   token: string;
+  audience: string;
   tokenStore?: TokenStore;
-} = {
-  clientId: "client_id",
-  clientSecret: "client",
-  kindeDomain: "https://kinde.com",
-  audience: "audience",
-  token: "",
 };
 
-export const init = () => {
-  if (!process.env.KINDE_DOMAIN) {
-    throw new Error("KINDE_DOMAIN is not set");
+export const kindeConfig: configType = {
+  kindeDomain: "",
+  clientId: "",
+  clientSecret: "",
+  token: "",
+  audience: "",
+};
+
+export const init = (
+  config: Pick<
+    configType,
+    "kindeDomain" | "clientId" | "clientSecret"
+  > = kindeConfig,
+) => {
+  if (!process.env.KINDE_DOMAIN && config.kindeDomain === "") {
+    throw new Error("kindeDomain or env KINDE_DOMAIN is not set");
   }
 
-  kindeConfig.clientId = process.env.KINDE_MANAGEMENT_CLIENT_ID;
-  kindeConfig.clientSecret = process.env.KINDE_MANAGEMENT_CLIENT_SECRET;
-  kindeConfig.audience = process.env.KINDE_DOMAIN + "/api";
-  kindeConfig.kindeDomain = process.env.KINDE_DOMAIN;
-  OpenAPI.BASE = process.env.KINDE_DOMAIN;
+  _merge(kindeConfig, config, {
+    clientId: process.env.KINDE_MANAGEMENT_CLIENT_ID,
+    clientSecret: process.env.KINDE_MANAGEMENT_CLIENT_SECRET,
+    audience: process.env.KINDE_DOMAIN + "/api",
+    kindeDomain: process.env.KINDE_DOMAIN,
+  });
 
-  OpenAPI.TOKEN = async () => {
-    return await getToken();
-  };
+  _merge(OpenAPI, {
+    BASE: kindeConfig.kindeDomain,
+    TOKEN: async () => {
+      return await getToken();
+    },
+  });
 };
+
+function _merge(target: object = {}, ...objects: object[]): object {
+  return Object.assign(target, ...objects.filter(Boolean));
+}
