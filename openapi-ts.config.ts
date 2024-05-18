@@ -1,9 +1,11 @@
-import { format } from "path";
+import path, { format } from "path";
 
 export default {
   input: "./spec/kinde-mgmt-api-specs.yaml",
-  output: "lib/api",
-  format: "prettier",
+  output: {
+    path: "lib/api",
+    format: "prettier"
+  },
   services: {
     name: "{{name}}",
   },
