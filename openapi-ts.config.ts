@@ -4,7 +4,7 @@ export default {
   input: "./spec/kinde-mgmt-api-specs.yaml",
   output: {
     path: "lib/api",
-    format: "prettier"
+    format: "prettier",
   },
   services: {
     name: "{{name}}",
