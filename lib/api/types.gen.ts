@@ -334,6 +334,91 @@ export type get_categories_response = {
   has_more?: boolean;
 };
 
+export type get_event_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  event?: {
+    type?: string;
+    source?: string;
+    event_id?: string;
+    /**
+     * Timestamp in ISO 8601 format.
+     */
+    timestamp?: string;
+    /**
+     * Event specific data object.
+     */
+    data?: {
+      [key: string]: unknown;
+    };
+  };
+};
+
+export type get_event_types_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  event_types?: Array<event_type>;
+};
+
+export type get_webhooks_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  webhooks?: Array<webhook>;
+};
+
+export type webhook = {
+  id?: string;
+  name?: string;
+  endpoint?: string;
+  description?: string;
+  event_types?: Array<string>;
+  /**
+   * Created on date in ISO 8601 format.
+   */
+  created_on?: string;
+};
+
+export type create_webhook_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  webhook?: {
+    id?: string;
+    endpoint?: string;
+  };
+};
+
+export type update_webhook_response = {
+  message?: string;
+  code?: string;
+  webhook?: {
+    id?: string;
+  };
+};
+
 export type create_connection_response = {
   message?: string;
   code?: string;
@@ -359,6 +444,27 @@ export type get_connections_response = {
    * Whether more records exist.
    */
   has_more?: boolean;
+};
+
+export type delete_webhook_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+};
+
+export type event_type = {
+  id?: string;
+  code?: string;
+  name?: string;
+  origin?: string;
+  schema?: {
+    [key: string]: unknown;
+  };
 };
 
 export type token_introspect = {
@@ -447,6 +553,7 @@ export type organization_user = {
   full_name?: string;
   last_name?: string;
   first_name?: string;
+  picture?: string;
   roles?: Array<string>;
 };
 
@@ -2610,7 +2717,7 @@ export type CreateUserData = {
       /**
        * The type of identity to create, for e.g. email.
        */
-      type?: "email" | "username";
+      type?: "email" | "phone" | "username";
       /**
        * Additional details required to create the user.
        */
@@ -2774,6 +2881,76 @@ export type SetUserPasswordData = {
 
 export type SetUserPasswordResponse = success_response;
 
+export type GetEventData = {
+  /**
+   * The event id.
+   */
+  eventId: string;
+};
+
+export type GetEventResponse = get_event_response;
+
+export type GetEventTypesResponse = get_event_types_response;
+
+export type DeleteWebHookData = {
+  /**
+   * The webhook id.
+   */
+  webhookId: string;
+};
+
+export type DeleteWebHookResponse = delete_webhook_response;
+
+export type GetWebHooksResponse = get_webhooks_response;
+
+export type CreateWebHookData = {
+  /**
+   * Webhook request specification.
+   */
+  requestBody: {
+    /**
+     * The webhook endpoint url
+     */
+    endpoint: string;
+    /**
+     * Array of event type keys
+     */
+    event_types: Array<string>;
+    /**
+     * The webhook name
+     */
+    name: string;
+    /**
+     * The webhook description
+     */
+    description?: string | null;
+  };
+};
+
+export type CreateWebHookResponse = create_webhook_response;
+
+export type UpdateWebHookData = {
+  /**
+   * Update webhook request specification.
+   */
+  requestBody: {
+    /**
+     * Array of event type keys
+     */
+    event_types?: Array<string>;
+    /**
+     * The webhook name
+     */
+    name?: string;
+    /**
+     * The webhook description
+     */
+    description?: string | null;
+  };
+};
+
+export type UpdateWebHookResponse = update_webhook_response;
+
 export type $OpenApiTs = {
   "/oauth2/user_profile": {
     get: {
@@ -2791,21 +2968,7 @@ export type $OpenApiTs = {
   };
   "/oauth2/introspect": {
     post: {
-      req: {
-        /**
-         * Token details.
-         */
-        formData: {
-          /**
-           * The token to be introspected.
-           */
-          token?: string;
-          /**
-           * The provided token's type.
-           */
-          token_type?: string;
-        };
-      };
+      req: TokenIntrospectionData;
       res: {
         /**
          * Details of the token.
@@ -2828,25 +2991,7 @@ export type $OpenApiTs = {
   };
   "/oauth2/revoke": {
     post: {
-      req: {
-        /**
-         * Details of the token to be revoked.
-         */
-        formData: {
-          /**
-           * The token to be revoked.
-           */
-          token?: string;
-          /**
-           * The identifier for your client.
-           */
-          client_id?: string;
-          /**
-           * The secret associated with your client.
-           */
-          client_secret?: string;
-        };
-      };
+      req: TokenRevocationData;
       res: {
         /**
          * Token successfully revoked.
@@ -2907,15 +3052,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * API details.
-         */
-        requestBody: {
-          name: string;
-          audience: string;
-        };
-      };
+      req: AddApIsData;
       res: {
         /**
          * APIs successfully updated
@@ -2938,12 +3075,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/apis/{api_id}": {
     get: {
-      req: {
-        /**
-         * The API's id.
-         */
-        apiId: string;
-      };
+      req: GetApiData;
       res: {
         /**
          * API successfully retrieved.
@@ -2964,12 +3096,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The API's id.
-         */
-        apiId: string;
-      };
+      req: DeleteApiData;
       res: {
         /**
          * API successfully deleted.
@@ -2992,27 +3119,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/apis/{api_id}/applications": {
     patch: {
-      req: {
-        /**
-         * The identifier for the API.
-         */
-        apiId: string;
-        /**
-         * The applications you want to connect or disconnect.
-         */
-        requestBody: {
-          applications: Array<{
-            /**
-             * The application's id.
-             */
-            id: string;
-            /**
-             * Optional operation, set to 'delete' to remove the user from the organization.
-             */
-            operation?: string;
-          }>;
-        };
-      };
+      req: UpdateApiApplicationsData;
       res: {
         /**
          * API applications updated.
@@ -3035,20 +3142,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/applications": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | null;
-      };
+      req: GetApplicationsData;
       res: {
         /**
          * A successful response with a list of applications or an empty list.
@@ -3065,21 +3159,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Application details.
-         */
-        requestBody?: {
-          /**
-           * The application's name.
-           */
-          name?: string;
-          /**
-           * The application's type.
-           */
-          type?: "reg" | "spa" | "m2m";
-        };
-      };
+      req: CreateApplicationData;
       res: {
         /**
          * Application successfully created.
@@ -3102,12 +3182,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/applications/{application_id}": {
     get: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        applicationId: string;
-      };
+      req: GetApplicationData;
       res: {
         /**
          * Application successfully retrieved.
@@ -3128,33 +3203,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        applicationId: string;
-        /**
-         * Application details.
-         */
-        requestBody?: {
-          /**
-           * The application's name.
-           */
-          name?: string;
-          /**
-           * The application's language key.
-           */
-          language_key?: string;
-          /**
-           * The application's logout uris.
-           */
-          logout_uris?: Array<string>;
-          /**
-           * The application's redirect uris.
-           */
-          redirect_uris?: Array<string>;
-        };
-      };
+      req: UpdateApplicationData;
       res: {
         /**
          * Application successfully updated.
@@ -3175,12 +3224,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        applicationId: string;
-      };
+      req: DeleteApplicationData;
       res: {
         /**
          * Application successfully deleted.
@@ -3203,12 +3247,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/applications/{application_id}/connections": {
     get: {
-      req: {
-        /**
-         * The identifier/client ID for the application.
-         */
-        applicationId: string;
-      };
+      req: GetApplicationConnectionsData;
       res: {
         /**
          * Application connections successfully retrieved.
@@ -3231,16 +3270,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/applications/{application_id}/connections/{connection_id}": {
     post: {
-      req: {
-        /**
-         * The identifier/client ID for the application.
-         */
-        applicationId: string;
-        /**
-         * The identifier for the connection.
-         */
-        connectionId: string;
-      };
+      req: EnableConnectionData;
       res: {
         /**
          * Connection successfully enabled.
@@ -3261,16 +3291,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier/client ID for the application.
-         */
-        applicationId: string;
-        /**
-         * The identifier for the connection.
-         */
-        connectionId: string;
-      };
+      req: RemoveConnectionData;
       res: {
         /**
          * Connection successfully removed.
@@ -3293,40 +3314,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/business": {
     get: {
-      req: {
-        /**
-         * Business code.
-         */
-        code: string;
-        /**
-         * Email associated with business.
-         */
-        email: string;
-        /**
-         * The industry your business is in.
-         */
-        industry?: string;
-        /**
-         * Business name.
-         */
-        name: string;
-        /**
-         * Phone number associated with business.
-         */
-        phone?: string | null;
-        /**
-         * Your Privacy policy URL.
-         */
-        privacyUrl?: string | null;
-        /**
-         * Your Terms and Conditions URL.
-         */
-        termsUrl?: string | null;
-        /**
-         * The timezone your business is in.
-         */
-        timezone?: string;
-      };
+      req: GetBusinessData;
       res: {
         /**
          * A successful response with your business details.
@@ -3343,48 +3331,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * Business name.
-         */
-        businessName: string;
-        /**
-         * The key of the industry your business is in.
-         */
-        industryKey?: string;
-        /**
-         * Show a policy acceptance checkbox on sign up.
-         */
-        isClickWrap?: boolean | null;
-        /**
-         * Display "Powered by Kinde" on your sign up, sign in, and subscription pages.
-         */
-        isShowKindeBranding?: string | null;
-        /**
-         * Your Kinde Perk code.
-         */
-        partnerCode?: string | null;
-        /**
-         * Email associated with business.
-         */
-        primaryEmail: string;
-        /**
-         * Phone number associated with business.
-         */
-        primaryPhone?: string | null;
-        /**
-         * Your Privacy policy URL.
-         */
-        privacyUrl?: string | null;
-        /**
-         * Your Terms and Conditions URL.
-         */
-        termsUrl?: string | null;
-        /**
-         * The ID of the timezone your business is in.
-         */
-        timezoneId?: string;
-      };
+      req: UpdateBusinessData;
       res: {
         /**
          * Business successfully updated.
@@ -3407,16 +3354,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/industries": {
     get: {
-      req: {
-        /**
-         * Industry Key.
-         */
-        industryKey?: string;
-        /**
-         * Industry name.
-         */
-        name?: string;
-      };
+      req: GetIndustriesData;
       res: {
         /**
          * A successful response with a list of industries and industry keys.
@@ -3435,16 +3373,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/timezones": {
     get: {
-      req: {
-        /**
-         * Timezone.
-         */
-        name?: string;
-        /**
-         * Timezone Key.
-         */
-        timezoneKey?: string;
-      };
+      req: GetTimezonesData;
       res: {
         /**
          * A successful response with a list of timezones and timezone keys.
@@ -3463,12 +3392,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/applications/{app_id}/auth_redirect_urls": {
     get: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-      };
+      req: GetCallbackUrLsData;
       res: {
         /**
          * Callback URLs successfully retrieved.
@@ -3489,21 +3413,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of callback urls.
-           */
-          urls?: Array<string>;
-        };
-      };
+      req: AddRedirectCallbackUrLsData;
       res: {
         /**
          * Callbacks successfully updated
@@ -3524,21 +3434,7 @@ export type $OpenApiTs = {
       };
     };
     put: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of callback urls.
-           */
-          urls?: Array<string>;
-        };
-      };
+      req: ReplaceRedirectCallbackUrLsData;
       res: {
         /**
          * Callbacks successfully updated
@@ -3559,16 +3455,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Urls to delete, comma separated and url encoded.
-         */
-        urls: string;
-      };
+      req: DeleteCallbackUrLsData;
       res: {
         /**
          * Callback URLs successfully deleted.
@@ -3591,12 +3478,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/applications/{app_id}/auth_logout_urls": {
     get: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-      };
+      req: GetLogoutUrLsData;
       res: {
         /**
          * Logout URLs successfully retrieved.
@@ -3617,21 +3499,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of logout urls.
-           */
-          urls?: Array<string>;
-        };
-      };
+      req: AddLogoutRedirectUrLsData;
       res: {
         /**
          * Logouts successfully updated
@@ -3652,21 +3520,7 @@ export type $OpenApiTs = {
       };
     };
     put: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Callback details.
-         */
-        requestBody: {
-          /**
-           * Array of logout urls.
-           */
-          urls?: Array<string>;
-        };
-      };
+      req: ReplaceLogoutRedirectUrLsData;
       res: {
         /**
          * Logout URLs successfully updated
@@ -3687,16 +3541,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the application.
-         */
-        appId: string;
-        /**
-         * Urls to delete, comma separated and url encoded.
-         */
-        urls: string;
-      };
+      req: DeleteLogoutUrLsData;
       res: {
         /**
          * Logout URLs successfully deleted.
@@ -3719,24 +3564,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/connected_apps/auth_url": {
     get: {
-      req: {
-        /**
-         * The unique key code reference of the connected app to authenticate against.
-         */
-        keyCodeRef: string;
-        /**
-         * The code of the Kinde organization that needs to authenticate to the third-party connected app.
-         */
-        orgCode?: string;
-        /**
-         * A URL that overrides the default callback URL setup in your connected app configuration
-         */
-        overrideCallbackUrl?: string;
-        /**
-         * The id of the user that needs to authenticate to the third-party connected app.
-         */
-        userId?: string;
-      };
+      req: GetConnectedAppAuthUrlData;
       res: {
         /**
          * A URL that can be used to authenticate and a session id to identify this authentication session.
@@ -3763,12 +3591,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/connected_apps/token": {
     get: {
-      req: {
-        /**
-         * The unique sesssion id reprensenting the login session of a user.
-         */
-        sessionId: string;
-      };
+      req: GetConnectedAppTokenData;
       res: {
         /**
          * An access token that can be used to query a third-party provider, as well as the token's expiry time.
@@ -3791,12 +3614,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/connected_apps/revoke": {
     post: {
-      req: {
-        /**
-         * The unique sesssion id reprensenting the login session of a user.
-         */
-        sessionId: string;
-      };
+      req: RevokeConnectedAppTokenData;
       res: {
         /**
          * An access token that can be used to query a third-party provider, as well as the token's expiry time.
@@ -3823,20 +3641,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/connections": {
     get: {
-      req: {
-        /**
-         * The ID of the connection to end before.
-         */
-        endingBefore?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * The ID of the connection to start after.
-         */
-        startingAfter?: string | null;
-      };
+      req: GetConnectionsData;
       res: {
         /**
          * Connections successfully retrieved.
@@ -3857,53 +3662,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Connection details.
-         */
-        requestBody: {
-          /**
-           * The internal name of the connection.
-           */
-          name: string;
-          /**
-           * The public facing name of the connection.
-           */
-          display_name: string;
-          /**
-           * The identity provider identifier for the connection.
-           */
-          strategy:
-            | "oauth2:apple"
-            | "oauth2:azure_ad"
-            | "oauth2:bitbucket"
-            | "oauth2:discord"
-            | "oauth2:facebook"
-            | "oauth2:github"
-            | "oauth2:gitlab"
-            | "oauth2:google"
-            | "oauth2:linkedin"
-            | "oauth2:microsoft"
-            | "oauth2:patreon"
-            | "oauth2:slack"
-            | "oauth2:stripe"
-            | "oauth2:twitch"
-            | "oauth2:twitter"
-            | "oauth2:xero"
-            | "saml:custom"
-            | "wsfed:azure_ad";
-          /**
-           * Client IDs of applications in which this connection is to be enabled.
-           */
-          enabled_applications?: Array<string>;
-          /**
-           * The connection's options (varies by strategy).
-           */
-          options?: {
-            [key: string]: unknown;
-          };
-        };
-      };
+      req: CreateConnectionData;
       res: {
         /**
          * Connection successfully created
@@ -3926,12 +3685,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/connections/{connection_id}": {
     get: {
-      req: {
-        /**
-         * The unique identifier for the connection.
-         */
-        connectionId: string;
-      };
+      req: GetConnectionData;
       res: {
         /**
          * Connection successfully retrieved.
@@ -3952,35 +3706,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The unique identifier for the connection.
-         */
-        connectionId: string;
-        /**
-         * The fields of the connection to update.
-         */
-        requestBody: {
-          /**
-           * The internal name of the connection.
-           */
-          name?: string;
-          /**
-           * The public facing name of the connection.
-           */
-          display_name?: string;
-          /**
-           * Client IDs of applications in which this connection is to be enabled.
-           */
-          enabled_applications?: Array<string>;
-          /**
-           * The connection's options (varies by strategy).
-           */
-          options?: {
-            [key: string]: unknown;
-          };
-        };
-      };
+      req: UpdateConnectionData;
       res: {
         /**
          * Connection successfully updated.
@@ -4045,12 +3771,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/environment/feature_flags/{feature_flag_key}": {
     delete: {
-      req: {
-        /**
-         * The identifier for the feature flag.
-         */
-        featureFlagKey: string;
-      };
+      req: DeleteEnvironementFeatureFlagOverrideData;
       res: {
         /**
          * Feature flag deleted successfully.
@@ -4071,21 +3792,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The identifier for the feature flag.
-         */
-        featureFlagKey: string;
-        /**
-         * Flag details.
-         */
-        requestBody: {
-          /**
-           * The flag override value.
-           */
-          value: string;
-        };
-      };
+      req: UpdateEnvironementFeatureFlagOverrideData;
       res: {
         /**
          * Feature flag override successful
@@ -4108,37 +3815,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/feature_flags": {
     post: {
-      req: {
-        /**
-         * Flag details.
-         */
-        requestBody: {
-          /**
-           * The name of the flag.
-           */
-          name: string;
-          /**
-           * Description of the flag purpose.
-           */
-          description?: string;
-          /**
-           * The flag identifier to use in code.
-           */
-          key: string;
-          /**
-           * The variable type.
-           */
-          type: "str" | "int" | "bool";
-          /**
-           * Allow the flag to be overridden at a different level.
-           */
-          allow_override_level?: "env" | "org" | "usr";
-          /**
-           * Default value for the flag used by environments and organizations.
-           */
-          default_value: string;
-        };
-      };
+      req: CreateFeatureFlagData;
       res: {
         /**
          * Feature flag successfully created
@@ -4161,12 +3838,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/feature_flags/{feature_flag_key}": {
     delete: {
-      req: {
-        /**
-         * The identifier for the feature flag.
-         */
-        featureFlagKey: string;
-      };
+      req: DeleteFeatureFlagData;
       res: {
         /**
          * Feature flag successfully updated.
@@ -4187,32 +3859,7 @@ export type $OpenApiTs = {
       };
     };
     put: {
-      req: {
-        /**
-         * Allow the flag to be overridden at a different level.
-         */
-        allowOverrideLevel: "env" | "org";
-        /**
-         * Default value for the flag used by environments and organizations.
-         */
-        defaultValue: string;
-        /**
-         * Description of the flag purpose.
-         */
-        description: string;
-        /**
-         * The key identifier for the feature flag.
-         */
-        featureFlagKey: string;
-        /**
-         * The name of the flag.
-         */
-        name: string;
-        /**
-         * The variable type
-         */
-        type: "str" | "int" | "bool";
-      };
+      req: UpdateFeatureFlagData;
       res: {
         /**
          * Feature flag successfully updated.
@@ -4235,12 +3882,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organization": {
     get: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        code?: string;
-      };
+      req: GetOrganizationData;
       res: {
         /**
          * Organization successfully retrieved.
@@ -4261,71 +3903,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Organization details.
-         */
-        requestBody: {
-          /**
-           * The organization's name.
-           */
-          name: string;
-          /**
-           * The organization's feature flag settings.
-           */
-          feature_flags?: {
-            [key: string]: "str" | "int" | "bool";
-          };
-          /**
-           * The organization's ID.
-           */
-          external_id?: string;
-          /**
-           * The organization's brand settings - background color.
-           */
-          background_color?: string;
-          /**
-           * The organization's brand settings - button color.
-           */
-          button_color?: string;
-          /**
-           * The organization's brand settings - button text color.
-           */
-          button_text_color?: string;
-          /**
-           * The organization's brand settings - link color.
-           */
-          link_color?: string;
-          /**
-           * The organization's brand settings - dark mode background color.
-           */
-          background_color_dark?: string;
-          /**
-           * The organization's brand settings - dark mode button color.
-           */
-          button_color_dark?: string;
-          /**
-           * The organization's brand settings - dark mode button text color.
-           */
-          button_text_color_dark?: string;
-          /**
-           * The organization's brand settings - dark mode link color.
-           */
-          link_color_dark?: string;
-          /**
-           * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
-           */
-          theme_code?: string;
-          /**
-           * The organization's handle.
-           */
-          handle?: string;
-          /**
-           * Users can sign up to this organization.
-           */
-          is_allow_registrations?: boolean;
-        };
-      };
+      req: CreateOrganizationData;
       res: {
         /**
          * Organization successfully created.
@@ -4352,69 +3930,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organization/{org_code}": {
     patch: {
-      req: {
-        /**
-         * The identifier for the organization.
-         */
-        orgCode: string;
-        /**
-         * Organization details.
-         */
-        requestBody?: {
-          /**
-           * The organization's name.
-           */
-          name?: string;
-          /**
-           * The organization's ID.
-           */
-          external_id?: string;
-          /**
-           * The organization's brand settings - background color.
-           */
-          background_color?: string;
-          /**
-           * The organization's brand settings - button color.
-           */
-          button_color?: string;
-          /**
-           * The organization's brand settings - button text color.
-           */
-          button_text_color?: string;
-          /**
-           * The organization's brand settings - link color.
-           */
-          link_color?: string;
-          /**
-           * The organization's brand settings - dark mode background color.
-           */
-          background_color_dark?: string;
-          /**
-           * The organization's brand settings - dark mode button color.
-           */
-          button_color_dark?: string;
-          /**
-           * The organization's brand settings - dark mode button text color.
-           */
-          button_text_color_dark?: string;
-          /**
-           * The organization's brand settings - dark mode link color.
-           */
-          link_color_dark?: string;
-          /**
-           * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
-           */
-          theme_code?: string;
-          /**
-           * The organization's handle.
-           */
-          handle?: string;
-          /**
-           * Users can sign up to this organization.
-           */
-          is_allow_registrations?: boolean;
-        };
-      };
+      req: UpdateOrganizationData;
       res: {
         /**
          * Organization successfully updated.
@@ -4435,12 +3951,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the organization.
-         */
-        orgCode: string;
-      };
+      req: DeleteOrganizationData;
       res: {
         /**
          * Organization successfully deleted.
@@ -4463,20 +3974,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
-      };
+      req: GetOrganizationsData;
       res: {
         /**
          * A successful response with a list of organizations or an empty list.
@@ -4495,32 +3993,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/users": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * Filter by user permissions comma separated (where all match)
-         */
-        permissions?: string;
-        /**
-         * Filter by user roles comma separated (where all match)
-         */
-        roles?: string;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
-      };
+      req: GetOrganizationUsersData;
       res: {
         /**
          * A successful response with a list of organization users or an empty list.
@@ -4541,31 +4014,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        requestBody?: {
-          /**
-           * Users to be added to the organization.
-           */
-          users?: Array<{
-            /**
-             * The users id.
-             */
-            id?: string;
-            /**
-             * Role keys to assign to the user.
-             */
-            roles?: Array<string>;
-            /**
-             * Permission keys to assign to the user.
-             */
-            permissions?: Array<string>;
-          }>;
-        };
-      };
+      req: AddOrganizationUsersData;
       res: {
         /**
          * Users successfully added.
@@ -4590,35 +4039,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        requestBody?: {
-          /**
-           * Users to add, update or remove from the organization.
-           */
-          users?: Array<{
-            /**
-             * The users id.
-             */
-            id?: string;
-            /**
-             * Optional operation, set to 'delete' to remove the user from the organization.
-             */
-            operation?: string;
-            /**
-             * Role keys to assign to the user.
-             */
-            roles?: Array<string>;
-            /**
-             * Permission keys to assign to the user.
-             */
-            permissions?: Array<string>;
-          }>;
-        };
-      };
+      req: UpdateOrganizationUsersData;
       res: {
         /**
          * Users successfully removed.
@@ -4641,16 +4062,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/users/{user_id}/roles": {
     get: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: GetOrganizationUserRolesData;
       res: {
         /**
          * A successful response with a list of user roles.
@@ -4667,25 +4079,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * Role details.
-         */
-        requestBody: {
-          /**
-           * The role id.
-           */
-          role_id?: string;
-        };
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: CreateOrganizationUserRoleData;
       res: {
         /**
          * Role successfully added.
@@ -4704,20 +4098,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/users/{user_id}/roles/{role_id}": {
     delete: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * The role id.
-         */
-        roleId: string;
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: DeleteOrganizationUserRoleData;
       res: {
         /**
          * User successfully removed.
@@ -4740,20 +4121,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/users/{user_id}/permissions": {
     get: {
-      req: {
-        /**
-         * Specify additional data to retrieve. Use "roles".
-         */
-        expand?: string | null;
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: GetOrganizationUserPermissionsData;
       res: {
         /**
          * A successful response with a list of user permissions.
@@ -4770,25 +4138,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * Permission details.
-         */
-        requestBody: {
-          /**
-           * The permission id.
-           */
-          permission_id?: string;
-        };
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: CreateOrganizationUserPermissionData;
       res: {
         /**
          * User permission successfully updated.
@@ -4807,20 +4157,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/users/{user_id}/permissions/{permission_id}": {
     delete: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * The permission id.
-         */
-        permissionId: string;
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: DeleteOrganizationUserPermissionData;
       res: {
         /**
          * User successfully removed.
@@ -4843,16 +4180,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/users/{user_id}": {
     delete: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-        /**
-         * The user's id.
-         */
-        userId: string;
-      };
+      req: RemoveOrganizationUserData;
       res: {
         /**
          * User successfully removed from organization
@@ -4875,12 +4203,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/feature_flags": {
     get: {
-      req: {
-        /**
-         * The identifier for the organization.
-         */
-        orgCode: string;
-      };
+      req: GetOrganizationFeatureFlagsData;
       res: {
         /**
          * Feature flag overrides successfully returned.
@@ -4901,12 +4224,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the organization.
-         */
-        orgCode: string;
-      };
+      req: DeleteOrganizationFeatureFlagOverridesData;
       res: {
         /**
          * Feature flag overrides successfully deleted.
@@ -4929,16 +4247,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/feature_flags/{feature_flag_key}": {
     delete: {
-      req: {
-        /**
-         * The identifier for the feature flag.
-         */
-        featureFlagKey: string;
-        /**
-         * The identifier for the organization.
-         */
-        orgCode: string;
-      };
+      req: DeleteOrganizationFeatureFlagOverrideData;
       res: {
         /**
          * Feature flag override successfully deleted.
@@ -4959,20 +4268,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The identifier for the feature flag
-         */
-        featureFlagKey: string;
-        /**
-         * The identifier for the organization
-         */
-        orgCode: string;
-        /**
-         * Override value
-         */
-        value: string;
-      };
+      req: UpdateOrganizationFeatureFlagOverrideData;
       res: {
         /**
          * Feature flag override successfully updated.
@@ -4995,20 +4291,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/properties/{property_key}": {
     put: {
-      req: {
-        /**
-         * The identifier for the organization
-         */
-        orgCode: string;
-        /**
-         * The identifier for the property
-         */
-        propertyKey: string;
-        /**
-         * The new property value
-         */
-        value: string;
-      };
+      req: UpdateOrganizationPropertyData;
       res: {
         /**
          * Property successfully updated.
@@ -5031,12 +4314,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organizations/{org_code}/properties": {
     get: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-      };
+      req: GetOrganizationPropertyValuesData;
       res: {
         /**
          * Properties successfully retrieved.
@@ -5057,23 +4335,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The identifier for the organization
-         */
-        orgCode: string;
-        /**
-         * Properties to update.
-         */
-        requestBody: {
-          /**
-           * Property keys and values
-           */
-          properties: {
-            [key: string]: unknown;
-          };
-        };
-      };
+      req: UpdateOrganizationPropertiesData;
       res: {
         /**
          * Properties successfully updated.
@@ -5096,12 +4358,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/organization/{org_code}/handle": {
     delete: {
-      req: {
-        /**
-         * The organization's code.
-         */
-        orgCode: string;
-      };
+      req: DeleteOrganizationHandleData;
       res: {
         /**
          * Handle successfully deleted.
@@ -5124,20 +4381,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/permissions": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc" | null;
-      };
+      req: GetPermissionsData;
       res: {
         /**
          * Permissions successfully retrieved.
@@ -5154,25 +4398,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Permission details.
-         */
-        requestBody?: {
-          /**
-           * The permission's name.
-           */
-          name?: string;
-          /**
-           * The permission's description.
-           */
-          description?: string;
-          /**
-           * The permission identifier to use in code.
-           */
-          key?: string;
-        };
-      };
+      req: CreatePermissionData;
       res: {
         /**
          * Permission successfully created
@@ -5195,29 +4421,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/permissions/{permission_id}": {
     patch: {
-      req: {
-        /**
-         * The identifier for the permission.
-         */
-        permissionId: number;
-        /**
-         * Permission details.
-         */
-        requestBody?: {
-          /**
-           * The permission's name.
-           */
-          name?: string;
-          /**
-           * The permission's description.
-           */
-          description?: string;
-          /**
-           * The permission identifier to use in code.
-           */
-          key?: string;
-        };
-      };
+      req: UpdatePermissionsData;
       res: {
         /**
          * Permission successfully updated
@@ -5238,12 +4442,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the permission.
-         */
-        permissionId: string;
-      };
+      req: DeletePermissionData;
       res: {
         /**
          * permission successfully updated.
@@ -5266,24 +4465,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/properties": {
     get: {
-      req: {
-        /**
-         * Filter results by User or Organization context
-         */
-        context?: "usr" | "org" | null;
-        /**
-         * The ID of the property to end before.
-         */
-        endingBefore?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * The ID of the property to start after.
-         */
-        startingAfter?: string | null;
-      };
+      req: GetPropertiesData;
       res: {
         /**
          * Properties successfully retrieved.
@@ -5304,41 +4486,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Property details.
-         */
-        requestBody: {
-          /**
-           * The name of the property.
-           */
-          name: string;
-          /**
-           * Description of the property purpose.
-           */
-          description?: string;
-          /**
-           * The property identifier to use in code.
-           */
-          key: string;
-          /**
-           * The property type.
-           */
-          type: "single_line_text" | "multi_line_text";
-          /**
-           * The context that the property applies to.
-           */
-          context: "org" | "usr";
-          /**
-           * Whether the property can be included in id and access tokens.
-           */
-          is_private: boolean;
-          /**
-           * Which category the property belongs to.
-           */
-          category_id: string;
-        };
-      };
+      req: CreatePropertyData;
       res: {
         /**
          * Property successfully created
@@ -5361,33 +4509,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/properties/{property_id}": {
     put: {
-      req: {
-        /**
-         * The unique identifier for the property.
-         */
-        propertyId: string;
-        /**
-         * The fields of the property to update.
-         */
-        requestBody: {
-          /**
-           * The name of the property.
-           */
-          name: string;
-          /**
-           * Description of the property purpose.
-           */
-          description?: string;
-          /**
-           * Whether the property can be included in id and access tokens.
-           */
-          is_private: boolean;
-          /**
-           * Which category the property belongs to.
-           */
-          category_id: string;
-        };
-      };
+      req: UpdatePropertyData;
       res: {
         /**
          * Property successfully updated.
@@ -5410,24 +4532,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/property_categories": {
     get: {
-      req: {
-        /**
-         * Filter the results by User or Organization context
-         */
-        context?: "usr" | "org" | null;
-        /**
-         * The ID of the category to end before.
-         */
-        endingBefore?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * The ID of the category to start after.
-         */
-        startingAfter?: string | null;
-      };
+      req: GetCategoriesData;
       res: {
         /**
          * Categories successfully retrieved.
@@ -5448,21 +4553,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Category details.
-         */
-        requestBody: {
-          /**
-           * The name of the category.
-           */
-          name: string;
-          /**
-           * The context that the category applies to.
-           */
-          context: "org" | "usr";
-        };
-      };
+      req: CreateCategoryData;
       res: {
         /**
          * Category successfully created
@@ -5485,21 +4576,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/property_categories/{category_id}": {
     put: {
-      req: {
-        /**
-         * The unique identifier for the category.
-         */
-        categoryId: string;
-        /**
-         * The fields of the category to update.
-         */
-        requestBody: {
-          /**
-           * The name of the category.
-           */
-          name?: string;
-        };
-      };
+      req: UpdateCategoryData;
       res: {
         /**
          * category successfully updated.
@@ -5522,20 +4599,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/roles": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc" | null;
-      };
+      req: GetRolesData;
       res: {
         /**
          * Roles successfully retrieved.
@@ -5552,29 +4616,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * Role details.
-         */
-        requestBody?: {
-          /**
-           * The role's name.
-           */
-          name?: string;
-          /**
-           * The role's description.
-           */
-          description?: string;
-          /**
-           * The role identifier to use in code.
-           */
-          key?: string;
-          /**
-           * Set role as default for new users.
-           */
-          is_default_role?: boolean;
-        };
-      };
+      req: CreateRoleData;
       res: {
         /**
          * Role successfully created
@@ -5593,24 +4635,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/roles/{role_id}/permissions": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * The role's public id.
-         */
-        roleId: string;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc" | null;
-      };
+      req: GetRolePermissionData;
       res: {
         /**
          * A list of permissions for a role
@@ -5631,27 +4656,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        requestBody: {
-          /**
-           * Permissions to add or remove from the role.
-           */
-          permissions?: Array<{
-            /**
-             * The permission id.
-             */
-            id?: string;
-            /**
-             * Optional operation, set to 'delete' to remove the permission from the role.
-             */
-            operation?: string;
-          }>;
-        };
-        /**
-         * The identifier for the role.
-         */
-        roleId: string;
-      };
+      req: UpdateRolePermissionsData;
       res: {
         /**
          * Permissions successfully updated.
@@ -5670,16 +4675,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/roles/{role_id}/permissions/{permission_id}": {
     delete: {
-      req: {
-        /**
-         * The permission's public id.
-         */
-        permissionId: string;
-        /**
-         * The role's public id.
-         */
-        roleId: string;
-      };
+      req: RemoveRolePermissionData;
       res: {
         /**
          * Permission successfully removed from role
@@ -5702,33 +4698,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/roles/{role_id}": {
     patch: {
-      req: {
-        /**
-         * Role details.
-         */
-        requestBody?: {
-          /**
-           * The role's name.
-           */
-          name: string;
-          /**
-           * The role's description.
-           */
-          description?: string;
-          /**
-           * The role identifier to use in code.
-           */
-          key: string;
-          /**
-           * Set role as default for new users.
-           */
-          is_default_role?: boolean;
-        };
-        /**
-         * The identifier for the role.
-         */
-        roleId: string;
-      };
+      req: UpdateRolesData;
       res: {
         /**
          * Role successfully updated
@@ -5749,12 +4719,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The identifier for the role.
-         */
-        roleId: string;
-      };
+      req: DeleteRoleData;
       res: {
         /**
          * Role successfully deleted.
@@ -5777,20 +4742,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/subscribers": {
     get: {
-      req: {
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * Field and order to sort the result by.
-         */
-        sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
-      };
+      req: GetSubscribersData;
       res: {
         /**
          * Subscriber successfully retrieved.
@@ -5807,20 +4759,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The email address of the subscriber.
-         */
-        email: string | null;
-        /**
-         * Subscriber's first name.
-         */
-        firstName: string;
-        /**
-         * Subscriber's last name.
-         */
-        lastName: string | null;
-      };
+      req: CreateSubscriberData;
       res: {
         /**
          * Subscriber successfully created
@@ -5843,12 +4782,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/subscribers/{subscriber_id}": {
     get: {
-      req: {
-        /**
-         * The subscriber's id.
-         */
-        subscriberId: string;
-      };
+      req: GetSubscriberData;
       res: {
         /**
          * Subscriber successfully retrieved.
@@ -5871,28 +4805,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/users": {
     get: {
-      req: {
-        /**
-         * Filter the results by email address. The query string should be comma separated and url encoded.
-         */
-        email?: string | null;
-        /**
-         * Specify additional data to retrieve. Use "organizations" and/or "identities".
-         */
-        expand?: string | null;
-        /**
-         * A string to get the next page of results if there are more results.
-         */
-        nextToken?: string | null;
-        /**
-         * Number of results per page. Defaults to 10 if parameter not sent.
-         */
-        pageSize?: number | null;
-        /**
-         * ID of the user to filter by.
-         */
-        userId?: string | null;
-      };
+      req: GetUsersData;
       res: {
         /**
          * Users successfully retrieved.
@@ -5911,12 +4824,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/users/{user_id}/refresh_claims": {
     post: {
-      req: {
-        /**
-         * The id of the user whose claims needs to be updated.
-         */
-        userId: string;
-      };
+      req: RefreshUserClaimsData;
       res: {
         /**
          * Claims successfully refreshed.
@@ -5939,16 +4847,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/user": {
     get: {
-      req: {
-        /**
-         * Specify additional data to retrieve. Use "organizations" and/or "identities".
-         */
-        expand?: string | null;
-        /**
-         * The user's id.
-         */
-        id: string;
-      };
+      req: GetUserDataData;
       res: {
         /**
          * User successfully updated.
@@ -5969,56 +4868,7 @@ export type $OpenApiTs = {
       };
     };
     post: {
-      req: {
-        /**
-         * The details of the user to create.
-         */
-        requestBody?: {
-          /**
-           * Basic information required to create a user.
-           */
-          profile?: {
-            /**
-             * User's first name.
-             */
-            given_name?: string;
-            /**
-             * User's last name.
-             */
-            family_name?: string;
-          };
-          /**
-           * The unique code associated with the organization you want the user to join.
-           */
-          organization_code?: string;
-          /**
-           * Array of identities to assign to the created user
-           */
-          identities?: Array<{
-            /**
-             * The type of identity to create, for e.g. email.
-             */
-            type?: "email" | "username";
-            /**
-             * Additional details required to create the user.
-             */
-            details?: {
-              /**
-               * The email address of the user.
-               */
-              email?: string;
-              /**
-               * The phone number of the user.
-               */
-              phone?: string;
-              /**
-               * The username of the user.
-               */
-              username?: string;
-            };
-          }>;
-        };
-      };
+      req: CreateUserData;
       res: {
         /**
          * User successfully created.
@@ -6039,33 +4889,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * The user's id.
-         */
-        id: string;
-        /**
-         * The user to update.
-         */
-        requestBody: {
-          /**
-           * User's first name.
-           */
-          given_name?: string;
-          /**
-           * User's last name.
-           */
-          family_name?: string;
-          /**
-           * Whether the user is currently suspended or not.
-           */
-          is_suspended?: boolean;
-          /**
-           * Prompt the user to change their password on next sign in.
-           */
-          is_password_reset_requested?: boolean;
-        };
-      };
+      req: UpdateUserData;
       res: {
         /**
          * User successfully updated.
@@ -6086,16 +4910,7 @@ export type $OpenApiTs = {
       };
     };
     delete: {
-      req: {
-        /**
-         * The user's id.
-         */
-        id: string;
-        /**
-         * Delete all data and remove the user's profile from all of Kinde, including the subscriber list
-         */
-        isDeleteProfile?: boolean;
-      };
+      req: DeleteUserData;
       res: {
         /**
          * User successfully deleted.
@@ -6118,20 +4933,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/users/{user_id}/feature_flags/{feature_flag_key}": {
     patch: {
-      req: {
-        /**
-         * The identifier for the feature flag
-         */
-        featureFlagKey: string;
-        /**
-         * The identifier for the user
-         */
-        userId: string;
-        /**
-         * Override value
-         */
-        value: string;
-      };
+      req: UpdateUserFeatureFlagOverrideData;
       res: {
         /**
          * Feature flag override successfully updated.
@@ -6154,20 +4956,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/users/{user_id}/properties/{property_key}": {
     put: {
-      req: {
-        /**
-         * The identifier for the property
-         */
-        propertyKey: string;
-        /**
-         * The identifier for the user
-         */
-        userId: string;
-        /**
-         * The new property value
-         */
-        value: string;
-      };
+      req: UpdateUserPropertyData;
       res: {
         /**
          * Property successfully updated.
@@ -6190,12 +4979,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/users/{user_id}/properties": {
     get: {
-      req: {
-        /**
-         * The user's ID.
-         */
-        userId: string;
-      };
+      req: GetUserPropertyValuesData;
       res: {
         /**
          * Properties successfully retrieved.
@@ -6216,23 +5000,7 @@ export type $OpenApiTs = {
       };
     };
     patch: {
-      req: {
-        /**
-         * Properties to update.
-         */
-        requestBody: {
-          /**
-           * Property keys and values
-           */
-          properties: {
-            [key: string]: unknown;
-          };
-        };
-        /**
-         * The identifier for the user
-         */
-        userId: string;
-      };
+      req: UpdateUserPropertiesData;
       res: {
         /**
          * Properties successfully updated.
@@ -6255,37 +5023,7 @@ export type $OpenApiTs = {
   };
   "/api/v1/users/{user_id}/password": {
     put: {
-      req: {
-        /**
-         * Password details.
-         */
-        requestBody: {
-          /**
-           * The hashed password.
-           */
-          hashed_password: string;
-          /**
-           * The hashing method or algorithm used to encrypt the user’s password. Default is bcrypt.
-           */
-          hashing_method?: "bcrypt" | "crypt" | "md5" | "wordpress";
-          /**
-           * Extra characters added to passwords to make them stronger. Not required for bcrypt.
-           */
-          salt?: string;
-          /**
-           * Position of salt in password string. Not required for bcrypt.
-           */
-          salt_position?: "prefix" | "suffix";
-          /**
-           * The user will be prompted to set a new password after entering this one.
-           */
-          is_temporary_password?: boolean;
-        };
-        /**
-         * The identifier for the user
-         */
-        userId: string;
-      };
+      req: SetUserPasswordData;
       res: {
         /**
          * User successfully created.
@@ -6299,6 +5037,138 @@ export type $OpenApiTs = {
          * Invalid credentials.
          */
         403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/events/{event_id}": {
+    get: {
+      req: GetEventData;
+      res: {
+        /**
+         * Event successfully retrieved.
+         */
+        200: get_event_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/event_types": {
+    get: {
+      res: {
+        /**
+         * Event types successfully retrieved.
+         */
+        200: get_event_types_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/webhooks/{webhook_id}": {
+    delete: {
+      req: DeleteWebHookData;
+      res: {
+        /**
+         * Webhook successfully deleted.
+         */
+        200: delete_webhook_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/webhooks": {
+    get: {
+      res: {
+        /**
+         * Webhook list successfully returned.
+         */
+        200: get_webhooks_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    post: {
+      req: CreateWebHookData;
+      res: {
+        /**
+         * Webhook successfully created.
+         */
+        200: create_webhook_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    patch: {
+      req: UpdateWebHookData;
+      res: {
+        /**
+         * Webhook successfully updated.
+         */
+        200: update_webhook_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
         /**
          * Request was throttled.
          */

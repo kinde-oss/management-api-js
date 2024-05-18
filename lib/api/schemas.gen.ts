@@ -471,6 +471,155 @@ export const $get_categories_response = {
   },
 } as const;
 
+export const $get_event_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    event: {
+      type: "object",
+      properties: {
+        type: {
+          type: "string",
+        },
+        source: {
+          type: "string",
+        },
+        event_id: {
+          type: "string",
+        },
+        timestamp: {
+          type: "string",
+          description: "Timestamp in ISO 8601 format.",
+        },
+        data: {
+          type: "object",
+          description: "Event specific data object.",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_event_types_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    event_types: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/event_type",
+      },
+    },
+  },
+} as const;
+
+export const $get_webhooks_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    webhooks: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/webhook",
+      },
+    },
+  },
+} as const;
+
+export const $webhook = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    name: {
+      type: "string",
+    },
+    endpoint: {
+      type: "string",
+    },
+    description: {
+      type: "string",
+    },
+    event_types: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
+    created_on: {
+      type: "string",
+      description: "Created on date in ISO 8601 format.",
+    },
+  },
+} as const;
+
+export const $create_webhook_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    webhook: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+        },
+        endpoint: {
+          type: "string",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $update_webhook_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    webhook: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+        },
+      },
+    },
+  },
+} as const;
+
 export const $create_connection_response = {
   type: "object",
   properties: {
@@ -512,6 +661,41 @@ export const $get_connections_response = {
     has_more: {
       description: "Whether more records exist.",
       type: "boolean",
+    },
+  },
+} as const;
+
+export const $delete_webhook_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+  },
+} as const;
+
+export const $event_type = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    name: {
+      type: "string",
+    },
+    origin: {
+      type: "string",
+    },
+    schema: {
+      type: "object",
     },
   },
 } as const;
@@ -637,6 +821,9 @@ export const $organization_user = {
       type: "string",
     },
     first_name: {
+      type: "string",
+    },
+    picture: {
       type: "string",
     },
     roles: {

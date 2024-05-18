@@ -51,6 +51,8 @@ tags:
     x-displayName: Subscribers
   - name: Users
     x-displayName: Users
+  - name: Webhooks
+    x-displayName: Webhooks
 paths:
   /oauth2/user_profile:
     get:
@@ -4715,6 +4717,7 @@ paths:
                         description: The type of identity to create, for e.g. email.
                         enum:
                           - email
+                          - phone
                           - username
                       details:
                         type: object
@@ -5137,6 +5140,312 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/events/{event_id}:
+    get:
+      tags:
+        - Webhooks
+      operationId: GetEvent
+      description: |
+        Returns an event
+      summary: Get Event
+      parameters:
+        - name: event_id
+          in: path
+          description: The event id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: Event successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_event_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_event_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/event_types:
+    get:
+      tags:
+        - Webhooks
+      operationId: GetEventTypes
+      description: |
+        Returns a list event type definitions
+      summary: List Event Types
+      responses:
+        '200':
+          description: Event types successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_event_types_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_event_types_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/webhooks/{webhook_id}:
+    delete:
+      tags:
+        - Webhooks
+      operationId: DeleteWebHook
+      description: |
+        Delete webhook
+      summary: Delete Webhook
+      parameters:
+        - name: webhook_id
+          in: path
+          description: The webhook id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: Webhook successfully deleted.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/delete_webhook_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_webhook_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/webhooks:
+    get:
+      tags:
+        - Webhooks
+      operationId: GetWebHooks
+      description: |
+        List webhooks
+      summary: List Webhooks
+      responses:
+        '200':
+          description: Webhook list successfully returned.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_webhooks_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_webhooks_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Webhooks
+      operationId: CreateWebHook
+      description: |
+        Create a webhook
+      summary: Create a Webhook
+      requestBody:
+        description: Webhook request specification.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  description: The webhook endpoint url
+                  type: string
+                  nullable: false
+                event_types:
+                  description: Array of event type keys
+                  type: array
+                  items:
+                    type: string
+                  nullable: false
+                name:
+                  description: The webhook name
+                  type: string
+                  nullable: false
+                description:
+                  description: The webhook description
+                  type: string
+                  nullable: true
+              required:
+                - endpoint
+                - event_types
+                - name
+      responses:
+        '200':
+          description: Webhook successfully created.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/create_webhook_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_webhook_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    patch:
+      tags:
+        - Webhooks
+      operationId: UpdateWebHook
+      description: |
+        Update a webhook
+      summary: Update a Webhook
+      requestBody:
+        description: Update webhook request specification.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_types:
+                  description: Array of event type keys
+                  type: array
+                  items:
+                    type: string
+                  nullable: false
+                name:
+                  description: The webhook name
+                  type: string
+                  nullable: false
+                description:
+                  description: The webhook description
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Webhook successfully updated.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/update_webhook_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/update_webhook_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
 components:
   schemas:
     success_response:
@@ -5461,6 +5770,102 @@ components:
         has_more:
           description: Whether more records exist.
           type: boolean
+    get_event_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        event:
+          type: object
+          properties:
+            type:
+              type: string
+            source:
+              type: string
+            event_id:
+              type: string
+            timestamp:
+              type: string
+              description: Timestamp in ISO 8601 format.
+            data:
+              type: object
+              description: Event specific data object.
+    get_event_types_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        event_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/event_type'
+    get_webhooks_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        webhooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/webhook'
+    webhook:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        endpoint:
+          type: string
+        description:
+          type: string
+        event_types:
+          type: array
+          items:
+            type: string
+        created_on:
+          type: string
+          description: Created on date in ISO 8601 format.
+    create_webhook_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        webhook:
+          type: object
+          properties:
+            id:
+              type: string
+            endpoint:
+              type: string
+    update_webhook_response:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        webhook:
+          type: object
+          properties:
+            id:
+              type: string
     create_connection_response:
       type: object
       properties:
@@ -5490,6 +5895,28 @@ components:
         has_more:
           description: Whether more records exist.
           type: boolean
+    delete_webhook_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+    event_type:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        origin:
+          type: string
+        schema:
+          type: object
     token_introspect:
       type: object
       properties:
@@ -5575,6 +6002,8 @@ components:
         last_name:
           type: string
         first_name:
+          type: string
+        picture:
           type: string
         roles:
           type: array
@@ -6203,3 +6632,6 @@ x-tagGroups:
   - name: Users API
     tags:
       - Users
+  - name: Webhooks API
+    tags:
+      - Webhooks

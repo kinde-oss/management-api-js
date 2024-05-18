@@ -193,6 +193,16 @@ import type {
   UpdateUserPropertiesResponse,
   SetUserPasswordData,
   SetUserPasswordResponse,
+  GetEventData,
+  GetEventResponse,
+  GetEventTypesResponse,
+  DeleteWebHookData,
+  DeleteWebHookResponse,
+  GetWebHooksResponse,
+  CreateWebHookData,
+  CreateWebHookResponse,
+  UpdateWebHookData,
+  UpdateWebHookResponse,
 } from "./types.gen";
 
 export class Oauth {
@@ -2878,6 +2888,148 @@ export class Users {
       mediaType: "application/json",
       errors: {
         400: "Error creating user.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+}
+
+export class Webhooks {
+  /**
+   * Get Event
+   * Returns an event
+   *
+   * @param data The data for the request.
+   * @param data.eventId The event id.
+   * @returns get_event_response Event successfully retrieved.
+   * @throws ApiError
+   */
+  public static getEvent(
+    data: GetEventData,
+  ): CancelablePromise<GetEventResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/events/{event_id}",
+      path: {
+        event_id: data.eventId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * List Event Types
+   * Returns a list event type definitions
+   *
+   * @returns get_event_types_response Event types successfully retrieved.
+   * @throws ApiError
+   */
+  public static getEventTypes(): CancelablePromise<GetEventTypesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/event_types",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete Webhook
+   * Delete webhook
+   *
+   * @param data The data for the request.
+   * @param data.webhookId The webhook id.
+   * @returns delete_webhook_response Webhook successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteWebHook(
+    data: DeleteWebHookData,
+  ): CancelablePromise<DeleteWebHookResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/webhooks/{webhook_id}",
+      path: {
+        webhook_id: data.webhookId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * List Webhooks
+   * List webhooks
+   *
+   * @returns get_webhooks_response Webhook list successfully returned.
+   * @throws ApiError
+   */
+  public static getWebHooks(): CancelablePromise<GetWebHooksResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/webhooks",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create a Webhook
+   * Create a webhook
+   *
+   * @param data The data for the request.
+   * @param data.requestBody Webhook request specification.
+   * @returns create_webhook_response Webhook successfully created.
+   * @throws ApiError
+   */
+  public static createWebHook(
+    data: CreateWebHookData,
+  ): CancelablePromise<CreateWebHookResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/webhooks",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update a Webhook
+   * Update a webhook
+   *
+   * @param data The data for the request.
+   * @param data.requestBody Update webhook request specification.
+   * @returns update_webhook_response Webhook successfully updated.
+   * @throws ApiError
+   */
+  public static updateWebHook(
+    data: UpdateWebHookData,
+  ): CancelablePromise<UpdateWebHookResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/webhooks",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
       },

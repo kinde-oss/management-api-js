@@ -15,7 +15,8 @@
     "test:coverage": "vitest --coverage",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "spec:update": "curl -o spec/kinde-mgmt-api-specs.yaml https://kinde.com/api/kinde-mgmt-api-specs.yaml"
+    "spec:update": "curl -o spec/kinde-mgmt-api-specs.yaml https://kinde.com/api/kinde-mgmt-api-specs.yaml",
+    "spec:generate": "openapi-generator-cli generate -i spec/kinde-mgmt-api-specs.yaml -g typescript-fetch -o src/api -c spec/openapi-generator-config.json"
   },
   "module": "dist/kinde-management-api-js.cjs",
   "main": "dist/kinde-management-api-js.cjs",
@@ -35,5 +36,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "pnpm@8.14.1+sha256.2df78e65d433d7693b9d3fbdaf431b2d96bb4f96a2ffecd51a50efe16e50a6a8"
 }
