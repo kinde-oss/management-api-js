@@ -4,6 +4,8 @@
 
 Javascript SDK to interact with the Kinde Management API.
 
+> Important: This has to be used on a backend service, will not work on a browser or client based libraries
+
 ## Installation
 
 ```bash
