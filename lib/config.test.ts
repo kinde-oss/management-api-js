@@ -1,19 +1,30 @@
 import { configType, init, kindeConfig } from './config'; // Adjust the import path as necessary
 import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
+function clearObjectValues<T extends object>(obj: T): T {
+  Object.keys(obj).forEach(key => {
+    const typedKey = key as keyof T;
+    if (typeof obj[typedKey] === 'number') {
+      obj[typedKey] = 0 as any; // Reset numbers to 0
+    } else if (typeof obj[typedKey] === 'string') {
+      obj[typedKey] = '' as any; // Reset strings to empty
+    } else if (typeof obj[typedKey] === 'boolean') {
+      obj[typedKey] = false as any; // Reset booleans to false
+    } else {
+      obj[typedKey] = null as any; // Reset other types to null
+    }
+  });
+  return obj;
+}
+
 describe('init method', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
     vi.resetModules(); // Clears any cache between tests
     process.env = { ...originalEnv }; // Reset environment variables
-    Object.keys(kindeConfig).forEach((key: keyof configType) => {
-        if (key !== 'tokenStore') {
-           kindeConfig[key] = '';
-        } else {
-            kindeConfig[key] = undefined;
-        }
-    });
+    clearObjectValues(kindeConfig); // Reset kindeConfig values
+
   });
 
   afterAll(() => {
