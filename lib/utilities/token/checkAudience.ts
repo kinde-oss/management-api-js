@@ -1,4 +1,4 @@
-import { type JWTDecoded, jwtDecode } from "../jwt-decode";
+import { type JWTDecoded, jwtDecoder } from "@kinde/jwt-decoder";
 /**
  * Checks if the given audience is present in the token
  * @param token - JWT to be checked, can be a string or a decoded JWT token
@@ -11,7 +11,7 @@ export const checkAudience = (
   if (!audience) {
     return false;
   }
-  const decoded = typeof token === "string" ? jwtDecode(token) : token;
+  const decoded = typeof token === "string" ? jwtDecoder(token) : token;
   if (!decoded) {
     return false;
   }

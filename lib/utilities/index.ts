@@ -1,7 +1,9 @@
 import { setToken } from "./setToken";
 import { getToken } from "./getToken";
-import { jwtDecode } from "./jwt-decode";
+import { jwtDecoder } from "@kinde/jwt-decoder";
 import { checkAudience } from "./token/checkAudience";
 import { validateToken } from "./token/validateToken";
 
-export { setToken, getToken, jwtDecode, checkAudience, validateToken };
+// TODO: Deprecate jwtDecode in favor of jwtDecoder
+const jwtDecode = jwtDecoder;
+export { setToken, getToken, jwtDecode, jwtDecoder, checkAudience, validateToken };
