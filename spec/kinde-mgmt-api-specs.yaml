@@ -1841,6 +1841,49 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+    delete:
+      tags:
+        - Connections
+      operationId: deleteConnection
+      description: |
+        Delete connection.
+      summary: Delete Connection
+      parameters:
+        - name: connection_id
+          in: path
+          description: The identifier for the connection.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Connection deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
   /api/v1/environment/feature_flags:
     delete:
       tags:
@@ -2518,6 +2561,8 @@ paths:
               - name_desc
               - email_asc
               - email_desc
+              - id_asc
+              - id_desc
         - name: page_size
           in: query
           description: Number of results per page. Defaults to 10 if parameter not sent.
@@ -3817,6 +3862,44 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+    delete:
+      tags:
+        - Properties
+      operationId: DeleteProperty
+      description: Delete property.
+      summary: Delete Property
+      parameters:
+        - name: property_id
+          in: path
+          description: The unique identifier for the property.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Property successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
   /api/v1/property_categories:
     get:
       tags:
@@ -4547,6 +4630,14 @@ paths:
           description: >-
             Filter the results by email address. The query string should be
             comma separated and url encoded.
+          schema:
+            type: string
+            nullable: true
+        - name: username
+          in: query
+          description: >-
+            Filter the results by username. The query string should be comma
+            separated and url encoded.
           schema:
             type: string
             nullable: true
