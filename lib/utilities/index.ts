@@ -6,4 +6,11 @@ import { validateToken } from "./token/validateToken";
 
 // TODO: Deprecate jwtDecode in favor of jwtDecoder
 const jwtDecode = jwtDecoder;
-export { setToken, getToken, jwtDecode, jwtDecoder, checkAudience, validateToken };
+export {
+  setToken,
+  getToken,
+  jwtDecode,
+  jwtDecoder,
+  checkAudience,
+  validateToken,
+};

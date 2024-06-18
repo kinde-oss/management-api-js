@@ -34,12 +34,16 @@ export const init = (
     throw new Error("kindeDomain or env KINDE_DOMAIN is not set");
   }
 
-  _merge(kindeConfig, {
-    clientId: process.env.KINDE_MANAGEMENT_CLIENT_ID,
-    clientSecret: process.env.KINDE_MANAGEMENT_CLIENT_SECRET,
-    audience: process.env.KINDE_DOMAIN + "/api",
-    kindeDomain: process.env.KINDE_DOMAIN,
-  }, config);
+  _merge(
+    kindeConfig,
+    {
+      clientId: process.env.KINDE_MANAGEMENT_CLIENT_ID,
+      clientSecret: process.env.KINDE_MANAGEMENT_CLIENT_SECRET,
+      audience: process.env.KINDE_DOMAIN + "/api",
+      kindeDomain: process.env.KINDE_DOMAIN,
+    },
+    config,
+  );
 
   _merge(OpenAPI, {
     BASE: kindeConfig.kindeDomain,
