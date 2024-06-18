@@ -1646,6 +1646,15 @@ export type UpdateConnectionData = {
 
 export type UpdateConnectionResponse = success_response;
 
+export type DeleteConnectionData = {
+  /**
+   * The identifier for the connection.
+   */
+  connectionId: string;
+};
+
+export type DeleteConnectionResponse = success_response;
+
 export type DeleteEnvironementFeatureFlagOverridesResponse = success_response;
 
 export type GetEnvironementFeatureFlagsResponse =
@@ -1943,7 +1952,14 @@ export type GetOrganizationUsersData = {
   /**
    * Field and order to sort the result by.
    */
-  sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc" | null;
+  sort?:
+    | "name_asc"
+    | "name_desc"
+    | "email_asc"
+    | "email_desc"
+    | "id_asc"
+    | "id_desc"
+    | null;
 };
 
 export type GetOrganizationUsersResponse = get_organization_users_response;
@@ -2401,6 +2417,15 @@ export type UpdatePropertyData = {
 
 export type UpdatePropertyResponse = success_response;
 
+export type DeletePropertyData = {
+  /**
+   * The unique identifier for the property.
+   */
+  propertyId: string;
+};
+
+export type DeletePropertyResponse = success_response;
+
 export type GetCategoriesData = {
   /**
    * Filter the results by User or Organization context
@@ -2662,6 +2687,10 @@ export type GetUsersData = {
    * ID of the user to filter by.
    */
   userId?: string | null;
+  /**
+   * Filter the results by username. The query string should be comma separated and url encoded.
+   */
+  username?: string | null;
 };
 
 export type GetUsersResponse = users_response;
@@ -3726,6 +3755,27 @@ export type $OpenApiTs = {
         429: unknown;
       };
     };
+    delete: {
+      req: DeleteConnectionData;
+      res: {
+        /**
+         * Connection deleted.
+         */
+        200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
   };
   "/api/v1/environment/feature_flags": {
     delete: {
@@ -4513,6 +4563,27 @@ export type $OpenApiTs = {
       res: {
         /**
          * Property successfully updated.
+         */
+        200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    delete: {
+      req: DeletePropertyData;
+      res: {
+        /**
+         * Property successfully deleted.
          */
         200: success_response;
         /**
