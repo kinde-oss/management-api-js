@@ -14,7 +14,7 @@ npm install @kinde/management-api-js
 # yarn
 yarn add @kinde/management-api-js
 # pnpm
-pnpm install @kinde/management-api-js
+pnpm add @kinde/management-api-js
 ```
 
 ## Configuration
