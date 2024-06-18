@@ -25,14 +25,14 @@ export const kindeConfig: configType = {
 };
 
 /**
- * Initializes the integration with Kinde, using either provided configuration 
+ * Initializes the integration with Kinde, using either provided configuration
  * or default values from `kindeConfig`.
- * 
+ *
  * @param {Object} [config] - Optional configuration object for Kinde.
  * @param {string} [config.kindeDomain] - The domain of your Kinde account.
  * @param {string} [config.clientId] - Your Kinde M2M client ID.
  * @param {string} [config.clientSecret] - Your Kinde M2M client secret.
- * @returns {void} - This function does not return a value. It sets up the 
+ * @returns {void} - This function does not return a value. It sets up the
  *                   Kinde integration based on the provided configuration.
  */
 export const init = (
