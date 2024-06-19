@@ -8,5 +8,6 @@ export default {
   },
   services: {
     name: "{{name}}",
+    asClass: true,
   },
 };
