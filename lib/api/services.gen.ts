@@ -87,6 +87,12 @@ import type {
   DeleteFeatureFlagResponse,
   UpdateFeatureFlagData,
   UpdateFeatureFlagResponse,
+  GetIdentityData,
+  GetIdentityResponse,
+  UpdateIdentityData,
+  UpdateIdentityResponse,
+  DeleteIdentityData,
+  DeleteIdentityResponse,
   GetOrganizationData,
   GetOrganizationResponse,
   CreateOrganizationData,
@@ -197,6 +203,10 @@ import type {
   UpdateUserPropertiesResponse,
   SetUserPasswordData,
   SetUserPasswordResponse,
+  GetUserIdentitiesData,
+  GetUserIdentitiesResponse,
+  CreateUserIdentityData,
+  CreateUserIdentityResponse,
   GetEventData,
   GetEventResponse,
   GetEventTypesResponse,
@@ -1389,6 +1399,87 @@ export class FeatureFlags {
         type: data.type,
         allow_override_level: data.allowOverrideLevel,
         default_value: data.defaultValue,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+}
+
+export class Identities {
+  /**
+   * Get identity
+   * Returns an identity by ID
+   *
+   * @param data The data for the request.
+   * @param data.identityId The unique identifier for the identity.
+   * @returns identity Identity successfully retrieved.
+   * @throws ApiError
+   */
+  public static getIdentity(
+    data: GetIdentityData,
+  ): CancelablePromise<GetIdentityResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/identities/{identity_id}",
+      path: {
+        identity_id: data.identityId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update identity
+   * Update identity by ID.
+   * @param data The data for the request.
+   * @param data.identityId The unique identifier for the identity.
+   * @param data.requestBody The fields of the identity to update.
+   * @returns success_response Identity successfully updated.
+   * @throws ApiError
+   */
+  public static updateIdentity(
+    data: UpdateIdentityData,
+  ): CancelablePromise<UpdateIdentityResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/identities/{identity_id}",
+      path: {
+        identity_id: data.identityId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete identity
+   * Delete identity by ID.
+   * @param data The data for the request.
+   * @param data.identityId The unique identifier for the identity.
+   * @returns success_response Identity successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteIdentity(
+    data: DeleteIdentityData,
+  ): CancelablePromise<DeleteIdentityResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/identities/{identity_id}",
+      path: {
+        identity_id: data.identityId,
       },
       errors: {
         400: "Invalid request.",
@@ -2945,6 +3036,61 @@ export class Users {
       mediaType: "application/json",
       errors: {
         400: "Error creating user.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get identities
+   * Gets a list of identities for an user by ID.
+   *
+   * @param data The data for the request.
+   * @param data.userId The user's ID.
+   * @returns get_identities_response Identities successfully retrieved.
+   * @throws ApiError
+   */
+  public static getUserIdentities(
+    data: GetUserIdentitiesData,
+  ): CancelablePromise<GetUserIdentitiesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/users/{user_id}/identities",
+      path: {
+        user_id: data.userId,
+      },
+      errors: {
+        400: "Bad request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create identity
+   * Creates an identity for a user.
+   *
+   * @param data The data for the request.
+   * @param data.userId The user's ID.
+   * @param data.requestBody The identity details.
+   * @returns create_identity_response Identity successfully created.
+   * @throws ApiError
+   */
+  public static createUserIdentity(
+    data: CreateUserIdentityData,
+  ): CancelablePromise<CreateUserIdentityResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/users/{user_id}/identities",
+      path: {
+        user_id: data.userId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Error creating identity.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
       },
