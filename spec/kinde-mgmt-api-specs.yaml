@@ -37,6 +37,8 @@ tags:
     x-displayName: Environments
   - name: Feature Flags
     x-displayName: Feature Flags
+  - name: Identities
+    x-displayName: Identities
   - name: Organizations
     x-displayName: Organizations
   - name: Permissions
@@ -2214,6 +2216,141 @@ paths:
       responses:
         '200':
           description: Feature flag successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/identities/{identity_id}:
+    get:
+      tags:
+        - Identities
+      operationId: GetIdentity
+      description: |
+        Returns an identity by ID
+      summary: Get identity
+      parameters:
+        - name: identity_id
+          in: path
+          description: The unique identifier for the identity.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Identity successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/identity'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/identity'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    patch:
+      tags:
+        - Identities
+      operationId: UpdateIdentity
+      description: Update identity by ID.
+      summary: Update identity
+      parameters:
+        - name: identity_id
+          in: path
+          description: The unique identifier for the identity.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The fields of the identity to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_primary:
+                  description: Whether the identity is the primary for it's type
+                  type: boolean
+                  nullable: false
+      responses:
+        '200':
+          description: Identity successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Identities
+      operationId: DeleteIdentity
+      description: Delete identity by ID.
+      summary: Delete identity
+      parameters:
+        - name: identity_id
+          in: path
+          description: The unique identifier for the identity.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Identity successfully deleted.
           content:
             application/json:
               schema:
@@ -5231,6 +5368,104 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/users/{user_id}/identities:
+    get:
+      tags:
+        - Users
+      operationId: GetUserIdentities
+      description: |
+        Gets a list of identities for an user by ID.
+      summary: Get identities
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's ID.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: Identities successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_identities_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_identities_response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Users
+      operationId: CreateUserIdentity
+      description: |
+        Creates an identity for a user.
+      summary: Create identity
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's ID.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      requestBody:
+        description: The identity details.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: The email address, or username of the user.
+                type:
+                  type: string
+                  description: The identity type
+                  enum:
+                    - email
+                    - username
+      responses:
+        '200':
+          description: Identity successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_identity_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/create_identity_response'
+        '400':
+          description: Error creating identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
   /api/v1/events/{event_id}:
     get:
       tags:
@@ -5800,6 +6035,35 @@ components:
             id:
               description: The property's ID.
               type: string
+    create_identity_response:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        identity:
+          type: object
+          properties:
+            id:
+              description: The identity's ID.
+              type: string
+    get_identities_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/identity'
+        has_more:
+          description: Whether more records exist.
+          type: boolean
     get_properties_response:
       type: object
       properties:
@@ -6117,6 +6381,25 @@ components:
         display_name:
           type: string
         strategy:
+          type: string
+    identity:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        is_confirmed:
+          type: boolean
+        created_on:
+          type: string
+          description: Date of user creation in ISO 8601 format.
+        last_login_on:
+          type: string
+          description: Date of user creation in ISO 8601 format.
+        total_logins:
+          type: integer
+        name:
           type: string
     property:
       type: object
@@ -6702,6 +6985,9 @@ x-tagGroups:
   - name: Feature flags API
     tags:
       - Feature Flags
+  - name: Identities API
+    tags:
+      - Identities
   - name: Organizations API
     tags:
       - Organizations

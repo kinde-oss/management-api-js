@@ -275,6 +275,33 @@ export type create_property_response = {
   };
 };
 
+export type create_identity_response = {
+  message?: string;
+  code?: string;
+  identity?: {
+    /**
+     * The identity's ID.
+     */
+    id?: string;
+  };
+};
+
+export type get_identities_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  properties?: Array<identity>;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+};
+
 export type get_properties_response = {
   /**
    * Response code.
@@ -567,6 +594,22 @@ export type connection = {
   name?: string;
   display_name?: string;
   strategy?: string;
+};
+
+export type identity = {
+  id?: string;
+  type?: string;
+  is_confirmed?: boolean;
+  /**
+   * Date of user creation in ISO 8601 format.
+   */
+  created_on?: string;
+  /**
+   * Date of user creation in ISO 8601 format.
+   */
+  last_login_on?: string;
+  total_logins?: number;
+  name?: string;
 };
 
 export type property = {
@@ -1759,6 +1802,42 @@ export type UpdateFeatureFlagData = {
 
 export type UpdateFeatureFlagResponse = success_response;
 
+export type GetIdentityData = {
+  /**
+   * The unique identifier for the identity.
+   */
+  identityId: string;
+};
+
+export type GetIdentityResponse = identity;
+
+export type UpdateIdentityData = {
+  /**
+   * The unique identifier for the identity.
+   */
+  identityId: string;
+  /**
+   * The fields of the identity to update.
+   */
+  requestBody: {
+    /**
+     * Whether the identity is the primary for it's type
+     */
+    is_primary?: boolean;
+  };
+};
+
+export type UpdateIdentityResponse = success_response;
+
+export type DeleteIdentityData = {
+  /**
+   * The unique identifier for the identity.
+   */
+  identityId: string;
+};
+
+export type DeleteIdentityResponse = success_response;
+
 export type GetOrganizationData = {
   /**
    * The organization's code.
@@ -2910,6 +2989,37 @@ export type SetUserPasswordData = {
 
 export type SetUserPasswordResponse = success_response;
 
+export type GetUserIdentitiesData = {
+  /**
+   * The user's ID.
+   */
+  userId: string;
+};
+
+export type GetUserIdentitiesResponse = get_identities_response;
+
+export type CreateUserIdentityData = {
+  /**
+   * The identity details.
+   */
+  requestBody?: {
+    /**
+     * The email address, or username of the user.
+     */
+    value?: string;
+    /**
+     * The identity type
+     */
+    type?: "email" | "username";
+  };
+  /**
+   * The user's ID.
+   */
+  userId: string;
+};
+
+export type CreateUserIdentityResponse = create_identity_response;
+
 export type GetEventData = {
   /**
    * The event id.
@@ -3913,6 +4023,71 @@ export type $OpenApiTs = {
       res: {
         /**
          * Feature flag successfully updated.
+         */
+        200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/identities/{identity_id}": {
+    get: {
+      req: GetIdentityData;
+      res: {
+        /**
+         * Identity successfully retrieved.
+         */
+        200: identity;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: error_response;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    patch: {
+      req: UpdateIdentityData;
+      res: {
+        /**
+         * Identity successfully updated.
+         */
+        200: success_response;
+        /**
+         * Invalid request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    delete: {
+      req: DeleteIdentityData;
+      res: {
+        /**
+         * Identity successfully deleted.
          */
         200: success_response;
         /**
@@ -5102,6 +5277,50 @@ export type $OpenApiTs = {
         200: success_response;
         /**
          * Error creating user.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+  };
+  "/api/v1/users/{user_id}/identities": {
+    get: {
+      req: GetUserIdentitiesData;
+      res: {
+        /**
+         * Identities successfully retrieved.
+         */
+        200: get_identities_response;
+        /**
+         * Bad request.
+         */
+        400: error_response;
+        /**
+         * Invalid credentials.
+         */
+        403: unknown;
+        /**
+         * Request was throttled.
+         */
+        429: unknown;
+      };
+    };
+    post: {
+      req: CreateUserIdentityData;
+      res: {
+        /**
+         * Identity successfully created.
+         */
+        200: create_identity_response;
+        /**
+         * Error creating identity.
          */
         400: error_response;
         /**

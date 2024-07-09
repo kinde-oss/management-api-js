@@ -378,6 +378,51 @@ export const $create_property_response = {
   },
 } as const;
 
+export const $create_identity_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    identity: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The identity's ID.",
+          type: "string",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_identities_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    properties: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/identity",
+      },
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+  },
+} as const;
+
 export const $get_properties_response = {
   type: "object",
   properties: {
@@ -860,6 +905,35 @@ export const $connection = {
       type: "string",
     },
     strategy: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const $identity = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+    },
+    type: {
+      type: "string",
+    },
+    is_confirmed: {
+      type: "boolean",
+    },
+    created_on: {
+      type: "string",
+      description: "Date of user creation in ISO 8601 format.",
+    },
+    last_login_on: {
+      type: "string",
+      description: "Date of user creation in ISO 8601 format.",
+    },
+    total_logins: {
+      type: "integer",
+    },
+    name: {
       type: "string",
     },
   },

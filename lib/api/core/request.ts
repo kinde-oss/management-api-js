@@ -115,9 +115,9 @@ export const resolve = async <T>(
   return resolver;
 };
 
-export const getHeaders = async (
+export const getHeaders = async <T>(
   config: OpenAPIConfig,
-  options: ApiRequestOptions,
+  options: ApiRequestOptions<T>,
 ): Promise<Headers> => {
   const [token, username, password, additionalHeaders] = await Promise.all([
     // @ts-ignore
@@ -378,7 +378,7 @@ export const request = <T>(
 
         let transformedBody = responseBody;
         if (options.responseTransformer && response.ok) {
-          transformedBody = options.responseTransformer(responseBody);
+          transformedBody = await options.responseTransformer(responseBody);
         }
 
         const result: ApiResult = {
