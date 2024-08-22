@@ -1047,7 +1047,7 @@ export class ConnectedApps {
    * Get Connected App Token
    * Get an access token that can be used to call the third-party provider linked to the connected app.
    * @param data The data for the request.
-   * @param data.sessionId The unique sesssion id reprensenting the login session of a user.
+   * @param data.sessionId The unique sesssion id representing the login session of a user.
    * @returns connected_apps_access_token An access token that can be used to query a third-party provider, as well as the token's expiry time.
    * @throws ApiError
    */
@@ -1072,7 +1072,7 @@ export class ConnectedApps {
    * Revoke Connected App Token
    * Revoke the tokens linked to the connected app session.
    * @param data The data for the request.
-   * @param data.sessionId The unique sesssion id reprensenting the login session of a user.
+   * @param data.sessionId The unique sesssion id representing the login session of a user.
    * @returns success_response An access token that can be used to query a third-party provider, as well as the token's expiry time.
    * @throws ApiError
    */
@@ -2737,6 +2737,7 @@ export class Users {
    * @param data.email Filter the results by email address. The query string should be comma separated and url encoded.
    * @param data.username Filter the results by username. The query string should be comma separated and url encoded.
    * @param data.expand Specify additional data to retrieve. Use "organizations" and/or "identities".
+   * @param data.hasOrganization Filter the results by if the user has at least one organization assigned.
    * @returns users_response Users successfully retrieved.
    * @throws ApiError
    */
@@ -2753,6 +2754,7 @@ export class Users {
         email: data.email,
         username: data.username,
         expand: data.expand,
+        has_organization: data.hasOrganization,
       },
       errors: {
         403: "Invalid credentials.",

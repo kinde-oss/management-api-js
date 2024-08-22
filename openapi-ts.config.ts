@@ -10,4 +10,5 @@ export default {
     name: "{{name}}",
     asClass: true,
   },
+  client: "fetch",
 };

@@ -9,7 +9,7 @@ info:
     email: support@kinde.com
     url: https://docs.kinde.com
 servers:
-  - url: https://{businessName}.kinde.com
+  - url: https://{your_subdomain}.kinde.com
     variables:
       businessName:
         default: app
@@ -192,6 +192,9 @@ paths:
       operationId: getAPIs
       description: |
         Returns a list of APIs.
+      security:
+        - ManagementAPI:
+            - read:apis
       summary: List APIs
       responses:
         '200':
@@ -223,14 +226,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - APIs
       operationId: addAPIs
       description: |
         Add APIs.
+      security:
+        - ManagementAPI:
+            - create:apis
       summary: Add APIs
       requestBody:
         description: API details.
@@ -277,8 +281,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/apis/{api_id}:
     get:
       tags:
@@ -286,6 +288,9 @@ paths:
       operationId: getAPI
       description: |
         Returns the details of the API.
+      security:
+        - ManagementAPI:
+            - read:apis
       summary: List API details
       parameters:
         - name: api_id
@@ -325,14 +330,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - APIs
       operationId: deleteAPI
       description: |
         Deletes API.
+      security:
+        - ManagementAPI:
+            - delete:apis
       summary: Delete API
       parameters:
         - name: api_id
@@ -372,8 +378,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/apis/{api_id}/applications:
     patch:
       tags:
@@ -381,6 +385,9 @@ paths:
       operationId: updateAPIApplications
       description: |
         Update the applications under that API.
+      security:
+        - ManagementAPI:
+            - update:apis
       summary: Update API Applications
       parameters:
         - name: api_id
@@ -444,8 +451,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/applications:
     get:
       tags:
@@ -453,6 +458,9 @@ paths:
       operationId: getApplications
       description: |
         Get a list of applications.
+      security:
+        - ManagementAPI:
+            - read:applications
       summary: List Applications
       parameters:
         - name: sort
@@ -490,13 +498,14 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Applications
       operationId: createApplication
       description: Create an application.
+      security:
+        - ManagementAPI:
+            - create:applications
       summary: Create Application
       requestBody:
         description: Application details.
@@ -539,8 +548,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/applications/{application_id}:
     get:
       tags:
@@ -549,6 +556,9 @@ paths:
       description: |
         Gets an application given the application's id.
       summary: Get Application
+      security:
+        - ManagementAPI:
+            - read:applications
       parameters:
         - name: application_id
           in: path
@@ -580,14 +590,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Applications
       operationId: updateApplication
       description: Update an application.
       summary: Update Application
+      security:
+        - ManagementAPI:
+            - update:applications
       parameters:
         - name: application_id
           in: path
@@ -619,6 +630,12 @@ paths:
                   type: array
                   items:
                     type: string
+                login_uri:
+                  description: The default login route for resolving session issues.
+                  type: string
+                homepage_uri:
+                  description: The homepage link to your application.
+                  type: string
       responses:
         '200':
           description: Application successfully updated.
@@ -635,14 +652,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Applications
       operationId: deleteApplication
       description: |
         Delete application.
+      security:
+        - ManagementAPI:
+            - delete:applications
       summary: Delete Application
       parameters:
         - name: application_id
@@ -678,14 +696,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/applications/{application_id}/connections:
     get:
       tags:
         - Applications
       operationId: GetApplicationConnections
       description: Gets all connections for an application.
+      security:
+        - ManagementAPI:
+            - read:application_connections
       summary: Get connections
       parameters:
         - name: application_id
@@ -718,14 +737,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/applications/{application_id}/connections/{connection_id}:
     post:
       tags:
         - Applications
       operationId: EnableConnection
       description: Enable an auth connection for an application.
+      security:
+        - ManagementAPI:
+            - create:application_connections
       summary: Enable connection
       parameters:
         - name: application_id
@@ -756,14 +776,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Applications
       operationId: RemoveConnection
       description: Turn off an auth connection for an application
       summary: Remove connection
+      security:
+        - ManagementAPI:
+            - delete:application_connections
       parameters:
         - name: application_id
           in: path
@@ -804,14 +825,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/business:
     get:
       tags:
         - Business
       operationId: getBusiness
       description: Get your business details.
+      security:
+        - ManagementAPI:
+            - read:business
       summary: List business details
       parameters:
         - name: code
@@ -881,13 +903,14 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Business
       operationId: updateBusiness
       description: Update business details.
+      security:
+        - ManagementAPI:
+            - update:businesses
       summary: Update business details
       parameters:
         - name: business_name
@@ -979,14 +1002,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/industries:
     get:
       tags:
         - Industries
       operationId: getIndustries
       description: Get a list of industries and associated industry keys.
+      security:
+        - ManagementAPI:
+            - read:industries
       summary: List industries and industry keys.
       parameters:
         - name: industry_key
@@ -1010,14 +1034,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/timezones:
     get:
       tags:
         - Timezones
       operationId: getTimezones
       description: Get a list of timezones and associated timezone keys.
+      security:
+        - ManagementAPI:
+            - read:timezones
       summary: List timezones and timezone IDs.
       parameters:
         - name: timezone_key
@@ -1041,8 +1066,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/applications/{app_id}/auth_redirect_urls:
     get:
       tags:
@@ -1051,6 +1074,9 @@ paths:
       description: |
         Returns an application's redirect callback URLs.
       summary: List Callback URLs
+      security:
+        - ManagementAPI:
+            - read:applications_redirect_uris
       parameters:
         - name: app_id
           in: path
@@ -1081,8 +1107,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Callbacks
@@ -1090,6 +1114,9 @@ paths:
       description: |
         Add additional redirect callback URLs.
       summary: Add Redirect Callback URLs
+      security:
+        - ManagementAPI:
+            - create:application_redirect_uris
       parameters:
         - name: app_id
           in: path
@@ -1131,8 +1158,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     put:
       tags:
         - Callbacks
@@ -1140,6 +1165,9 @@ paths:
       description: |
         Replace all redirect callback URLs.
       summary: Replace Redirect Callback URLs
+      security:
+        - ManagementAPI:
+            - update:application_redirect_uris
       parameters:
         - name: app_id
           in: path
@@ -1177,8 +1205,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Callbacks
@@ -1186,6 +1212,9 @@ paths:
       description: |
         Delete callback URLs.
       summary: Delete Callback URLs
+      security:
+        - ManagementAPI:
+            - delete:application_redirect_uris
       parameters:
         - name: app_id
           in: path
@@ -1226,8 +1255,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/applications/{app_id}/auth_logout_urls:
     get:
       tags:
@@ -1236,6 +1263,9 @@ paths:
       description: |
         Returns an application's logout redirect URLs.
       summary: List Logout URLs
+      security:
+        - ManagementAPI:
+            - read:application_logout_uris
       parameters:
         - name: app_id
           in: path
@@ -1266,8 +1296,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Callbacks
@@ -1275,6 +1303,9 @@ paths:
       description: |
         Add additional logout redirect URLs.
       summary: Add Logout Redirect URLs
+      security:
+        - ManagementAPI:
+            - create:application_logout_uris
       parameters:
         - name: app_id
           in: path
@@ -1316,8 +1347,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     put:
       tags:
         - Callbacks
@@ -1325,6 +1354,9 @@ paths:
       description: |
         Replace all logout redirect URLs.
       summary: Replace Logout Redirect URLs
+      security:
+        - ManagementAPI:
+            - update:application_logout_uris
       parameters:
         - name: app_id
           in: path
@@ -1362,8 +1394,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Callbacks
@@ -1371,6 +1401,9 @@ paths:
       description: |
         Delete logout URLs.
       summary: Delete Logout URLs
+      security:
+        - ManagementAPI:
+            - delete:application_logout_uris
       parameters:
         - name: app_id
           in: path
@@ -1411,8 +1444,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/connected_apps/auth_url:
     get:
       tags:
@@ -1422,6 +1453,9 @@ paths:
         Get a URL that authenticates and authorizes a user to a third-party
         connected app.
       summary: Get Connected App URL
+      security:
+        - ManagementAPI:
+            - read:connected_apps
       parameters:
         - name: key_code_ref
           in: query
@@ -1493,8 +1527,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/connected_apps/token:
     get:
       tags:
@@ -1504,10 +1536,13 @@ paths:
         Get an access token that can be used to call the third-party provider
         linked to the connected app.
       summary: Get Connected App Token
+      security:
+        - ManagementAPI:
+            - read:connected_apps
       parameters:
         - name: session_id
           in: query
-          description: The unique sesssion id reprensenting the login session of a user.
+          description: The unique sesssion id representing the login session of a user.
           schema:
             type: string
             nullable: false
@@ -1544,8 +1579,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/connected_apps/revoke:
     post:
       tags:
@@ -1553,10 +1586,13 @@ paths:
       operationId: RevokeConnectedAppToken
       description: Revoke the tokens linked to the connected app session.
       summary: Revoke Connected App Token
+      security:
+        - ManagementAPI:
+            - create:connected_apps
       parameters:
         - name: session_id
           in: query
-          description: The unique sesssion id reprensenting the login session of a user.
+          description: The unique sesssion id representing the login session of a user.
           schema:
             type: string
             nullable: false
@@ -1595,8 +1631,6 @@ paths:
           description: Invalid HTTP method used.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/connections:
     get:
       tags:
@@ -1605,6 +1639,9 @@ paths:
       description: |
         Returns a list of Connections
       summary: List Connections
+      security:
+        - ManagementAPI:
+            - read:connections
       parameters:
         - name: page_size
           in: query
@@ -1654,14 +1691,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Connections
       operationId: CreateConnection
       description: Create Connection.
       summary: Create Connection
+      security:
+        - ManagementAPI:
+            - create:connections
       requestBody:
         description: Connection details.
         required: true
@@ -1738,8 +1776,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/connections/{connection_id}:
     get:
       tags:
@@ -1747,6 +1783,9 @@ paths:
       operationId: GetConnection
       description: Get Connection.
       summary: Get Connection
+      security:
+        - ManagementAPI:
+            - read:connections
       parameters:
         - name: connection_id
           in: path
@@ -1777,14 +1816,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Connections
       operationId: UpdateConnection
       description: Update Connection.
       summary: Update Connection
+      security:
+        - ManagementAPI:
+            - update:connections
       parameters:
         - name: connection_id
           in: path
@@ -1841,8 +1881,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Connections
@@ -1850,6 +1888,9 @@ paths:
       description: |
         Delete connection.
       summary: Delete Connection
+      security:
+        - ManagementAPI:
+            - delete:connections
       parameters:
         - name: connection_id
           in: path
@@ -1884,8 +1925,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/environment/feature_flags:
     delete:
       tags:
@@ -1893,6 +1932,9 @@ paths:
       operationId: DeleteEnvironementFeatureFlagOverrides
       description: Delete all environment feature flag overrides.
       summary: Delete Environment Feature Flag Overrides
+      security:
+        - ManagementAPI:
+            - delete:environment_feature_flags
       responses:
         '200':
           description: Feature flag overrides deleted successfully.
@@ -1916,14 +1958,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     get:
       tags:
         - Environments
       operationId: GetEnvironementFeatureFlags
       description: Get environment feature flags.
       summary: List Environment Feature Flags
+      security:
+        - ManagementAPI:
+            - read:environment_feature_flags
       responses:
         '200':
           description: Feature flags retrieved successfully.
@@ -1947,8 +1990,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/environment/feature_flags/{feature_flag_key}:
     delete:
       tags:
@@ -1956,6 +1997,9 @@ paths:
       operationId: DeleteEnvironementFeatureFlagOverride
       description: Delete environment feature flag override.
       summary: Delete Environment Feature Flag Override
+      security:
+        - ManagementAPI:
+            - delete:environment_feature_flags
       parameters:
         - name: feature_flag_key
           in: path
@@ -1986,14 +2030,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Environments
       operationId: UpdateEnvironementFeatureFlagOverride
       description: Update environment feature flag override.
       summary: Update Environment Feature Flag Override
+      security:
+        - ManagementAPI:
+            - update:environment_feature_flags
       parameters:
         - name: feature_flag_key
           in: path
@@ -2038,8 +2083,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/feature_flags:
     post:
       tags:
@@ -2047,6 +2090,9 @@ paths:
       operationId: CreateFeatureFlag
       description: Create feature flag.
       summary: Create Feature Flag
+      security:
+        - ManagementAPI:
+            - create:feature_flags
       requestBody:
         description: Flag details.
         required: true
@@ -2117,8 +2163,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/feature_flags/{feature_flag_key}:
     delete:
       tags:
@@ -2126,6 +2170,9 @@ paths:
       operationId: DeleteFeatureFlag
       description: Delete feature flag
       summary: Delete Feature Flag
+      security:
+        - ManagementAPI:
+            - delete:feature_flags
       parameters:
         - name: feature_flag_key
           in: path
@@ -2156,14 +2203,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     put:
       tags:
         - Feature Flags
       operationId: UpdateFeatureFlag
       description: Update feature flag.
       summary: Replace Feature Flag
+      security:
+        - ManagementAPI:
+            - update:feature_flags
       parameters:
         - name: feature_flag_key
           in: path
@@ -2236,8 +2284,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/identities/{identity_id}:
     get:
       tags:
@@ -2246,6 +2292,9 @@ paths:
       description: |
         Returns an identity by ID
       summary: Get identity
+      security:
+        - ManagementAPI:
+            - read:identities
       parameters:
         - name: identity_id
           in: path
@@ -2283,14 +2332,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Identities
       operationId: UpdateIdentity
       description: Update identity by ID.
       summary: Update identity
+      security:
+        - ManagementAPI:
+            - update:identities
       parameters:
         - name: identity_id
           in: path
@@ -2333,14 +2383,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Identities
       operationId: DeleteIdentity
       description: Delete identity by ID.
       summary: Delete identity
+      security:
+        - ManagementAPI:
+            - delete:identities
       parameters:
         - name: identity_id
           in: path
@@ -2371,8 +2422,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organization:
     get:
       tags:
@@ -2381,6 +2430,9 @@ paths:
       description: |
         Gets an organization given the organization's code.
       summary: Get Organization
+      security:
+        - ManagementAPI:
+            - read:organizations
       parameters:
         - name: code
           in: query
@@ -2411,14 +2463,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Organizations
       operationId: createOrganization
       description: Create an organization.
       summary: Create Organization
+      security:
+        - ManagementAPI:
+            - create:organizations
       requestBody:
         description: Organization details.
         required: true
@@ -2506,8 +2559,6 @@ paths:
           description: Request was throttled.
         '500':
           description: Could not create organization.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organization/{org_code}:
     patch:
       tags:
@@ -2515,6 +2566,9 @@ paths:
       operationId: updateOrganization
       description: Update an organization.
       summary: Update Organization
+      security:
+        - ManagementAPI:
+            - update:organizations
       parameters:
         - name: org_code
           in: path
@@ -2598,14 +2652,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Organizations
       operationId: deleteOrganization
       description: Delete an organization.
       summary: Delete Organization
+      security:
+        - ManagementAPI:
+            - delete:organizations
       parameters:
         - name: org_code
           in: path
@@ -2629,8 +2684,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations:
     get:
       tags:
@@ -2639,6 +2692,9 @@ paths:
       description: |
         Get a list of organizations.
       summary: List Organizations
+      security:
+        - ManagementAPI:
+            - read:organizations
       parameters:
         - name: sort
           in: query
@@ -2677,8 +2733,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users:
     get:
       tags:
@@ -2686,6 +2740,9 @@ paths:
       operationId: GetOrganizationUsers
       description: Get users in an organization.
       summary: List Organization Users
+      security:
+        - ManagementAPI:
+            - read:organization_users
       parameters:
         - name: sort
           in: query
@@ -2754,14 +2811,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Organizations
       operationId: AddOrganizationUsers
       description: Add existing users to an organization.
       summary: Add Organization Users
+      security:
+        - ManagementAPI:
+            - create:organization_users
       parameters:
         - name: org_code
           in: path
@@ -2821,14 +2879,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Organizations
       operationId: UpdateOrganizationUsers
       description: Update users that belong to an organization.
       summary: Update Organization Users
+      security:
+        - ManagementAPI:
+            - update:organization_users
       parameters:
         - name: org_code
           in: path
@@ -2891,8 +2950,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/roles:
     get:
       tags:
@@ -2900,6 +2957,9 @@ paths:
       operationId: GetOrganizationUserRoles
       description: Get roles for an organization user.
       summary: List Organization User Roles
+      security:
+        - ManagementAPI:
+            - read:organization_user_roles
       parameters:
         - name: org_code
           in: path
@@ -2929,14 +2989,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Organizations
       operationId: CreateOrganizationUserRole
       description: Add role to an organization user.
       summary: Add Organization User Role
+      security:
+        - ManagementAPI:
+            - create:organization_user_roles
       parameters:
         - name: org_code
           in: path
@@ -2977,8 +3038,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/roles/{role_id}:
     delete:
       tags:
@@ -2986,6 +3045,9 @@ paths:
       operationId: DeleteOrganizationUserRole
       description: Delete role for an organization user.
       summary: Delete Organization User Role
+      security:
+        - ManagementAPI:
+            - delete:organization_user_roles
       parameters:
         - name: org_code
           in: path
@@ -3031,8 +3093,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/permissions:
     get:
       tags:
@@ -3040,6 +3100,9 @@ paths:
       operationId: GetOrganizationUserPermissions
       description: Get permissions for an organization user.
       summary: List Organization User Permissions
+      security:
+        - ManagementAPI:
+            - read:organization_user_permissions
       parameters:
         - name: org_code
           in: path
@@ -3078,14 +3141,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Organizations
       operationId: CreateOrganizationUserPermission
       description: Add permission to an organization user.
       summary: Add Organization User Permission
+      security:
+        - ManagementAPI:
+            - create:organization_user_permissions
       parameters:
         - name: org_code
           in: path
@@ -3126,8 +3190,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/permissions/{permission_id}:
     delete:
       tags:
@@ -3135,6 +3197,9 @@ paths:
       operationId: DeleteOrganizationUserPermission
       description: Delete permission for an organization user.
       summary: Delete Organization User Permission
+      security:
+        - ManagementAPI:
+            - delete:organization_user_permissions
       parameters:
         - name: org_code
           in: path
@@ -3180,8 +3245,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}:
     delete:
       tags:
@@ -3189,6 +3252,9 @@ paths:
       operationId: RemoveOrganizationUser
       description: Remove user from an organization.
       summary: Remove Organization User
+      security:
+        - ManagementAPI:
+            - delete:organization_users
       parameters:
         - name: org_code
           in: path
@@ -3227,8 +3293,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/feature_flags:
     get:
       tags:
@@ -3236,6 +3300,9 @@ paths:
       operationId: GetOrganizationFeatureFlags
       description: Get all organization feature flags.
       summary: List Organization Feature Flags
+      security:
+        - ManagementAPI:
+            - read:organization_feature_flags
       parameters:
         - name: org_code
           in: path
@@ -3266,14 +3333,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Organizations
       operationId: DeleteOrganizationFeatureFlagOverrides
       description: Delete all organization feature flag overrides.
       summary: Delete Organization Feature Flag Overrides
+      security:
+        - ManagementAPI:
+            - delete:organization_feature_flags
       parameters:
         - name: org_code
           in: path
@@ -3304,8 +3372,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/feature_flags/{feature_flag_key}:
     delete:
       tags:
@@ -3313,6 +3379,9 @@ paths:
       operationId: DeleteOrganizationFeatureFlagOverride
       description: Delete organization feature flag override.
       summary: Delete Organization Feature Flag Override
+      security:
+        - ManagementAPI:
+            - delete:organization_feature_flags
       parameters:
         - name: org_code
           in: path
@@ -3349,14 +3418,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Organizations
       operationId: UpdateOrganizationFeatureFlagOverride
       description: Update organization feature flag override.
       summary: Update Organization Feature Flag Override
+      security:
+        - ManagementAPI:
+            - update:organization_feature_flags
       parameters:
         - name: org_code
           in: path
@@ -3399,8 +3469,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/properties/{property_key}:
     put:
       tags:
@@ -3408,6 +3476,9 @@ paths:
       operationId: UpdateOrganizationProperty
       description: Update organization property value.
       summary: Update Organization Property value
+      security:
+        - ManagementAPI:
+            - update:organization_properties
       parameters:
         - name: org_code
           in: path
@@ -3450,8 +3521,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/properties:
     get:
       tags:
@@ -3460,6 +3529,9 @@ paths:
       description: |
         Gets properties for an organization by org code.
       summary: Get Organization Property Values
+      security:
+        - ManagementAPI:
+            - read:organization_properties
       parameters:
         - name: org_code
           in: path
@@ -3491,14 +3563,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Organizations
       operationId: UpdateOrganizationProperties
       description: Update organization property values.
       summary: Update Organization Property values
+      security:
+        - ManagementAPI:
+            - update:organization_properties
       parameters:
         - name: org_code
           in: path
@@ -3543,8 +3616,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/organization/{org_code}/handle:
     delete:
       tags:
@@ -3553,6 +3624,9 @@ paths:
       description: |
         Delete organization handle
       summary: Delete organization handle
+      security:
+        - ManagementAPI:
+            - delete:organization_handles
       parameters:
         - name: org_code
           in: path
@@ -3584,8 +3658,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/permissions:
     get:
       tags:
@@ -3596,6 +3668,9 @@ paths:
         ascending or descending order. The number of records to return at a time
         can also be controlled using the `page_size` query string parameter.
       summary: List Permissions
+      security:
+        - ManagementAPI:
+            - read:permissions
       parameters:
         - name: sort
           in: query
@@ -3641,14 +3716,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Permissions
       operationId: CreatePermission
       description: Create a new permission.
       summary: Create Permission
+      security:
+        - ManagementAPI:
+            - create:permissions
       requestBody:
         description: Permission details.
         required: false
@@ -3687,8 +3763,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/permissions/{permission_id}:
     patch:
       tags:
@@ -3696,6 +3770,9 @@ paths:
       operationId: UpdatePermissions
       description: Update permission
       summary: Update Permission
+      security:
+        - ManagementAPI:
+            - update:permissions
       parameters:
         - name: permission_id
           in: path
@@ -3742,14 +3819,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Permissions
       operationId: DeletePermission
       description: Delete permission
       summary: Delete Permission
+      security:
+        - ManagementAPI:
+            - delete:permissions
       parameters:
         - name: permission_id
           in: path
@@ -3780,8 +3858,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/properties:
     get:
       tags:
@@ -3790,6 +3866,9 @@ paths:
       description: |
         Returns a list of properties
       summary: List properties
+      security:
+        - ManagementAPI:
+            - read:properties
       parameters:
         - name: page_size
           in: query
@@ -3848,14 +3927,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Properties
       operationId: CreateProperty
       description: Create property.
       summary: Create Property
+      security:
+        - ManagementAPI:
+            - create:properties
       requestBody:
         description: Property details.
         required: true
@@ -3930,8 +4010,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/properties/{property_id}:
     put:
       tags:
@@ -3939,6 +4017,9 @@ paths:
       operationId: UpdateProperty
       description: Update property.
       summary: Update Property
+      security:
+        - ManagementAPI:
+            - update:properties
       parameters:
         - name: property_id
           in: path
@@ -3997,14 +4078,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Properties
       operationId: DeleteProperty
       description: Delete property.
       summary: Delete Property
+      security:
+        - ManagementAPI:
+            - delete:properties
       parameters:
         - name: property_id
           in: path
@@ -4035,8 +4117,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/property_categories:
     get:
       tags:
@@ -4045,6 +4125,9 @@ paths:
       description: |
         Returns a list of categories.
       summary: List categories
+      security:
+        - ManagementAPI:
+            - read:property_categories
       parameters:
         - name: page_size
           in: query
@@ -4103,14 +4186,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Property Categories
       operationId: CreateCategory
       description: Create category.
       summary: Create Category
+      security:
+        - ManagementAPI:
+            - create:property_categories
       requestBody:
         description: Category details.
         required: true
@@ -4156,8 +4240,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/property_categories/{category_id}:
     put:
       tags:
@@ -4165,6 +4247,9 @@ paths:
       operationId: UpdateCategory
       description: Update category.
       summary: Update Category
+      security:
+        - ManagementAPI:
+            - update:property_categories
       parameters:
         - name: category_id
           in: path
@@ -4207,8 +4292,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/roles:
     get:
       tags:
@@ -4219,6 +4302,9 @@ paths:
         descending order. The number of records to return at a time can also be
         controlled using the `page_size` query string parameter.
       summary: List Roles
+      security:
+        - ManagementAPI:
+            - read:roles
       parameters:
         - name: sort
           in: query
@@ -4264,14 +4350,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Roles
       operationId: CreateRole
       description: Create role.
       summary: Create Role
+      security:
+        - ManagementAPI:
+            - create:roles
       requestBody:
         description: Role details.
         required: false
@@ -4320,8 +4407,6 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/error_response'
-      security:
-        - kindeBearerAuth: []
   /api/v1/roles/{role_id}/permissions:
     get:
       tags:
@@ -4329,6 +4414,9 @@ paths:
       operationId: GetRolePermission
       description: Get permissions for a role.
       summary: Get Role Permissions
+      security:
+        - ManagementAPI:
+            - read:role_permissions
       parameters:
         - name: role_id
           in: path
@@ -4383,8 +4471,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Roles
@@ -4392,6 +4478,9 @@ paths:
       description: |
         Update role permissions.
       summary: Update Role Permissions
+      security:
+        - ManagementAPI:
+            - update:role_permissions
       parameters:
         - name: role_id
           in: path
@@ -4442,8 +4531,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/roles/{role_id}/permissions/{permission_id}:
     delete:
       tags:
@@ -4451,6 +4538,9 @@ paths:
       operationId: RemoveRolePermission
       description: Remove a permission from a role.
       summary: Remove Role Permission
+      security:
+        - ManagementAPI:
+            - delete:role_permissions
       parameters:
         - name: role_id
           in: path
@@ -4489,8 +4579,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/roles/{role_id}:
     patch:
       tags:
@@ -4498,6 +4586,9 @@ paths:
       operationId: UpdateRoles
       description: Update a role
       summary: Update Role
+      security:
+        - ManagementAPI:
+            - update:roles
       parameters:
         - name: role_id
           in: path
@@ -4549,14 +4640,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Roles
       operationId: DeleteRole
       description: Delete role
       summary: Delete Role
+      security:
+        - ManagementAPI:
+            - delete:roles
       parameters:
         - name: role_id
           in: path
@@ -4587,8 +4679,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/subscribers:
     get:
       tags:
@@ -4602,6 +4692,9 @@ paths:
 
         string parameter.
       summary: List Subscribers
+      security:
+        - ManagementAPI:
+            - read:subscribers
       parameters:
         - name: sort
           in: query
@@ -4641,14 +4734,15 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Subscribers
       operationId: CreateSubscriber
       description: Create subscriber.
       summary: Create Subscriber
+      security:
+        - ManagementAPI:
+            - create:subscribers
       parameters:
         - name: first_name
           in: query
@@ -4692,8 +4786,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/subscribers/{subscriber_id}:
     get:
       tags:
@@ -4702,6 +4794,9 @@ paths:
       description: |
         Retrieve a subscriber record.
       summary: Get Subscriber
+      security:
+        - ManagementAPI:
+            - read:subscribers
       parameters:
         - name: subscriber_id
           in: path
@@ -4731,8 +4826,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users:
     get:
       tags:
@@ -4743,6 +4836,9 @@ paths:
         ascending or descending order. The number of records to return at a time
         can also be controlled using the `page_size` query string parameter.
       summary: List Users
+      security:
+        - ManagementAPI:
+            - read:users
       parameters:
         - name: page_size
           in: query
@@ -4787,6 +4883,15 @@ paths:
           schema:
             type: string
             nullable: true
+        - name: has_organization
+          in: query
+          description: >-
+            Filter the results by if the user has at least one organization
+            assigned.
+          required: false
+          schema:
+            type: boolean
+            nullable: true
       responses:
         '200':
           description: Users successfully retrieved.
@@ -4801,8 +4906,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users/{user_id}/refresh_claims:
     post:
       tags:
@@ -4811,6 +4914,9 @@ paths:
       description: |
         Refreshes the user's claims and invalidates the current cache.
       summary: Refresh User Claims and Invalidate Cache
+      security:
+        - ManagementAPI:
+            - update:user_refresh_claims
       parameters:
         - in: path
           name: user_id
@@ -4848,8 +4954,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/user:
     get:
       tags:
@@ -4858,6 +4962,9 @@ paths:
       description: |
         Retrieve a user record.
       summary: Get User
+      security:
+        - ManagementAPI:
+            - read:users
       parameters:
         - name: id
           in: query
@@ -4898,8 +5005,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Users
@@ -4910,6 +5015,9 @@ paths:
 
         address of the user.
       summary: Create User
+      security:
+        - ManagementAPI:
+            - create:users
       requestBody:
         description: The details of the user to create.
         required: false
@@ -4983,8 +5091,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Users
@@ -4992,6 +5098,9 @@ paths:
       description: |
         Update a user record.
       summary: Update User
+      security:
+        - ManagementAPI:
+            - update:users
       parameters:
         - name: id
           in: query
@@ -5043,8 +5152,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     delete:
       tags:
         - Users
@@ -5052,6 +5159,9 @@ paths:
       description: |
         Delete a user record.
       summary: Delete User
+      security:
+        - ManagementAPI:
+            - delete:users
       parameters:
         - name: id
           in: query
@@ -5091,8 +5201,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users/{user_id}/feature_flags/{feature_flag_key}:
     patch:
       tags:
@@ -5100,6 +5208,9 @@ paths:
       operationId: UpdateUserFeatureFlagOverride
       description: Update user feature flag override.
       summary: Update User Feature Flag Override
+      security:
+        - ManagementAPI:
+            - update:user_feature_flags
       parameters:
         - name: user_id
           in: path
@@ -5142,8 +5253,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users/{user_id}/properties/{property_key}:
     put:
       tags:
@@ -5151,6 +5260,9 @@ paths:
       operationId: UpdateUserProperty
       description: Update property value.
       summary: Update Property value
+      security:
+        - ManagementAPI:
+            - update:user_properties
       parameters:
         - name: user_id
           in: path
@@ -5193,8 +5305,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users/{user_id}/properties:
     get:
       tags:
@@ -5203,6 +5313,9 @@ paths:
       description: |
         Gets properties for an user by ID.
       summary: Get property values
+      security:
+        - ManagementAPI:
+            - read:user_properties
       parameters:
         - name: user_id
           in: path
@@ -5234,14 +5347,15 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Users
       operationId: UpdateUserProperties
       description: Update property values.
       summary: Update Property values
+      security:
+        - ManagementAPI:
+            - update:user_properties
       parameters:
         - name: user_id
           in: path
@@ -5286,8 +5400,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users/{user_id}/password:
     put:
       tags:
@@ -5295,6 +5407,9 @@ paths:
       operationId: SetUserPassword
       description: Set user password.
       summary: Set User password
+      security:
+        - ManagementAPI:
+            - update:user_passwords
       parameters:
         - name: user_id
           in: path
@@ -5366,8 +5481,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/users/{user_id}/identities:
     get:
       tags:
@@ -5376,6 +5489,9 @@ paths:
       description: |
         Gets a list of identities for an user by ID.
       summary: Get identities
+      security:
+        - ManagementAPI:
+            - read:user_identities
       parameters:
         - name: user_id
           in: path
@@ -5407,8 +5523,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Users
@@ -5416,6 +5530,9 @@ paths:
       description: |
         Creates an identity for a user.
       summary: Create identity
+      security:
+        - ManagementAPI:
+            - create:user_identities
       parameters:
         - name: user_id
           in: path
@@ -5441,6 +5558,13 @@ paths:
                   enum:
                     - email
                     - username
+                    - phone
+                    - enterprise
+                phone_country_id:
+                  type: string
+                  description: >-
+                    The country code for the phone number, only required when
+                    identity type is 'phone'.
       responses:
         '200':
           description: Identity successfully created.
@@ -5464,8 +5588,6 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/events/{event_id}:
     get:
       tags:
@@ -5474,6 +5596,9 @@ paths:
       description: |
         Returns an event
       summary: Get Event
+      security:
+        - ManagementAPI:
+            - read:events
       parameters:
         - name: event_id
           in: path
@@ -5512,8 +5637,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/event_types:
     get:
       tags:
@@ -5522,6 +5645,9 @@ paths:
       description: |
         Returns a list event type definitions
       summary: List Event Types
+      security:
+        - ManagementAPI:
+            - read:event_types
       responses:
         '200':
           description: Event types successfully retrieved.
@@ -5552,8 +5678,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/webhooks/{webhook_id}:
     delete:
       tags:
@@ -5562,6 +5686,9 @@ paths:
       description: |
         Delete webhook
       summary: Delete Webhook
+      security:
+        - ManagementAPI:
+            - delete:webhooks
       parameters:
         - name: webhook_id
           in: path
@@ -5600,8 +5727,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
   /api/v1/webhooks:
     get:
       tags:
@@ -5610,6 +5735,9 @@ paths:
       description: |
         List webhooks
       summary: List Webhooks
+      security:
+        - ManagementAPI:
+            - read:webhooks
       responses:
         '200':
           description: Webhook list successfully returned.
@@ -5640,8 +5768,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     post:
       tags:
         - Webhooks
@@ -5649,6 +5775,9 @@ paths:
       description: |
         Create a webhook
       summary: Create a Webhook
+      security:
+        - ManagementAPI:
+            - create:webhooks
       requestBody:
         description: Webhook request specification.
         required: true
@@ -5709,8 +5838,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
     patch:
       tags:
         - Webhooks
@@ -5718,6 +5845,9 @@ paths:
       description: |
         Update a webhook
       summary: Update a Webhook
+      security:
+        - ManagementAPI:
+            - update:webhooks
       requestBody:
         description: Update webhook request specification.
         required: true
@@ -5770,8 +5900,6 @@ paths:
                 $ref: '#/components/schemas/error_response'
         '429':
           description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
 components:
   schemas:
     success_response:
@@ -6318,7 +6446,7 @@ components:
           nullable: true
         name:
           type: string
-          description: Users's first and last name separated by a space.
+          description: User's first and last name separated by a space.
         given_name:
           type: string
           description: User's first name.
@@ -6345,6 +6473,18 @@ components:
           type: boolean
         external_id:
           type: string
+        logo:
+          type: string
+        link_color:
+          type: string
+        button_color:
+          type: string
+        background_color:
+          type: string
+        button_text_color:
+          type: string
+        is_allow_registrations:
+          type: boolean
     organization_user:
       type: object
       properties:
@@ -6792,6 +6932,12 @@ components:
             client_secret:
               description: The application's client secret.
               type: string
+            login_uri:
+              description: The default login route for resolving session issues.
+              type: string
+            homepage_uri:
+              description: The homepage link to your application.
+              type: string
     applications:
       type: object
       properties:
@@ -6957,6 +7103,115 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    ManagementAPI:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://<subdomain>.kinde.com/oauth2/token
+          scopes:
+            create:apis: Create Apis
+            create:application_connections: Create Application Connections
+            create:application_logout_uris: Create Application Logout Uris
+            create:application_redirect_uris: Create Application Redirect Uris
+            create:applications: Create Applications
+            create:billing_entitlement_change_requests: Create Billing Entitlement Change Requests
+            create:billing_payment_methods: Create Billing Payment Methods
+            create:connected_apps: Create Connected Apps
+            create:connections: Create Connections
+            create:feature_flags: Create Feature Flags
+            create:organization_connections: Create Organization Connections
+            create:organization_user_permissions: Create Organization User Permissions
+            create:organization_user_roles: Create Organization User Roles
+            create:organization_users: Create Organization Users
+            create:organizations: Create Organizations
+            create:permissions: Create Permissions
+            create:properties: Create Properties
+            create:property_categories: Create Property Categories
+            create:roles: Create Roles
+            create:subscribers: Create Subscribers
+            create:user_identities: Create User Identities
+            create:users: Create Users
+            create:webhooks: Create Webhooks
+            delete:apis: Delete Apis
+            delete:application_connections: Delete Application Connections
+            delete:application_logout_uris: Delete Application Logout Uris
+            delete:application_redirect_uris: Delete Application Redirect Uris
+            delete:applications: Delete Applications
+            delete:billing_payment_methods: Delete Billing Payment Methods
+            delete:connections: Delete Connections
+            delete:environment_feature_flags: Delete Environment Feature Flags
+            delete:feature_flags: Delete Feature Flags
+            delete:identities: Delete Identities
+            delete:organization_connections: Delete Organization Connections
+            delete:organization_feature_flags: Delete Organization Feature Flags
+            delete:organization_handles: Delete Organization Handle
+            delete:organization_user_permissions: Delete Organization User Permissions
+            delete:organization_user_roles: Delete Organization User Roles
+            delete:organization_users: Delete Organization Users
+            delete:organizations: Delete Organizations
+            delete:permissions: Delete Permissions
+            delete:properties: Delete Properties
+            delete:role_permissions: Delete Role Permissions
+            delete:roles: Delete Roles
+            delete:users: Delete Users
+            delete:webhooks: Delete Webhooks
+            read:apis: Read Apis
+            read:application_connections: Read Application Connections
+            read:application_logout_uris: Read Application Logout Uris
+            read:applications: Read Applications
+            read:applications_redirect_uris: Read Applications Redirect Uris
+            read:billing_payment_methods: Read Billing Payment Methods
+            read:businesses: Read Businesses
+            read:connected_apps: Read Connected Apps
+            read:connections: Read Connections
+            read:environment_feature_flags: Read Environment Feature Flags
+            read:event_types: Read Event Types
+            read:events: Read Events
+            read:identities: Read Identities
+            read:industries: Read Industries
+            read:organization_connections: Read Organization Connections
+            read:organization_feature_flags: Read Organization Feature Flags
+            read:organization_properties: Read Organization Properties
+            read:organization_user_permissions: Read Organization User Permissions
+            read:organization_user_roles: Read Organization User Roles
+            read:organization_users: Read Organization Users
+            read:organizations: Read Organizations
+            read:permissions: Read Permissions
+            read:properties: Read Properties
+            read:property_categories: Read Property Categories
+            read:role_permissions: Read Role Permissions
+            read:roles: Read Roles
+            read:subscribers: Read Subscribers
+            read:timezones: Read Timezones
+            read:user_feature_flags: Read User Feature Flags
+            read:user_identities: Read User Identities
+            read:user_properties: Read User Properties
+            read:users: Read Users
+            read:webhooks: Read Webhooks
+            update:apis: Update Apis
+            update:application_logout_uris: Update Application Logout Uris
+            update:application_redirect_uris: Update Application Redirect Uris
+            update:applications: Update Applications
+            update:businesses: Update Businesses
+            update:connections: Update Connections
+            update:environment_feature_flags: Update Environment Feature Flags
+            update:feature_flags: Update Feature Flags
+            update:identities: Update Identities
+            update:organization_feature_flags: Update Organization Feature Flags
+            update:organization_properties: Update Organization Properties
+            update:organization_users: Update Organization Users
+            update:organizations: Update Organizations
+            update:permissions: Update Permissions
+            update:properties: Update Properties
+            update:property_categories: Update Property Categories
+            update:role_permissions: Update Role Permissions
+            update:roles: Update Roles
+            update:user_feature_flags: Update User Feature Flags
+            update:user_passwords: Update User Passwords
+            update:user_properties: Update User Properties
+            update:user_refresh_claims: Update User Refresh Claims
+            update:users: Update Users
+            update:webhooks: Update Webhooks
 x-tagGroups:
   - name: Kinde Management API
     tags:

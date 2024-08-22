@@ -34,20 +34,18 @@ init();
 const { users } = await Users.getUsers();
 ```
 
-
 ### Params can be passed to the function as an object
+
 ```js
 import { Users, init } from "@kinde/management-api-js";
 
 const params = {
-    id: 'kp_xxx'
-}
+  id: "kp_xxx",
+};
 
 init();
 const { user } = await Users.getUserData(params);
 ```
-
-
 
 ## API documentation
 
