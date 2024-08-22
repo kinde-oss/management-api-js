@@ -807,7 +807,7 @@ export const $user_profile_v2 = {
     },
     name: {
       type: "string",
-      description: "Users's first and last name separated by a space.",
+      description: "User's first and last name separated by a space.",
     },
     given_name: {
       type: "string",
@@ -846,6 +846,24 @@ export const $organization = {
     },
     external_id: {
       type: "string",
+    },
+    logo: {
+      type: "string",
+    },
+    link_color: {
+      type: "string",
+    },
+    button_color: {
+      type: "string",
+    },
+    background_color: {
+      type: "string",
+    },
+    button_text_color: {
+      type: "string",
+    },
+    is_allow_registrations: {
+      type: "boolean",
     },
   },
 } as const;
@@ -1527,6 +1545,14 @@ export const $get_application_response = {
         },
         client_secret: {
           description: "The application's client secret.",
+          type: "string",
+        },
+        login_uri: {
+          description: "The default login route for resolving session issues.",
+          type: "string",
+        },
+        homepage_uri: {
+          description: "The homepage link to your application.",
           type: "string",
         },
       },
