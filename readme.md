@@ -44,7 +44,7 @@ const params = {
 };
 
 init();
-const { user } = await Users.getUserData(params);
+const userData = await Users.getUserData(params);
 ```
 
 ## API documentation
