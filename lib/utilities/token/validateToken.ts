@@ -25,6 +25,5 @@ export const validateToken = async (token?: string, audience?: string) => {
   if (!token) {
     return false;
   }
-  console.log(kindeConfig.kindeDomain);
   return verifyJwt(token, kindeConfig.kindeDomain, audience);
 };
