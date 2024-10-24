@@ -62,6 +62,9 @@ export const init = (
       return await getToken();
     },
   });
+
+  // Mark OpenAPI as initialized
+  OpenAPI.INITIALIZED = true;
 };
 
 function _merge(target: object = {}, ...objects: object[]): object {
