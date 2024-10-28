@@ -35,13 +35,14 @@ import type {
   EnableConnectionResponse,
   RemoveConnectionData,
   RemoveConnectionResponse,
-  GetBusinessData,
+  GetApplicationPropertyValuesData,
+  GetApplicationPropertyValuesResponse,
+  UpdateApplicationsPropertyData,
+  UpdateApplicationsPropertyResponse,
   GetBusinessResponse,
   UpdateBusinessData,
   UpdateBusinessResponse,
-  GetIndustriesData,
   GetIndustriesResponse,
-  GetTimezonesData,
   GetTimezonesResponse,
   GetCallbackUrLsData,
   GetCallbackUrLsResponse,
@@ -81,6 +82,15 @@ import type {
   DeleteEnvironementFeatureFlagOverrideResponse,
   UpdateEnvironementFeatureFlagOverrideData,
   UpdateEnvironementFeatureFlagOverrideResponse,
+  GetEnvironmentVariablesResponse,
+  CreateEnvironmentVariableData,
+  CreateEnvironmentVariableResponse,
+  GetEnvironmentVariableData,
+  GetEnvironmentVariableResponse,
+  UpdateEnvironmentVariableData,
+  UpdateEnvironmentVariableResponse,
+  DeleteEnvironmentVariableData,
+  DeleteEnvironmentVariableResponse,
   CreateFeatureFlagData,
   CreateFeatureFlagResponse,
   DeleteFeatureFlagData,
@@ -97,12 +107,12 @@ import type {
   GetOrganizationResponse,
   CreateOrganizationData,
   CreateOrganizationResponse,
+  GetOrganizationsData,
+  GetOrganizationsResponse,
   UpdateOrganizationData,
   UpdateOrganizationResponse,
   DeleteOrganizationData,
   DeleteOrganizationResponse,
-  GetOrganizationsData,
-  GetOrganizationsResponse,
   GetOrganizationUsersData,
   GetOrganizationUsersResponse,
   AddOrganizationUsersData,
@@ -165,16 +175,18 @@ import type {
   GetRolesResponse,
   CreateRoleData,
   CreateRoleResponse,
+  GetRoleData,
+  GetRoleResponse,
+  UpdateRolesData,
+  UpdateRolesResponse,
+  DeleteRoleData,
+  DeleteRoleResponse,
   GetRolePermissionData,
   GetRolePermissionResponse,
   UpdateRolePermissionsData,
   UpdateRolePermissionsResponse,
   RemoveRolePermissionData,
   RemoveRolePermissionResponse,
-  UpdateRolesData,
-  UpdateRolesResponse,
-  DeleteRoleData,
-  DeleteRoleResponse,
   GetSubscribersData,
   GetSubscribersResponse,
   CreateSubscriberData,
@@ -287,7 +299,7 @@ export class Oauth {
 
   /**
    * Returns the details of the currently logged in user
-   * Contains the id, names, profile picture URL and email of the currently logged in user.
+   * Contains the ID, names, profile picture URL and email of the currently logged in user.
    *
    * @returns user_profile_v2 Details of logged in user V2.
    * @throws ApiError
@@ -306,10 +318,9 @@ export class Oauth {
 
 export class ApIs {
   /**
-   * List APIs
-   * Returns a list of APIs.
-   *
-   * @returns apis APIs successfully retrieved.
+   * Get APIs
+   * Returns a list of your APIs. The APIs are returned sorted by name.
+   * @returns get_apis_response A list of APIs.
    * @throws ApiError
    */
   public static getApIs(): CancelablePromise<GetApIsResponse> {
@@ -318,19 +329,18 @@ export class ApIs {
       url: "/api/v1/apis",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Add APIs
-   * Add APIs.
-   *
+   * Create API
+   * Register a new API. For more information read [Register and manage APIs](https://docs.kinde.com/developer-tools/your-apis/register-manage-apis/).
    * @param data The data for the request.
-   * @param data.requestBody API details.
-   * @returns success_response APIs successfully updated
+   * @param data.requestBody
+   * @returns create_apis_response APIs successfully updated
    * @throws ApiError
    */
   public static addApIs(data: AddApIsData): CancelablePromise<AddApIsResponse> {
@@ -341,19 +351,18 @@ export class ApIs {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * List API details
-   * Returns the details of the API.
-   *
+   * Get API
+   * Retrieve API details by ID.
    * @param data The data for the request.
-   * @param data.apiId The API's id.
-   * @returns api API successfully retrieved.
+   * @param data.apiId The API's ID.
+   * @returns get_api_response API successfully retrieved.
    * @throws ApiError
    */
   public static getApi(data: GetApiData): CancelablePromise<GetApiResponse> {
@@ -365,19 +374,18 @@ export class ApIs {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
    * Delete API
-   * Deletes API.
-   *
+   * Delete an API you previously created.
    * @param data The data for the request.
-   * @param data.apiId The API's id.
-   * @returns success_response API successfully deleted.
+   * @param data.apiId The API's ID.
+   * @returns delete_api_response API successfully deleted.
    * @throws ApiError
    */
   public static deleteApi(
@@ -391,20 +399,19 @@ export class ApIs {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Update API Applications
-   * Update the applications under that API.
-   *
+   * Authorize API applications
+   * Authorize applications to be allowed to request access tokens for an API
    * @param data The data for the request.
-   * @param data.apiId The identifier for the API.
-   * @param data.requestBody The applications you want to connect or disconnect.
-   * @returns success_response API applications updated.
+   * @param data.requestBody The applications you want to authorize.
+   * @param data.apiId The API's ID.
+   * @returns authorize_app_api_response Authorized applications updated.
    * @throws ApiError
    */
   public static updateApiApplications(
@@ -420,8 +427,8 @@ export class ApIs {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -429,9 +436,8 @@ export class ApIs {
 
 export class Applications {
   /**
-   * List Applications
-   * Get a list of applications.
-   *
+   * Get applications
+   * Get a list of applications / clients.
    * @param data The data for the request.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
@@ -451,22 +457,23 @@ export class Applications {
         next_token: data.nextToken,
       },
       errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Create Application
-   * Create an application.
+   * Create application
+   * Create a new client.
    * @param data The data for the request.
-   * @param data.requestBody Application details.
+   * @param data.requestBody
    * @returns create_application_response Application successfully created.
    * @throws ApiError
    */
   public static createApplication(
-    data: CreateApplicationData = {},
+    data: CreateApplicationData,
   ): CancelablePromise<CreateApplicationResponse> {
     return __request(OpenAPI, {
       method: "POST",
@@ -474,17 +481,16 @@ export class Applications {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Error creating user.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Get Application
-   * Gets an application given the application's id.
-   *
+   * Get application
+   * Gets an application given the application's ID.
    * @param data The data for the request.
    * @param data.applicationId The identifier for the application.
    * @returns get_application_response Application successfully retrieved.
@@ -500,16 +506,16 @@ export class Applications {
         application_id: data.applicationId,
       },
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
    * Update Application
-   * Update an application.
+   * Updates a client's settings. For more information, read [Applications in Kinde](https://docs.kinde.com/build/applications/about-applications)
    * @param data The data for the request.
    * @param data.applicationId The identifier for the application.
    * @param data.requestBody Application details.
@@ -528,17 +534,16 @@ export class Applications {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Delete Application
-   * Delete application.
-   *
+   * Delete application
+   * Delete a client / application.
    * @param data The data for the request.
    * @param data.applicationId The identifier for the application.
    * @returns success_response Application successfully deleted.
@@ -555,8 +560,8 @@ export class Applications {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -579,9 +584,9 @@ export class Applications {
         application_id: data.applicationId,
       },
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -606,9 +611,9 @@ export class Applications {
         connection_id: data.connectionId,
       },
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -634,8 +639,63 @@ export class Applications {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get property values
+   * Gets properties for an application by client ID.
+   * @param data The data for the request.
+   * @param data.applicationId The application's ID / client ID.
+   * @returns get_property_values_response Properties successfully retrieved.
+   * @throws ApiError
+   */
+  public static getApplicationPropertyValues(
+    data: GetApplicationPropertyValuesData,
+  ): CancelablePromise<GetApplicationPropertyValuesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/applications/{application_id}/properties",
+      path: {
+        application_id: data.applicationId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update property
+   * Update application property value.
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @param data.applicationId The application's ID / client ID.
+   * @param data.propertyKey The property's key.
+   * @returns success_response Property successfully updated
+   * @throws ApiError
+   */
+  public static updateApplicationsProperty(
+    data: UpdateApplicationsPropertyData,
+  ): CancelablePromise<UpdateApplicationsPropertyResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/applications/{application_id}/properties/{property_key}",
+      path: {
+        application_id: data.applicationId,
+        property_key: data.propertyKey,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -643,57 +703,28 @@ export class Applications {
 
 export class Business {
   /**
-   * List business details
+   * Get business
    * Get your business details.
-   * @param data The data for the request.
-   * @param data.code Business code.
-   * @param data.name Business name.
-   * @param data.email Email associated with business.
-   * @param data.phone Phone number associated with business.
-   * @param data.industry The industry your business is in.
-   * @param data.timezone The timezone your business is in.
-   * @param data.privacyUrl Your Privacy policy URL.
-   * @param data.termsUrl Your Terms and Conditions URL.
-   * @returns success_response A successful response with your business details.
+   * @returns get_business_response Your business details.
    * @throws ApiError
    */
-  public static getBusiness(
-    data: GetBusinessData,
-  ): CancelablePromise<GetBusinessResponse> {
+  public static getBusiness(): CancelablePromise<GetBusinessResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/business",
-      query: {
-        code: data.code,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        industry: data.industry,
-        timezone: data.timezone,
-        privacy_url: data.privacyUrl,
-        terms_url: data.termsUrl,
-      },
       errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Update business details
-   * Update business details.
+   * Update business
+   * Update your business details.
    * @param data The data for the request.
-   * @param data.businessName Business name.
-   * @param data.primaryEmail Email associated with business.
-   * @param data.primaryPhone Phone number associated with business.
-   * @param data.industryKey The key of the industry your business is in.
-   * @param data.timezoneId The ID of the timezone your business is in.
-   * @param data.privacyUrl Your Privacy policy URL.
-   * @param data.termsUrl Your Terms and Conditions URL.
-   * @param data.isShowKindeBranding Display "Powered by Kinde" on your sign up, sign in, and subscription pages.
-   * @param data.isClickWrap Show a policy acceptance checkbox on sign up.
-   * @param data.partnerCode Your Kinde Perk code.
+   * @param data.requestBody The business details to update.
    * @returns success_response Business successfully updated.
    * @throws ApiError
    */
@@ -703,22 +734,12 @@ export class Business {
     return __request(OpenAPI, {
       method: "PATCH",
       url: "/api/v1/business",
-      query: {
-        business_name: data.businessName,
-        primary_email: data.primaryEmail,
-        primary_phone: data.primaryPhone,
-        industry_key: data.industryKey,
-        timezone_id: data.timezoneId,
-        privacy_url: data.privacyUrl,
-        terms_url: data.termsUrl,
-        is_show_kinde_branding: data.isShowKindeBranding,
-        is_click_wrap: data.isClickWrap,
-        partner_code: data.partnerCode,
-      },
+      body: data.requestBody,
+      mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -726,27 +747,19 @@ export class Business {
 
 export class Industries {
   /**
-   * List industries and industry keys.
+   * Get industries
    * Get a list of industries and associated industry keys.
-   * @param data The data for the request.
-   * @param data.industryKey Industry Key.
-   * @param data.name Industry name.
-   * @returns success_response A successful response with a list of industries and industry keys.
+   * @returns get_industries_response A list of industries.
    * @throws ApiError
    */
-  public static getIndustries(
-    data: GetIndustriesData = {},
-  ): CancelablePromise<GetIndustriesResponse> {
+  public static getIndustries(): CancelablePromise<GetIndustriesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/industries",
-      query: {
-        industry_key: data.industryKey,
-        name: data.name,
-      },
       errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -754,27 +767,19 @@ export class Industries {
 
 export class Timezones {
   /**
-   * List timezones and timezone IDs.
+   * Get timezones
    * Get a list of timezones and associated timezone keys.
-   * @param data The data for the request.
-   * @param data.timezoneKey Timezone Key.
-   * @param data.name Timezone.
-   * @returns success_response A successful response with a list of timezones and timezone keys.
+   * @returns get_timezones_response A list of timezones.
    * @throws ApiError
    */
-  public static getTimezones(
-    data: GetTimezonesData = {},
-  ): CancelablePromise<GetTimezonesResponse> {
+  public static getTimezones(): CancelablePromise<GetTimezonesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/timezones",
-      query: {
-        timezone_key: data.timezoneKey,
-        name: data.name,
-      },
       errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -896,9 +901,8 @@ export class Callbacks {
   }
 
   /**
-   * List Logout URLs
+   * List logout URLs
    * Returns an application's logout redirect URLs.
-   *
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @returns logout_redirect_urls Logout URLs successfully retrieved.
@@ -915,20 +919,19 @@ export class Callbacks {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Add Logout Redirect URLs
+   * Add logout redirect URLs
    * Add additional logout redirect URLs.
-   *
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.requestBody Callback details.
-   * @returns success_response Logouts successfully updated
+   * @returns success_response Logout URLs successfully updated.
    * @throws ApiError
    */
   public static addLogoutRedirectUrLs(
@@ -944,20 +947,19 @@ export class Callbacks {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Replace Logout Redirect URLs
+   * Replace logout redirect URls
    * Replace all logout redirect URLs.
-   *
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.requestBody Callback details.
-   * @returns success_response Logout URLs successfully updated
+   * @returns success_response Logout URLs successfully updated.
    * @throws ApiError
    */
   public static replaceLogoutRedirectUrLs(
@@ -973,8 +975,8 @@ export class Callbacks {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1003,8 +1005,8 @@ export class Callbacks {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1321,6 +1323,128 @@ export class Environments {
   }
 }
 
+export class EnvironmentVariables {
+  /**
+   * Get environment variables
+   * Get environment variables. This feature is in beta and admin UI is not yet available.
+   * @returns get_environment_variables_response A successful response with a list of environment variables or an empty list.
+   * @throws ApiError
+   */
+  public static getEnvironmentVariables(): CancelablePromise<GetEnvironmentVariablesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/environment_variables",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create environment variable
+   * Create a new environment variable. This feature is in beta and admin UI is not yet available.
+   * @param data The data for the request.
+   * @param data.requestBody The environment variable details.
+   * @returns create_environment_variable_response Environment variable successfully created.
+   * @throws ApiError
+   */
+  public static createEnvironmentVariable(
+    data: CreateEnvironmentVariableData,
+  ): CancelablePromise<CreateEnvironmentVariableResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/environment_variables",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get environment variable
+   * Retrieve environment variable details by ID. This feature is in beta and admin UI is not yet available.
+   * @param data The data for the request.
+   * @param data.variableId The environment variable's ID.
+   * @returns get_environment_variable_response Environment variable successfully retrieved.
+   * @throws ApiError
+   */
+  public static getEnvironmentVariable(
+    data: GetEnvironmentVariableData,
+  ): CancelablePromise<GetEnvironmentVariableResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/environment_variables/{variable_id}",
+      path: {
+        variable_id: data.variableId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update environment variable
+   * Update an environment variable you previously created. This feature is in beta and admin UI is not yet available.
+   * @param data The data for the request.
+   * @param data.requestBody The new details for the environment variable
+   * @param data.variableId The environment variable's ID.
+   * @returns update_environment_variable_response Environment variable successfully updated.
+   * @throws ApiError
+   */
+  public static updateEnvironmentVariable(
+    data: UpdateEnvironmentVariableData,
+  ): CancelablePromise<UpdateEnvironmentVariableResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/environment_variables/{variable_id}",
+      path: {
+        variable_id: data.variableId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete environment variable
+   * Delete an environment variable you previously created. This feature is in beta and admin UI is not yet available.
+   * @param data The data for the request.
+   * @param data.variableId The environment variable's ID.
+   * @returns delete_environment_variable_response Environment variable successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteEnvironmentVariable(
+    data: DeleteEnvironmentVariableData,
+  ): CancelablePromise<DeleteEnvironmentVariableResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/environment_variables/{variable_id}",
+      path: {
+        variable_id: data.variableId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+}
+
 export class FeatureFlags {
   /**
    * Create Feature Flag
@@ -1492,12 +1616,11 @@ export class Identities {
 
 export class Organizations {
   /**
-   * Get Organization
-   * Gets an organization given the organization's code.
-   *
+   * Get organization
+   * Retrieve organization details by code.
    * @param data The data for the request.
    * @param data.code The organization's code.
-   * @returns organization Organization successfully retrieved.
+   * @returns get_organization_response Organization successfully retrieved.
    * @throws ApiError
    */
   public static getOrganization(
@@ -1510,16 +1633,16 @@ export class Organizations {
         code: data.code,
       },
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Create Organization
-   * Create an organization.
+   * Create organization
+   * Create a new organization. To learn more read about [multi tenancy using organizations](https://docs.kinde.com/build/organizations/multi-tenancy-using-organizations/)
    * @param data The data for the request.
    * @param data.requestBody Organization details.
    * @returns create_organization_response Organization successfully created.
@@ -1534,10 +1657,38 @@ export class Organizations {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Error creating user.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-        500: "Could not create organization.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get organizations
+   * Get a list of organizations.
+   * @param data The data for the request.
+   * @param data.sort Field and order to sort the result by.
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.nextToken A string to get the next page of results if there are more results.
+   * @returns get_organizations_response Organizations successfully retreived.
+   * @throws ApiError
+   */
+  public static getOrganizations(
+    data: GetOrganizationsData = {},
+  ): CancelablePromise<GetOrganizationsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organizations",
+      query: {
+        sort: data.sort,
+        page_size: data.pageSize,
+        next_token: data.nextToken,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1563,9 +1714,9 @@ export class Organizations {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Error updating organization.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1575,7 +1726,7 @@ export class Organizations {
    * Delete an organization.
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
-   * @returns unknown Organization successfully deleted.
+   * @returns success_response Organization successfully deleted.
    * @throws ApiError
    */
   public static deleteOrganization(
@@ -1588,38 +1739,10 @@ export class Organizations {
         org_code: data.orgCode,
       },
       errors: {
-        400: "Error deleting organization.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * List Organizations
-   * Get a list of organizations.
-   *
-   * @param data The data for the request.
-   * @param data.sort Field and order to sort the result by.
-   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.nextToken A string to get the next page of results if there are more results.
-   * @returns get_organizations_response A successful response with a list of organizations or an empty list.
-   * @throws ApiError
-   */
-  public static getOrganizations(
-    data: GetOrganizationsData = {},
-  ): CancelablePromise<GetOrganizationsResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/organizations",
-      query: {
-        sort: data.sort,
-        page_size: data.pageSize,
-        next_token: data.nextToken,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -2444,7 +2567,7 @@ export class PropertyCategories {
 
 export class Roles {
   /**
-   * List Roles
+   * List roles
    * The returned list can be sorted by role name or role ID in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
    *
    * @param data The data for the request.
@@ -2466,18 +2589,19 @@ export class Roles {
         next_token: data.nextToken,
       },
       errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Create Role
+   * Create role
    * Create role.
    * @param data The data for the request.
    * @param data.requestBody Role details.
-   * @returns success_response Role successfully created
+   * @returns create_roles_response Role successfully created
    * @throws ApiError
    */
   public static createRole(
@@ -2490,13 +2614,90 @@ export class Roles {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Get Role Permissions
+   * Get role
+   * Get a role
+   * @param data The data for the request.
+   * @param data.roleId The identifier for the role.
+   * @returns get_role_response Role successfully retrieved.
+   * @throws ApiError
+   */
+  public static getRole(data: GetRoleData): CancelablePromise<GetRoleResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/roles/{role_id}",
+      path: {
+        role_id: data.roleId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update role
+   * Update a role
+   * @param data The data for the request.
+   * @param data.roleId The identifier for the role.
+   * @param data.requestBody Role details.
+   * @returns success_response Role successfully updated
+   * @throws ApiError
+   */
+  public static updateRoles(
+    data: UpdateRolesData,
+  ): CancelablePromise<UpdateRolesResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/roles/{role_id}",
+      path: {
+        role_id: data.roleId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete role
+   * Delete role
+   * @param data The data for the request.
+   * @param data.roleId The identifier for the role.
+   * @returns success_response Role successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteRole(
+    data: DeleteRoleData,
+  ): CancelablePromise<DeleteRoleResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/roles/{role_id}",
+      path: {
+        role_id: data.roleId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get role permissions
    * Get permissions for a role.
    * @param data The data for the request.
    * @param data.roleId The role's public id.
@@ -2529,7 +2730,7 @@ export class Roles {
   }
 
   /**
-   * Update Role Permissions
+   * Update role permissions
    * Update role permissions.
    *
    * @param data The data for the request.
@@ -2557,7 +2758,7 @@ export class Roles {
   }
 
   /**
-   * Remove Role Permission
+   * Remove role permission
    * Remove a permission from a role.
    * @param data The data for the request.
    * @param data.roleId The role's public id.
@@ -2577,59 +2778,6 @@ export class Roles {
       },
       errors: {
         400: "Error removing user",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Update Role
-   * Update a role
-   * @param data The data for the request.
-   * @param data.roleId The identifier for the role.
-   * @param data.requestBody Role details.
-   * @returns success_response Role successfully updated
-   * @throws ApiError
-   */
-  public static updateRoles(
-    data: UpdateRolesData,
-  ): CancelablePromise<UpdateRolesResponse> {
-    return __request(OpenAPI, {
-      method: "PATCH",
-      url: "/api/v1/roles/{role_id}",
-      path: {
-        role_id: data.roleId,
-      },
-      body: data.requestBody,
-      mediaType: "application/json",
-      errors: {
-        400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Delete Role
-   * Delete role
-   * @param data The data for the request.
-   * @param data.roleId The identifier for the role.
-   * @returns success_response Role successfully deleted.
-   * @throws ApiError
-   */
-  public static deleteRole(
-    data: DeleteRoleData,
-  ): CancelablePromise<DeleteRoleResponse> {
-    return __request(OpenAPI, {
-      method: "DELETE",
-      url: "/api/v1/roles/{role_id}",
-      path: {
-        role_id: data.roleId,
-      },
-      errors: {
-        400: "Invalid request.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
       },
@@ -2727,7 +2875,7 @@ export class Subscribers {
 
 export class Users {
   /**
-   * List Users
+   * Get users
    * The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
    *
    * @param data The data for the request.
@@ -2757,8 +2905,9 @@ export class Users {
         has_organization: data.hasOrganization,
       },
       errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -2790,7 +2939,7 @@ export class Users {
   }
 
   /**
-   * Get User
+   * Get user
    * Retrieve a user record.
    *
    * @param data The data for the request.
@@ -2810,15 +2959,15 @@ export class Users {
         expand: data.expand,
       },
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Create User
+   * Create user
    * Creates a user record and optionally zero or more identities for the user. An example identity could be the email
    * address of the user.
    *
@@ -2836,15 +2985,15 @@ export class Users {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Error creating user.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Update User
+   * Update user
    * Update a user record.
    *
    * @param data The data for the request.
@@ -2865,15 +3014,15 @@ export class Users {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
 
   /**
-   * Delete User
+   * Delete user
    * Delete a user record.
    *
    * @param data The data for the request.
@@ -2893,9 +3042,9 @@ export class Users {
         is_delete_profile: data.isDeleteProfile,
       },
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -3050,6 +3199,8 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.userId The user's ID.
+   * @param data.startingAfter The ID of the identity to start after.
+   * @param data.endingBefore The ID of the identity to end before.
    * @returns get_identities_response Identities successfully retrieved.
    * @throws ApiError
    */
@@ -3061,6 +3212,10 @@ export class Users {
       url: "/api/v1/users/{user_id}/identities",
       path: {
         user_id: data.userId,
+      },
+      query: {
+        starting_after: data.startingAfter,
+        ending_before: data.endingBefore,
       },
       errors: {
         400: "Bad request.",

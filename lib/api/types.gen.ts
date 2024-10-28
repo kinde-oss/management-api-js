@@ -20,13 +20,286 @@ export type error_response = {
   errors?: Array<error>;
 };
 
+export type not_found_response = {
+  errors?: {
+    code?: string;
+    message?: string;
+  };
+};
+
+export type get_apis_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Pagination token.
+   */
+  next_token?: string;
+  apis?: Array<{
+    /**
+     * The unique ID for the API.
+     */
+    id?: string;
+    /**
+     * The API’s name.
+     */
+    name?: string;
+    /**
+     * A unique identifier for the API - commonly the URL. This value will be used as the `audience` parameter in authorization claims.
+     */
+    audience?: string;
+    /**
+     * Whether or not it is the Kinde management API.
+     */
+    is_management_api?: boolean;
+  }>;
+};
+
+export type create_apis_response = {
+  /**
+   * A Kinde generated message.
+   */
+  message?: string;
+  /**
+   * A Kinde generated status code.
+   */
+  code?: string;
+  api?: {
+    /**
+     * The unique ID for the API.
+     */
+    id?: string;
+  };
+};
+
+export type get_environment_variables_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  environment_variables?: Array<environment_variable>;
+};
+
+export type get_environment_variable_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  environment_variable?: environment_variable;
+};
+
+export type create_environment_variable_response = {
+  /**
+   * A Kinde generated message.
+   */
+  message?: string;
+  /**
+   * A Kinde generated status code.
+   */
+  code?: string;
+  environment_variable?: {
+    /**
+     * The unique ID for the environment variable.
+     */
+    id?: string;
+  };
+};
+
+export type update_environment_variable_response = {
+  /**
+   * A Kinde generated message.
+   */
+  message?: string;
+  /**
+   * A Kinde generated status code.
+   */
+  code?: string;
+};
+
+export type delete_environment_variable_response = {
+  /**
+   * A Kinde generated message.
+   */
+  message?: string;
+  /**
+   * A Kinde generated status code.
+   */
+  code?: string;
+};
+
+export type get_business_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  business?: {
+    /**
+     * The unique ID for the business.
+     */
+    code?: string;
+    /**
+     * Your business's name.
+     */
+    name?: string;
+    /**
+     * Phone number associated with business.
+     */
+    phone?: string | null;
+    /**
+     * Email address associated with business.
+     */
+    email?: string | null;
+    /**
+     * The industry your business is in.
+     */
+    industry?: string | null;
+    /**
+     * The timezone your business is in.
+     */
+    timezone?: string | null;
+    /**
+     * Your Privacy policy URL.
+     */
+    privacy_url?: string | null;
+    /**
+     * Your Terms and Conditions URL.
+     */
+    terms_url?: string | null;
+  };
+};
+
+export type get_industries_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  industries?: Array<{
+    /**
+     * The unique key for the industry.
+     */
+    key?: string;
+    /**
+     * The display name for the industry.
+     */
+    name?: string;
+  }>;
+};
+
+export type get_timezones_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  timezones?: Array<{
+    /**
+     * The unique key for the timezone.
+     */
+    key?: string;
+    /**
+     * The display name for the timezone.
+     */
+    name?: string;
+  }>;
+};
+
+export type get_api_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  api?: {
+    /**
+     * Unique ID of the API.
+     */
+    id?: string;
+    /**
+     * The API’s name.
+     */
+    name?: string;
+    /**
+     * A unique identifier for the API - commonly the URL. This value will be used as the `audience` parameter in authorization claims.
+     */
+    audience?: string;
+    /**
+     * Whether or not it is the Kinde management API.
+     */
+    is_management_api?: boolean;
+    applications?: Array<{
+      /**
+       * The Client ID of the application.
+       */
+      id?: string;
+      /**
+       * The application's name.
+       */
+      name?: string;
+      /**
+       * The application's type.
+       */
+      type?:
+        | "Machine to machine (M2M)"
+        | "Back-end web"
+        | "Front-end and mobile";
+      /**
+       * Whether or not the application is authorized to access the API
+       */
+      is_active?: boolean | null;
+    }>;
+  };
+};
+
+export type authorize_app_api_response = {
+  message?: string;
+  code?: string;
+  applications_disconnected?: Array<string>;
+  applications_connected?: Array<string>;
+};
+
+export type delete_api_response = {
+  message?: string;
+  code?: string;
+};
+
 export type user = {
   /**
-   * Unique id of the user in Kinde.
+   * Unique ID of the user in Kinde.
    */
   id?: string;
   /**
-   * External id for user.
+   * External ID for user.
    */
   provided_id?: string;
   /**
@@ -84,7 +357,7 @@ export type user = {
 
 export type update_user_response = {
   /**
-   * Unique id of the user in Kinde.
+   * Unique ID of the user in Kinde.
    */
   id?: string;
   /**
@@ -110,7 +383,7 @@ export type update_user_response = {
   /**
    * User's profile picture URL.
    */
-  picture?: string;
+  picture?: string | null;
 };
 
 /**
@@ -129,11 +402,11 @@ export type users_response = {
   message?: string;
   users?: Array<{
     /**
-     * Unique id of the user in Kinde.
+     * Unique ID of the user in Kinde.
      */
     id?: string;
     /**
-     * External id for user.
+     * External ID for user.
      */
     provided_id?: string;
     /**
@@ -196,7 +469,7 @@ export type users_response = {
 
 export type create_user_response = {
   /**
-   * Unique id of the user in Kinde.
+   * Unique ID of the user in Kinde.
    */
   id?: string;
   /**
@@ -207,11 +480,17 @@ export type create_user_response = {
 };
 
 export type create_organization_response = {
+  /**
+   * Response message.
+   */
   message?: string;
+  /**
+   * Response code.
+   */
   code?: string;
   organization?: {
     /**
-     * The organization's code.
+     * The organization's unique code.
      */
     code?: string;
   };
@@ -235,7 +514,7 @@ export type user_identity = {
 
 export type user_profile = {
   /**
-   * Unique id of the user in Kinde.
+   * Unique ID of the user in Kinde.
    */
   id?: string;
   /**
@@ -247,7 +526,7 @@ export type user_profile = {
    */
   username?: string;
   /**
-   * Value of the user's id in a third-party system when the user is imported into Kinde.
+   * Value of the user's ID in a third-party system when the user is imported into Kinde.
    */
   provided_id?: string | null;
   /**
@@ -295,7 +574,7 @@ export type get_identities_response = {
    * Response message.
    */
   message?: string;
-  properties?: Array<identity>;
+  identities?: Array<identity>;
   /**
    * Whether more records exist.
    */
@@ -530,15 +809,15 @@ export type token_error_response = {
 
 export type user_profile_v2 = {
   /**
-   * Unique id of the user in Kinde (deprecated).
+   * Unique ID of the user in Kinde (deprecated).
    */
   id?: string;
   /**
-   * Unique id of the user in Kinde.
+   * Unique ID of the user in Kinde.
    */
   sub?: string;
   /**
-   * Value of the user's id in a third-party system when the user is imported into Kinde.
+   * Value of the user's ID in a third-party system when the user is imported into Kinde.
    */
   provided_id?: string | null;
   /**
@@ -567,17 +846,107 @@ export type user_profile_v2 = {
   picture?: string;
 };
 
-export type organization = {
+export type organization_item_schema = {
+  /**
+   * The unique identifier for the organization.
+   */
   code?: string;
+  /**
+   * The organization's name.
+   */
   name?: string;
+  /**
+   * A unique handle for the organization - can be used for dynamic callback urls.
+   */
+  handle?: string | null;
+  /**
+   * Whether the organization is the default organization.
+   */
   is_default?: boolean;
-  external_id?: string;
-  logo?: string;
-  link_color?: string;
-  button_color?: string;
-  background_color?: string;
-  button_text_color?: string;
-  is_allow_registrations?: boolean;
+  /**
+   * The organization's external identifier - commonly used when migrating from or mapping to other systems.
+   */
+  external_id?: string | null;
+  /**
+   * If users become members of this organization when the org code is supplied during authentication.
+   */
+  is_auto_membership_enabled?: boolean;
+};
+
+export type get_organization_response = {
+  /**
+   * The unique identifier for the organization.
+   */
+  code?: string;
+  /**
+   * The organization's name.
+   */
+  name?: string;
+  /**
+   * A unique handle for the organization - can be used for dynamic callback urls.
+   */
+  handle?: string | null;
+  /**
+   * Whether the organization is the default organization.
+   */
+  is_default?: boolean;
+  /**
+   * The organization's external identifier - commonly used when migrating from or mapping to other systems.
+   */
+  external_id?: string | null;
+  /**
+   * If users become members of this organization when the org code is supplied during authentication.
+   */
+  is_auto_membership_enabled?: boolean;
+  /**
+   * @deprecated
+   */
+  logo?: string | null;
+  link_color?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  background_color?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  button_color?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  button_text_color?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  link_color_dark?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  background_color_dark?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  button_text_color_dark?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  button_color_dark?: {
+    raw?: string;
+    hex?: string;
+    hsl?: string;
+  } | null;
+  /**
+   * Deprecated - Use 'is_auto_membership_enabled' instead
+   * @deprecated
+   */
+  is_allow_registrations?: boolean | null;
 };
 
 export type organization_user = {
@@ -600,6 +969,29 @@ export type connection = {
   name?: string;
   display_name?: string;
   strategy?: string;
+};
+
+export type environment_variable = {
+  /**
+   * The unique ID for the environment variable.
+   */
+  id?: string;
+  /**
+   * The name of the environment variable.
+   */
+  key?: string;
+  /**
+   * The value of the environment variable.
+   */
+  value?: string | null;
+  /**
+   * Whether the environment variable is sensitive.
+   */
+  is_secret?: boolean;
+  /**
+   * The date the environment variable was created.
+   */
+  created_on?: string;
 };
 
 export type identity = {
@@ -630,9 +1022,9 @@ export type property = {
 export type property_value = {
   id?: string;
   name?: string;
-  description?: string;
+  description?: string | null;
   key?: string;
-  value?: string;
+  value?: string | null;
 };
 
 export type role = {
@@ -728,6 +1120,56 @@ export type get_roles_response = {
   next_token?: string;
 };
 
+export type get_role_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  role?: {
+    /**
+     * The role's ID.
+     */
+    id?: string;
+    /**
+     * The role identifier to use in code.
+     */
+    key?: string;
+    /**
+     * The role's name.
+     */
+    name?: string;
+    /**
+     * The role's description.
+     */
+    description?: string;
+    /**
+     * Whether the role is the default role.
+     */
+    is_default_role?: boolean;
+  };
+};
+
+export type create_roles_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  role?: {
+    /**
+     * The role's ID.
+     */
+    id?: string;
+  };
+};
+
 export type get_organizations_response = {
   /**
    * Response code.
@@ -737,7 +1179,7 @@ export type get_organizations_response = {
    * Response message.
    */
   message?: string;
-  organizations?: Array<organization>;
+  organizations?: Array<organization_item_schema>;
   /**
    * Pagination token.
    */
@@ -911,7 +1353,7 @@ export type create_application_response = {
      */
     id?: string;
     /**
-     * The application's client id.
+     * The application's client ID.
      */
     client_id?: string;
     /**
@@ -944,7 +1386,7 @@ export type get_application_response = {
      */
     type?: string;
     /**
-     * The application's client id.
+     * The application's client ID.
      */
     client_id?: string;
     /**
@@ -1002,7 +1444,15 @@ export type logout_redirect_urls = {
   /**
    * An application's logout URLs.
    */
-  redirect_urls?: Array<string>;
+  logout_urls?: Array<string>;
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
 };
 
 export type get_permissions_response = {
@@ -1023,7 +1473,7 @@ export type get_permissions_response = {
 
 export type permissions = {
   /**
-   * The permission's id.
+   * The permission's ID.
    */
   id?: string;
   /**
@@ -1042,7 +1492,7 @@ export type permissions = {
 
 export type roles = {
   /**
-   * The role's id.
+   * The role's ID.
    */
   id?: string;
   /**
@@ -1056,7 +1506,11 @@ export type roles = {
   /**
    * The role's description.
    */
-  description?: string;
+  description?: string | null;
+  /**
+   * Whether the role is the default role.
+   */
+  is_default_role?: boolean;
 };
 
 export type roles_permission_response = Array<{
@@ -1066,53 +1520,25 @@ export type roles_permission_response = Array<{
   description?: string;
 }>;
 
-export type apis = {
-  /**
-   * Unique id of the API.
-   */
-  id?: string;
-  /**
-   * The API's name.
-   */
-  name?: string;
-  /**
-   * The logical identifier for the API.
-   */
-  audience?: string;
-  /**
-   * Whether it is the management API or not.
-   */
-  is_management_api?: boolean;
-};
+/**
+ * The API's ID.
+ */
+export type Parameterapi_id = string;
 
-export type api = {
-  /**
-   * The API's unique identifier.
-   */
-  id?: string;
-  /**
-   * Response code.
-   */
-  code?: string;
-  /**
-   * The API's name.
-   */
-  name?: string;
-  /**
-   * Response message.
-   */
-  message?: string;
-  /**
-   * The API's audience.
-   */
-  audience?: string;
-  applications?: Array<{
-    id?: string;
-    name?: string;
-    type?: string;
-    is_active?: boolean;
-  }>;
-};
+/**
+ * The application's ID / client ID.
+ */
+export type Parameterapplication_id = string;
+
+/**
+ * The property's key.
+ */
+export type Parameterproperty_key = string;
+
+/**
+ * The environment variable's ID.
+ */
+export type Parametervariable_id = string;
 
 export type GetUserResponse = user_profile;
 
@@ -1158,61 +1584,64 @@ export type TokenRevocationResponse = unknown;
 
 export type GetUserProfileV2Response = user_profile_v2;
 
-export type GetApIsResponse = apis;
+export type GetApIsResponse = get_apis_response;
 
 export type AddApIsData = {
-  /**
-   * API details.
-   */
   requestBody: {
+    /**
+     * The name of the API. (1-64 characters).
+     */
     name: string;
+    /**
+     * A unique identifier for the API - commonly the URL. This value will be used as the `audience` parameter in authorization claims. (1-64 characters)
+     */
     audience: string;
   };
 };
 
-export type AddApIsResponse = success_response;
+export type AddApIsResponse = create_apis_response;
 
 export type GetApiData = {
   /**
-   * The API's id.
+   * The API's ID.
    */
   apiId: string;
 };
 
-export type GetApiResponse = api;
+export type GetApiResponse = get_api_response;
 
 export type DeleteApiData = {
   /**
-   * The API's id.
+   * The API's ID.
    */
   apiId: string;
 };
 
-export type DeleteApiResponse = success_response;
+export type DeleteApiResponse = delete_api_response;
 
 export type UpdateApiApplicationsData = {
   /**
-   * The identifier for the API.
+   * The API's ID.
    */
   apiId: string;
   /**
-   * The applications you want to connect or disconnect.
+   * The applications you want to authorize.
    */
   requestBody: {
     applications: Array<{
       /**
-       * The application's id.
+       * The application's Client ID.
        */
       id: string;
       /**
-       * Optional operation, set to 'delete' to remove the user from the organization.
+       * Optional operation, set to 'delete' to revoke authorization for the application. If not set, the application will be authorized.
        */
       operation?: string;
     }>;
   };
 };
 
-export type UpdateApiApplicationsResponse = success_response;
+export type UpdateApiApplicationsResponse = authorize_app_api_response;
 
 export type GetApplicationsData = {
   /**
@@ -1232,18 +1661,15 @@ export type GetApplicationsData = {
 export type GetApplicationsResponse = get_applications_response;
 
 export type CreateApplicationData = {
-  /**
-   * Application details.
-   */
-  requestBody?: {
+  requestBody: {
     /**
      * The application's name.
      */
-    name?: string;
+    name: string;
     /**
-     * The application's type.
+     * The application's type. Use `reg` for regular server rendered applications, `spa` for single-page applications, and `m2m` for machine-to-machine applications.
      */
-    type?: "reg" | "spa" | "m2m";
+    type: "reg" | "spa" | "m2m";
   };
 };
 
@@ -1340,113 +1766,89 @@ export type RemoveConnectionData = {
 
 export type RemoveConnectionResponse = success_response;
 
-export type GetBusinessData = {
+export type GetApplicationPropertyValuesData = {
   /**
-   * Business code.
+   * The application's ID / client ID.
    */
-  code: string;
-  /**
-   * Email associated with business.
-   */
-  email: string;
-  /**
-   * The industry your business is in.
-   */
-  industry?: string;
-  /**
-   * Business name.
-   */
-  name: string;
-  /**
-   * Phone number associated with business.
-   */
-  phone?: string | null;
-  /**
-   * Your Privacy policy URL.
-   */
-  privacyUrl?: string | null;
-  /**
-   * Your Terms and Conditions URL.
-   */
-  termsUrl?: string | null;
-  /**
-   * The timezone your business is in.
-   */
-  timezone?: string;
+  applicationId: string;
 };
 
-export type GetBusinessResponse = success_response;
+export type GetApplicationPropertyValuesResponse = get_property_values_response;
+
+export type UpdateApplicationsPropertyData = {
+  /**
+   * The application's ID / client ID.
+   */
+  applicationId: string;
+  /**
+   * The property's key.
+   */
+  propertyKey: string;
+  requestBody: {
+    /**
+     * The new value for the propery
+     */
+    value: string | boolean;
+  };
+};
+
+export type UpdateApplicationsPropertyResponse = success_response;
+
+export type GetBusinessResponse = get_business_response;
 
 export type UpdateBusinessData = {
   /**
-   * Business name.
+   * The business details to update.
    */
-  businessName: string;
-  /**
-   * The key of the industry your business is in.
-   */
-  industryKey?: string;
-  /**
-   * Show a policy acceptance checkbox on sign up.
-   */
-  isClickWrap?: boolean | null;
-  /**
-   * Display "Powered by Kinde" on your sign up, sign in, and subscription pages.
-   */
-  isShowKindeBranding?: string | null;
-  /**
-   * Your Kinde Perk code.
-   */
-  partnerCode?: string | null;
-  /**
-   * Email associated with business.
-   */
-  primaryEmail: string;
-  /**
-   * Phone number associated with business.
-   */
-  primaryPhone?: string | null;
-  /**
-   * Your Privacy policy URL.
-   */
-  privacyUrl?: string | null;
-  /**
-   * Your Terms and Conditions URL.
-   */
-  termsUrl?: string | null;
-  /**
-   * The ID of the timezone your business is in.
-   */
-  timezoneId?: string;
+  requestBody: {
+    /**
+     * The name of the business.
+     */
+    business_name?: string | null;
+    /**
+     * The email address of the business.
+     */
+    email?: string | null;
+    /**
+     * The key of the industry of your business. Can be retrieved from the /industries endpoint.
+     */
+    industry_key?: string | null;
+    /**
+     * Whether the business is using clickwrap agreements.
+     */
+    is_click_wrap?: boolean | null;
+    /**
+     * Whether the business is showing Kinde branding. Requires a paid plan.
+     */
+    is_show_kinde_branding?: boolean | null;
+    /**
+     * The Kinde perk code for the business.
+     */
+    kinde_perk_code?: string | null;
+    /**
+     * The phone number of the business.
+     */
+    phone?: string | null;
+    /**
+     * The URL to the business's privacy policy.
+     */
+    privacy_url?: string | null;
+    /**
+     * The URL to the business's terms of service.
+     */
+    terms_url?: string | null;
+    /**
+     * The key of the timezone of your business. Can be retrieved from the /timezones endpoint.
+     */
+    timezone_key?: string | null;
+  };
 };
 
 export type UpdateBusinessResponse = success_response;
 
-export type GetIndustriesData = {
-  /**
-   * Industry Key.
-   */
-  industryKey?: string;
-  /**
-   * Industry name.
-   */
-  name?: string;
-};
+export type GetIndustriesResponse = get_industries_response;
 
-export type GetIndustriesResponse = success_response;
-
-export type GetTimezonesData = {
-  /**
-   * Timezone.
-   */
-  name?: string;
-  /**
-   * Timezone Key.
-   */
-  timezoneKey?: string;
-};
-
-export type GetTimezonesResponse = success_response;
+export type GetTimezonesResponse = get_timezones_response;
 
 export type GetCallbackUrLsData = {
   /**
@@ -1752,6 +2154,78 @@ export type UpdateEnvironementFeatureFlagOverrideData = {
 
 export type UpdateEnvironementFeatureFlagOverrideResponse = success_response;
 
+export type GetEnvironmentVariablesResponse =
+  get_environment_variables_response;
+
+export type CreateEnvironmentVariableData = {
+  /**
+   * The environment variable details.
+   */
+  requestBody: {
+    /**
+     * The name of the environment variable (max 128 characters).
+     */
+    key: string;
+    /**
+     * The value of the new environment variable (max 2048 characters).
+     */
+    value: string;
+    /**
+     * Whether the environment variable is sensitive. Secrets are not-readable by you or your team after creation.
+     */
+    is_secret?: boolean;
+  };
+};
+
+export type CreateEnvironmentVariableResponse =
+  create_environment_variable_response;
+
+export type GetEnvironmentVariableData = {
+  /**
+   * The environment variable's ID.
+   */
+  variableId: string;
+};
+
+export type GetEnvironmentVariableResponse = get_environment_variable_response;
+
+export type UpdateEnvironmentVariableData = {
+  /**
+   * The new details for the environment variable
+   */
+  requestBody: {
+    /**
+     * The key to update.
+     */
+    key?: string;
+    /**
+     * The new value for the environment variable.
+     */
+    value?: string;
+    /**
+     * Whether the environment variable is sensitive. Secret variables are not-readable by you or your team after creation.
+     */
+    is_secret?: boolean;
+  };
+  /**
+   * The environment variable's ID.
+   */
+  variableId: string;
+};
+
+export type UpdateEnvironmentVariableResponse =
+  update_environment_variable_response;
+
+export type DeleteEnvironmentVariableData = {
+  /**
+   * The environment variable's ID.
+   */
+  variableId: string;
+};
+
+export type DeleteEnvironmentVariableResponse =
+  delete_environment_variable_response;
+
 export type CreateFeatureFlagData = {
   /**
    * Flag details.
@@ -1867,7 +2341,7 @@ export type GetOrganizationData = {
   code?: string;
 };
 
-export type GetOrganizationResponse = organization;
+export type GetOrganizationResponse = get_organization_response;
 
 export type CreateOrganizationData = {
   /**
@@ -1885,7 +2359,7 @@ export type CreateOrganizationData = {
       [key: string]: "str" | "int" | "bool";
     };
     /**
-     * The organization's ID.
+     * The organization's external identifier - commonly used when migrating from or mapping to other systems.
      */
     external_id?: string;
     /**
@@ -1925,17 +2399,38 @@ export type CreateOrganizationData = {
      */
     theme_code?: string;
     /**
-     * The organization's handle.
+     * A unique handle for the organization - can be used for dynamic callback urls.
      */
     handle?: string;
     /**
-     * Users can sign up to this organization.
+     * If users become members of this organization when the org code is supplied during authentication.
      */
     is_allow_registrations?: boolean;
+    /**
+     * Enable custom auth connections for this organization.
+     */
+    is_custom_auth_connections_enabled?: boolean;
   };
 };
 
 export type CreateOrganizationResponse = create_organization_response;
+
+export type GetOrganizationsData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?: ("name_asc" | "name_desc" | "email_asc" | "email_desc") | null;
+};
+
+export type GetOrganizationsResponse = get_organizations_response;
 
 export type UpdateOrganizationData = {
   /**
@@ -1987,17 +2482,30 @@ export type UpdateOrganizationData = {
      */
     link_color_dark?: string;
     /**
-     * The organization's brand settings - theme/mode 'light' | 'dark' | 'user_preference'.
+     * The organization's brand settings - theme/mode.
      */
-    theme_code?: string;
+    theme_code?: "light" | "dark" | "user_preference";
     /**
      * The organization's handle.
      */
     handle?: string;
     /**
-     * Users can sign up to this organization.
+     * Deprecated - Use 'is_auto_membership_enabled' instead.
+     * @deprecated
      */
     is_allow_registrations?: boolean;
+    /**
+     * Enable custom auth connections for this organization.
+     */
+    is_custom_auth_connections_enabled?: boolean;
+    /**
+     * Users can sign up to this organization.
+     */
+    is_auto_join_domain_list?: boolean;
+    /**
+     * Domains allowed for self-sign up to this environment.
+     */
+    allowed_domains?: Array<string>;
   };
 };
 
@@ -2010,24 +2518,7 @@ export type DeleteOrganizationData = {
   orgCode: string;
 };
 
-export type DeleteOrganizationResponse = unknown;
-
-export type GetOrganizationsData = {
-  /**
-   * A string to get the next page of results if there are more results.
-   */
-  nextToken?: string | null;
-  /**
-   * Number of results per page. Defaults to 10 if parameter not sent.
-   */
-  pageSize?: number | null;
-  /**
-   * Field and order to sort the result by.
-   */
-  sort?: ("name_asc" | "name_desc" | "email_asc" | "email_desc") | null;
-};
-
-export type GetOrganizationsResponse = get_organizations_response;
+export type DeleteOrganizationResponse = success_response;
 
 export type GetOrganizationUsersData = {
   /**
@@ -2476,7 +2967,7 @@ export type CreatePropertyData = {
     /**
      * The context that the property applies to.
      */
-    context: "org" | "usr";
+    context: "org" | "usr" | "app";
     /**
      * Whether the property can be included in id and access tokens.
      */
@@ -2562,7 +3053,7 @@ export type CreateCategoryData = {
     /**
      * The context that the category applies to.
      */
-    context: "org" | "usr";
+    context: "org" | "usr" | "app";
   };
 };
 
@@ -2627,7 +3118,55 @@ export type CreateRoleData = {
   };
 };
 
-export type CreateRoleResponse = success_response;
+export type CreateRoleResponse = create_roles_response;
+
+export type GetRoleData = {
+  /**
+   * The identifier for the role.
+   */
+  roleId: string;
+};
+
+export type GetRoleResponse = get_role_response;
+
+export type UpdateRolesData = {
+  /**
+   * Role details.
+   */
+  requestBody?: {
+    /**
+     * The role's name.
+     */
+    name: string;
+    /**
+     * The role's description.
+     */
+    description?: string;
+    /**
+     * The role identifier to use in code.
+     */
+    key: string;
+    /**
+     * Set role as default for new users.
+     */
+    is_default_role?: boolean;
+  };
+  /**
+   * The identifier for the role.
+   */
+  roleId: string;
+};
+
+export type UpdateRolesResponse = success_response;
+
+export type DeleteRoleData = {
+  /**
+   * The identifier for the role.
+   */
+  roleId: string;
+};
+
+export type DeleteRoleResponse = success_response;
 
 export type GetRolePermissionData = {
   /**
@@ -2686,45 +3225,6 @@ export type RemoveRolePermissionData = {
 };
 
 export type RemoveRolePermissionResponse = success_response;
-
-export type UpdateRolesData = {
-  /**
-   * Role details.
-   */
-  requestBody?: {
-    /**
-     * The role's name.
-     */
-    name: string;
-    /**
-     * The role's description.
-     */
-    description?: string;
-    /**
-     * The role identifier to use in code.
-     */
-    key: string;
-    /**
-     * Set role as default for new users.
-     */
-    is_default_role?: boolean;
-  };
-  /**
-   * The identifier for the role.
-   */
-  roleId: string;
-};
-
-export type UpdateRolesResponse = success_response;
-
-export type DeleteRoleData = {
-  /**
-   * The identifier for the role.
-   */
-  roleId: string;
-};
-
-export type DeleteRoleResponse = success_response;
 
 export type GetSubscribersData = {
   /**
@@ -2841,17 +3341,25 @@ export type CreateUserData = {
        * User's last name.
        */
       family_name?: string;
+      /**
+       * The user's profile picture.
+       */
+      picture?: string;
     };
     /**
      * The unique code associated with the organization you want the user to join.
      */
     organization_code?: string;
     /**
+     * An external id to reference the user.
+     */
+    provided_id?: string;
+    /**
      * Array of identities to assign to the created user
      */
     identities?: Array<{
       /**
-       * The type of identity to create, for e.g. email.
+       * The type of identity to create, e.g. email, username, or phone.
        */
       type?: "email" | "phone" | "username";
       /**
@@ -2866,6 +3374,10 @@ export type CreateUserData = {
          * The phone number of the user.
          */
         phone?: string;
+        /**
+         * The country code for the phone number.
+         */
+        phone_country_id?: string;
         /**
          * The username of the user.
          */
@@ -2895,6 +3407,10 @@ export type UpdateUserData = {
      */
     family_name?: string;
     /**
+     * The user's profile picture.
+     */
+    picture?: string;
+    /**
      * Whether the user is currently suspended or not.
      */
     is_suspended?: boolean;
@@ -2902,6 +3418,10 @@ export type UpdateUserData = {
      * Prompt the user to change their password on next sign in.
      */
     is_password_reset_requested?: boolean;
+    /**
+     * An external id to reference the user.
+     */
+    provided_id?: string;
   };
 };
 
@@ -3019,6 +3539,14 @@ export type SetUserPasswordResponse = success_response;
 
 export type GetUserIdentitiesData = {
   /**
+   * The ID of the identity to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * The ID of the identity to start after.
+   */
+  startingAfter?: string | null;
+  /**
    * The user's ID.
    */
   userId: string;
@@ -3032,17 +3560,21 @@ export type CreateUserIdentityData = {
    */
   requestBody?: {
     /**
-     * The email address, or username of the user.
+     * The email address, social identity, or username of the user.
      */
     value?: string;
     /**
      * The identity type
      */
-    type?: "email" | "username" | "phone" | "enterprise";
+    type?: "email" | "username" | "phone" | "enterprise" | "social";
     /**
      * The country code for the phone number, only required when identity type is 'phone'.
      */
     phone_country_id?: string;
+    /**
+     * The social connection ID, only required when identity type is 'social'.
+     */
+    connection_id?: string;
   };
   /**
    * The user's ID.

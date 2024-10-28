@@ -5,9 +5,11 @@ export const $success_response = {
   properties: {
     message: {
       type: "string",
+      example: "Success",
     },
     code: {
       type: "string",
+      example: "OK",
     },
   },
 } as const;
@@ -38,16 +40,467 @@ export const $error_response = {
   },
 } as const;
 
+export const $not_found_response = {
+  type: "object",
+  properties: {
+    errors: {
+      type: "object",
+      properties: {
+        code: {
+          type: "string",
+          example: "ROUTE_NOT_FOUND",
+        },
+        message: {
+          type: "string",
+          example: "The requested API route does not exist",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_apis_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+      example: "Njo5Om1hvWVfYXNj",
+    },
+    apis: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            description: "The unique ID for the API.",
+            type: "string",
+            example: "7ccd126599aa422a771abcb341596881",
+          },
+          name: {
+            type: "string",
+            description: "The API’s name.",
+            example: "Example API",
+          },
+          audience: {
+            type: "string",
+            description:
+              "A unique identifier for the API - commonly the URL. This value will be used as the `audience` parameter in authorization claims.",
+            example: "https://api.example.com",
+          },
+          is_management_api: {
+            type: "boolean",
+            description: "Whether or not it is the Kinde management API.",
+            example: false,
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $create_apis_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "A Kinde generated message.",
+      example: "Success",
+    },
+    code: {
+      type: "string",
+      description: "A Kinde generated status code.",
+      example: "OK",
+    },
+    api: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The unique ID for the API.",
+          type: "string",
+          example: "7ccd126599aa422a771abcb341596881",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_environment_variables_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+    environment_variables: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/environment_variable",
+      },
+    },
+  },
+} as const;
+
+export const $get_environment_variable_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    environment_variable: {
+      $ref: "#/components/schemas/environment_variable",
+    },
+  },
+} as const;
+
+export const $create_environment_variable_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "A Kinde generated message.",
+      example: "Environment variable created",
+    },
+    code: {
+      type: "string",
+      description: "A Kinde generated status code.",
+      example: "VARIABLE_CREATED",
+    },
+    environment_variable: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The unique ID for the environment variable.",
+          type: "string",
+          example: "env_var_0192b194f6156fb7452fe38cfb144958",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $update_environment_variable_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "A Kinde generated message.",
+      example: "Environment variable updated",
+    },
+    code: {
+      type: "string",
+      description: "A Kinde generated status code.",
+      example: "ENVIRONMENT_VARIABLE_UPDATED",
+    },
+  },
+} as const;
+
+export const $delete_environment_variable_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "A Kinde generated message.",
+      example: "Environment variable deleted",
+    },
+    code: {
+      type: "string",
+      description: "A Kinde generated status code.",
+      example: "ENVIRONMENT_VARIABLE_DELETED",
+    },
+  },
+} as const;
+
+export const $get_business_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    business: {
+      type: "object",
+      properties: {
+        code: {
+          type: "string",
+          description: "The unique ID for the business.",
+          example: "bus_c69fb73b091",
+        },
+        name: {
+          type: "string",
+          description: "Your business's name.",
+          example: "Tailsforce Ltd",
+        },
+        phone: {
+          type: "string",
+          description: "Phone number associated with business.",
+          example: "555-555-5555",
+          nullable: true,
+        },
+        email: {
+          type: "string",
+          description: "Email address associated with business.",
+          example: "sally@example.com",
+          nullable: true,
+        },
+        industry: {
+          type: "string",
+          description: "The industry your business is in.",
+          example: "Healthcare & Medical",
+          nullable: true,
+        },
+        timezone: {
+          type: "string",
+          description: "The timezone your business is in.",
+          example: "Los Angeles (Pacific Standard Time)",
+          nullable: true,
+        },
+        privacy_url: {
+          type: "string",
+          description: "Your Privacy policy URL.",
+          example: "https://example.com/privacy",
+          nullable: true,
+        },
+        terms_url: {
+          type: "string",
+          description: "Your Terms and Conditions URL.",
+          example: "https://example.com/terms",
+          nullable: true,
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_industries_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    industries: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          key: {
+            description: "The unique key for the industry.",
+            type: "string",
+            example: "administration_office_support",
+          },
+          name: {
+            type: "string",
+            description: "The display name for the industry.",
+            example: "Administration & Office Support",
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_timezones_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    timezones: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          key: {
+            description: "The unique key for the timezone.",
+            type: "string",
+            example: "london_greenwich_mean_time",
+          },
+          name: {
+            type: "string",
+            description: "The display name for the timezone.",
+            example: "London (Greenwich Mean Time) [+01:00]",
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_api_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "success_response",
+    },
+    api: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "Unique ID of the API.",
+          example: "7ccd126599aa422a771abcb341596881",
+        },
+        name: {
+          type: "string",
+          description: "The API’s name.",
+          example: "Example API",
+        },
+        audience: {
+          type: "string",
+          description:
+            "A unique identifier for the API - commonly the URL. This value will be used as the `audience` parameter in authorization claims.",
+          example: "https://api.example.com",
+        },
+        is_management_api: {
+          type: "boolean",
+          description: "Whether or not it is the Kinde management API.",
+          example: false,
+        },
+        applications: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: {
+                type: "string",
+                description: "The Client ID of the application.",
+                example: "3b0b5c6c8fcc464fab397f4969b5f482",
+              },
+              name: {
+                type: "string",
+                description: "The application's name.",
+                example: "My M2M app",
+              },
+              type: {
+                type: "string",
+                description: "The application's type.",
+                enum: [
+                  "Machine to machine (M2M)",
+                  "Back-end web",
+                  "Front-end and mobile",
+                ],
+                example: "Machine to machine (M2M)",
+              },
+              is_active: {
+                type: "boolean",
+                description:
+                  "Whether or not the application is authorized to access the API",
+                example: true,
+                nullable: true,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $authorize_app_api_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      example: "API applications updated",
+    },
+    code: {
+      type: "string",
+      example: "API_APPLICATIONS_UPDATED",
+    },
+    applications_disconnected: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
+    applications_connected: {
+      type: "array",
+      items: {
+        type: "string",
+        example: "d2db282d6214242b3b145c123f0c123",
+      },
+    },
+  },
+} as const;
+
+export const $delete_api_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      example: "API successfully deleted",
+    },
+    code: {
+      type: "string",
+      example: "API_DELETED",
+    },
+  },
+} as const;
+
 export const $user = {
   type: "object",
   properties: {
     id: {
       type: "string",
-      description: "Unique id of the user in Kinde.",
+      description: "Unique ID of the user in Kinde.",
     },
     provided_id: {
       type: "string",
-      description: "External id for user.",
+      description: "External ID for user.",
     },
     preferred_email: {
       type: "string",
@@ -123,7 +576,7 @@ export const $update_user_response = {
   properties: {
     id: {
       type: "string",
-      description: "Unique id of the user in Kinde.",
+      description: "Unique ID of the user in Kinde.",
     },
     given_name: {
       type: "string",
@@ -148,6 +601,7 @@ export const $update_user_response = {
     picture: {
       type: "string",
       description: "User's profile picture URL.",
+      nullable: true,
     },
   },
 } as const;
@@ -178,11 +632,11 @@ export const $users_response = {
         properties: {
           id: {
             type: "string",
-            description: "Unique id of the user in Kinde.",
+            description: "Unique ID of the user in Kinde.",
           },
           provided_id: {
             type: "string",
-            description: "External id for user.",
+            description: "External ID for user.",
           },
           email: {
             type: "string",
@@ -264,7 +718,7 @@ export const $create_user_response = {
   type: "object",
   properties: {
     id: {
-      description: "Unique id of the user in Kinde.",
+      description: "Unique ID of the user in Kinde.",
       type: "string",
     },
     created: {
@@ -285,16 +739,21 @@ export const $create_organization_response = {
   properties: {
     message: {
       type: "string",
+      description: "Response message.",
+      example: "Success",
     },
     code: {
       type: "string",
+      description: "Response code.",
+      example: "OK",
     },
     organization: {
       type: "object",
       properties: {
         code: {
-          description: "The organization's code.",
+          description: "The organization's unique code.",
           type: "string",
+          example: "org_1ccfb819462",
         },
       },
     },
@@ -326,7 +785,7 @@ export const $user_profile = {
   properties: {
     id: {
       type: "string",
-      description: "Unique id of the user in Kinde.",
+      description: "Unique ID of the user in Kinde.",
     },
     preferred_email: {
       type: "string",
@@ -339,7 +798,7 @@ export const $user_profile = {
     provided_id: {
       type: "string",
       description:
-        "Value of the user's id in a third-party system when the user is imported into Kinde.",
+        "Value of the user's ID in a third-party system when the user is imported into Kinde.",
       nullable: true,
     },
     last_name: {
@@ -410,7 +869,7 @@ export const $get_identities_response = {
       type: "string",
       description: "Response message.",
     },
-    properties: {
+    identities: {
       type: "array",
       items: {
         $ref: "#/components/schemas/identity",
@@ -793,16 +1252,16 @@ export const $user_profile_v2 = {
   properties: {
     id: {
       type: "string",
-      description: "Unique id of the user in Kinde (deprecated).",
+      description: "Unique ID of the user in Kinde (deprecated).",
     },
     sub: {
       type: "string",
-      description: "Unique id of the user in Kinde.",
+      description: "Unique ID of the user in Kinde.",
     },
     provided_id: {
       type: "string",
       description:
-        "Value of the user's id in a third-party system when the user is imported into Kinde.",
+        "Value of the user's ID in a third-party system when the user is imported into Kinde.",
       nullable: true,
     },
     name: {
@@ -832,38 +1291,240 @@ export const $user_profile_v2 = {
   },
 } as const;
 
-export const $organization = {
+export const $organization_item_schema = {
   type: "object",
   properties: {
     code: {
       type: "string",
+      description: "The unique identifier for the organization.",
+      example: "org_1ccfb819462",
     },
     name: {
       type: "string",
+      description: "The organization's name.",
+      example: "Acme Corp",
+    },
+    handle: {
+      type: "string",
+      description:
+        "A unique handle for the organization - can be used for dynamic callback urls.",
+      example: "acme_corp",
+      nullable: true,
     },
     is_default: {
       type: "boolean",
+      description: "Whether the organization is the default organization.",
+      example: false,
     },
     external_id: {
       type: "string",
+      description:
+        "The organization's external identifier - commonly used when migrating from or mapping to other systems.",
+      example: "some1234",
+      nullable: true,
+    },
+    is_auto_membership_enabled: {
+      type: "boolean",
+      example: true,
+      description:
+        "If users become members of this organization when the org code is supplied during authentication.",
+    },
+  },
+} as const;
+
+export const $get_organization_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "The unique identifier for the organization.",
+      example: "org_1ccfb819462",
+    },
+    name: {
+      type: "string",
+      description: "The organization's name.",
+      example: "Acme Corp",
+    },
+    handle: {
+      type: "string",
+      description:
+        "A unique handle for the organization - can be used for dynamic callback urls.",
+      example: "acme_corp",
+      nullable: true,
+    },
+    is_default: {
+      type: "boolean",
+      description: "Whether the organization is the default organization.",
+      example: false,
+    },
+    external_id: {
+      type: "string",
+      description:
+        "The organization's external identifier - commonly used when migrating from or mapping to other systems.",
+      example: "some1234",
+      nullable: true,
+    },
+    is_auto_membership_enabled: {
+      type: "boolean",
+      example: true,
+      description:
+        "If users become members of this organization when the org code is supplied during authentication.",
     },
     logo: {
       type: "string",
+      deprecated: true,
+      nullable: true,
     },
     link_color: {
-      type: "string",
-    },
-    button_color: {
-      type: "string",
+      type: "object",
+      nullable: true,
+      properties: {
+        raw: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hex: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(220, 100%, 50%)",
+        },
+      },
     },
     background_color: {
-      type: "string",
+      nullable: true,
+      type: "object",
+      properties: {
+        raw: {
+          type: "string",
+          example: "#ffffff",
+        },
+        hex: {
+          type: "string",
+          example: "#ffffff",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(0, 0%, 100%)",
+        },
+      },
+    },
+    button_color: {
+      nullable: true,
+      type: "object",
+      properties: {
+        raw: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hex: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(220, 100%, 50%)",
+        },
+      },
     },
     button_text_color: {
-      type: "string",
+      nullable: true,
+      type: "object",
+      properties: {
+        raw: {
+          type: "string",
+          example: "#ffffff",
+        },
+        hex: {
+          type: "string",
+          example: "#ffffff",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(0, 0%, 100%)",
+        },
+      },
+    },
+    link_color_dark: {
+      type: "object",
+      nullable: true,
+      properties: {
+        raw: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hex: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(220, 100%, 50%)",
+        },
+      },
+    },
+    background_color_dark: {
+      type: "object",
+      nullable: true,
+      properties: {
+        raw: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hex: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(220, 100%, 50%)",
+        },
+      },
+    },
+    button_text_color_dark: {
+      type: "object",
+      nullable: true,
+      properties: {
+        raw: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hex: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(220, 100%, 50%)",
+        },
+      },
+    },
+    button_color_dark: {
+      type: "object",
+      nullable: true,
+      properties: {
+        raw: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hex: {
+          type: "string",
+          example: "#0056F1",
+        },
+        hsl: {
+          type: "string",
+          example: "hsl(220, 100%, 50%)",
+        },
+      },
     },
     is_allow_registrations: {
+      nullable: true,
       type: "boolean",
+      example: true,
+      deprecated: true,
+      description: "Deprecated - Use 'is_auto_membership_enabled' instead",
     },
   },
 } as const;
@@ -928,6 +1589,38 @@ export const $connection = {
   },
 } as const;
 
+export const $environment_variable = {
+  type: "object",
+  properties: {
+    id: {
+      description: "The unique ID for the environment variable.",
+      type: "string",
+      example: "env_var_0192b1941f125645fa15bf28a662a0b3",
+    },
+    key: {
+      type: "string",
+      description: "The name of the environment variable.",
+      example: "MY_API_KEY",
+    },
+    value: {
+      type: "string",
+      description: "The value of the environment variable.",
+      example: "some-secret",
+      nullable: true,
+    },
+    is_secret: {
+      type: "boolean",
+      description: "Whether the environment variable is sensitive.",
+      example: false,
+    },
+    created_on: {
+      type: "string",
+      description: "The date the environment variable was created.",
+      example: "2021-01-01T00:00:00Z",
+    },
+  },
+} as const;
+
 export const $identity = {
   type: "object",
   properties: {
@@ -986,18 +1679,25 @@ export const $property_value = {
   properties: {
     id: {
       type: "string",
+      example: "prop_0192b7e8b4f8ca08110d2b22059662a8",
     },
     name: {
       type: "string",
+      example: "Town",
     },
     description: {
       type: "string",
+      example: "Where the entity is located",
+      nullable: true,
     },
     key: {
       type: "string",
+      example: "kp_town",
     },
     value: {
       type: "string",
+      example: "West-side Staines massive",
+      nullable: true,
     },
   },
 } as const;
@@ -1201,7 +1901,7 @@ export const $get_roles_response = {
   },
 } as const;
 
-export const $get_organizations_response = {
+export const $get_role_response = {
   type: "object",
   properties: {
     code: {
@@ -1212,15 +1912,85 @@ export const $get_organizations_response = {
       type: "string",
       description: "Response message.",
     },
+    role: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "The role's ID.",
+          example: "01929904-316d-bb2c-069f-99dfea4ac394",
+        },
+        key: {
+          type: "string",
+          description: "The role identifier to use in code.",
+          example: "admin",
+        },
+        name: {
+          type: "string",
+          description: "The role's name.",
+          example: "Administrator",
+        },
+        description: {
+          type: "string",
+          description: "The role's description.",
+          example: "Full access to all resources.",
+        },
+        is_default_role: {
+          type: "boolean",
+          description: "Whether the role is the default role.",
+          example: false,
+        },
+      },
+    },
+  },
+} as const;
+
+export const $create_roles_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    role: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "The role's ID.",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_organizations_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
     organizations: {
       type: "array",
       items: {
-        $ref: "#/components/schemas/organization",
+        $ref: "#/components/schemas/organization_item_schema",
       },
     },
     next_token: {
       description: "Pagination token.",
       type: "string",
+      example: "Mjo5Om1hbWVfYZNj",
     },
   },
 } as const;
@@ -1501,7 +2271,7 @@ export const $create_application_response = {
           type: "string",
         },
         client_id: {
-          description: "The application's client id.",
+          description: "The application's client ID.",
           type: "string",
         },
         client_secret: {
@@ -1540,7 +2310,7 @@ export const $get_application_response = {
           type: "string",
         },
         client_id: {
-          description: "The application's client id.",
+          description: "The application's client ID.",
           type: "string",
         },
         client_secret: {
@@ -1628,12 +2398,22 @@ export const $get_redirect_callback_urls_response = {
 export const $logout_redirect_urls = {
   type: "object",
   properties: {
-    redirect_urls: {
+    logout_urls: {
       type: "array",
       description: "An application's logout URLs.",
       items: {
         type: "string",
       },
+    },
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
     },
   },
 } as const;
@@ -1667,7 +2447,7 @@ export const $permissions = {
   properties: {
     id: {
       type: "string",
-      description: "The permission's id.",
+      description: "The permission's ID.",
     },
     key: {
       type: "string",
@@ -1689,7 +2469,7 @@ export const $roles = {
   properties: {
     id: {
       type: "string",
-      description: "The role's id.",
+      description: "The role's ID.",
     },
     key: {
       type: "string",
@@ -1702,6 +2482,11 @@ export const $roles = {
     description: {
       type: "string",
       description: "The role's description.",
+      nullable: true,
+    },
+    is_default_role: {
+      type: "boolean",
+      description: "Whether the role is the default role.",
     },
   },
 } as const;
@@ -1722,74 +2507,6 @@ export const $roles_permission_response = {
       },
       description: {
         type: "string",
-      },
-    },
-  },
-} as const;
-
-export const $apis = {
-  type: "object",
-  properties: {
-    id: {
-      type: "string",
-      description: "Unique id of the API.",
-    },
-    name: {
-      type: "string",
-      description: "The API's name.",
-    },
-    audience: {
-      type: "string",
-      description: "The logical identifier for the API.",
-    },
-    is_management_api: {
-      type: "boolean",
-      description: "Whether it is the management API or not.",
-    },
-  },
-} as const;
-
-export const $api = {
-  type: "object",
-  properties: {
-    id: {
-      type: "string",
-      description: "The API's unique identifier.",
-    },
-    code: {
-      type: "string",
-      description: "Response code.",
-    },
-    name: {
-      type: "string",
-      description: "The API's name.",
-    },
-    message: {
-      type: "string",
-      description: "Response message.",
-    },
-    audience: {
-      type: "string",
-      description: "The API's audience.",
-    },
-    applications: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          id: {
-            type: "string",
-          },
-          name: {
-            type: "string",
-          },
-          type: {
-            type: "string",
-          },
-          is_active: {
-            type: "boolean",
-          },
-        },
       },
     },
   },
