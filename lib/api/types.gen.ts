@@ -512,37 +512,6 @@ export type user_identity = {
   };
 };
 
-export type user_profile = {
-  /**
-   * Unique ID of the user in Kinde.
-   */
-  id?: string;
-  /**
-   * Default email address of the user in Kinde.
-   */
-  preferred_email?: string;
-  /**
-   * Primary username of the user in Kinde.
-   */
-  username?: string;
-  /**
-   * Value of the user's ID in a third-party system when the user is imported into Kinde.
-   */
-  provided_id?: string | null;
-  /**
-   * User's last name.
-   */
-  last_name?: string;
-  /**
-   * User's first name.
-   */
-  first_name?: string;
-  /**
-   * URL that point's to the user's picture or avatar
-   */
-  picture?: string;
-};
-
 export type create_property_response = {
   message?: string;
   code?: string;
@@ -773,79 +742,6 @@ export type event_type = {
   };
 };
 
-export type token_introspect = {
-  /**
-   * Indicates the status of the token.
-   */
-  active?: boolean;
-  /**
-   * Array of intended token recipients.
-   */
-  aud?: Array<string>;
-  /**
-   * Identifier for the requesting client.
-   */
-  client_id?: string;
-  /**
-   * Token expiration timestamp.
-   */
-  exp?: string;
-  /**
-   * Token issuance timestamp.
-   */
-  iat?: string;
-};
-
-export type token_error_response = {
-  /**
-   * Error.
-   */
-  error?: string;
-  /**
-   * The error description.
-   */
-  error_description?: string;
-};
-
-export type user_profile_v2 = {
-  /**
-   * Unique ID of the user in Kinde (deprecated).
-   */
-  id?: string;
-  /**
-   * Unique ID of the user in Kinde.
-   */
-  sub?: string;
-  /**
-   * Value of the user's ID in a third-party system when the user is imported into Kinde.
-   */
-  provided_id?: string | null;
-  /**
-   * User's first and last name separated by a space.
-   */
-  name?: string;
-  /**
-   * User's first name.
-   */
-  given_name?: string;
-  /**
-   * User's last name.
-   */
-  family_name?: string;
-  /**
-   * Date the user was last updated at (In Unix time).
-   */
-  updated_at?: number;
-  /**
-   * User's email address if available.
-   */
-  email?: string;
-  /**
-   * URL that point's to the user's picture or avatar
-   */
-  picture?: string;
-};
-
 export type organization_item_schema = {
   /**
    * The unique identifier for the organization.
@@ -950,12 +846,37 @@ export type get_organization_response = {
 };
 
 export type organization_user = {
+  /**
+   * The unique ID for the user.
+   */
   id?: string;
+  /**
+   * The user's email address.
+   */
   email?: string;
+  /**
+   * The user's full name.
+   */
   full_name?: string;
+  /**
+   * The user's last name.
+   */
   last_name?: string;
+  /**
+   * The user's first name.
+   */
   first_name?: string;
+  /**
+   * The user's profile picture URL.
+   */
   picture?: string;
+  /**
+   * The date the user joined the organization.
+   */
+  joined_on?: string;
+  /**
+   * The roles the user has in the organization.
+   */
   roles?: Array<string>;
 };
 
@@ -1513,12 +1434,102 @@ export type roles = {
   is_default_role?: boolean;
 };
 
-export type roles_permission_response = Array<{
-  id?: string;
-  key?: string;
+export type role_permissions_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  permissions?: Array<permissions>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string;
+};
+
+export type user_profile_v2 = {
+  /**
+   * Unique ID of the user in Kinde.
+   */
+  sub?: string;
+  /**
+   * Value of the user's ID in a third-party system when the user is imported into Kinde.
+   */
+  provided_id?: string | null;
+  /**
+   * User's first and last name separated by a space.
+   */
   name?: string;
-  description?: string;
-}>;
+  /**
+   * User's first name.
+   */
+  given_name?: string;
+  /**
+   * User's last name.
+   */
+  family_name?: string;
+  /**
+   * Date the user was last updated at (In Unix time).
+   */
+  updated_at?: number;
+  /**
+   * User's email address if available.
+   */
+  email?: string;
+  /**
+   * Whether the user's email address has been verified.
+   */
+  email_verified?: boolean;
+  /**
+   * URL that point's to the user's picture or avatar
+   */
+  picture?: string | null;
+  /**
+   * User's preferred username.
+   */
+  preferred_username?: string | null;
+  /**
+   * Unique ID of the user in Kinde
+   */
+  id?: string;
+};
+
+export type token_introspect = {
+  /**
+   * Indicates the status of the token.
+   */
+  active?: boolean;
+  /**
+   * Array of intended token recipients.
+   */
+  aud?: Array<string>;
+  /**
+   * Identifier for the requesting client.
+   */
+  client_id?: string;
+  /**
+   * Token expiration timestamp.
+   */
+  exp?: string;
+  /**
+   * Token issuance timestamp.
+   */
+  iat?: string;
+};
+
+export type token_error_response = {
+  /**
+   * Error.
+   */
+  error?: string;
+  /**
+   * The error description.
+   */
+  error_description?: string;
+};
 
 /**
  * The API's ID.
@@ -1540,53 +1551,25 @@ export type Parameterproperty_key = string;
  */
 export type Parametervariable_id = string;
 
-export type GetUserResponse = user_profile;
+/**
+ * The `Accept` header is required and must always be `application/json`.
+ */
+export type ParameteracceptApplicationJsonHeader = "application/json";
 
-export type TokenIntrospectionData = {
+export type GetApIsData = {
   /**
-   * Token details.
+   * The `Accept` header is required and must always be `application/json`.
    */
-  formData: {
-    /**
-     * The token to be introspected.
-     */
-    token?: string;
-    /**
-     * The provided token's type.
-     */
-    token_type?: string;
-  };
+  accept: "application/json";
 };
-
-export type TokenIntrospectionResponse = token_introspect;
-
-export type TokenRevocationData = {
-  /**
-   * Details of the token to be revoked.
-   */
-  formData: {
-    /**
-     * The token to be revoked.
-     */
-    token?: string;
-    /**
-     * The identifier for your client.
-     */
-    client_id?: string;
-    /**
-     * The secret associated with your client.
-     */
-    client_secret?: string;
-  };
-};
-
-export type TokenRevocationResponse = unknown;
-
-export type GetUserProfileV2Response = user_profile_v2;
 
 export type GetApIsResponse = get_apis_response;
 
 export type AddApIsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   requestBody: {
     /**
      * The name of the API. (1-64 characters).
@@ -1603,6 +1586,10 @@ export type AddApIsResponse = create_apis_response;
 
 export type GetApiData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The API's ID.
    */
   apiId: string;
@@ -1612,6 +1599,10 @@ export type GetApiResponse = get_api_response;
 
 export type DeleteApiData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The API's ID.
    */
   apiId: string;
@@ -1620,6 +1611,10 @@ export type DeleteApiData = {
 export type DeleteApiResponse = delete_api_response;
 
 export type UpdateApiApplicationsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The API's ID.
    */
@@ -1645,6 +1640,10 @@ export type UpdateApiApplicationsResponse = authorize_app_api_response;
 
 export type GetApplicationsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * A string to get the next page of results if there are more results.
    */
   nextToken?: string | null;
@@ -1661,6 +1660,10 @@ export type GetApplicationsData = {
 export type GetApplicationsResponse = get_applications_response;
 
 export type CreateApplicationData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   requestBody: {
     /**
      * The application's name.
@@ -1677,6 +1680,10 @@ export type CreateApplicationResponse = create_application_response;
 
 export type GetApplicationData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   applicationId: string;
@@ -1685,6 +1692,10 @@ export type GetApplicationData = {
 export type GetApplicationResponse = get_application_response;
 
 export type UpdateApplicationData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the application.
    */
@@ -1724,6 +1735,10 @@ export type UpdateApplicationResponse = unknown;
 
 export type DeleteApplicationData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   applicationId: string;
@@ -1733,6 +1748,10 @@ export type DeleteApplicationResponse = success_response;
 
 export type GetApplicationConnectionsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier/client ID for the application.
    */
   applicationId: string;
@@ -1741,6 +1760,10 @@ export type GetApplicationConnectionsData = {
 export type GetApplicationConnectionsResponse = get_connections_response;
 
 export type EnableConnectionData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier/client ID for the application.
    */
@@ -1755,6 +1778,10 @@ export type EnableConnectionResponse = unknown;
 
 export type RemoveConnectionData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier/client ID for the application.
    */
   applicationId: string;
@@ -1768,6 +1795,10 @@ export type RemoveConnectionResponse = success_response;
 
 export type GetApplicationPropertyValuesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The application's ID / client ID.
    */
   applicationId: string;
@@ -1776,6 +1807,10 @@ export type GetApplicationPropertyValuesData = {
 export type GetApplicationPropertyValuesResponse = get_property_values_response;
 
 export type UpdateApplicationsPropertyData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The application's ID / client ID.
    */
@@ -1786,7 +1821,7 @@ export type UpdateApplicationsPropertyData = {
   propertyKey: string;
   requestBody: {
     /**
-     * The new value for the propery
+     * The new value for the property
      */
     value: string | boolean;
   };
@@ -1794,9 +1829,54 @@ export type UpdateApplicationsPropertyData = {
 
 export type UpdateApplicationsPropertyResponse = success_response;
 
+export type UpdateApplicationTokensData = {
+  /**
+   * The identifier/client ID for the application.
+   */
+  applicationId: string;
+  /**
+   * Application tokens.
+   */
+  requestBody: {
+    /**
+     * The lifetime of an access token in seconds.
+     */
+    access_token_lifetime?: number;
+    /**
+     * The lifetime of a refresh token in seconds.
+     */
+    refresh_token_lifetime?: number;
+    /**
+     * The lifetime of an ID token in seconds.
+     */
+    id_token_lifetime?: number;
+    /**
+     * The lifetime of an authenticated session in seconds.
+     */
+    authenticated_session_lifetime?: number;
+    /**
+     * Enable or disable Hasura mapping.
+     */
+    is_hasura_mapping_enabled?: boolean;
+  };
+};
+
+export type UpdateApplicationTokensResponse = success_response;
+
+export type GetBusinessData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
+
 export type GetBusinessResponse = get_business_response;
 
 export type UpdateBusinessData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The business details to update.
    */
@@ -1846,11 +1926,29 @@ export type UpdateBusinessData = {
 
 export type UpdateBusinessResponse = success_response;
 
+export type GetIndustriesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
+
 export type GetIndustriesResponse = get_industries_response;
+
+export type GetTimezonesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
 
 export type GetTimezonesResponse = get_timezones_response;
 
 export type GetCallbackUrLsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the application.
    */
@@ -1860,6 +1958,10 @@ export type GetCallbackUrLsData = {
 export type GetCallbackUrLsResponse = redirect_callback_urls;
 
 export type AddRedirectCallbackUrLsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the application.
    */
@@ -1879,6 +1981,10 @@ export type AddRedirectCallbackUrLsResponse = success_response;
 
 export type ReplaceRedirectCallbackUrLsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   appId: string;
@@ -1897,6 +2003,10 @@ export type ReplaceRedirectCallbackUrLsResponse = success_response;
 
 export type DeleteCallbackUrLsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   appId: string;
@@ -1910,6 +2020,10 @@ export type DeleteCallbackUrLsResponse = success_response;
 
 export type GetLogoutUrLsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   appId: string;
@@ -1918,6 +2032,10 @@ export type GetLogoutUrLsData = {
 export type GetLogoutUrLsResponse = logout_redirect_urls;
 
 export type AddLogoutRedirectUrLsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the application.
    */
@@ -1937,6 +2055,10 @@ export type AddLogoutRedirectUrLsResponse = success_response;
 
 export type ReplaceLogoutRedirectUrLsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   appId: string;
@@ -1955,6 +2077,10 @@ export type ReplaceLogoutRedirectUrLsResponse = success_response;
 
 export type DeleteLogoutUrLsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the application.
    */
   appId: string;
@@ -1967,6 +2093,10 @@ export type DeleteLogoutUrLsData = {
 export type DeleteLogoutUrLsResponse = success_response;
 
 export type GetConnectedAppAuthUrlData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The unique key code reference of the connected app to authenticate against.
    */
@@ -1989,6 +2119,10 @@ export type GetConnectedAppAuthUrlResponse = connected_apps_auth_url;
 
 export type GetConnectedAppTokenData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique sesssion id representing the login session of a user.
    */
   sessionId: string;
@@ -1998,6 +2132,10 @@ export type GetConnectedAppTokenResponse = connected_apps_access_token;
 
 export type RevokeConnectedAppTokenData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique sesssion id representing the login session of a user.
    */
   sessionId: string;
@@ -2006,6 +2144,10 @@ export type RevokeConnectedAppTokenData = {
 export type RevokeConnectedAppTokenResponse = success_response;
 
 export type GetConnectionsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The ID of the connection to end before.
    */
@@ -2023,6 +2165,10 @@ export type GetConnectionsData = {
 export type GetConnectionsResponse = get_connections_response;
 
 export type CreateConnectionData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Connection details.
    */
@@ -2074,6 +2220,10 @@ export type CreateConnectionResponse = create_connection_response;
 
 export type GetConnectionData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique identifier for the connection.
    */
   connectionId: string;
@@ -2082,6 +2232,10 @@ export type GetConnectionData = {
 export type GetConnectionResponse = connection;
 
 export type UpdateConnectionData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The unique identifier for the connection.
    */
@@ -2115,6 +2269,10 @@ export type UpdateConnectionResponse = success_response;
 
 export type DeleteConnectionData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the connection.
    */
   connectionId: string;
@@ -2122,12 +2280,30 @@ export type DeleteConnectionData = {
 
 export type DeleteConnectionResponse = success_response;
 
+export type DeleteEnvironementFeatureFlagOverridesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
+
 export type DeleteEnvironementFeatureFlagOverridesResponse = success_response;
+
+export type GetEnvironementFeatureFlagsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
 
 export type GetEnvironementFeatureFlagsResponse =
   get_environment_feature_flags_response;
 
 export type DeleteEnvironementFeatureFlagOverrideData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the feature flag.
    */
@@ -2137,6 +2313,10 @@ export type DeleteEnvironementFeatureFlagOverrideData = {
 export type DeleteEnvironementFeatureFlagOverrideResponse = success_response;
 
 export type UpdateEnvironementFeatureFlagOverrideData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the feature flag.
    */
@@ -2154,10 +2334,21 @@ export type UpdateEnvironementFeatureFlagOverrideData = {
 
 export type UpdateEnvironementFeatureFlagOverrideResponse = success_response;
 
+export type GetEnvironmentVariablesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
+
 export type GetEnvironmentVariablesResponse =
   get_environment_variables_response;
 
 export type CreateEnvironmentVariableData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The environment variable details.
    */
@@ -2182,6 +2373,10 @@ export type CreateEnvironmentVariableResponse =
 
 export type GetEnvironmentVariableData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The environment variable's ID.
    */
   variableId: string;
@@ -2190,6 +2385,10 @@ export type GetEnvironmentVariableData = {
 export type GetEnvironmentVariableResponse = get_environment_variable_response;
 
 export type UpdateEnvironmentVariableData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The new details for the environment variable
    */
@@ -2218,6 +2417,10 @@ export type UpdateEnvironmentVariableResponse =
 
 export type DeleteEnvironmentVariableData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The environment variable's ID.
    */
   variableId: string;
@@ -2227,6 +2430,10 @@ export type DeleteEnvironmentVariableResponse =
   delete_environment_variable_response;
 
 export type CreateFeatureFlagData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Flag details.
    */
@@ -2262,6 +2469,10 @@ export type CreateFeatureFlagResponse = success_response;
 
 export type DeleteFeatureFlagData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the feature flag.
    */
   featureFlagKey: string;
@@ -2270,6 +2481,10 @@ export type DeleteFeatureFlagData = {
 export type DeleteFeatureFlagResponse = success_response;
 
 export type UpdateFeatureFlagData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Allow the flag to be overridden at a different level.
    */
@@ -2300,6 +2515,10 @@ export type UpdateFeatureFlagResponse = success_response;
 
 export type GetIdentityData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique identifier for the identity.
    */
   identityId: string;
@@ -2308,6 +2527,10 @@ export type GetIdentityData = {
 export type GetIdentityResponse = identity;
 
 export type UpdateIdentityData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The unique identifier for the identity.
    */
@@ -2327,6 +2550,10 @@ export type UpdateIdentityResponse = success_response;
 
 export type DeleteIdentityData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique identifier for the identity.
    */
   identityId: string;
@@ -2336,6 +2563,10 @@ export type DeleteIdentityResponse = success_response;
 
 export type GetOrganizationData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   code?: string;
@@ -2344,6 +2575,10 @@ export type GetOrganizationData = {
 export type GetOrganizationResponse = get_organization_response;
 
 export type CreateOrganizationData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Organization details.
    */
@@ -2417,6 +2652,10 @@ export type CreateOrganizationResponse = create_organization_response;
 
 export type GetOrganizationsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * A string to get the next page of results if there are more results.
    */
   nextToken?: string | null;
@@ -2433,6 +2672,10 @@ export type GetOrganizationsData = {
 export type GetOrganizationsResponse = get_organizations_response;
 
 export type UpdateOrganizationData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the organization.
    */
@@ -2513,6 +2756,10 @@ export type UpdateOrganizationResponse = success_response;
 
 export type DeleteOrganizationData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the organization.
    */
   orgCode: string;
@@ -2521,6 +2768,10 @@ export type DeleteOrganizationData = {
 export type DeleteOrganizationResponse = success_response;
 
 export type GetOrganizationUsersData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * A string to get the next page of results if there are more results.
    */
@@ -2560,6 +2811,10 @@ export type GetOrganizationUsersResponse = get_organization_users_response;
 
 export type AddOrganizationUsersData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2588,6 +2843,10 @@ export type AddOrganizationUsersResponse =
   add_organization_users_response | void;
 
 export type UpdateOrganizationUsersData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The organization's code.
    */
@@ -2622,6 +2881,10 @@ export type UpdateOrganizationUsersResponse =
 
 export type GetOrganizationUserRolesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2635,6 +2898,10 @@ export type GetOrganizationUserRolesResponse =
   get_organizations_user_roles_response;
 
 export type CreateOrganizationUserRoleData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The organization's code.
    */
@@ -2658,6 +2925,10 @@ export type CreateOrganizationUserRoleResponse = success_response;
 
 export type DeleteOrganizationUserRoleData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2674,6 +2945,10 @@ export type DeleteOrganizationUserRoleData = {
 export type DeleteOrganizationUserRoleResponse = success_response;
 
 export type GetOrganizationUserPermissionsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Specify additional data to retrieve. Use "roles".
    */
@@ -2692,6 +2967,10 @@ export type GetOrganizationUserPermissionsResponse =
   get_organizations_user_permissions_response;
 
 export type CreateOrganizationUserPermissionData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The organization's code.
    */
@@ -2715,6 +2994,10 @@ export type CreateOrganizationUserPermissionResponse = success_response;
 
 export type DeleteOrganizationUserPermissionData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2732,6 +3015,10 @@ export type DeleteOrganizationUserPermissionResponse = success_response;
 
 export type RemoveOrganizationUserData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2745,6 +3032,10 @@ export type RemoveOrganizationUserResponse = success_response;
 
 export type GetOrganizationFeatureFlagsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the organization.
    */
   orgCode: string;
@@ -2755,6 +3046,10 @@ export type GetOrganizationFeatureFlagsResponse =
 
 export type DeleteOrganizationFeatureFlagOverridesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the organization.
    */
   orgCode: string;
@@ -2763,6 +3058,10 @@ export type DeleteOrganizationFeatureFlagOverridesData = {
 export type DeleteOrganizationFeatureFlagOverridesResponse = success_response;
 
 export type DeleteOrganizationFeatureFlagOverrideData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the feature flag.
    */
@@ -2776,6 +3075,10 @@ export type DeleteOrganizationFeatureFlagOverrideData = {
 export type DeleteOrganizationFeatureFlagOverrideResponse = success_response;
 
 export type UpdateOrganizationFeatureFlagOverrideData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the feature flag
    */
@@ -2794,6 +3097,10 @@ export type UpdateOrganizationFeatureFlagOverrideResponse = success_response;
 
 export type UpdateOrganizationPropertyData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the organization
    */
   orgCode: string;
@@ -2811,6 +3118,10 @@ export type UpdateOrganizationPropertyResponse = success_response;
 
 export type GetOrganizationPropertyValuesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2820,6 +3131,10 @@ export type GetOrganizationPropertyValuesResponse =
   get_property_values_response;
 
 export type UpdateOrganizationPropertiesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the organization
    */
@@ -2841,6 +3156,10 @@ export type UpdateOrganizationPropertiesResponse = success_response;
 
 export type DeleteOrganizationHandleData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The organization's code.
    */
   orgCode: string;
@@ -2849,6 +3168,10 @@ export type DeleteOrganizationHandleData = {
 export type DeleteOrganizationHandleResponse = success_response;
 
 export type GetPermissionsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * A string to get the next page of results if there are more results.
    */
@@ -2866,6 +3189,10 @@ export type GetPermissionsData = {
 export type GetPermissionsResponse = get_permissions_response;
 
 export type CreatePermissionData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Permission details.
    */
@@ -2889,9 +3216,13 @@ export type CreatePermissionResponse = success_response;
 
 export type UpdatePermissionsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the permission.
    */
-  permissionId: number;
+  permissionId: string;
   /**
    * Permission details.
    */
@@ -2915,6 +3246,10 @@ export type UpdatePermissionsResponse = success_response;
 
 export type DeletePermissionData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the permission.
    */
   permissionId: string;
@@ -2924,9 +3259,13 @@ export type DeletePermissionResponse = success_response;
 
 export type GetPropertiesData = {
   /**
-   * Filter results by User or Organization context
+   * The `Accept` header is required and must always be `application/json`.
    */
-  context?: ("usr" | "org") | null;
+  accept: "application/json";
+  /**
+   * Filter results by user,  organization or application context
+   */
+  context?: ("usr" | "org" | "app") | null;
   /**
    * The ID of the property to end before.
    */
@@ -2944,6 +3283,10 @@ export type GetPropertiesData = {
 export type GetPropertiesResponse = get_properties_response;
 
 export type CreatePropertyData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Property details.
    */
@@ -2983,6 +3326,10 @@ export type CreatePropertyResponse = create_property_response;
 
 export type UpdatePropertyData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique identifier for the property.
    */
   propertyId: string;
@@ -3013,6 +3360,10 @@ export type UpdatePropertyResponse = success_response;
 
 export type DeletePropertyData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The unique identifier for the property.
    */
   propertyId: string;
@@ -3021,6 +3372,10 @@ export type DeletePropertyData = {
 export type DeletePropertyResponse = success_response;
 
 export type GetCategoriesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Filter the results by User or Organization context
    */
@@ -3043,6 +3398,10 @@ export type GetCategoriesResponse = get_categories_response;
 
 export type CreateCategoryData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * Category details.
    */
   requestBody: {
@@ -3060,6 +3419,10 @@ export type CreateCategoryData = {
 export type CreateCategoryResponse = create_category_response;
 
 export type UpdateCategoryData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The unique identifier for the category.
    */
@@ -3079,6 +3442,10 @@ export type UpdateCategoryResponse = success_response;
 
 export type GetRolesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * A string to get the next page of results if there are more results.
    */
   nextToken?: string | null;
@@ -3095,6 +3462,10 @@ export type GetRolesData = {
 export type GetRolesResponse = get_roles_response;
 
 export type CreateRoleData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Role details.
    */
@@ -3122,6 +3493,10 @@ export type CreateRoleResponse = create_roles_response;
 
 export type GetRoleData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the role.
    */
   roleId: string;
@@ -3130,6 +3505,10 @@ export type GetRoleData = {
 export type GetRoleResponse = get_role_response;
 
 export type UpdateRolesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Role details.
    */
@@ -3161,6 +3540,10 @@ export type UpdateRolesResponse = success_response;
 
 export type DeleteRoleData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the role.
    */
   roleId: string;
@@ -3168,7 +3551,11 @@ export type DeleteRoleData = {
 
 export type DeleteRoleResponse = success_response;
 
-export type GetRolePermissionData = {
+export type GetRolePermissionsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * A string to get the next page of results if there are more results.
    */
@@ -3187,9 +3574,13 @@ export type GetRolePermissionData = {
   sort?: ("name_asc" | "name_desc" | "id_asc" | "id_desc") | null;
 };
 
-export type GetRolePermissionResponse = roles_permission_response;
+export type GetRolePermissionsResponse = role_permissions_response;
 
 export type UpdateRolePermissionsData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   requestBody: {
     /**
      * Permissions to add or remove from the role.
@@ -3215,6 +3606,10 @@ export type UpdateRolePermissionsResponse = update_role_permissions_response;
 
 export type RemoveRolePermissionData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The permission's public id.
    */
   permissionId: string;
@@ -3227,6 +3622,10 @@ export type RemoveRolePermissionData = {
 export type RemoveRolePermissionResponse = success_response;
 
 export type GetSubscribersData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * A string to get the next page of results if there are more results.
    */
@@ -3245,6 +3644,10 @@ export type GetSubscribersResponse = get_subscribers_response;
 
 export type CreateSubscriberData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The email address of the subscriber.
    */
   email: string | null;
@@ -3262,6 +3665,10 @@ export type CreateSubscriberResponse = create_subscriber_success_response;
 
 export type GetSubscriberData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The subscriber's id.
    */
   subscriberId: string;
@@ -3270,6 +3677,10 @@ export type GetSubscriberData = {
 export type GetSubscriberResponse = get_subscriber_response;
 
 export type GetUsersData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Filter the results by email address. The query string should be comma separated and url encoded.
    */
@@ -3304,6 +3715,10 @@ export type GetUsersResponse = users_response;
 
 export type RefreshUserClaimsData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The id of the user whose claims needs to be updated.
    */
   userId: string;
@@ -3312,6 +3727,10 @@ export type RefreshUserClaimsData = {
 export type RefreshUserClaimsResponse = success_response;
 
 export type GetUserDataData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Specify additional data to retrieve. Use "organizations" and/or "identities".
    */
@@ -3325,6 +3744,10 @@ export type GetUserDataData = {
 export type GetUserDataResponse = user;
 
 export type CreateUserData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The details of the user to create.
    */
@@ -3391,6 +3814,10 @@ export type CreateUserResponse = create_user_response;
 
 export type UpdateUserData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The user's id.
    */
   id: string;
@@ -3429,6 +3856,10 @@ export type UpdateUserResponse = update_user_response;
 
 export type DeleteUserData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The user's id.
    */
   id: string;
@@ -3441,6 +3872,10 @@ export type DeleteUserData = {
 export type DeleteUserResponse = success_response;
 
 export type UpdateUserFeatureFlagOverrideData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identifier for the feature flag
    */
@@ -3459,6 +3894,10 @@ export type UpdateUserFeatureFlagOverrideResponse = success_response;
 
 export type UpdateUserPropertyData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The identifier for the property
    */
   propertyKey: string;
@@ -3476,6 +3915,10 @@ export type UpdateUserPropertyResponse = success_response;
 
 export type GetUserPropertyValuesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The user's ID.
    */
   userId: string;
@@ -3484,6 +3927,10 @@ export type GetUserPropertyValuesData = {
 export type GetUserPropertyValuesResponse = get_property_values_response;
 
 export type UpdateUserPropertiesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Properties to update.
    */
@@ -3504,6 +3951,10 @@ export type UpdateUserPropertiesData = {
 export type UpdateUserPropertiesResponse = success_response;
 
 export type SetUserPasswordData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Password details.
    */
@@ -3539,6 +3990,10 @@ export type SetUserPasswordResponse = success_response;
 
 export type GetUserIdentitiesData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * The ID of the identity to end before.
    */
   endingBefore?: string | null;
@@ -3555,6 +4010,10 @@ export type GetUserIdentitiesData = {
 export type GetUserIdentitiesResponse = get_identities_response;
 
 export type CreateUserIdentityData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The identity details.
    */
@@ -3584,7 +4043,20 @@ export type CreateUserIdentityData = {
 
 export type CreateUserIdentityResponse = create_identity_response;
 
+export type DeleteUserSessionsData = {
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type DeleteUserSessionsResponse = success_response;
+
 export type GetEventData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The event id.
    */
@@ -3593,9 +4065,20 @@ export type GetEventData = {
 
 export type GetEventResponse = get_event_response;
 
+export type GetEventTypesData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
+
 export type GetEventTypesResponse = get_event_types_response;
 
 export type DeleteWebHookData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * The webhook id.
    */
@@ -3604,9 +4087,20 @@ export type DeleteWebHookData = {
 
 export type DeleteWebHookResponse = delete_webhook_response;
 
+export type GetWebHooksData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+};
+
 export type GetWebHooksResponse = get_webhooks_response;
 
 export type CreateWebHookData = {
+  /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
   /**
    * Webhook request specification.
    */
@@ -3634,6 +4128,10 @@ export type CreateWebHookResponse = create_webhook_response;
 
 export type UpdateWebHookData = {
   /**
+   * The `Accept` header is required and must always be `application/json`.
+   */
+  accept: "application/json";
+  /**
    * Update webhook request specification.
    */
   requestBody: {
@@ -3653,3 +4151,49 @@ export type UpdateWebHookData = {
 };
 
 export type UpdateWebHookResponse = update_webhook_response;
+
+export type GetUserProfileV2Response = user_profile_v2;
+
+export type TokenIntrospectionData = {
+  /**
+   * Token details.
+   */
+  formData: {
+    /**
+     * The token to be introspected.
+     */
+    token: string;
+    /**
+     * A hint about the token type being queried in the request.
+     */
+    token_type_hint?: "access_token" | "refresh_token";
+  };
+};
+
+export type TokenIntrospectionResponse = token_introspect;
+
+export type TokenRevocationData = {
+  /**
+   * Details of the token to be revoked.
+   */
+  formData: {
+    /**
+     * The `client_id` of your application.
+     */
+    client_id: string;
+    /**
+     * The `client_secret` of your application. Required for backend apps only.
+     */
+    client_secret?: string;
+    /**
+     * The token to be revoked.
+     */
+    token: string;
+    /**
+     * The type of token to be revoked.
+     */
+    token_type_hint?: "access_token" | "refresh_token";
+  };
+};
+
+export type TokenRevocationResponse = unknown;

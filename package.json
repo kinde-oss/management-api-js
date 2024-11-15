@@ -17,7 +17,7 @@
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
     "spec:update": "curl -o spec/kinde-mgmt-api-specs.yaml https://kinde.com/api/kinde-mgmt-api-specs.yaml",
-    "spec:generate": "npx @hey-api/openapi-ts"
+    "spec:generate": "npx @hey-api/openapi-ts@0.52.9"
   },
   "module": "dist/kinde-management-api-js.cjs",
   "main": "dist/kinde-management-api-js.cjs",
