@@ -40,7 +40,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: "https://app.kinde.com",
+  BASE: "https://your_kinde_subdomain.kinde.com",
   CREDENTIALS: "include",
   ENCODE_PATH: undefined,
   HEADERS: undefined,

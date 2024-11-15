@@ -780,42 +780,6 @@ export const $user_identity = {
   },
 } as const;
 
-export const $user_profile = {
-  type: "object",
-  properties: {
-    id: {
-      type: "string",
-      description: "Unique ID of the user in Kinde.",
-    },
-    preferred_email: {
-      type: "string",
-      description: "Default email address of the user in Kinde.",
-    },
-    username: {
-      type: "string",
-      description: "Primary username of the user in Kinde.",
-    },
-    provided_id: {
-      type: "string",
-      description:
-        "Value of the user's ID in a third-party system when the user is imported into Kinde.",
-      nullable: true,
-    },
-    last_name: {
-      type: "string",
-      description: "User's last name.",
-    },
-    first_name: {
-      type: "string",
-      description: "User's first name.",
-    },
-    picture: {
-      type: "string",
-      description: "URL that point's to the user's picture or avatar",
-    },
-  },
-} as const;
-
 export const $create_property_response = {
   type: "object",
   properties: {
@@ -1204,93 +1168,6 @@ export const $event_type = {
   },
 } as const;
 
-export const $token_introspect = {
-  type: "object",
-  properties: {
-    active: {
-      type: "boolean",
-      description: "Indicates the status of the token.",
-    },
-    aud: {
-      type: "array",
-      description: "Array of intended token recipients.",
-      items: {
-        type: "string",
-      },
-    },
-    client_id: {
-      type: "string",
-      description: "Identifier for the requesting client.",
-    },
-    exp: {
-      type: "string",
-      description: "Token expiration timestamp.",
-    },
-    iat: {
-      type: "string",
-      description: "Token issuance timestamp.",
-    },
-  },
-} as const;
-
-export const $token_error_response = {
-  type: "object",
-  properties: {
-    error: {
-      type: "string",
-      description: "Error.",
-    },
-    error_description: {
-      type: "string",
-      description: "The error description.",
-    },
-  },
-} as const;
-
-export const $user_profile_v2 = {
-  type: "object",
-  properties: {
-    id: {
-      type: "string",
-      description: "Unique ID of the user in Kinde (deprecated).",
-    },
-    sub: {
-      type: "string",
-      description: "Unique ID of the user in Kinde.",
-    },
-    provided_id: {
-      type: "string",
-      description:
-        "Value of the user's ID in a third-party system when the user is imported into Kinde.",
-      nullable: true,
-    },
-    name: {
-      type: "string",
-      description: "User's first and last name separated by a space.",
-    },
-    given_name: {
-      type: "string",
-      description: "User's first name.",
-    },
-    family_name: {
-      type: "string",
-      description: "User's last name.",
-    },
-    updated_at: {
-      type: "integer",
-      description: "Date the user was last updated at (In Unix time).",
-    },
-    email: {
-      type: "string",
-      description: "User's email address if available.",
-    },
-    picture: {
-      type: "string",
-      description: "URL that point's to the user's picture or avatar",
-    },
-  },
-} as const;
-
 export const $organization_item_schema = {
   type: "object",
   properties: {
@@ -1534,26 +1411,46 @@ export const $organization_user = {
   properties: {
     id: {
       type: "string",
+      example: "kp:97c2ba24217d48e3b96a799b76cf2c74",
+      description: "The unique ID for the user.",
     },
     email: {
       type: "string",
+      example: "john.snow@example.com",
+      description: "The user's email address.",
     },
     full_name: {
       type: "string",
+      example: "John Snow",
+      description: "The user's full name.",
     },
     last_name: {
       type: "string",
+      example: "Snow",
+      description: "The user's last name.",
     },
     first_name: {
       type: "string",
+      example: "John",
+      description: "The user's first name.",
     },
     picture: {
       type: "string",
+      example: "https://example.com/john_snow.jpg",
+      description: "The user's profile picture URL.",
+    },
+    joined_on: {
+      type: "string",
+      example: "2021-01-01T00:00:00Z",
+      description: "The date the user joined the organization.",
     },
     roles: {
       type: "array",
+      description: "The roles the user has in the organization.",
       items: {
         type: "string",
+        example: "admin",
+        description: "The role's key.",
       },
     },
   },
@@ -2001,10 +1898,12 @@ export const $get_organization_users_response = {
     code: {
       type: "string",
       description: "Response code.",
+      example: "OK",
     },
     message: {
       type: "string",
       description: "Response message.",
+      example: "Success",
     },
     organization_users: {
       type: "array",
@@ -2491,23 +2390,138 @@ export const $roles = {
   },
 } as const;
 
-export const $roles_permission_response = {
-  type: "array",
-  items: {
-    type: "object",
-    properties: {
-      id: {
-        type: "string",
+export const $role_permissions_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    permissions: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/permissions",
       },
-      key: {
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+    },
+  },
+} as const;
+
+export const $user_profile_v2 = {
+  type: "object",
+  properties: {
+    sub: {
+      type: "string",
+      description: "Unique ID of the user in Kinde.",
+      example: "kp_c3143a4b50ad43c88e541d9077681782",
+    },
+    provided_id: {
+      type: "string",
+      description:
+        "Value of the user's ID in a third-party system when the user is imported into Kinde.",
+      example: "some_external_id",
+      nullable: true,
+    },
+    name: {
+      type: "string",
+      description: "User's first and last name separated by a space.",
+      example: "John Snow",
+    },
+    given_name: {
+      type: "string",
+      description: "User's first name.",
+      example: "John",
+    },
+    family_name: {
+      type: "string",
+      description: "User's last name.",
+      example: "Snow",
+    },
+    updated_at: {
+      type: "integer",
+      description: "Date the user was last updated at (In Unix time).",
+      example: 1612345678,
+    },
+    email: {
+      type: "string",
+      description: "User's email address if available.",
+      example: "john.snow@example.com",
+    },
+    email_verified: {
+      type: "boolean",
+      description: "Whether the user's email address has been verified.",
+      example: true,
+    },
+    picture: {
+      type: "string",
+      description: "URL that point's to the user's picture or avatar",
+      example: "https://example.com/john_snow.jpg",
+      nullable: true,
+    },
+    preferred_username: {
+      type: "string",
+      description: "User's preferred username.",
+      example: "john_snow",
+      nullable: true,
+    },
+    id: {
+      type: "string",
+      description: "Unique ID of the user in Kinde",
+      example: "kp_c3143a4b50ad43c88e541d9077681782",
+    },
+  },
+} as const;
+
+export const $token_introspect = {
+  type: "object",
+  properties: {
+    active: {
+      type: "boolean",
+      description: "Indicates the status of the token.",
+    },
+    aud: {
+      type: "array",
+      description: "Array of intended token recipients.",
+      items: {
         type: "string",
+        example: "https://api.example.com/v1",
       },
-      name: {
-        type: "string",
-      },
-      description: {
-        type: "string",
-      },
+    },
+    client_id: {
+      type: "string",
+      description: "Identifier for the requesting client.",
+      example: "3b0b5c6c8fcc464fab397f4969b5f482",
+    },
+    exp: {
+      type: "string",
+      description: "Token expiration timestamp.",
+      example: 1612345678,
+    },
+    iat: {
+      type: "string",
+      description: "Token issuance timestamp.",
+      example: 1612345678,
+    },
+  },
+} as const;
+
+export const $token_error_response = {
+  type: "object",
+  properties: {
+    error: {
+      type: "string",
+      description: "Error.",
+    },
+    error_description: {
+      type: "string",
+      description: "The error description.",
     },
   },
 } as const;
