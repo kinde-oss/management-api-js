@@ -1,5 +1,4 @@
-import { configType, init, kindeConfig } from "./config"; // Adjust the import path as necessary
-import { describe, beforeEach, afterAll, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 
 import * as main from "./main";
 
