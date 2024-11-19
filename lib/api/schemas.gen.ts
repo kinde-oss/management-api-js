@@ -300,6 +300,21 @@ export const $get_business_response = {
           example: "https://example.com/terms",
           nullable: true,
         },
+        has_clickwrap: {
+          type: "boolean",
+          description: "Whether your business uses clickwrap agreements.",
+          example: false,
+        },
+        has_kinde_branding: {
+          type: "boolean",
+          description: "Whether your business shows Kinde branding.",
+          example: true,
+        },
+        created_on: {
+          type: "string",
+          description: "Date of business creation in ISO 8601 format.",
+          example: "2021-01-01T00:00:00Z",
+        },
       },
     },
   },
@@ -963,7 +978,7 @@ export const $get_event_response = {
           type: "string",
         },
         timestamp: {
-          type: "string",
+          type: "integer",
           description: "Timestamp in ISO 8601 format.",
         },
         data: {
@@ -1209,6 +1224,284 @@ export const $organization_item_schema = {
   },
 } as const;
 
+export const $get_environment_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "success_response",
+    },
+    environment: {
+      type: "object",
+      properties: {
+        code: {
+          type: "string",
+          description: "The unique identifier for the environment.",
+          example: "production",
+        },
+        name: {
+          type: "string",
+          description: "The environment's name.",
+          example: "Production",
+        },
+        hotjar_site_id: {
+          type: "string",
+          description: "Your HotJar site ID.",
+          example: 404009,
+          nullable: true,
+        },
+        google_analytics_tag: {
+          type: "string",
+          description: "Your Google Analytics tag.",
+          example: "G-1234567",
+          nullable: true,
+        },
+        is_default: {
+          type: "boolean",
+          description:
+            "Whether the environment is the default. Typically this is your production environment.",
+          example: true,
+        },
+        is_live: {
+          type: "boolean",
+          description: "Whether the environment is live.",
+          example: true,
+        },
+        kinde_domain: {
+          type: "string",
+          description: "Your domain on Kinde",
+          example: "example.kinde.com",
+        },
+        custom_domain: {
+          type: "string",
+          description: "Your custom domain for the environment",
+          nullable: true,
+          example: "app.example.com",
+        },
+        logo: {
+          type: "string",
+          nullable: true,
+          description: "The organization's logo URL.",
+          example:
+            "https://yoursubdomain.kinde.com/logo?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+        },
+        logo_dark: {
+          type: "string",
+          nullable: true,
+          description:
+            "The organization's logo URL to be used for dark themes.",
+          example:
+            "https://yoursubdomain.kinde.com/logo_dark?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+        },
+        favicon_svg: {
+          type: "string",
+          nullable: true,
+          description:
+            "The organization's SVG favicon URL. Optimal format for most browsers",
+          example:
+            "https://yoursubdomain.kinde.com/favicon_svg?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+        },
+        favicon_fallback: {
+          type: "string",
+          nullable: true,
+          description:
+            "The favicon URL to be used as a fallback in browsers that don’t support SVG, add a PNG",
+          example:
+            "https://yoursubdomain.kinde.com/favicon_fallback?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+        },
+        link_color: {
+          type: "object",
+          nullable: true,
+          properties: {
+            raw: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hex: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(220, 100%, 50%)",
+            },
+          },
+        },
+        background_color: {
+          nullable: true,
+          type: "object",
+          properties: {
+            raw: {
+              type: "string",
+              example: "#ffffff",
+            },
+            hex: {
+              type: "string",
+              example: "#ffffff",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(0, 0%, 100%)",
+            },
+          },
+        },
+        button_color: {
+          nullable: true,
+          type: "object",
+          properties: {
+            raw: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hex: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(220, 100%, 50%)",
+            },
+          },
+        },
+        button_text_color: {
+          nullable: true,
+          type: "object",
+          properties: {
+            raw: {
+              type: "string",
+              example: "#ffffff",
+            },
+            hex: {
+              type: "string",
+              example: "#ffffff",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(0, 0%, 100%)",
+            },
+          },
+        },
+        link_color_dark: {
+          type: "object",
+          nullable: true,
+          properties: {
+            raw: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hex: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(220, 100%, 50%)",
+            },
+          },
+        },
+        background_color_dark: {
+          type: "object",
+          nullable: true,
+          properties: {
+            raw: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hex: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(220, 100%, 50%)",
+            },
+          },
+        },
+        button_text_color_dark: {
+          type: "object",
+          nullable: true,
+          properties: {
+            raw: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hex: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(220, 100%, 50%)",
+            },
+          },
+        },
+        button_color_dark: {
+          type: "object",
+          nullable: true,
+          properties: {
+            raw: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hex: {
+              type: "string",
+              example: "#0056F1",
+            },
+            hsl: {
+              type: "string",
+              example: "hsl(220, 100%, 50%)",
+            },
+          },
+        },
+        button_border_radius: {
+          type: "integer",
+          nullable: true,
+          description:
+            "The border radius for buttons. Value is px, Kinde transforms to rem for rendering",
+          example: 8,
+        },
+        card_border_radius: {
+          type: "integer",
+          nullable: true,
+          description:
+            "The border radius for cards. Value is px, Kinde transforms to rem for rendering",
+          example: 16,
+        },
+        input_border_radius: {
+          type: "integer",
+          nullable: true,
+          description:
+            "The border radius for inputs. Value is px, Kinde transforms to rem for rendering",
+          example: 4,
+        },
+        theme_code: {
+          type: "string",
+          description:
+            "Whether the environment is forced into light mode, dark mode or user preference",
+          enum: ["light", "dark", "user_preference"],
+        },
+        color_scheme: {
+          type: "string",
+          description:
+            "The color scheme for the environment used for meta tags based on the theme code",
+          enum: ["light", "dark", "light dark"],
+        },
+        created_on: {
+          type: "string",
+          description: "Date of environment creation in ISO 8601 format.",
+          example: "2021-01-01T00:00:00Z",
+        },
+      },
+    },
+  },
+} as const;
+
 export const $get_organization_response = {
   type: "object",
   properties: {
@@ -1249,8 +1542,33 @@ export const $get_organization_response = {
     },
     logo: {
       type: "string",
-      deprecated: true,
       nullable: true,
+      description: "The organization's logo URL.",
+      example:
+        "https://yoursubdomain.kinde.com/logo?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+    },
+    logo_dark: {
+      type: "string",
+      nullable: true,
+      description: "The organization's logo URL to be used for dark themes.",
+      example:
+        "https://yoursubdomain.kinde.com/logo_dark?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+    },
+    favicon_svg: {
+      type: "string",
+      nullable: true,
+      description:
+        "The organization's SVG favicon URL. Optimal format for most browsers",
+      example:
+        "https://yoursubdomain.kinde.com/favicon_svg?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
+    },
+    favicon_fallback: {
+      type: "string",
+      nullable: true,
+      description:
+        "The favicon URL to be used as a fallback in browsers that don’t support SVG, add a PNG",
+      example:
+        "https://yoursubdomain.kinde.com/favicon_fallback?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d",
     },
     link_color: {
       type: "object",
@@ -1395,6 +1713,44 @@ export const $get_organization_response = {
           example: "hsl(220, 100%, 50%)",
         },
       },
+    },
+    button_border_radius: {
+      type: "integer",
+      nullable: true,
+      description:
+        "The border radius for buttons. Value is px, Kinde transforms to rem for rendering",
+      example: 8,
+    },
+    card_border_radius: {
+      type: "integer",
+      nullable: true,
+      description:
+        "The border radius for cards. Value is px, Kinde transforms to rem for rendering",
+      example: 16,
+    },
+    input_border_radius: {
+      type: "integer",
+      nullable: true,
+      description:
+        "The border radius for inputs. Value is px, Kinde transforms to rem for rendering",
+      example: 4,
+    },
+    theme_code: {
+      type: "string",
+      description:
+        "Whether the environment is forced into light mode, dark mode or user preference",
+      enum: ["light", "dark", "user_preference"],
+    },
+    color_scheme: {
+      type: "string",
+      description:
+        "The color scheme for the environment used for meta tags based on the theme code",
+      enum: ["light", "dark", "light dark"],
+    },
+    created_on: {
+      type: "string",
+      description: "Date of organization creation in ISO 8601 format.",
+      example: "2021-01-01T00:00:00Z",
     },
     is_allow_registrations: {
       nullable: true,
@@ -2168,14 +2524,17 @@ export const $create_application_response = {
         id: {
           description: "The application's identifier.",
           type: "string",
+          example: "3b0b5c6c8fcc464fab397f4969b5f482",
         },
         client_id: {
           description: "The application's client ID.",
           type: "string",
+          example: "3b0b5c6c8fcc464fab397f4969b5f482",
         },
         client_secret: {
           description: "The application's client secret.",
           type: "string",
+          example: "sUJSHI3ZQEVTJkx6hOxdOSHaLsZkCBRFLzTNOI791rX8mDjgt7LC",
         },
       },
     },
@@ -2199,30 +2558,43 @@ export const $get_application_response = {
         id: {
           description: "The application's identifier.",
           type: "string",
+          example: "3b0b5c6c8fcc464fab397f4969b5f482",
         },
         name: {
           description: "The application's name.",
           type: "string",
+          example: "My React app",
         },
         type: {
           description: "The application's type.",
           type: "string",
+          enum: ["m2m", "reg", "spa"],
         },
         client_id: {
           description: "The application's client ID.",
           type: "string",
+          example: "3b0b5c6c8fcc464fab397f4969b5f482",
         },
         client_secret: {
           description: "The application's client secret.",
           type: "string",
+          example: "sUJSHI3ZQEVTJkx6hOxdOSHaLsZkCBRFLzTNOI791rX8mDjgt7LC",
         },
         login_uri: {
           description: "The default login route for resolving session issues.",
           type: "string",
+          example: "https://yourapp.com/api/auth/login",
         },
         homepage_uri: {
           description: "The homepage link to your application.",
           type: "string",
+          example: "https://yourapp.com",
+        },
+        has_cancel_button: {
+          description:
+            "Whether the application has a cancel button to allow users to exit the auth flow [Beta].",
+          type: "boolean",
+          example: false,
         },
       },
     },
@@ -2500,12 +2872,12 @@ export const $token_introspect = {
       example: "3b0b5c6c8fcc464fab397f4969b5f482",
     },
     exp: {
-      type: "string",
+      type: "integer",
       description: "Token expiration timestamp.",
       example: 1612345678,
     },
     iat: {
-      type: "string",
+      type: "integer",
       description: "Token issuance timestamp.",
       example: 1612345678,
     },

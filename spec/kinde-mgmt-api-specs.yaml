@@ -76,8 +76,6 @@ tags:
     x-displayName: OAuth
 paths:
   /api/v1/apis:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - APIs
@@ -159,7 +157,6 @@ paths:
   /api/v1/apis/{api_id}:
     parameters:
       - $ref: '#/components/parameters/api_id'
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - APIs
@@ -215,7 +212,6 @@ paths:
   /api/v1/apis/{api_id}/applications:
     parameters:
       - $ref: '#/components/parameters/api_id'
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     patch:
       tags:
         - APIs
@@ -271,8 +267,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/applications:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Applications
@@ -372,8 +366,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/applications/{application_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Applications
@@ -506,8 +498,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/applications/{application_id}/connections:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Applications
@@ -544,8 +534,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/applications/{application_id}/connections/{connection_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     post:
       tags:
         - Applications
@@ -627,7 +615,6 @@ paths:
   /api/v1/applications/{application_id}/properties:
     parameters:
       - $ref: '#/components/parameters/application_id'
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Applications
@@ -658,7 +645,6 @@ paths:
     parameters:
       - $ref: '#/components/parameters/application_id'
       - $ref: '#/components/parameters/property_key'
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     put:
       tags:
         - Applications
@@ -763,8 +749,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/business:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Business
@@ -881,8 +865,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/industries:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Industries
@@ -910,8 +892,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/timezones:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Timezones
@@ -939,8 +919,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/applications/{app_id}/auth_redirect_urls:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Callbacks
@@ -1142,8 +1120,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/applications/{app_id}/auth_logout_urls:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Callbacks
@@ -1309,8 +1285,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/connected_apps/auth_url:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Connected Apps
@@ -1398,8 +1372,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/connected_apps/token:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Connected Apps
@@ -1456,8 +1428,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/connected_apps/revoke:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     post:
       tags:
         - Connected Apps
@@ -1514,8 +1484,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/connections:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Connections
@@ -1668,8 +1636,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/connections/{connection_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Connections
@@ -1829,9 +1795,34 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/environment:
+    get:
+      tags:
+        - Environments
+      operationId: getEnvironment
+      summary: Get environment
+      description: |
+        Get's the current environment.
+
+        <div>
+          <code>read:environments</code>
+        </div>
+      responses:
+        '200':
+          description: Environment successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_environment_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/environment/feature_flags:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Environments
@@ -1905,8 +1896,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/environment/feature_flags/{feature_flag_key}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Environments
@@ -2008,8 +1997,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/environment_variables:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Environment variables
@@ -2098,7 +2085,6 @@ paths:
   /api/v1/environment_variables/{variable_id}:
     parameters:
       - $ref: '#/components/parameters/variable_id'
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Environment variables
@@ -2206,8 +2192,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/feature_flags:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     post:
       tags:
         - Feature Flags
@@ -2292,8 +2276,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/feature_flags/{feature_flag_key}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Feature Flags
@@ -2423,8 +2405,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/identities/{identity_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Identities
@@ -2574,8 +2554,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organization:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -2716,8 +2694,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -2769,8 +2745,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organization/{org_code}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     patch:
       tags:
         - Organizations
@@ -2925,8 +2899,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -3147,8 +3119,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/roles:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -3245,8 +3215,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/roles/{role_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Organizations
@@ -3306,8 +3274,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/permissions:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -3413,8 +3379,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/permissions/{permission_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Organizations
@@ -3474,8 +3438,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Organizations
@@ -3528,8 +3490,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/feature_flags:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -3617,8 +3577,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/feature_flags/{feature_flag_key}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Organizations
@@ -3724,8 +3682,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/properties/{property_key}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     put:
       tags:
         - Organizations
@@ -3782,8 +3738,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/properties:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Organizations
@@ -3886,8 +3840,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/organization/{org_code}/handle:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Organizations
@@ -3933,8 +3885,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/permissions:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Permissions
@@ -4048,8 +3998,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/permissions/{permission_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     patch:
       tags:
         - Permissions
@@ -4153,8 +4101,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/properties:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Properties
@@ -4316,8 +4262,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/properties/{property_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     put:
       tags:
         - Properties
@@ -4433,8 +4377,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/property_categories:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Property Categories
@@ -4566,8 +4508,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/property_categories/{category_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     put:
       tags:
         - Property Categories
@@ -4624,8 +4564,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/roles:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Roles
@@ -4726,8 +4664,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/roles/{role_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Roles
@@ -4851,8 +4787,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/roles/{role_id}/permissions:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Roles
@@ -4984,8 +4918,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/roles/{role_id}/permissions/{permission_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Roles
@@ -5038,8 +4970,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/subscribers:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Subscribers
@@ -5155,8 +5085,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/subscribers/{subscriber_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Subscribers
@@ -5200,8 +5128,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Users
@@ -5285,8 +5211,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/refresh_claims:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     post:
       tags:
         - Users
@@ -5338,8 +5262,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/user:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Users
@@ -5594,8 +5516,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/feature_flags/{feature_flag_key}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     patch:
       tags:
         - Users
@@ -5652,8 +5572,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/properties/{property_key}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     put:
       tags:
         - Users
@@ -5710,8 +5628,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/properties:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Users
@@ -5814,8 +5730,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/password:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     put:
       tags:
         - Users
@@ -5901,8 +5815,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/identities:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Users
@@ -6075,8 +5987,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/events/{event_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Webhooks
@@ -6129,8 +6039,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/event_types:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Webhooks
@@ -6175,8 +6083,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/webhooks/{webhook_id}:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     delete:
       tags:
         - Webhooks
@@ -6229,8 +6135,6 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/webhooks:
-    parameters:
-      - $ref: '#/components/parameters/acceptApplicationJsonHeader'
     get:
       tags:
         - Webhooks
@@ -6545,16 +6449,6 @@ paths:
       security:
         - kindeBearerAuth: []
 components:
-  headers:
-    acceptApplicationJsonHeader:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-          - application/json
-      description: The `Accept` header is required and must always be `application/json`.
   parameters:
     api_id:
       in: path
@@ -6588,15 +6482,6 @@ components:
       schema:
         type: string
         example: env_var_0192b1941f125645fa15bf28a662a0b3
-    acceptApplicationJsonHeader:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-          - application/json
-      description: The `Accept` header is required and must always be `application/json`.
   responses:
     bad_request:
       description: Invalid request.
@@ -6840,6 +6725,18 @@ components:
               description: Your Terms and Conditions URL.
               example: https://example.com/terms
               nullable: true
+            has_clickwrap:
+              type: boolean
+              description: Whether your business uses clickwrap agreements.
+              example: false
+            has_kinde_branding:
+              type: boolean
+              description: Whether your business shows Kinde branding.
+              example: true
+            created_on:
+              type: string
+              description: Date of business creation in ISO 8601 format.
+              example: '2021-01-01T00:00:00Z'
     get_industries_response:
       type: object
       properties:
@@ -7302,7 +7199,7 @@ components:
             event_id:
               type: string
             timestamp:
-              type: string
+              type: integer
               description: Timestamp in ISO 8601 format.
             data:
               type: object
@@ -7465,6 +7362,232 @@ components:
           description: >-
             If users become members of this organization when the org code is
             supplied during authentication.
+    get_environment_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: success_response
+        environment:
+          type: object
+          properties:
+            code:
+              type: string
+              description: The unique identifier for the environment.
+              example: production
+            name:
+              type: string
+              description: The environment's name.
+              example: Production
+            hotjar_site_id:
+              type: string
+              description: Your HotJar site ID.
+              example: 404009
+              nullable: true
+            google_analytics_tag:
+              type: string
+              description: Your Google Analytics tag.
+              example: G-1234567
+              nullable: true
+            is_default:
+              type: boolean
+              description: >-
+                Whether the environment is the default. Typically this is your
+                production environment.
+              example: true
+            is_live:
+              type: boolean
+              description: Whether the environment is live.
+              example: true
+            kinde_domain:
+              type: string
+              description: Your domain on Kinde
+              example: example.kinde.com
+            custom_domain:
+              type: string
+              description: Your custom domain for the environment
+              nullable: true
+              example: app.example.com
+            logo:
+              type: string
+              nullable: true
+              description: The organization's logo URL.
+              example: >-
+                https://yoursubdomain.kinde.com/logo?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+            logo_dark:
+              type: string
+              nullable: true
+              description: The organization's logo URL to be used for dark themes.
+              example: >-
+                https://yoursubdomain.kinde.com/logo_dark?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+            favicon_svg:
+              type: string
+              nullable: true
+              description: >-
+                The organization's SVG favicon URL. Optimal format for most
+                browsers
+              example: >-
+                https://yoursubdomain.kinde.com/favicon_svg?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+            favicon_fallback:
+              type: string
+              nullable: true
+              description: >-
+                The favicon URL to be used as a fallback in browsers that don’t
+                support SVG, add a PNG
+              example: >-
+                https://yoursubdomain.kinde.com/favicon_fallback?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+            link_color:
+              type: object
+              nullable: true
+              properties:
+                raw:
+                  type: string
+                  example: '#0056F1'
+                hex:
+                  type: string
+                  example: '#0056F1'
+                hsl:
+                  type: string
+                  example: hsl(220, 100%, 50%)
+            background_color:
+              nullable: true
+              type: object
+              properties:
+                raw:
+                  type: string
+                  example: '#ffffff'
+                hex:
+                  type: string
+                  example: '#ffffff'
+                hsl:
+                  type: string
+                  example: hsl(0, 0%, 100%)
+            button_color:
+              nullable: true
+              type: object
+              properties:
+                raw:
+                  type: string
+                  example: '#0056F1'
+                hex:
+                  type: string
+                  example: '#0056F1'
+                hsl:
+                  type: string
+                  example: hsl(220, 100%, 50%)
+            button_text_color:
+              nullable: true
+              type: object
+              properties:
+                raw:
+                  type: string
+                  example: '#ffffff'
+                hex:
+                  type: string
+                  example: '#ffffff'
+                hsl:
+                  type: string
+                  example: hsl(0, 0%, 100%)
+            link_color_dark:
+              type: object
+              nullable: true
+              properties:
+                raw:
+                  type: string
+                  example: '#0056F1'
+                hex:
+                  type: string
+                  example: '#0056F1'
+                hsl:
+                  type: string
+                  example: hsl(220, 100%, 50%)
+            background_color_dark:
+              type: object
+              nullable: true
+              properties:
+                raw:
+                  type: string
+                  example: '#0056F1'
+                hex:
+                  type: string
+                  example: '#0056F1'
+                hsl:
+                  type: string
+                  example: hsl(220, 100%, 50%)
+            button_text_color_dark:
+              type: object
+              nullable: true
+              properties:
+                raw:
+                  type: string
+                  example: '#0056F1'
+                hex:
+                  type: string
+                  example: '#0056F1'
+                hsl:
+                  type: string
+                  example: hsl(220, 100%, 50%)
+            button_color_dark:
+              type: object
+              nullable: true
+              properties:
+                raw:
+                  type: string
+                  example: '#0056F1'
+                hex:
+                  type: string
+                  example: '#0056F1'
+                hsl:
+                  type: string
+                  example: hsl(220, 100%, 50%)
+            button_border_radius:
+              type: integer
+              nullable: true
+              description: >-
+                The border radius for buttons. Value is px, Kinde transforms to
+                rem for rendering
+              example: 8
+            card_border_radius:
+              type: integer
+              nullable: true
+              description: >-
+                The border radius for cards. Value is px, Kinde transforms to
+                rem for rendering
+              example: 16
+            input_border_radius:
+              type: integer
+              nullable: true
+              description: >-
+                The border radius for inputs. Value is px, Kinde transforms to
+                rem for rendering
+              example: 4
+            theme_code:
+              type: string
+              description: >-
+                Whether the environment is forced into light mode, dark mode or
+                user preference
+              enum:
+                - light
+                - dark
+                - user_preference
+            color_scheme:
+              type: string
+              description: >-
+                The color scheme for the environment used for meta tags based on
+                the theme code
+              enum:
+                - light
+                - dark
+                - light dark
+            created_on:
+              type: string
+              description: Date of environment creation in ISO 8601 format.
+              example: '2021-01-01T00:00:00Z'
     get_organization_response:
       type: object
       properties:
@@ -7502,8 +7625,30 @@ components:
             supplied during authentication.
         logo:
           type: string
-          deprecated: true
           nullable: true
+          description: The organization's logo URL.
+          example: >-
+            https://yoursubdomain.kinde.com/logo?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+        logo_dark:
+          type: string
+          nullable: true
+          description: The organization's logo URL to be used for dark themes.
+          example: >-
+            https://yoursubdomain.kinde.com/logo_dark?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+        favicon_svg:
+          type: string
+          nullable: true
+          description: The organization's SVG favicon URL. Optimal format for most browsers
+          example: >-
+            https://yoursubdomain.kinde.com/favicon_svg?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
+        favicon_fallback:
+          type: string
+          nullable: true
+          description: >-
+            The favicon URL to be used as a fallback in browsers that don’t
+            support SVG, add a PNG
+          example: >-
+            https://yoursubdomain.kinde.com/favicon_fallback?org_code=org_1ccfb819462&cache=311308b8ad3544bf8e572979f0e5748d
         link_color:
           type: object
           nullable: true
@@ -7608,6 +7753,49 @@ components:
             hsl:
               type: string
               example: hsl(220, 100%, 50%)
+        button_border_radius:
+          type: integer
+          nullable: true
+          description: >-
+            The border radius for buttons. Value is px, Kinde transforms to rem
+            for rendering
+          example: 8
+        card_border_radius:
+          type: integer
+          nullable: true
+          description: >-
+            The border radius for cards. Value is px, Kinde transforms to rem
+            for rendering
+          example: 16
+        input_border_radius:
+          type: integer
+          nullable: true
+          description: >-
+            The border radius for inputs. Value is px, Kinde transforms to rem
+            for rendering
+          example: 4
+        theme_code:
+          type: string
+          description: >-
+            Whether the environment is forced into light mode, dark mode or user
+            preference
+          enum:
+            - light
+            - dark
+            - user_preference
+        color_scheme:
+          type: string
+          description: >-
+            The color scheme for the environment used for meta tags based on the
+            theme code
+          enum:
+            - light
+            - dark
+            - light dark
+        created_on:
+          type: string
+          description: Date of organization creation in ISO 8601 format.
+          example: '2021-01-01T00:00:00Z'
         is_allow_registrations:
           nullable: true
           type: boolean
@@ -8130,12 +8318,15 @@ components:
             id:
               description: The application's identifier.
               type: string
+              example: 3b0b5c6c8fcc464fab397f4969b5f482
             client_id:
               description: The application's client ID.
               type: string
+              example: 3b0b5c6c8fcc464fab397f4969b5f482
             client_secret:
               description: The application's client secret.
               type: string
+              example: sUJSHI3ZQEVTJkx6hOxdOSHaLsZkCBRFLzTNOI791rX8mDjgt7LC
     get_application_response:
       type: object
       properties:
@@ -8151,24 +8342,40 @@ components:
             id:
               description: The application's identifier.
               type: string
+              example: 3b0b5c6c8fcc464fab397f4969b5f482
             name:
               description: The application's name.
               type: string
+              example: My React app
             type:
               description: The application's type.
               type: string
+              enum:
+                - m2m
+                - reg
+                - spa
             client_id:
               description: The application's client ID.
               type: string
+              example: 3b0b5c6c8fcc464fab397f4969b5f482
             client_secret:
               description: The application's client secret.
               type: string
+              example: sUJSHI3ZQEVTJkx6hOxdOSHaLsZkCBRFLzTNOI791rX8mDjgt7LC
             login_uri:
               description: The default login route for resolving session issues.
               type: string
+              example: https://yourapp.com/api/auth/login
             homepage_uri:
               description: The homepage link to your application.
               type: string
+              example: https://yourapp.com
+            has_cancel_button:
+              description: >-
+                Whether the application has a cancel button to allow users to
+                exit the auth flow [Beta].
+              type: boolean
+              example: false
     applications:
       type: object
       properties:
@@ -8361,11 +8568,11 @@ components:
           description: Identifier for the requesting client.
           example: 3b0b5c6c8fcc464fab397f4969b5f482
         exp:
-          type: string
+          type: integer
           description: Token expiration timestamp.
           example: 1612345678
         iat:
-          type: string
+          type: integer
           description: Token issuance timestamp.
           example: 1612345678
     token_error_response:

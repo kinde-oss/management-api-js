@@ -4,7 +4,6 @@ import type { CancelablePromise } from "./core/CancelablePromise";
 import { OpenAPI } from "./core/OpenAPI";
 import { request as __request } from "./core/request";
 import type {
-  GetApIsData,
   GetApIsResponse,
   AddApIsData,
   AddApIsResponse,
@@ -36,13 +35,10 @@ import type {
   UpdateApplicationsPropertyResponse,
   UpdateApplicationTokensData,
   UpdateApplicationTokensResponse,
-  GetBusinessData,
   GetBusinessResponse,
   UpdateBusinessData,
   UpdateBusinessResponse,
-  GetIndustriesData,
   GetIndustriesResponse,
-  GetTimezonesData,
   GetTimezonesResponse,
   GetCallbackUrLsData,
   GetCallbackUrLsResponse,
@@ -76,15 +72,13 @@ import type {
   UpdateConnectionResponse,
   DeleteConnectionData,
   DeleteConnectionResponse,
-  DeleteEnvironementFeatureFlagOverridesData,
+  GetEnvironmentResponse,
   DeleteEnvironementFeatureFlagOverridesResponse,
-  GetEnvironementFeatureFlagsData,
   GetEnvironementFeatureFlagsResponse,
   DeleteEnvironementFeatureFlagOverrideData,
   DeleteEnvironementFeatureFlagOverrideResponse,
   UpdateEnvironementFeatureFlagOverrideData,
   UpdateEnvironementFeatureFlagOverrideResponse,
-  GetEnvironmentVariablesData,
   GetEnvironmentVariablesResponse,
   CreateEnvironmentVariableData,
   CreateEnvironmentVariableResponse,
@@ -226,11 +220,9 @@ import type {
   DeleteUserSessionsResponse,
   GetEventData,
   GetEventResponse,
-  GetEventTypesData,
   GetEventTypesResponse,
   DeleteWebHookData,
   DeleteWebHookResponse,
-  GetWebHooksData,
   GetWebHooksResponse,
   CreateWebHookData,
   CreateWebHookResponse,
@@ -252,18 +244,13 @@ export class ApIs {
    * <code>read:apis</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_apis_response A list of APIs.
    * @throws ApiError
    */
-  public static getApIs(data: GetApIsData): CancelablePromise<GetApIsResponse> {
+  public static getApIs(): CancelablePromise<GetApIsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/apis",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -282,7 +269,6 @@ export class ApIs {
    *
    * @param data The data for the request.
    * @param data.requestBody
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_apis_response APIs successfully updated
    * @throws ApiError
    */
@@ -290,9 +276,6 @@ export class ApIs {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/apis",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -313,7 +296,6 @@ export class ApIs {
    *
    * @param data The data for the request.
    * @param data.apiId The API's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_api_response API successfully retrieved.
    * @throws ApiError
    */
@@ -323,9 +305,6 @@ export class ApIs {
       url: "/api/v1/apis/{api_id}",
       path: {
         api_id: data.apiId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -345,7 +324,6 @@ export class ApIs {
    *
    * @param data The data for the request.
    * @param data.apiId The API's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns delete_api_response API successfully deleted.
    * @throws ApiError
    */
@@ -357,9 +335,6 @@ export class ApIs {
       url: "/api/v1/apis/{api_id}",
       path: {
         api_id: data.apiId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -380,7 +355,6 @@ export class ApIs {
    * @param data The data for the request.
    * @param data.requestBody The applications you want to authorize.
    * @param data.apiId The API's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns authorize_app_api_response Authorized applications updated.
    * @throws ApiError
    */
@@ -392,9 +366,6 @@ export class ApIs {
       url: "/api/v1/apis/{api_id}/applications",
       path: {
         api_id: data.apiId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -417,7 +388,6 @@ export class Applications {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -425,14 +395,11 @@ export class Applications {
    * @throws ApiError
    */
   public static getApplications(
-    data: GetApplicationsData,
+    data: GetApplicationsData = {},
   ): CancelablePromise<GetApplicationsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/applications",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         sort: data.sort,
         page_size: data.pageSize,
@@ -456,7 +423,6 @@ export class Applications {
    *
    * @param data The data for the request.
    * @param data.requestBody
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_application_response Application successfully created.
    * @throws ApiError
    */
@@ -466,9 +432,6 @@ export class Applications {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/applications",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -489,7 +452,6 @@ export class Applications {
    *
    * @param data The data for the request.
    * @param data.applicationId The identifier for the application.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_application_response Application successfully retrieved.
    * @throws ApiError
    */
@@ -501,9 +463,6 @@ export class Applications {
       url: "/api/v1/applications/{application_id}",
       path: {
         application_id: data.applicationId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -523,7 +482,6 @@ export class Applications {
    *
    * @param data The data for the request.
    * @param data.applicationId The identifier for the application.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody Application details.
    * @returns unknown Application successfully updated.
    * @throws ApiError
@@ -536,9 +494,6 @@ export class Applications {
       url: "/api/v1/applications/{application_id}",
       path: {
         application_id: data.applicationId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -560,7 +515,6 @@ export class Applications {
    *
    * @param data The data for the request.
    * @param data.applicationId The identifier for the application.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Application successfully deleted.
    * @throws ApiError
    */
@@ -572,9 +526,6 @@ export class Applications {
       url: "/api/v1/applications/{application_id}",
       path: {
         application_id: data.applicationId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -594,7 +545,6 @@ export class Applications {
    *
    * @param data The data for the request.
    * @param data.applicationId The identifier/client ID for the application.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_connections_response Application connections successfully retrieved.
    * @throws ApiError
    */
@@ -606,9 +556,6 @@ export class Applications {
       url: "/api/v1/applications/{application_id}/connections",
       path: {
         application_id: data.applicationId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -629,7 +576,6 @@ export class Applications {
    * @param data The data for the request.
    * @param data.applicationId The identifier/client ID for the application.
    * @param data.connectionId The identifier for the connection.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns unknown Connection successfully enabled.
    * @throws ApiError
    */
@@ -642,9 +588,6 @@ export class Applications {
       path: {
         application_id: data.applicationId,
         connection_id: data.connectionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -665,7 +608,6 @@ export class Applications {
    * @param data The data for the request.
    * @param data.applicationId The identifier/client ID for the application.
    * @param data.connectionId The identifier for the connection.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Connection successfully removed.
    * @throws ApiError
    */
@@ -678,9 +620,6 @@ export class Applications {
       path: {
         application_id: data.applicationId,
         connection_id: data.connectionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -700,7 +639,6 @@ export class Applications {
    *
    * @param data The data for the request.
    * @param data.applicationId The application's ID / client ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_property_values_response Properties successfully retrieved.
    * @throws ApiError
    */
@@ -712,9 +650,6 @@ export class Applications {
       url: "/api/v1/applications/{application_id}/properties",
       path: {
         application_id: data.applicationId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -736,7 +671,6 @@ export class Applications {
    * @param data.requestBody
    * @param data.applicationId The application's ID / client ID.
    * @param data.propertyKey The property's key.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Property successfully updated
    * @throws ApiError
    */
@@ -749,9 +683,6 @@ export class Applications {
       path: {
         application_id: data.applicationId,
         property_key: data.propertyKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -805,20 +736,13 @@ export class Business {
    * <code>read:businesses</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_business_response Your business details.
    * @throws ApiError
    */
-  public static getBusiness(
-    data: GetBusinessData,
-  ): CancelablePromise<GetBusinessResponse> {
+  public static getBusiness(): CancelablePromise<GetBusinessResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/business",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -837,7 +761,6 @@ export class Business {
    *
    * @param data The data for the request.
    * @param data.requestBody The business details to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Business successfully updated.
    * @throws ApiError
    */
@@ -847,9 +770,6 @@ export class Business {
     return __request(OpenAPI, {
       method: "PATCH",
       url: "/api/v1/business",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -870,20 +790,13 @@ export class Industries {
    * <code>read:industries</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_industries_response A list of industries.
    * @throws ApiError
    */
-  public static getIndustries(
-    data: GetIndustriesData,
-  ): CancelablePromise<GetIndustriesResponse> {
+  public static getIndustries(): CancelablePromise<GetIndustriesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/industries",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -902,20 +815,13 @@ export class Timezones {
    * <code>read:timezones</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_timezones_response A list of timezones.
    * @throws ApiError
    */
-  public static getTimezones(
-    data: GetTimezonesData,
-  ): CancelablePromise<GetTimezonesResponse> {
+  public static getTimezones(): CancelablePromise<GetTimezonesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/timezones",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -936,7 +842,6 @@ export class Callbacks {
    *
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns redirect_callback_urls Callback URLs successfully retrieved.
    * @throws ApiError
    */
@@ -948,9 +853,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -971,7 +873,6 @@ export class Callbacks {
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.requestBody Callback details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Callbacks successfully updated
    * @throws ApiError
    */
@@ -983,9 +884,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1008,7 +906,6 @@ export class Callbacks {
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.requestBody Callback details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Callbacks successfully updated
    * @throws ApiError
    */
@@ -1020,9 +917,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1045,7 +939,6 @@ export class Callbacks {
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.urls Urls to delete, comma separated and url encoded.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Callback URLs successfully deleted.
    * @throws ApiError
    */
@@ -1057,9 +950,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         urls: data.urls,
@@ -1082,7 +972,6 @@ export class Callbacks {
    *
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns logout_redirect_urls Logout URLs successfully retrieved.
    * @throws ApiError
    */
@@ -1094,9 +983,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1117,7 +1003,6 @@ export class Callbacks {
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.requestBody Callback details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Logout URLs successfully updated.
    * @throws ApiError
    */
@@ -1129,9 +1014,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1154,7 +1036,6 @@ export class Callbacks {
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.requestBody Callback details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Logout URLs successfully updated.
    * @throws ApiError
    */
@@ -1166,9 +1047,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1191,7 +1069,6 @@ export class Callbacks {
    * @param data The data for the request.
    * @param data.appId The identifier for the application.
    * @param data.urls Urls to delete, comma separated and url encoded.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Logout URLs successfully deleted.
    * @throws ApiError
    */
@@ -1203,9 +1080,6 @@ export class Callbacks {
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       path: {
         app_id: data.appId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         urls: data.urls,
@@ -1230,7 +1104,6 @@ export class ConnectedApps {
    *
    * @param data The data for the request.
    * @param data.keyCodeRef The unique key code reference of the connected app to authenticate against.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.userId The id of the user that needs to authenticate to the third-party connected app.
    * @param data.orgCode The code of the Kinde organization that needs to authenticate to the third-party connected app.
    * @param data.overrideCallbackUrl A URL that overrides the default callback URL setup in your connected app configuration
@@ -1243,9 +1116,6 @@ export class ConnectedApps {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/connected_apps/auth_url",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         key_code_ref: data.keyCodeRef,
         user_id: data.userId,
@@ -1271,7 +1141,6 @@ export class ConnectedApps {
    *
    * @param data The data for the request.
    * @param data.sessionId The unique sesssion id representing the login session of a user.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns connected_apps_access_token An access token that can be used to query a third-party provider, as well as the token's expiry time.
    * @throws ApiError
    */
@@ -1281,9 +1150,6 @@ export class ConnectedApps {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/connected_apps/token",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         session_id: data.sessionId,
       },
@@ -1305,7 +1171,6 @@ export class ConnectedApps {
    *
    * @param data The data for the request.
    * @param data.sessionId The unique sesssion id representing the login session of a user.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response An access token that can be used to query a third-party provider, as well as the token's expiry time.
    * @throws ApiError
    */
@@ -1315,9 +1180,6 @@ export class ConnectedApps {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/connected_apps/revoke",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         session_id: data.sessionId,
       },
@@ -1341,7 +1203,6 @@ export class Connections {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.startingAfter The ID of the connection to start after.
    * @param data.endingBefore The ID of the connection to end before.
@@ -1349,14 +1210,11 @@ export class Connections {
    * @throws ApiError
    */
   public static getConnections(
-    data: GetConnectionsData,
+    data: GetConnectionsData = {},
   ): CancelablePromise<GetConnectionsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/connections",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         page_size: data.pageSize,
         starting_after: data.startingAfter,
@@ -1380,7 +1238,6 @@ export class Connections {
    *
    * @param data The data for the request.
    * @param data.requestBody Connection details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_connection_response Connection successfully created
    * @throws ApiError
    */
@@ -1390,9 +1247,6 @@ export class Connections {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/connections",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -1413,7 +1267,6 @@ export class Connections {
    *
    * @param data The data for the request.
    * @param data.connectionId The unique identifier for the connection.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns connection Connection successfully retrieved.
    * @throws ApiError
    */
@@ -1425,9 +1278,6 @@ export class Connections {
       url: "/api/v1/connections/{connection_id}",
       path: {
         connection_id: data.connectionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1448,7 +1298,6 @@ export class Connections {
    * @param data The data for the request.
    * @param data.connectionId The unique identifier for the connection.
    * @param data.requestBody The fields of the connection to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Connection successfully updated.
    * @throws ApiError
    */
@@ -1460,9 +1309,6 @@ export class Connections {
       url: "/api/v1/connections/{connection_id}",
       path: {
         connection_id: data.connectionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1484,7 +1330,6 @@ export class Connections {
    *
    * @param data The data for the request.
    * @param data.connectionId The identifier for the connection.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Connection deleted.
    * @throws ApiError
    */
@@ -1497,9 +1342,6 @@ export class Connections {
       path: {
         connection_id: data.connectionId,
       },
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Invalid credentials.",
@@ -1511,6 +1353,29 @@ export class Connections {
 
 export class Environments {
   /**
+   * Get environment
+   * Get's the current environment.
+   *
+   * <div>
+   * <code>read:environments</code>
+   * </div>
+   *
+   * @returns get_environment_response Environment successfully retrieved.
+   * @throws ApiError
+   */
+  public static getEnvironment(): CancelablePromise<GetEnvironmentResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/environment",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
    * Delete Environment Feature Flag Overrides
    * Delete all environment feature flag overrides.
    *
@@ -1518,20 +1383,13 @@ export class Environments {
    * <code>delete:environment_feature_flags</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag overrides deleted successfully.
    * @throws ApiError
    */
-  public static deleteEnvironementFeatureFlagOverrides(
-    data: DeleteEnvironementFeatureFlagOverridesData,
-  ): CancelablePromise<DeleteEnvironementFeatureFlagOverridesResponse> {
+  public static deleteEnvironementFeatureFlagOverrides(): CancelablePromise<DeleteEnvironementFeatureFlagOverridesResponse> {
     return __request(OpenAPI, {
       method: "DELETE",
       url: "/api/v1/environment/feature_flags",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Invalid credentials.",
@@ -1548,20 +1406,13 @@ export class Environments {
    * <code>read:environment_feature_flags</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_environment_feature_flags_response Feature flags retrieved successfully.
    * @throws ApiError
    */
-  public static getEnvironementFeatureFlags(
-    data: GetEnvironementFeatureFlagsData,
-  ): CancelablePromise<GetEnvironementFeatureFlagsResponse> {
+  public static getEnvironementFeatureFlags(): CancelablePromise<GetEnvironementFeatureFlagsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/environment/feature_flags",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Invalid credentials.",
@@ -1580,7 +1431,6 @@ export class Environments {
    *
    * @param data The data for the request.
    * @param data.featureFlagKey The identifier for the feature flag.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag deleted successfully.
    * @throws ApiError
    */
@@ -1592,9 +1442,6 @@ export class Environments {
       url: "/api/v1/environment/feature_flags/{feature_flag_key}",
       path: {
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1615,7 +1462,6 @@ export class Environments {
    * @param data The data for the request.
    * @param data.featureFlagKey The identifier for the feature flag.
    * @param data.requestBody Flag details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag override successful
    * @throws ApiError
    */
@@ -1627,9 +1473,6 @@ export class Environments {
       url: "/api/v1/environment/feature_flags/{feature_flag_key}",
       path: {
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1651,20 +1494,13 @@ export class EnvironmentVariables {
    * <code>read:environment_variables</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_environment_variables_response A successful response with a list of environment variables or an empty list.
    * @throws ApiError
    */
-  public static getEnvironmentVariables(
-    data: GetEnvironmentVariablesData,
-  ): CancelablePromise<GetEnvironmentVariablesResponse> {
+  public static getEnvironmentVariables(): CancelablePromise<GetEnvironmentVariablesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/environment_variables",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -1683,7 +1519,6 @@ export class EnvironmentVariables {
    *
    * @param data The data for the request.
    * @param data.requestBody The environment variable details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_environment_variable_response Environment variable successfully created.
    * @throws ApiError
    */
@@ -1693,9 +1528,6 @@ export class EnvironmentVariables {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/environment_variables",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -1716,7 +1548,6 @@ export class EnvironmentVariables {
    *
    * @param data The data for the request.
    * @param data.variableId The environment variable's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_environment_variable_response Environment variable successfully retrieved.
    * @throws ApiError
    */
@@ -1728,9 +1559,6 @@ export class EnvironmentVariables {
       url: "/api/v1/environment_variables/{variable_id}",
       path: {
         variable_id: data.variableId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1751,7 +1579,6 @@ export class EnvironmentVariables {
    * @param data The data for the request.
    * @param data.requestBody The new details for the environment variable
    * @param data.variableId The environment variable's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns update_environment_variable_response Environment variable successfully updated.
    * @throws ApiError
    */
@@ -1763,9 +1590,6 @@ export class EnvironmentVariables {
       url: "/api/v1/environment_variables/{variable_id}",
       path: {
         variable_id: data.variableId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -1787,7 +1611,6 @@ export class EnvironmentVariables {
    *
    * @param data The data for the request.
    * @param data.variableId The environment variable's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns delete_environment_variable_response Environment variable successfully deleted.
    * @throws ApiError
    */
@@ -1799,9 +1622,6 @@ export class EnvironmentVariables {
       url: "/api/v1/environment_variables/{variable_id}",
       path: {
         variable_id: data.variableId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1823,7 +1643,6 @@ export class FeatureFlags {
    *
    * @param data The data for the request.
    * @param data.requestBody Flag details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag successfully created
    * @throws ApiError
    */
@@ -1833,9 +1652,6 @@ export class FeatureFlags {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/feature_flags",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -1856,7 +1672,6 @@ export class FeatureFlags {
    *
    * @param data The data for the request.
    * @param data.featureFlagKey The identifier for the feature flag.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag successfully updated.
    * @throws ApiError
    */
@@ -1868,9 +1683,6 @@ export class FeatureFlags {
       url: "/api/v1/feature_flags/{feature_flag_key}",
       path: {
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1895,7 +1707,6 @@ export class FeatureFlags {
    * @param data.type The variable type
    * @param data.allowOverrideLevel Allow the flag to be overridden at a different level.
    * @param data.defaultValue Default value for the flag used by environments and organizations.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag successfully updated.
    * @throws ApiError
    */
@@ -1907,9 +1718,6 @@ export class FeatureFlags {
       url: "/api/v1/feature_flags/{feature_flag_key}",
       path: {
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         name: data.name,
@@ -1938,7 +1746,6 @@ export class Identities {
    *
    * @param data The data for the request.
    * @param data.identityId The unique identifier for the identity.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns identity Identity successfully retrieved.
    * @throws ApiError
    */
@@ -1950,9 +1757,6 @@ export class Identities {
       url: "/api/v1/identities/{identity_id}",
       path: {
         identity_id: data.identityId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -1973,7 +1777,6 @@ export class Identities {
    * @param data The data for the request.
    * @param data.identityId The unique identifier for the identity.
    * @param data.requestBody The fields of the identity to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Identity successfully updated.
    * @throws ApiError
    */
@@ -1985,9 +1788,6 @@ export class Identities {
       url: "/api/v1/identities/{identity_id}",
       path: {
         identity_id: data.identityId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2009,7 +1809,6 @@ export class Identities {
    *
    * @param data The data for the request.
    * @param data.identityId The unique identifier for the identity.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Identity successfully deleted.
    * @throws ApiError
    */
@@ -2021,9 +1820,6 @@ export class Identities {
       url: "/api/v1/identities/{identity_id}",
       path: {
         identity_id: data.identityId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -2044,20 +1840,16 @@ export class Organizations {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.code The organization's code.
    * @returns get_organization_response Organization successfully retrieved.
    * @throws ApiError
    */
   public static getOrganization(
-    data: GetOrganizationData,
+    data: GetOrganizationData = {},
   ): CancelablePromise<GetOrganizationResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/organization",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         code: data.code,
       },
@@ -2079,7 +1871,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.requestBody Organization details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_organization_response Organization successfully created.
    * @throws ApiError
    */
@@ -2089,9 +1880,6 @@ export class Organizations {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/organization",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -2111,7 +1899,6 @@ export class Organizations {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -2119,14 +1906,11 @@ export class Organizations {
    * @throws ApiError
    */
   public static getOrganizations(
-    data: GetOrganizationsData,
+    data: GetOrganizationsData = {},
   ): CancelablePromise<GetOrganizationsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/organizations",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         sort: data.sort,
         page_size: data.pageSize,
@@ -2150,7 +1934,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody Organization details.
    * @returns success_response Organization successfully updated.
    * @throws ApiError
@@ -2163,9 +1946,6 @@ export class Organizations {
       url: "/api/v1/organization/{org_code}",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2187,7 +1967,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Organization successfully deleted.
    * @throws ApiError
    */
@@ -2199,9 +1978,6 @@ export class Organizations {
       url: "/api/v1/organization/{org_code}",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -2222,7 +1998,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -2239,9 +2014,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/users",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         sort: data.sort,
@@ -2268,7 +2040,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody
    * @returns add_organization_users_response Users successfully added.
    * @returns void No users added.
@@ -2282,9 +2053,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/users",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2306,7 +2074,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody
    * @returns update_organization_users_response Users successfully removed.
    * @throws ApiError
@@ -2319,9 +2086,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/users",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2344,7 +2108,6 @@ export class Organizations {
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_organizations_user_roles_response A successful response with a list of user roles.
    * @throws ApiError
    */
@@ -2357,9 +2120,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         403: "Invalid credentials.",
@@ -2380,7 +2140,6 @@ export class Organizations {
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
    * @param data.requestBody Role details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Role successfully added.
    * @throws ApiError
    */
@@ -2393,9 +2152,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2418,7 +2174,6 @@ export class Organizations {
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
    * @param data.roleId The role id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response User successfully removed.
    * @throws ApiError
    */
@@ -2432,9 +2187,6 @@ export class Organizations {
         org_code: data.orgCode,
         user_id: data.userId,
         role_id: data.roleId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Error creating user.",
@@ -2455,7 +2207,6 @@ export class Organizations {
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.expand Specify additional data to retrieve. Use "roles".
    * @returns get_organizations_user_permissions_response A successful response with a list of user permissions.
    * @throws ApiError
@@ -2469,9 +2220,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         expand: data.expand,
@@ -2495,7 +2243,6 @@ export class Organizations {
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
    * @param data.requestBody Permission details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response User permission successfully updated.
    * @throws ApiError
    */
@@ -2508,9 +2255,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2533,7 +2277,6 @@ export class Organizations {
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
    * @param data.permissionId The permission id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response User successfully removed.
    * @throws ApiError
    */
@@ -2547,9 +2290,6 @@ export class Organizations {
         org_code: data.orgCode,
         user_id: data.userId,
         permission_id: data.permissionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Error creating user.",
@@ -2570,7 +2310,6 @@ export class Organizations {
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response User successfully removed from organization
    * @throws ApiError
    */
@@ -2583,9 +2322,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Error removing user",
@@ -2605,7 +2341,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_organization_feature_flags_response Feature flag overrides successfully returned.
    * @throws ApiError
    */
@@ -2617,9 +2352,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/feature_flags",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -2639,7 +2371,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag overrides successfully deleted.
    * @throws ApiError
    */
@@ -2651,9 +2382,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/feature_flags",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -2674,7 +2402,6 @@ export class Organizations {
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
    * @param data.featureFlagKey The identifier for the feature flag.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag override successfully deleted.
    * @throws ApiError
    */
@@ -2687,9 +2414,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -2711,7 +2435,6 @@ export class Organizations {
    * @param data.orgCode The identifier for the organization
    * @param data.featureFlagKey The identifier for the feature flag
    * @param data.value Override value
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag override successfully updated.
    * @throws ApiError
    */
@@ -2724,9 +2447,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         value: data.value,
@@ -2751,7 +2471,6 @@ export class Organizations {
    * @param data.orgCode The identifier for the organization
    * @param data.propertyKey The identifier for the property
    * @param data.value The new property value
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Property successfully updated.
    * @throws ApiError
    */
@@ -2764,9 +2483,6 @@ export class Organizations {
       path: {
         org_code: data.orgCode,
         property_key: data.propertyKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         value: data.value,
@@ -2789,7 +2505,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_property_values_response Properties successfully retrieved.
    * @throws ApiError
    */
@@ -2801,9 +2516,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/properties",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Bad request.",
@@ -2824,7 +2536,6 @@ export class Organizations {
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization
    * @param data.requestBody Properties to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Properties successfully updated.
    * @throws ApiError
    */
@@ -2836,9 +2547,6 @@ export class Organizations {
       url: "/api/v1/organizations/{org_code}/properties",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2860,7 +2568,6 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Handle successfully deleted.
    * @throws ApiError
    */
@@ -2872,9 +2579,6 @@ export class Organizations {
       url: "/api/v1/organization/{org_code}/handle",
       path: {
         org_code: data.orgCode,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Bad request.",
@@ -2895,7 +2599,6 @@ export class Permissions {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -2903,14 +2606,11 @@ export class Permissions {
    * @throws ApiError
    */
   public static getPermissions(
-    data: GetPermissionsData,
+    data: GetPermissionsData = {},
   ): CancelablePromise<GetPermissionsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/permissions",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         sort: data.sort,
         page_size: data.pageSize,
@@ -2932,20 +2632,16 @@ export class Permissions {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody Permission details.
    * @returns success_response Permission successfully created
    * @throws ApiError
    */
   public static createPermission(
-    data: CreatePermissionData,
+    data: CreatePermissionData = {},
   ): CancelablePromise<CreatePermissionResponse> {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/permissions",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -2966,7 +2662,6 @@ export class Permissions {
    *
    * @param data The data for the request.
    * @param data.permissionId The identifier for the permission.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody Permission details.
    * @returns success_response Permission successfully updated
    * @throws ApiError
@@ -2979,9 +2674,6 @@ export class Permissions {
       url: "/api/v1/permissions/{permission_id}",
       path: {
         permission_id: data.permissionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -3003,7 +2695,6 @@ export class Permissions {
    *
    * @param data The data for the request.
    * @param data.permissionId The identifier for the permission.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response permission successfully updated.
    * @throws ApiError
    */
@@ -3015,9 +2706,6 @@ export class Permissions {
       url: "/api/v1/permissions/{permission_id}",
       path: {
         permission_id: data.permissionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -3038,7 +2726,6 @@ export class Properties {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.startingAfter The ID of the property to start after.
    * @param data.endingBefore The ID of the property to end before.
@@ -3047,14 +2734,11 @@ export class Properties {
    * @throws ApiError
    */
   public static getProperties(
-    data: GetPropertiesData,
+    data: GetPropertiesData = {},
   ): CancelablePromise<GetPropertiesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/properties",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         page_size: data.pageSize,
         starting_after: data.startingAfter,
@@ -3079,7 +2763,6 @@ export class Properties {
    *
    * @param data The data for the request.
    * @param data.requestBody Property details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_property_response Property successfully created
    * @throws ApiError
    */
@@ -3089,9 +2772,6 @@ export class Properties {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/properties",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -3113,7 +2793,6 @@ export class Properties {
    * @param data The data for the request.
    * @param data.propertyId The unique identifier for the property.
    * @param data.requestBody The fields of the property to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Property successfully updated.
    * @throws ApiError
    */
@@ -3125,9 +2804,6 @@ export class Properties {
       url: "/api/v1/properties/{property_id}",
       path: {
         property_id: data.propertyId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -3149,7 +2825,6 @@ export class Properties {
    *
    * @param data The data for the request.
    * @param data.propertyId The unique identifier for the property.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Property successfully deleted.
    * @throws ApiError
    */
@@ -3161,9 +2836,6 @@ export class Properties {
       url: "/api/v1/properties/{property_id}",
       path: {
         property_id: data.propertyId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -3184,7 +2856,6 @@ export class PropertyCategories {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.startingAfter The ID of the category to start after.
    * @param data.endingBefore The ID of the category to end before.
@@ -3193,14 +2864,11 @@ export class PropertyCategories {
    * @throws ApiError
    */
   public static getCategories(
-    data: GetCategoriesData,
+    data: GetCategoriesData = {},
   ): CancelablePromise<GetCategoriesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/property_categories",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         page_size: data.pageSize,
         starting_after: data.startingAfter,
@@ -3225,7 +2893,6 @@ export class PropertyCategories {
    *
    * @param data The data for the request.
    * @param data.requestBody Category details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_category_response Category successfully created
    * @throws ApiError
    */
@@ -3235,9 +2902,6 @@ export class PropertyCategories {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/property_categories",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -3259,7 +2923,6 @@ export class PropertyCategories {
    * @param data The data for the request.
    * @param data.categoryId The unique identifier for the category.
    * @param data.requestBody The fields of the category to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response category successfully updated.
    * @throws ApiError
    */
@@ -3271,9 +2934,6 @@ export class PropertyCategories {
       url: "/api/v1/property_categories/{category_id}",
       path: {
         category_id: data.categoryId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -3296,7 +2956,6 @@ export class Roles {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -3304,14 +2963,11 @@ export class Roles {
    * @throws ApiError
    */
   public static getRoles(
-    data: GetRolesData,
+    data: GetRolesData = {},
   ): CancelablePromise<GetRolesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/roles",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         sort: data.sort,
         page_size: data.pageSize,
@@ -3334,20 +2990,16 @@ export class Roles {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody Role details.
    * @returns create_roles_response Role successfully created
    * @throws ApiError
    */
   public static createRole(
-    data: CreateRoleData,
+    data: CreateRoleData = {},
   ): CancelablePromise<CreateRoleResponse> {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/roles",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -3368,7 +3020,6 @@ export class Roles {
    *
    * @param data The data for the request.
    * @param data.roleId The identifier for the role.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_role_response Role successfully retrieved.
    * @throws ApiError
    */
@@ -3378,9 +3029,6 @@ export class Roles {
       url: "/api/v1/roles/{role_id}",
       path: {
         role_id: data.roleId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -3400,7 +3048,6 @@ export class Roles {
    *
    * @param data The data for the request.
    * @param data.roleId The identifier for the role.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody Role details.
    * @returns success_response Role successfully updated
    * @throws ApiError
@@ -3413,9 +3060,6 @@ export class Roles {
       url: "/api/v1/roles/{role_id}",
       path: {
         role_id: data.roleId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -3437,7 +3081,6 @@ export class Roles {
    *
    * @param data The data for the request.
    * @param data.roleId The identifier for the role.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Role successfully deleted.
    * @throws ApiError
    */
@@ -3449,9 +3092,6 @@ export class Roles {
       url: "/api/v1/roles/{role_id}",
       path: {
         role_id: data.roleId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -3471,7 +3111,6 @@ export class Roles {
    *
    * @param data The data for the request.
    * @param data.roleId The role's public id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -3486,9 +3125,6 @@ export class Roles {
       url: "/api/v1/roles/{role_id}/permissions",
       path: {
         role_id: data.roleId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         sort: data.sort,
@@ -3514,7 +3150,6 @@ export class Roles {
    * @param data The data for the request.
    * @param data.roleId The identifier for the role.
    * @param data.requestBody
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns update_role_permissions_response Permissions successfully updated.
    * @throws ApiError
    */
@@ -3526,9 +3161,6 @@ export class Roles {
       url: "/api/v1/roles/{role_id}/permissions",
       path: {
         role_id: data.roleId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -3550,7 +3182,6 @@ export class Roles {
    * @param data The data for the request.
    * @param data.roleId The role's public id.
    * @param data.permissionId The permission's public id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Permission successfully removed from role
    * @throws ApiError
    */
@@ -3563,9 +3194,6 @@ export class Roles {
       path: {
         role_id: data.roleId,
         permission_id: data.permissionId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Error removing user",
@@ -3588,7 +3216,6 @@ export class Subscribers {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.sort Field and order to sort the result by.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -3596,14 +3223,11 @@ export class Subscribers {
    * @throws ApiError
    */
   public static getSubscribers(
-    data: GetSubscribersData,
+    data: GetSubscribersData = {},
   ): CancelablePromise<GetSubscribersResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/subscribers",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         sort: data.sort,
         page_size: data.pageSize,
@@ -3628,7 +3252,6 @@ export class Subscribers {
    * @param data.firstName Subscriber's first name.
    * @param data.lastName Subscriber's last name.
    * @param data.email The email address of the subscriber.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_subscriber_success_response Subscriber successfully created
    * @throws ApiError
    */
@@ -3638,9 +3261,6 @@ export class Subscribers {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/subscribers",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         first_name: data.firstName,
         last_name: data.lastName,
@@ -3664,7 +3284,6 @@ export class Subscribers {
    *
    * @param data The data for the request.
    * @param data.subscriberId The subscriber's id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_subscriber_response Subscriber successfully retrieved.
    * @throws ApiError
    */
@@ -3676,9 +3295,6 @@ export class Subscribers {
       url: "/api/v1/subscribers/{subscriber_id}",
       path: {
         subscriber_id: data.subscriberId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Bad request.",
@@ -3699,7 +3315,6 @@ export class Users {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
    * @param data.userId ID of the user to filter by.
    * @param data.nextToken A string to get the next page of results if there are more results.
@@ -3711,14 +3326,11 @@ export class Users {
    * @throws ApiError
    */
   public static getUsers(
-    data: GetUsersData,
+    data: GetUsersData = {},
   ): CancelablePromise<GetUsersResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/users",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         page_size: data.pageSize,
         user_id: data.userId,
@@ -3746,7 +3358,6 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.userId The id of the user whose claims needs to be updated.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Claims successfully refreshed.
    * @throws ApiError
    */
@@ -3758,9 +3369,6 @@ export class Users {
       url: "/api/v1/users/{user_id}/refresh_claims",
       path: {
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Bad request.",
@@ -3780,7 +3388,6 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.id The user's id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.expand Specify additional data to retrieve. Use "organizations" and/or "identities".
    * @returns user User successfully updated.
    * @throws ApiError
@@ -3791,9 +3398,6 @@ export class Users {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/user",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         id: data.id,
         expand: data.expand,
@@ -3816,20 +3420,16 @@ export class Users {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody The details of the user to create.
    * @returns create_user_response User successfully created.
    * @throws ApiError
    */
   public static createUser(
-    data: CreateUserData,
+    data: CreateUserData = {},
   ): CancelablePromise<CreateUserResponse> {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/user",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -3851,7 +3451,6 @@ export class Users {
    * @param data The data for the request.
    * @param data.id The user's id.
    * @param data.requestBody The user to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns update_user_response User successfully updated.
    * @throws ApiError
    */
@@ -3861,9 +3460,6 @@ export class Users {
     return __request(OpenAPI, {
       method: "PATCH",
       url: "/api/v1/user",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         id: data.id,
       },
@@ -3887,7 +3483,6 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.id The user's id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.isDeleteProfile Delete all data and remove the user's profile from all of Kinde, including the subscriber list
    * @returns success_response User successfully deleted.
    * @throws ApiError
@@ -3898,9 +3493,6 @@ export class Users {
     return __request(OpenAPI, {
       method: "DELETE",
       url: "/api/v1/user",
-      headers: {
-        Accept: data.accept,
-      },
       query: {
         id: data.id,
         is_delete_profile: data.isDeleteProfile,
@@ -3925,7 +3517,6 @@ export class Users {
    * @param data.userId The identifier for the user
    * @param data.featureFlagKey The identifier for the feature flag
    * @param data.value Override value
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Feature flag override successfully updated.
    * @throws ApiError
    */
@@ -3938,9 +3529,6 @@ export class Users {
       path: {
         user_id: data.userId,
         feature_flag_key: data.featureFlagKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         value: data.value,
@@ -3965,7 +3553,6 @@ export class Users {
    * @param data.userId The identifier for the user
    * @param data.propertyKey The identifier for the property
    * @param data.value The new property value
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Property successfully updated.
    * @throws ApiError
    */
@@ -3978,9 +3565,6 @@ export class Users {
       path: {
         user_id: data.userId,
         property_key: data.propertyKey,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         value: data.value,
@@ -4003,7 +3587,6 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.userId The user's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_property_values_response Properties successfully retrieved.
    * @throws ApiError
    */
@@ -4015,9 +3598,6 @@ export class Users {
       url: "/api/v1/users/{user_id}/properties",
       path: {
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Bad request.",
@@ -4038,7 +3618,6 @@ export class Users {
    * @param data The data for the request.
    * @param data.userId The identifier for the user
    * @param data.requestBody Properties to update.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response Properties successfully updated.
    * @throws ApiError
    */
@@ -4050,9 +3629,6 @@ export class Users {
       url: "/api/v1/users/{user_id}/properties",
       path: {
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -4075,7 +3651,6 @@ export class Users {
    * @param data The data for the request.
    * @param data.userId The identifier for the user
    * @param data.requestBody Password details.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns success_response User successfully created.
    * @throws ApiError
    */
@@ -4087,9 +3662,6 @@ export class Users {
       url: "/api/v1/users/{user_id}/password",
       path: {
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -4111,7 +3683,6 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.userId The user's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.startingAfter The ID of the identity to start after.
    * @param data.endingBefore The ID of the identity to end before.
    * @returns get_identities_response Identities successfully retrieved.
@@ -4125,9 +3696,6 @@ export class Users {
       url: "/api/v1/users/{user_id}/identities",
       path: {
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       query: {
         starting_after: data.startingAfter,
@@ -4151,7 +3719,6 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.userId The user's ID.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @param data.requestBody The identity details.
    * @returns create_identity_response Identity successfully created.
    * @throws ApiError
@@ -4164,9 +3731,6 @@ export class Users {
       url: "/api/v1/users/{user_id}/identities",
       path: {
         user_id: data.userId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -4221,7 +3785,6 @@ export class Webhooks {
    *
    * @param data The data for the request.
    * @param data.eventId The event id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_event_response Event successfully retrieved.
    * @throws ApiError
    */
@@ -4233,9 +3796,6 @@ export class Webhooks {
       url: "/api/v1/events/{event_id}",
       path: {
         event_id: data.eventId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -4253,20 +3813,13 @@ export class Webhooks {
    * <code>read:event_types</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_event_types_response Event types successfully retrieved.
    * @throws ApiError
    */
-  public static getEventTypes(
-    data: GetEventTypesData,
-  ): CancelablePromise<GetEventTypesResponse> {
+  public static getEventTypes(): CancelablePromise<GetEventTypesResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/event_types",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Invalid credentials.",
@@ -4285,7 +3838,6 @@ export class Webhooks {
    *
    * @param data The data for the request.
    * @param data.webhookId The webhook id.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns delete_webhook_response Webhook successfully deleted.
    * @throws ApiError
    */
@@ -4297,9 +3849,6 @@ export class Webhooks {
       url: "/api/v1/webhooks/{webhook_id}",
       path: {
         webhook_id: data.webhookId,
-      },
-      headers: {
-        Accept: data.accept,
       },
       errors: {
         400: "Invalid request.",
@@ -4317,20 +3866,13 @@ export class Webhooks {
    * <code>read:webhooks</code>
    * </div>
    *
-   * @param data The data for the request.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns get_webhooks_response Webhook list successfully returned.
    * @throws ApiError
    */
-  public static getWebHooks(
-    data: GetWebHooksData,
-  ): CancelablePromise<GetWebHooksResponse> {
+  public static getWebHooks(): CancelablePromise<GetWebHooksResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/webhooks",
-      headers: {
-        Accept: data.accept,
-      },
       errors: {
         400: "Invalid request.",
         403: "Invalid credentials.",
@@ -4349,7 +3891,6 @@ export class Webhooks {
    *
    * @param data The data for the request.
    * @param data.requestBody Webhook request specification.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns create_webhook_response Webhook successfully created.
    * @throws ApiError
    */
@@ -4359,9 +3900,6 @@ export class Webhooks {
     return __request(OpenAPI, {
       method: "POST",
       url: "/api/v1/webhooks",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -4382,7 +3920,6 @@ export class Webhooks {
    *
    * @param data The data for the request.
    * @param data.requestBody Update webhook request specification.
-   * @param data.accept The `Accept` header is required and must always be `application/json`.
    * @returns update_webhook_response Webhook successfully updated.
    * @throws ApiError
    */
@@ -4392,9 +3929,6 @@ export class Webhooks {
     return __request(OpenAPI, {
       method: "PATCH",
       url: "/api/v1/webhooks",
-      headers: {
-        Accept: data.accept,
-      },
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
