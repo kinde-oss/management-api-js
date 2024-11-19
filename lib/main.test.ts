@@ -43,6 +43,7 @@ describe("main.ts exports", () => {
       "$get_categories_response",
       "$get_connections_response",
       "$get_environment_feature_flags_response",
+      "$get_environment_response",
       "$get_environment_variable_response",
       "$get_environment_variables_response",
       "$get_event_response",
