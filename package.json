@@ -23,7 +23,7 @@
   "main": "dist/kinde-management-api-js.cjs",
   "types": "dist/main.d.ts",
   "devDependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^2.0.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
