@@ -37,6 +37,7 @@ export type OpenAPIConfig = {
     request: Interceptors<RequestInit>;
     response: Interceptors<Response>;
   };
+  INITIALIZED: boolean;
 };
 
 export const OpenAPI: OpenAPIConfig = {
@@ -53,4 +54,5 @@ export const OpenAPI: OpenAPIConfig = {
     request: new Interceptors(),
     response: new Interceptors(),
   },
+  INITIALIZED: false,
 };
