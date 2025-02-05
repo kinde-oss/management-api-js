@@ -103,6 +103,22 @@ export const $get_apis_response = {
             description: "Whether or not it is the Kinde management API.",
             example: false,
           },
+          scopes: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  example: "api_scope_01939128c3d7193ae87c4755213c07c6",
+                },
+                key: {
+                  type: "string",
+                  example: "create:apis",
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -129,6 +145,32 @@ export const $create_apis_response = {
           description: "The unique ID for the API.",
           type: "string",
           example: "7ccd126599aa422a771abcb341596881",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $create_api_scopes_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "A Kinde generated message.",
+      example: "Success",
+    },
+    code: {
+      type: "string",
+      description: "A Kinde generated status code.",
+      example: "OK",
+    },
+    scope: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The unique ID for the API scope.",
+          type: "string",
+          example: "api_scope_0193ab57965aef77b2b687d0ef673713",
         },
       },
     },
@@ -425,6 +467,24 @@ export const $get_api_response = {
           description: "Whether or not it is the Kinde management API.",
           example: false,
         },
+        scopes: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: {
+                type: "string",
+                description: "The ID of the scope.",
+                example: "api_scope_01939222ef24200668b9f5829af001ce",
+              },
+              key: {
+                type: "string",
+                description: "The reference key for the scope.",
+                example: "read:logs",
+              },
+            },
+          },
+        },
         applications: {
           type: "array",
           items: {
@@ -459,6 +519,81 @@ export const $get_api_response = {
               },
             },
           },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_api_scopes_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "success_response",
+    },
+    scopes: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "Unique ID of the API scope.",
+            example: "api_scope_01939128c3d7193ae87c4755213c07c6",
+          },
+          key: {
+            type: "string",
+            description: "The scope's reference key.",
+            example: "read:logs",
+          },
+          description: {
+            type: "string",
+            description: "Explanation of the scope purpose.",
+            example: "Read logs scope",
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_api_scope_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "success_response",
+    },
+    scope: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "Unique ID of the API scope.",
+          example: "api_scope_01939128c3d7193ae87c4755213c07c6",
+        },
+        key: {
+          type: "string",
+          description: "The scope's reference key.",
+          example: "read:logs",
+        },
+        description: {
+          type: "string",
+          description: "Explanation of the scope purpose.",
+          example: "Read logs scope",
         },
       },
     },
@@ -857,6 +992,61 @@ export const $get_identities_response = {
     has_more: {
       description: "Whether more records exist.",
       type: "boolean",
+    },
+  },
+} as const;
+
+export const $get_user_mfa_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+    },
+    code: {
+      type: "string",
+    },
+    mfa: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The MFA's identifier.",
+          type: "string",
+          example: "mfa_01933d1ca1f093e7fad48ebcdb65a871",
+        },
+        type: {
+          description: "The type of MFA (e.g. email, SMS, authenticator app).",
+          type: "string",
+          example: "email",
+        },
+        created_on: {
+          description: "The timestamp when the MFA was created.",
+          type: "string",
+          format: "date-time",
+          example: "2024-11-18T13:31:46.795085+11:00",
+        },
+        name: {
+          description:
+            "The identifier used for MFA (e.g. email address, phone number).",
+          type: "string",
+          example: "sally@gmail.com",
+        },
+        is_verified: {
+          description: "Whether the MFA is verified or not.",
+          type: "boolean",
+          example: true,
+        },
+        usage_count: {
+          description: "The number of times MFA has been used.",
+          type: "integer",
+          example: 2,
+        },
+        last_used_on: {
+          description: "The timestamp when the MFA was last used.",
+          type: "string",
+          format: "date-time",
+          example: "2024-11-18T13:32:07.22538+11:00",
+        },
+      },
     },
   },
 } as const;
@@ -1769,11 +1959,13 @@ export const $organization_user = {
       type: "string",
       example: "kp:97c2ba24217d48e3b96a799b76cf2c74",
       description: "The unique ID for the user.",
+      nullable: true,
     },
     email: {
       type: "string",
       example: "john.snow@example.com",
       description: "The user's email address.",
+      nullable: true,
     },
     full_name: {
       type: "string",
@@ -1784,16 +1976,19 @@ export const $organization_user = {
       type: "string",
       example: "Snow",
       description: "The user's last name.",
+      nullable: true,
     },
     first_name: {
       type: "string",
       example: "John",
       description: "The user's first name.",
+      nullable: true,
     },
     picture: {
       type: "string",
       example: "https://example.com/john_snow.jpg",
       description: "The user's profile picture URL.",
+      nullable: true,
     },
     joined_on: {
       type: "string",
@@ -1827,17 +2022,30 @@ export const $category = {
 export const $connection = {
   type: "object",
   properties: {
-    id: {
+    code: {
       type: "string",
+      description: "Response code.",
     },
-    name: {
+    message: {
       type: "string",
+      description: "Response message.",
     },
-    display_name: {
-      type: "string",
-    },
-    strategy: {
-      type: "string",
+    connection: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+        },
+        name: {
+          type: "string",
+        },
+        display_name: {
+          type: "string",
+        },
+        strategy: {
+          type: "string",
+        },
+      },
     },
   },
 } as const;
@@ -2431,23 +2639,31 @@ export const $update_organization_users_response = {
   properties: {
     message: {
       type: "string",
+      example: "Success",
+    },
+    code: {
+      type: "string",
+      example: "OK",
     },
     users_added: {
       type: "array",
       items: {
         type: "string",
+        example: "kp_057ee6debc624c70947b6ba512908c35",
       },
     },
     users_updated: {
       type: "array",
       items: {
         type: "string",
+        example: "kp_057ee6debc624c70947b6ba512908c35",
       },
     },
     users_removed: {
       type: "array",
       items: {
         type: "string",
+        example: "kp_057ee6debc624c70947b6ba512908c35",
       },
     },
   },
@@ -2782,6 +2998,46 @@ export const $role_permissions_response = {
     next_token: {
       type: "string",
       description: "Pagination token.",
+    },
+  },
+} as const;
+
+export const $read_logo_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    logos: {
+      type: "array",
+      description: "A list of logos.",
+      items: {
+        type: "object",
+        properties: {
+          type: {
+            type: "string",
+            description: "The type of logo (light or dark).",
+            example: "light",
+          },
+          file_name: {
+            type: "string",
+            description: "The name of the logo file.",
+            example: "kinde_light.jpeg",
+          },
+          path: {
+            type: "string",
+            description: "The relative path to the logo file.",
+            example: "/logo?p_org_code=org_1767f11ce62",
+          },
+        },
+      },
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
     },
   },
 } as const;

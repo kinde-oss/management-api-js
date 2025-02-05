@@ -57,6 +57,10 @@ export type get_apis_response = {
      * Whether or not it is the Kinde management API.
      */
     is_management_api?: boolean;
+    scopes?: Array<{
+      id?: string;
+      key?: string;
+    }>;
   }>;
 };
 
@@ -72,6 +76,23 @@ export type create_apis_response = {
   api?: {
     /**
      * The unique ID for the API.
+     */
+    id?: string;
+  };
+};
+
+export type create_api_scopes_response = {
+  /**
+   * A Kinde generated message.
+   */
+  message?: string;
+  /**
+   * A Kinde generated status code.
+   */
+  code?: string;
+  scope?: {
+    /**
+     * The unique ID for the API scope.
      */
     id?: string;
   };
@@ -269,6 +290,16 @@ export type get_api_response = {
      * Whether or not it is the Kinde management API.
      */
     is_management_api?: boolean;
+    scopes?: Array<{
+      /**
+       * The ID of the scope.
+       */
+      id?: string;
+      /**
+       * The reference key for the scope.
+       */
+      key?: string;
+    }>;
     applications?: Array<{
       /**
        * The Client ID of the application.
@@ -290,6 +321,56 @@ export type get_api_response = {
        */
       is_active?: boolean | null;
     }>;
+  };
+};
+
+export type get_api_scopes_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  scopes?: Array<{
+    /**
+     * Unique ID of the API scope.
+     */
+    id?: string;
+    /**
+     * The scope's reference key.
+     */
+    key?: string;
+    /**
+     * Explanation of the scope purpose.
+     */
+    description?: string;
+  }>;
+};
+
+export type get_api_scope_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  scope?: {
+    /**
+     * Unique ID of the API scope.
+     */
+    id?: string;
+    /**
+     * The scope's reference key.
+     */
+    key?: string;
+    /**
+     * Explanation of the scope purpose.
+     */
+    description?: string;
   };
 };
 
@@ -560,6 +641,41 @@ export type get_identities_response = {
    * Whether more records exist.
    */
   has_more?: boolean;
+};
+
+export type get_user_mfa_response = {
+  message?: string;
+  code?: string;
+  mfa?: {
+    /**
+     * The MFA's identifier.
+     */
+    id?: string;
+    /**
+     * The type of MFA (e.g. email, SMS, authenticator app).
+     */
+    type?: string;
+    /**
+     * The timestamp when the MFA was created.
+     */
+    created_on?: string;
+    /**
+     * The identifier used for MFA (e.g. email address, phone number).
+     */
+    name?: string;
+    /**
+     * Whether the MFA is verified or not.
+     */
+    is_verified?: boolean;
+    /**
+     * The number of times MFA has been used.
+     */
+    usage_count?: number;
+    /**
+     * The timestamp when the MFA was last used.
+     */
+    last_used_on?: string;
+  };
 };
 
 export type get_properties_response = {
@@ -1032,11 +1148,11 @@ export type organization_user = {
   /**
    * The unique ID for the user.
    */
-  id?: string;
+  id?: string | null;
   /**
    * The user's email address.
    */
-  email?: string;
+  email?: string | null;
   /**
    * The user's full name.
    */
@@ -1044,15 +1160,15 @@ export type organization_user = {
   /**
    * The user's last name.
    */
-  last_name?: string;
+  last_name?: string | null;
   /**
    * The user's first name.
    */
-  first_name?: string;
+  first_name?: string | null;
   /**
    * The user's profile picture URL.
    */
-  picture?: string;
+  picture?: string | null;
   /**
    * The date the user joined the organization.
    */
@@ -1069,10 +1185,20 @@ export type category = {
 };
 
 export type connection = {
-  id?: string;
-  name?: string;
-  display_name?: string;
-  strategy?: string;
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  connection?: {
+    id?: string;
+    name?: string;
+    display_name?: string;
+    strategy?: string;
+  };
 };
 
 export type environment_variable = {
@@ -1399,6 +1525,7 @@ export type update_role_permissions_response = {
 
 export type update_organization_users_response = {
   message?: string;
+  code?: string;
   users_added?: Array<string>;
   users_updated?: Array<string>;
   users_removed?: Array<string>;
@@ -1642,6 +1769,34 @@ export type role_permissions_response = {
   next_token?: string;
 };
 
+export type read_logo_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * A list of logos.
+   */
+  logos?: Array<{
+    /**
+     * The type of logo (light or dark).
+     */
+    type?: string;
+    /**
+     * The name of the logo file.
+     */
+    file_name?: string;
+    /**
+     * The relative path to the logo file.
+     */
+    path?: string;
+  }>;
+  /**
+   * Response message.
+   */
+  message?: string;
+};
+
 export type user_profile_v2 = {
   /**
    * Unique ID of the user in Kinde.
@@ -1743,6 +1898,13 @@ export type Parameterproperty_key = string;
  */
 export type Parametervariable_id = string;
 
+export type GetApIsData = {
+  /**
+   * Specify additional data to retrieve. Use "scopes".
+   */
+  expand?: "scopes" | null;
+};
+
 export type GetApIsResponse = get_apis_response;
 
 export type AddApIsData = {
@@ -1778,6 +1940,79 @@ export type DeleteApiData = {
 
 export type DeleteApiResponse = delete_api_response;
 
+export type GetApiScopesData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+};
+
+export type GetApiScopesResponse = get_api_scopes_response;
+
+export type AddApiScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  requestBody: {
+    /**
+     * The key reference for the scope (1-64 characters, no white space).
+     */
+    key: string;
+    /**
+     * Description of the api scope purpose.
+     */
+    description?: string;
+  };
+};
+
+export type AddApiScopeResponse = create_api_scopes_response;
+
+export type GetApiScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+};
+
+export type GetApiScopeResponse = get_api_scope_response;
+
+export type UpdateApiScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  requestBody: {
+    /**
+     * Description of the api scope purpose.
+     */
+    description?: string;
+  };
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+};
+
+export type UpdateApiScopeResponse = unknown;
+
+export type DeleteApiScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+};
+
+export type DeleteApiScopeResponse = unknown;
+
 export type UpdateApiApplicationsData = {
   /**
    * The API's ID.
@@ -1801,6 +2036,40 @@ export type UpdateApiApplicationsData = {
 };
 
 export type UpdateApiApplicationsResponse = authorize_app_api_response;
+
+export type AddApiApplicationScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  /**
+   * Application ID
+   */
+  applicationId: string;
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+};
+
+export type AddApiApplicationScopeResponse = unknown;
+
+export type DeleteApiAppliationScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  /**
+   * Application ID
+   */
+  applicationId: string;
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+};
+
+export type DeleteApiAppliationScopeResponse = unknown;
 
 export type GetApplicationsData = {
   /**
@@ -2223,15 +2492,15 @@ export type CreateConnectionData = {
     /**
      * The internal name of the connection.
      */
-    name: string;
+    name?: string;
     /**
      * The public facing name of the connection.
      */
-    display_name: string;
+    display_name?: string;
     /**
      * The identity provider identifier for the connection.
      */
-    strategy:
+    strategy?:
       | "oauth2:apple"
       | "oauth2:azure_ad"
       | "oauth2:bitbucket"
@@ -2254,12 +2523,97 @@ export type CreateConnectionData = {
      * Client IDs of applications in which this connection is to be enabled.
      */
     enabled_applications?: Array<string>;
-    /**
-     * The connection's options (varies by strategy).
-     */
-    options?: {
-      [key: string]: unknown;
-    };
+    options?:
+      | {
+          /**
+           * OAuth client ID.
+           */
+          client_id?: string;
+          /**
+           * OAuth client secret.
+           */
+          client_secret?: string;
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+        }
+      | {
+          /**
+           * Client ID.
+           */
+          client_id?: string;
+          /**
+           * Client secret.
+           */
+          client_secret?: string;
+          /**
+           * List of domains to limit authentication.
+           */
+          home_realm_domains?: Array<string>;
+          /**
+           * Domain for Entra ID.
+           */
+          entra_id_domain?: string;
+          /**
+           * Use https://login.windows.net/common instead of a default endpoint.
+           */
+          is_use_common_endpoint?: boolean;
+          /**
+           * Sync user profile data with IDP.
+           */
+          is_sync_user_profile_on_login?: boolean;
+          /**
+           * Include user group info from MS Entra ID.
+           */
+          is_retrieve_provider_user_groups?: boolean;
+          /**
+           * Include additional user profile information.
+           */
+          is_extended_attributes_required?: boolean;
+        }
+      | {
+          /**
+           * List of domains to restrict authentication.
+           */
+          home_realm_domains?: Array<string>;
+          /**
+           * SAML Entity ID.
+           */
+          saml_entity_id?: string;
+          /**
+           * Assertion Consumer Service URL.
+           */
+          saml_acs_url?: string;
+          /**
+           * URL for the IdP metadata.
+           */
+          saml_idp_metadata_url?: string;
+          /**
+           * Attribute key for the user’s email.
+           */
+          saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user’s first name.
+           */
+          saml_first_name_key_attr?: string;
+          /**
+           * Attribute key for the user’s last name.
+           */
+          saml_last_name_key_attr?: string;
+          /**
+           * Create user if they don’t exist.
+           */
+          is_create_missing_user?: boolean;
+          /**
+           * Certificate for signing SAML requests.
+           */
+          saml_signing_certificate?: string;
+          /**
+           * Private key associated with the signing certificate.
+           */
+          saml_signing_private_key?: string;
+        };
   };
 };
 
@@ -2295,16 +2649,218 @@ export type UpdateConnectionData = {
      * Client IDs of applications in which this connection is to be enabled.
      */
     enabled_applications?: Array<string>;
-    /**
-     * The connection's options (varies by strategy).
-     */
-    options?: {
-      [key: string]: unknown;
-    };
+    options?:
+      | {
+          /**
+           * OAuth client ID.
+           */
+          client_id?: string;
+          /**
+           * OAuth client secret.
+           */
+          client_secret?: string;
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+        }
+      | {
+          /**
+           * Client ID.
+           */
+          client_id?: string;
+          /**
+           * Client secret.
+           */
+          client_secret?: string;
+          /**
+           * List of domains to limit authentication.
+           */
+          home_realm_domains?: Array<string>;
+          /**
+           * Domain for Entra ID.
+           */
+          entra_id_domain?: string;
+          /**
+           * Use https://login.windows.net/common instead of a default endpoint.
+           */
+          is_use_common_endpoint?: boolean;
+          /**
+           * Sync user profile data with IDP.
+           */
+          is_sync_user_profile_on_login?: boolean;
+          /**
+           * Include user group info from MS Entra ID.
+           */
+          is_retrieve_provider_user_groups?: boolean;
+          /**
+           * Include additional user profile information.
+           */
+          is_extended_attributes_required?: boolean;
+        }
+      | {
+          /**
+           * List of domains to restrict authentication.
+           */
+          home_realm_domains?: Array<string>;
+          /**
+           * SAML Entity ID.
+           */
+          saml_entity_id?: string;
+          /**
+           * Assertion Consumer Service URL.
+           */
+          saml_acs_url?: string;
+          /**
+           * URL for the IdP metadata.
+           */
+          saml_idp_metadata_url?: string;
+          /**
+           * Attribute key for the user’s email.
+           */
+          saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user’s first name.
+           */
+          saml_first_name_key_attr?: string;
+          /**
+           * Attribute key for the user’s last name.
+           */
+          saml_last_name_key_attr?: string;
+          /**
+           * Create user if they don’t exist.
+           */
+          is_create_missing_user?: boolean;
+          /**
+           * Certificate for signing SAML requests.
+           */
+          saml_signing_certificate?: string;
+          /**
+           * Private key associated with the signing certificate.
+           */
+          saml_signing_private_key?: string;
+        };
   };
 };
 
 export type UpdateConnectionResponse = success_response;
+
+export type ReplaceConnectionData = {
+  /**
+   * The unique identifier for the connection.
+   */
+  connectionId: string;
+  /**
+   * The complete connection configuration to replace the existing one.
+   */
+  requestBody: {
+    /**
+     * The internal name of the connection.
+     */
+    name?: string;
+    /**
+     * The public-facing name of the connection.
+     */
+    display_name?: string;
+    /**
+     * Client IDs of applications in which this connection is to be enabled.
+     */
+    enabled_applications?: Array<string>;
+    options?:
+      | {
+          /**
+           * OAuth client ID.
+           */
+          client_id?: string;
+          /**
+           * OAuth client secret.
+           */
+          client_secret?: string;
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+        }
+      | {
+          /**
+           * Client ID.
+           */
+          client_id?: string;
+          /**
+           * Client secret.
+           */
+          client_secret?: string;
+          /**
+           * List of domains to limit authentication.
+           */
+          home_realm_domains?: Array<string>;
+          /**
+           * Domain for Entra ID.
+           */
+          entra_id_domain?: string;
+          /**
+           * Use https://login.windows.net/common instead of a default endpoint.
+           */
+          is_use_common_endpoint?: boolean;
+          /**
+           * Sync user profile data with IDP.
+           */
+          is_sync_user_profile_on_login?: boolean;
+          /**
+           * Include user group info from MS Entra ID.
+           */
+          is_retrieve_provider_user_groups?: boolean;
+          /**
+           * Include additional user profile information.
+           */
+          is_extended_attributes_required?: boolean;
+        }
+      | {
+          /**
+           * List of domains to restrict authentication.
+           */
+          home_realm_domains?: Array<string>;
+          /**
+           * SAML Entity ID.
+           */
+          saml_entity_id?: string;
+          /**
+           * Assertion Consumer Service URL.
+           */
+          saml_acs_url?: string;
+          /**
+           * URL for the IdP metadata.
+           */
+          saml_idp_metadata_url?: string;
+          /**
+           * Attribute key for the user’s email.
+           */
+          saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user’s first name.
+           */
+          saml_first_name_key_attr?: string;
+          /**
+           * Attribute key for the user’s last name.
+           */
+          saml_last_name_key_attr?: string;
+          /**
+           * Create user if they don’t exist.
+           */
+          is_create_missing_user?: boolean;
+          /**
+           * Certificate for signing SAML requests.
+           */
+          saml_signing_certificate?: string;
+          /**
+           * Private key associated with the signing certificate.
+           */
+          saml_signing_private_key?: string;
+        };
+  };
+};
+
+export type ReplaceConnectionResponse = success_response;
 
 export type DeleteConnectionData = {
   /**
@@ -2529,6 +3085,24 @@ export type DeleteIdentityData = {
 
 export type DeleteIdentityResponse = success_response;
 
+export type ReplaceMfaData = {
+  /**
+   * MFA details.
+   */
+  requestBody: {
+    /**
+     * Specifies whether MFA is required, optional, or not enforced.
+     */
+    policy: "required" | "off" | "optional";
+    /**
+     * The MFA methods to enable.
+     */
+    enabled_factors: Array<"mfa:email" | "mfa:sms" | "mfa:authenticator_app">;
+  };
+};
+
+export type ReplaceMfaResponse = success_response;
+
 export type GetOrganizationData = {
   /**
    * The organization's code.
@@ -2701,6 +3275,14 @@ export type UpdateOrganizationData = {
      * Domains allowed for self-sign up to this environment.
      */
     allowed_domains?: Array<string>;
+    /**
+     * Activate advanced organization features.
+     */
+    is_enable_advanced_orgs?: boolean;
+    /**
+     * Enforce MFA for all users in this organization.
+     */
+    is_enforce_mfa?: boolean;
   };
 };
 
@@ -2938,6 +3520,78 @@ export type RemoveOrganizationUserData = {
 
 export type RemoveOrganizationUserResponse = success_response;
 
+export type AddOrganizationUserApiScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+  /**
+   * User ID
+   */
+  userId: string;
+};
+
+export type AddOrganizationUserApiScopeResponse = unknown;
+
+export type DeleteOrganizationUserApiScopeData = {
+  /**
+   * API ID
+   */
+  apiId: string;
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+  /**
+   * Scope ID
+   */
+  scopeId: string;
+  /**
+   * User ID
+   */
+  userId: string;
+};
+
+export type DeleteOrganizationUserApiScopeResponse = unknown;
+
+export type GetOrgUserMfaData = {
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type GetOrgUserMfaResponse = get_user_mfa_response;
+
+export type ResetOrgUserMfaData = {
+  /**
+   * The identifier for the MFA factor
+   */
+  factorId: string;
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type ResetOrgUserMfaResponse = success_response;
+
 export type GetOrganizationFeatureFlagsData = {
   /**
    * The identifier for the organization.
@@ -3034,6 +3688,24 @@ export type UpdateOrganizationPropertiesData = {
 
 export type UpdateOrganizationPropertiesResponse = success_response;
 
+export type ReplaceOrganizationMfaData = {
+  /**
+   * The identifier for the organization
+   */
+  orgCode: string;
+  /**
+   * MFA details.
+   */
+  requestBody: {
+    /**
+     * The MFA methods to enable.
+     */
+    enabled_factors: Array<"mfa:email" | "mfa:sms" | "mfa:authenticator_app">;
+  };
+};
+
+export type ReplaceOrganizationMfaResponse = success_response;
+
 export type DeleteOrganizationHandleData = {
   /**
    * The organization's code.
@@ -3042,6 +3714,50 @@ export type DeleteOrganizationHandleData = {
 };
 
 export type DeleteOrganizationHandleResponse = success_response;
+
+export type ReadOrganizationLogoData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+};
+
+export type ReadOrganizationLogoResponse = read_logo_response;
+
+export type AddOrganizationLogoData = {
+  /**
+   * Organization logo details.
+   */
+  formData: {
+    /**
+     * The logo file to upload.
+     */
+    logo: Blob | File;
+  };
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The type of logo to add.
+   */
+  type: "dark" | "light";
+};
+
+export type AddOrganizationLogoResponse = success_response;
+
+export type DeleteOrganizationLogoData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * The type of logo to delete.
+   */
+  type: "dark" | "light";
+};
+
+export type DeleteOrganizationLogoResponse = success_response;
 
 export type GetPermissionsData = {
   /**
@@ -3486,7 +4202,7 @@ export type GetUsersData = {
    */
   pageSize?: number | null;
   /**
-   * ID of the user to filter by.
+   * Filter the results by User ID. The query string should be comma separated and url encoded.
    */
   userId?: string | null;
   /**
@@ -3787,6 +4503,28 @@ export type DeleteUserSessionsData = {
 };
 
 export type DeleteUserSessionsResponse = success_response;
+
+export type GetUsersMfaData = {
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type GetUsersMfaResponse = get_user_mfa_response;
+
+export type ResetUsersMfaData = {
+  /**
+   * The identifier for the MFA factor
+   */
+  factorId: string;
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type ResetUsersMfaResponse = success_response;
 
 export type GetEventData = {
   /**

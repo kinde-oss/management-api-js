@@ -4,6 +4,7 @@ import type { CancelablePromise } from "./core/CancelablePromise";
 import { OpenAPI } from "./core/OpenAPI";
 import { request as __request } from "./core/request";
 import type {
+  GetApIsData,
   GetApIsResponse,
   AddApIsData,
   AddApIsResponse,
@@ -11,8 +12,22 @@ import type {
   GetApiResponse,
   DeleteApiData,
   DeleteApiResponse,
+  GetApiScopesData,
+  GetApiScopesResponse,
+  AddApiScopeData,
+  AddApiScopeResponse,
+  GetApiScopeData,
+  GetApiScopeResponse,
+  UpdateApiScopeData,
+  UpdateApiScopeResponse,
+  DeleteApiScopeData,
+  DeleteApiScopeResponse,
   UpdateApiApplicationsData,
   UpdateApiApplicationsResponse,
+  AddApiApplicationScopeData,
+  AddApiApplicationScopeResponse,
+  DeleteApiAppliationScopeData,
+  DeleteApiAppliationScopeResponse,
   GetApplicationsData,
   GetApplicationsResponse,
   CreateApplicationData,
@@ -70,6 +85,8 @@ import type {
   GetConnectionResponse,
   UpdateConnectionData,
   UpdateConnectionResponse,
+  ReplaceConnectionData,
+  ReplaceConnectionResponse,
   DeleteConnectionData,
   DeleteConnectionResponse,
   GetEnvironmentResponse,
@@ -100,6 +117,8 @@ import type {
   UpdateIdentityResponse,
   DeleteIdentityData,
   DeleteIdentityResponse,
+  ReplaceMfaData,
+  ReplaceMfaResponse,
   GetOrganizationData,
   GetOrganizationResponse,
   CreateOrganizationData,
@@ -130,6 +149,14 @@ import type {
   DeleteOrganizationUserPermissionResponse,
   RemoveOrganizationUserData,
   RemoveOrganizationUserResponse,
+  AddOrganizationUserApiScopeData,
+  AddOrganizationUserApiScopeResponse,
+  DeleteOrganizationUserApiScopeData,
+  DeleteOrganizationUserApiScopeResponse,
+  GetOrgUserMfaData,
+  GetOrgUserMfaResponse,
+  ResetOrgUserMfaData,
+  ResetOrgUserMfaResponse,
   GetOrganizationFeatureFlagsData,
   GetOrganizationFeatureFlagsResponse,
   DeleteOrganizationFeatureFlagOverridesData,
@@ -144,8 +171,16 @@ import type {
   GetOrganizationPropertyValuesResponse,
   UpdateOrganizationPropertiesData,
   UpdateOrganizationPropertiesResponse,
+  ReplaceOrganizationMfaData,
+  ReplaceOrganizationMfaResponse,
   DeleteOrganizationHandleData,
   DeleteOrganizationHandleResponse,
+  ReadOrganizationLogoData,
+  ReadOrganizationLogoResponse,
+  AddOrganizationLogoData,
+  AddOrganizationLogoResponse,
+  DeleteOrganizationLogoData,
+  DeleteOrganizationLogoResponse,
   GetPermissionsData,
   GetPermissionsResponse,
   CreatePermissionData,
@@ -218,6 +253,10 @@ import type {
   CreateUserIdentityResponse,
   DeleteUserSessionsData,
   DeleteUserSessionsResponse,
+  GetUsersMfaData,
+  GetUsersMfaResponse,
+  ResetUsersMfaData,
+  ResetUsersMfaResponse,
   GetEventData,
   GetEventResponse,
   GetEventTypesResponse,
@@ -244,13 +283,20 @@ export class ApIs {
    * <code>read:apis</code>
    * </div>
    *
+   * @param data The data for the request.
+   * @param data.expand Specify additional data to retrieve. Use "scopes".
    * @returns get_apis_response A list of APIs.
    * @throws ApiError
    */
-  public static getApIs(): CancelablePromise<GetApIsResponse> {
+  public static getApIs(
+    data: GetApIsData = {},
+  ): CancelablePromise<GetApIsResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/apis",
+      query: {
+        expand: data.expand,
+      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -345,6 +391,168 @@ export class ApIs {
   }
 
   /**
+   * Get API scopes
+   * Retrieve API scopes by API ID.
+   *
+   * <div>
+   * <code>read:api_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @returns get_api_scopes_response API scopes successfully retrieved.
+   * @throws ApiError
+   */
+  public static getApiScopes(
+    data: GetApiScopesData,
+  ): CancelablePromise<GetApiScopesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/apis/{api_id}/scopes",
+      path: {
+        api_id: data.apiId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create API scope
+   * Create a new API scope.
+   *
+   * <div>
+   * <code>create:api_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @param data.requestBody
+   * @returns create_api_scopes_response API scopes successfully created
+   * @throws ApiError
+   */
+  public static addApiScope(
+    data: AddApiScopeData,
+  ): CancelablePromise<AddApiScopeResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/apis/{api_id}/scopes",
+      path: {
+        api_id: data.apiId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get API scope
+   * Retrieve API scope by API ID.
+   *
+   * <div>
+   * <code>read:api_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @param data.scopeId Scope ID
+   * @returns get_api_scope_response API scope successfully retrieved.
+   * @throws ApiError
+   */
+  public static getApiScope(
+    data: GetApiScopeData,
+  ): CancelablePromise<GetApiScopeResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/apis/{api_id}/scopes/{scope_id}",
+      path: {
+        api_id: data.apiId,
+        scope_id: data.scopeId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update API scope
+   * Update an API scope.
+   *
+   * <div>
+   * <code>update:api_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @param data.scopeId Scope ID
+   * @param data.requestBody
+   * @returns unknown API scope successfully updated
+   * @throws ApiError
+   */
+  public static updateApiScope(
+    data: UpdateApiScopeData,
+  ): CancelablePromise<UpdateApiScopeResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/apis/{api_id}/scopes/{scope_id}",
+      path: {
+        api_id: data.apiId,
+        scope_id: data.scopeId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete API scope
+   * Delete an API scope you previously created.
+   *
+   * <div>
+   * <code>delete:apis_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @param data.scopeId Scope ID
+   * @returns unknown API scope successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteApiScope(
+    data: DeleteApiScopeData,
+  ): CancelablePromise<DeleteApiScopeResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/apis/{api_id}/scopes/{scope_id}",
+      path: {
+        api_id: data.apiId,
+        scope_id: data.scopeId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
    * Authorize API applications
    * Authorize applications to be allowed to request access tokens for an API
    *
@@ -369,6 +577,74 @@ export class ApIs {
       },
       body: data.requestBody,
       mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Add scope to API application
+   * Add a scope to an API application.
+   *
+   * <div>
+   * <code>create:api_application_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @param data.applicationId Application ID
+   * @param data.scopeId Scope ID
+   * @returns unknown API scope successfully added to API application
+   * @throws ApiError
+   */
+  public static addApiApplicationScope(
+    data: AddApiApplicationScopeData,
+  ): CancelablePromise<AddApiApplicationScopeResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/apis/{api_id}/applications/{application_id}/scopes/{scope_id}",
+      path: {
+        api_id: data.apiId,
+        application_id: data.applicationId,
+        scope_id: data.scopeId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete API application scope
+   * Delete an API application scope you previously created.
+   *
+   * <div>
+   * <code>delete:apis_application_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.apiId API ID
+   * @param data.applicationId Application ID
+   * @param data.scopeId Scope ID
+   * @returns unknown API scope successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteApiAppliationScope(
+    data: DeleteApiAppliationScopeData,
+  ): CancelablePromise<DeleteApiAppliationScopeResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/apis/{api_id}/applications/{application_id}/scopes/{scope_id}",
+      path: {
+        api_id: data.apiId,
+        application_id: data.applicationId,
+        scope_id: data.scopeId,
+      },
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -1238,7 +1514,7 @@ export class Connections {
    *
    * @param data The data for the request.
    * @param data.requestBody Connection details.
-   * @returns create_connection_response Connection successfully created
+   * @returns create_connection_response Connection successfully created.
    * @throws ApiError
    */
   public static createConnection(
@@ -1251,8 +1527,8 @@ export class Connections {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1281,8 +1557,8 @@ export class Connections {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1314,8 +1590,43 @@ export class Connections {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Replace Connection
+   * Replace Connection Config.
+   *
+   * <div>
+   * <code>update:connections</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.connectionId The unique identifier for the connection.
+   * @param data.requestBody The complete connection configuration to replace the existing one.
+   * @returns success_response Connection successfully updated
+   * @throws ApiError
+   */
+  public static replaceConnection(
+    data: ReplaceConnectionData,
+  ): CancelablePromise<ReplaceConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/connections/{connection_id}",
+      path: {
+        connection_id: data.connectionId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1330,7 +1641,7 @@ export class Connections {
    *
    * @param data The data for the request.
    * @param data.connectionId The identifier for the connection.
-   * @returns success_response Connection deleted.
+   * @returns success_response Connection successfully deleted.
    * @throws ApiError
    */
   public static deleteConnection(
@@ -1344,8 +1655,9 @@ export class Connections {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -1830,6 +2142,37 @@ export class Identities {
   }
 }
 
+export class Mfa {
+  /**
+   * Replace MFA Configuration
+   * Replace MFA Configuration.
+   *
+   * <div>
+   * <code>update:mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.requestBody MFA details.
+   * @returns success_response MFA Configuration updated successfully.
+   * @throws ApiError
+   */
+  public static replaceMfa(
+    data: ReplaceMfaData,
+  ): CancelablePromise<ReplaceMfaResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/mfa",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+}
+
 export class Organizations {
   /**
    * Get organization
@@ -2057,9 +2400,9 @@ export class Organizations {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -2090,9 +2433,9 @@ export class Organizations {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
-        400: "Error updating organization user.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -2332,6 +2675,146 @@ export class Organizations {
   }
 
   /**
+   * Add scope to organization user api
+   * Add a scope to an organization user api.
+   *
+   * <div>
+   * <code>create:organization_user_api_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The identifier for the organization.
+   * @param data.userId User ID
+   * @param data.apiId API ID
+   * @param data.scopeId Scope ID
+   * @returns unknown API scope successfully added to organization user api
+   * @throws ApiError
+   */
+  public static addOrganizationUserApiScope(
+    data: AddOrganizationUserApiScopeData,
+  ): CancelablePromise<AddOrganizationUserApiScopeResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/organizations/{org_code}/users/{user_id}/apis/{api_id}/scopes/{scope_id}",
+      path: {
+        org_code: data.orgCode,
+        user_id: data.userId,
+        api_id: data.apiId,
+        scope_id: data.scopeId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete scope from organization user API
+   * Delete a scope from an organization user api you previously created.
+   *
+   * <div>
+   * <code>delete:organization_user_api_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The identifier for the organization.
+   * @param data.userId User ID
+   * @param data.apiId API ID
+   * @param data.scopeId Scope ID
+   * @returns unknown Organization user API scope successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteOrganizationUserApiScope(
+    data: DeleteOrganizationUserApiScopeData,
+  ): CancelablePromise<DeleteOrganizationUserApiScopeResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/organizations/{org_code}/users/{user_id}/apis/{api_id}/scopes/{scope_id}",
+      path: {
+        org_code: data.orgCode,
+        user_id: data.userId,
+        api_id: data.apiId,
+        scope_id: data.scopeId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get an organization user's MFA configuration
+   * Get an organization user’s MFA configuration.
+   *
+   * <div>
+   * <code>read:organization_user_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The identifier for the organization.
+   * @param data.userId The identifier for the user
+   * @returns get_user_mfa_response Successfully retrieve user's MFA configuration.
+   * @throws ApiError
+   */
+  public static getOrgUserMfa(
+    data: GetOrgUserMfaData,
+  ): CancelablePromise<GetOrgUserMfaResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organizations/{org_code}/users/{user_id}/mfa",
+      path: {
+        org_code: data.orgCode,
+        user_id: data.userId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Reset MFA for a user
+   * Reset an organization user’s MFA.
+   *
+   * <div>
+   * <code>delete:organization_user_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The identifier for the organization.
+   * @param data.userId The identifier for the user
+   * @param data.factorId The identifier for the MFA factor
+   * @returns success_response User's MFA successfully reset.
+   * @throws ApiError
+   */
+  public static resetOrgUserMfa(
+    data: ResetOrgUserMfaData,
+  ): CancelablePromise<ResetOrgUserMfaResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/organizations/{org_code}/users/{user_id}/mfa/{factor_id}",
+      path: {
+        org_code: data.orgCode,
+        user_id: data.userId,
+        factor_id: data.factorId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
    * List Organization Feature Flags
    * Get all organization feature flags.
    *
@@ -2559,6 +3042,39 @@ export class Organizations {
   }
 
   /**
+   * Replace Organization MFA Configuration
+   * Replace Organization MFA Configuration.
+   *
+   * <div>
+   * <code>update:organization_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The identifier for the organization
+   * @param data.requestBody MFA details.
+   * @returns success_response MFA Configuration updated successfully.
+   * @throws ApiError
+   */
+  public static replaceOrganizationMfa(
+    data: ReplaceOrganizationMfaData,
+  ): CancelablePromise<ReplaceOrganizationMfaResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/organizations/{org_code}/mfa",
+      path: {
+        org_code: data.orgCode,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
    * Delete organization handle
    * Delete organization handle
    *
@@ -2584,6 +3100,103 @@ export class Organizations {
         400: "Bad request.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Read organization logo details
+   * Read organization logo details
+   *
+   * <div>
+   * <code>read:organizations</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @returns read_logo_response Successfully retrieved organization logo details
+   * @throws ApiError
+   */
+  public static readOrganizationLogo(
+    data: ReadOrganizationLogoData,
+  ): CancelablePromise<ReadOrganizationLogoResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organizations/{org_code}/logos",
+      path: {
+        org_code: data.orgCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Add organization logo
+   * Add organization logo
+   *
+   * <div>
+   * <code>update:organizations</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.type The type of logo to add.
+   * @param data.formData Organization logo details.
+   * @returns success_response Organization logo successfully updated
+   * @throws ApiError
+   */
+  public static addOrganizationLogo(
+    data: AddOrganizationLogoData,
+  ): CancelablePromise<AddOrganizationLogoResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/organizations/{org_code}/logos/{type}",
+      path: {
+        org_code: data.orgCode,
+        type: data.type,
+      },
+      formData: data.formData,
+      mediaType: "multipart/form-data",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete organization logo
+   * Delete organization logo
+   *
+   * <div>
+   * <code>update:organizations</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.type The type of logo to delete.
+   * @returns success_response Organization logo successfully deleted
+   * @throws ApiError
+   */
+  public static deleteOrganizationLogo(
+    data: DeleteOrganizationLogoData,
+  ): CancelablePromise<DeleteOrganizationLogoResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/organizations/{org_code}/logos/{type}",
+      path: {
+        org_code: data.orgCode,
+        type: data.type,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -3316,7 +3929,7 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.userId ID of the user to filter by.
+   * @param data.userId Filter the results by User ID. The query string should be comma separated and url encoded.
    * @param data.nextToken A string to get the next page of results if there are more results.
    * @param data.email Filter the results by email address. The query string should be comma separated and url encoded.
    * @param data.username Filter the results by username. The query string should be comma separated and url encoded.
@@ -3763,6 +4376,70 @@ export class Users {
       url: "/api/v1/users/{user_id}/sessions",
       path: {
         user_id: data.userId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get user's MFA configuration
+   * Get a user’s MFA configuration.
+   *
+   * <div>
+   * <code>read:user_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.userId The identifier for the user
+   * @returns get_user_mfa_response Successfully retrieve user's MFA configuration.
+   * @throws ApiError
+   */
+  public static getUsersMfa(
+    data: GetUsersMfaData,
+  ): CancelablePromise<GetUsersMfaResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/users/{user_id}/mfa",
+      path: {
+        user_id: data.userId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Reset MFA for a user
+   * Reset a user’s MFA.
+   *
+   * <div>
+   * <code>delete:user_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.userId The identifier for the user
+   * @param data.factorId The identifier for the MFA factor
+   * @returns success_response User's MFA successfully reset.
+   * @throws ApiError
+   */
+  public static resetUsersMfa(
+    data: ResetUsersMfaData,
+  ): CancelablePromise<ResetUsersMfaResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/users/{user_id}/mfa/{factor_id}",
+      path: {
+        user_id: data.userId,
+        factor_id: data.factorId,
       },
       errors: {
         400: "Invalid request.",
