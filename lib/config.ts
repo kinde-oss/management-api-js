@@ -45,13 +45,19 @@ export const init = (
     throw new Error("kindeDomain or env KINDE_DOMAIN is not set");
   }
 
+  // KINDE_DOMAIN needs to be prefixed with https:// add it if it's not there
+  let domain = process.env.KINDE_DOMAIN || config.kindeDomain;
+  if (!domain.startsWith("https://")) {
+    domain = "https://" + domain;
+  }
+
   _merge(
     kindeConfig,
     {
       clientId: process.env.KINDE_MANAGEMENT_CLIENT_ID,
       clientSecret: process.env.KINDE_MANAGEMENT_CLIENT_SECRET,
-      audience: process.env.KINDE_DOMAIN + "/api",
-      kindeDomain: process.env.KINDE_DOMAIN,
+      audience: domain + "/api",
+      kindeDomain: domain,
     },
     config,
   );
