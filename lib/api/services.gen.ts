@@ -181,6 +181,12 @@ import type {
   AddOrganizationLogoResponse,
   DeleteOrganizationLogoData,
   DeleteOrganizationLogoResponse,
+  GetOrganizationConnectionsData,
+  GetOrganizationConnectionsResponse,
+  EnableOrgConnectionData,
+  EnableOrgConnectionResponse,
+  RemoveOrgConnectionData,
+  RemoveOrgConnectionResponse,
   GetPermissionsData,
   GetPermissionsResponse,
   CreatePermissionData,
@@ -219,6 +225,8 @@ import type {
   UpdateRolePermissionsResponse,
   RemoveRolePermissionData,
   RemoveRolePermissionResponse,
+  SearchUsersData,
+  SearchUsersResponse,
   GetSubscribersData,
   GetSubscribersResponse,
   CreateSubscriberData,
@@ -3200,6 +3208,100 @@ export class Organizations {
       },
     });
   }
+
+  /**
+   * Get connections
+   * Gets all connections for an organization.
+   *
+   * <div>
+   * <code>read:organization_connections</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.organizationCode The organization code.
+   * @returns get_connections_response Organization connections successfully retrieved.
+   * @throws ApiError
+   */
+  public static getOrganizationConnections(
+    data: GetOrganizationConnectionsData,
+  ): CancelablePromise<GetOrganizationConnectionsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organizations/{organization_code}/connections",
+      path: {
+        organization_code: data.organizationCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Enable connection
+   * Enable an auth connection for an organization.
+   *
+   * <div>
+   * <code>create:organization_connections</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.organizationCode The unique code for the organization.
+   * @param data.connectionId The identifier for the connection.
+   * @returns unknown Connection successfully enabled.
+   * @throws ApiError
+   */
+  public static enableOrgConnection(
+    data: EnableOrgConnectionData,
+  ): CancelablePromise<EnableOrgConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/organizations/{organization_code}/connections/{connection_id}",
+      path: {
+        organization_code: data.organizationCode,
+        connection_id: data.connectionId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Remove connection
+   * Turn off an auth connection for an organization
+   *
+   * <div>
+   * <code>delete:organization_connections</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.organizationCode The unique code for the organization.
+   * @param data.connectionId The identifier for the connection.
+   * @returns success_response Connection successfully removed.
+   * @throws ApiError
+   */
+  public static removeOrgConnection(
+    data: RemoveOrgConnectionData,
+  ): CancelablePromise<RemoveOrgConnectionResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/organizations/{organization_code}/connections/{connection_id}",
+      path: {
+        organization_code: data.organizationCode,
+        connection_id: data.connectionId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
 }
 
 export class Permissions {
@@ -3812,6 +3914,49 @@ export class Roles {
         400: "Error removing user",
         403: "Invalid credentials.",
         429: "Request was throttled.",
+      },
+    });
+  }
+}
+
+export class Search {
+  /**
+   * Search users
+   * Search for users based on the provided query string. Set query to '*' to filter by other parameters only.
+   * The number of records to return at a time can be controlled using the `page_size` query string parameter.
+   *
+   * <div>
+   * <code>read:users</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.query Search the users by email or name. Use '*' to search all.
+   * @param data.properties
+   * @param data.startingAfter The ID of the user to start after.
+   * @param data.endingBefore The ID of the user to end before.
+   * @param data.expand Specify additional data to retrieve. Use "organizations" and/or "identities".
+   * @returns search_users_response Users successfully retrieved.
+   * @throws ApiError
+   */
+  public static searchUsers(
+    data: SearchUsersData = {},
+  ): CancelablePromise<SearchUsersResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/search/users",
+      query: {
+        page_size: data.pageSize,
+        query: data.query,
+        properties: data.properties,
+        starting_after: data.startingAfter,
+        ending_before: data.endingBefore,
+        expand: data.expand,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
