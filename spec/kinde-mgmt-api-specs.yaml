@@ -70,6 +70,8 @@ tags:
     x-displayName: Property Categories
   - name: Roles
     x-displayName: Roles
+  - name: Search
+    x-displayName: Search
   - name: Subscribers
     x-displayName: Subscribers
   - name: Users
@@ -3431,6 +3433,18 @@ paths:
                 is_custom_auth_connections_enabled:
                   description: Enable custom auth connections for this organization.
                   type: boolean
+                sender_name:
+                  nullable: true
+                  type: string
+                  example: Acme Corp
+                  description: The name of the organization that will be used in emails
+                sender_email:
+                  nullable: true
+                  type: string
+                  example: hello@acmecorp.com
+                  description: >-
+                    The email address that will be used in emails. Requires
+                    custom SMTP to be set up.
       responses:
         '200':
           description: Organization successfully created.
@@ -3609,6 +3623,18 @@ paths:
                   description: Enforce MFA for all users in this organization.
                   type: boolean
                   example: true
+                sender_name:
+                  nullable: true
+                  type: string
+                  example: Acme Corp
+                  description: The name of the organization that will be used in emails
+                sender_email:
+                  nullable: true
+                  type: string
+                  example: hello@acmecorp.com
+                  description: >-
+                    The email address that will be used in emails. Requires
+                    custom SMTP to be set up.
       responses:
         '200':
           description: Organization successfully updated.
@@ -5034,6 +5060,121 @@ paths:
           $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
+  /api/v1/organizations/{organization_code}/connections:
+    get:
+      tags:
+        - Organizations
+      operationId: GetOrganizationConnections
+      description: |
+        Gets all connections for an organization.
+
+        <div>
+          <code>read:organization_connections</code>
+        </div>
+      summary: Get connections
+      parameters:
+        - name: organization_code
+          in: path
+          description: The organization code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+            example: org_7d45b01ef13
+      responses:
+        '200':
+          description: Organization connections successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_connections_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organizations/{organization_code}/connections/{connection_id}:
+    post:
+      tags:
+        - Organizations
+      operationId: EnableOrgConnection
+      summary: Enable connection
+      description: |
+        Enable an auth connection for an organization.
+
+        <div>
+          <code>create:organization_connections</code>
+        </div>
+      parameters:
+        - name: organization_code
+          in: path
+          description: The unique code for the organization.
+          required: true
+          schema:
+            type: string
+            example: org_7d45b01ef13
+        - name: connection_id
+          in: path
+          description: The identifier for the connection.
+          required: true
+          schema:
+            type: string
+            example: conn_0192c16abb53b44277e597d31877ba5b
+      responses:
+        '200':
+          description: Connection successfully enabled.
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Organizations
+      operationId: RemoveOrgConnection
+      summary: Remove connection
+      description: |
+        Turn off an auth connection for an organization
+
+        <div>
+          <code>delete:organization_connections</code>
+        </div>
+      parameters:
+        - name: organization_code
+          in: path
+          description: The unique code for the organization.
+          required: true
+          schema:
+            type: string
+            example: org_7d45b01ef13
+        - name: connection_id
+          in: path
+          description: The identifier for the connection.
+          required: true
+          schema:
+            type: string
+            example: conn_0192c16abb53b44277e597d31877ba5b
+      responses:
+        '200':
+          description: Connection successfully removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/permissions:
     get:
       tags:
@@ -6117,6 +6258,83 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/search/users:
+    get:
+      tags:
+        - Search
+      operationId: searchUsers
+      description: >
+        Search for users based on the provided query string. Set query to '*' to
+        filter by other parameters only.
+
+        The number of records to return at a time can be controlled using the
+        `page_size` query string parameter.
+
+
+        <div>
+          <code>read:users</code>
+        </div>
+      summary: Search users
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: query
+          in: query
+          description: Search the users by email or name. Use '*' to search all.
+          schema:
+            type: string
+            nullable: true
+        - name: properties
+          in: query
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: array
+              items:
+                type: string
+        - name: starting_after
+          in: query
+          description: The ID of the user to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: ending_before
+          in: query
+          description: The ID of the user to end before.
+          schema:
+            type: string
+            nullable: true
+        - name: expand
+          in: query
+          description: >-
+            Specify additional data to retrieve. Use "organizations" and/or
+            "identities".
+          required: false
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Users successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/search_users_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
   /api/v1/subscribers:
@@ -8214,6 +8432,9 @@ components:
         preferred_email:
           type: string
           description: Default email address of the user in Kinde.
+        phone:
+          type: string
+          description: User's primary phone number.
         username:
           type: string
           description: Primary username of the user in Kinde.
@@ -8313,6 +8534,9 @@ components:
               email:
                 type: string
                 description: Default email address of the user in Kinde.
+              phone:
+                type: string
+                description: User's primary phone number.
               username:
                 type: string
                 description: Primary username of the user in Kinde.
@@ -8362,6 +8586,96 @@ components:
         next_token:
           type: string
           description: Pagination token.
+    search_users_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Unique ID of the user in Kinde.
+                example: kp_0ba7c433e5d648cf992621ce99d42817
+              provided_id:
+                type: string
+                description: External ID for user.
+                nullable: true
+                example: U123456
+              email:
+                type: string
+                description: Default email address of the user in Kinde.
+                nullable: true
+                example: user@domain.com
+              username:
+                type: string
+                description: Primary username of the user in Kinde.
+                nullable: true
+                example: john.snow
+              last_name:
+                type: string
+                description: User's last name.
+                example: Snow
+              first_name:
+                type: string
+                description: User's first name.
+                example: John
+              is_suspended:
+                type: boolean
+                description: Whether the user is currently suspended or not.
+                example: true
+              picture:
+                type: string
+                description: User's profile picture URL.
+                example: https://example.com/john_snow.jpg
+                nullable: true
+              total_sign_ins:
+                type: integer
+                description: Total number of user sign ins.
+                nullable: true
+                example: 1
+              failed_sign_ins:
+                type: integer
+                description: Number of consecutive failed user sign ins.
+                nullable: true
+                example: 0
+              last_signed_in:
+                type: string
+                description: Last sign in date in ISO 8601 format.
+                nullable: true
+                example: '2025-02-12T18:02:23.614638+00:00'
+              created_on:
+                type: string
+                description: Date of user creation in ISO 8601 format.
+                nullable: true
+                example: '2025-02-12T18:02:23.614638+00:00'
+              organizations:
+                type: array
+                description: Array of organizations a user belongs to.
+                items:
+                  type: string
+              identities:
+                type: array
+                description: Array of identities belonging to the user.
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    identity:
+                      type: string
+              properties:
+                type: object
+                description: The user properties.
+                additionalProperties:
+                  type: string
     create_user_response:
       type: object
       properties:
@@ -9171,6 +9485,18 @@ components:
           example: true
           deprecated: true
           description: Deprecated - Use 'is_auto_membership_enabled' instead
+        sender_name:
+          nullable: true
+          type: string
+          example: Acme Corp
+          description: The name of the organization that will be used in emails
+        sender_email:
+          nullable: true
+          type: string
+          example: hello@acmecorp.com
+          description: >-
+            The email address that will be used in emails. Requires custom SMTP
+            to be set up.
     organization_user:
       type: object
       properties:

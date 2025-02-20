@@ -656,6 +656,10 @@ export const $user = {
       type: "string",
       description: "Default email address of the user in Kinde.",
     },
+    phone: {
+      type: "string",
+      description: "User's primary phone number.",
+    },
     username: {
       type: "string",
       description: "Primary username of the user in Kinde.",
@@ -792,6 +796,10 @@ export const $users_response = {
             type: "string",
             description: "Default email address of the user in Kinde.",
           },
+          phone: {
+            type: "string",
+            description: "User's primary phone number.",
+          },
           username: {
             type: "string",
             description: "Primary username of the user in Kinde.",
@@ -860,6 +868,125 @@ export const $users_response = {
     next_token: {
       type: "string",
       description: "Pagination token.",
+    },
+  },
+} as const;
+
+export const $search_users_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    results: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "Unique ID of the user in Kinde.",
+            example: "kp_0ba7c433e5d648cf992621ce99d42817",
+          },
+          provided_id: {
+            type: "string",
+            description: "External ID for user.",
+            nullable: true,
+            example: "U123456",
+          },
+          email: {
+            type: "string",
+            description: "Default email address of the user in Kinde.",
+            nullable: true,
+            example: "user@domain.com",
+          },
+          username: {
+            type: "string",
+            description: "Primary username of the user in Kinde.",
+            nullable: true,
+            example: "john.snow",
+          },
+          last_name: {
+            type: "string",
+            description: "User's last name.",
+            example: "Snow",
+          },
+          first_name: {
+            type: "string",
+            description: "User's first name.",
+            example: "John",
+          },
+          is_suspended: {
+            type: "boolean",
+            description: "Whether the user is currently suspended or not.",
+            example: true,
+          },
+          picture: {
+            type: "string",
+            description: "User's profile picture URL.",
+            example: "https://example.com/john_snow.jpg",
+            nullable: true,
+          },
+          total_sign_ins: {
+            type: "integer",
+            description: "Total number of user sign ins.",
+            nullable: true,
+            example: 1,
+          },
+          failed_sign_ins: {
+            type: "integer",
+            description: "Number of consecutive failed user sign ins.",
+            nullable: true,
+            example: 0,
+          },
+          last_signed_in: {
+            type: "string",
+            description: "Last sign in date in ISO 8601 format.",
+            nullable: true,
+            example: "2025-02-12T18:02:23.614638+00:00",
+          },
+          created_on: {
+            type: "string",
+            description: "Date of user creation in ISO 8601 format.",
+            nullable: true,
+            example: "2025-02-12T18:02:23.614638+00:00",
+          },
+          organizations: {
+            type: "array",
+            description: "Array of organizations a user belongs to.",
+            items: {
+              type: "string",
+            },
+          },
+          identities: {
+            type: "array",
+            description: "Array of identities belonging to the user.",
+            items: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                },
+                identity: {
+                  type: "string",
+                },
+              },
+            },
+          },
+          properties: {
+            type: "object",
+            description: "The user properties.",
+            additionalProperties: {
+              type: "string",
+            },
+          },
+        },
+      },
     },
   },
 } as const;
@@ -1948,6 +2075,19 @@ export const $get_organization_response = {
       example: true,
       deprecated: true,
       description: "Deprecated - Use 'is_auto_membership_enabled' instead",
+    },
+    sender_name: {
+      nullable: true,
+      type: "string",
+      example: "Acme Corp",
+      description: "The name of the organization that will be used in emails",
+    },
+    sender_email: {
+      nullable: true,
+      type: "string",
+      example: "hello@acmecorp.com",
+      description:
+        "The email address that will be used in emails. Requires custom SMTP to be set up.",
     },
   },
 } as const;

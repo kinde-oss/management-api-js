@@ -400,6 +400,10 @@ export type user = {
    */
   preferred_email?: string;
   /**
+   * User's primary phone number.
+   */
+  phone?: string;
+  /**
    * Primary username of the user in Kinde.
    */
   username?: string;
@@ -507,6 +511,10 @@ export type users_response = {
      */
     email?: string;
     /**
+     * User's primary phone number.
+     */
+    phone?: string;
+    /**
      * Primary username of the user in Kinde.
      */
     username?: string;
@@ -558,6 +566,84 @@ export type users_response = {
    * Pagination token.
    */
   next_token?: string;
+};
+
+export type search_users_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  results?: Array<{
+    /**
+     * Unique ID of the user in Kinde.
+     */
+    id?: string;
+    /**
+     * External ID for user.
+     */
+    provided_id?: string | null;
+    /**
+     * Default email address of the user in Kinde.
+     */
+    email?: string | null;
+    /**
+     * Primary username of the user in Kinde.
+     */
+    username?: string | null;
+    /**
+     * User's last name.
+     */
+    last_name?: string;
+    /**
+     * User's first name.
+     */
+    first_name?: string;
+    /**
+     * Whether the user is currently suspended or not.
+     */
+    is_suspended?: boolean;
+    /**
+     * User's profile picture URL.
+     */
+    picture?: string | null;
+    /**
+     * Total number of user sign ins.
+     */
+    total_sign_ins?: number | null;
+    /**
+     * Number of consecutive failed user sign ins.
+     */
+    failed_sign_ins?: number | null;
+    /**
+     * Last sign in date in ISO 8601 format.
+     */
+    last_signed_in?: string | null;
+    /**
+     * Date of user creation in ISO 8601 format.
+     */
+    created_on?: string | null;
+    /**
+     * Array of organizations a user belongs to.
+     */
+    organizations?: Array<string>;
+    /**
+     * Array of identities belonging to the user.
+     */
+    identities?: Array<{
+      type?: string;
+      identity?: string;
+    }>;
+    /**
+     * The user properties.
+     */
+    properties?: {
+      [key: string]: string;
+    };
+  }>;
 };
 
 export type create_user_response = {
@@ -1142,6 +1228,14 @@ export type get_organization_response = {
    * @deprecated
    */
   is_allow_registrations?: boolean | null;
+  /**
+   * The name of the organization that will be used in emails
+   */
+  sender_name?: string | null;
+  /**
+   * The email address that will be used in emails. Requires custom SMTP to be set up.
+   */
+  sender_email?: string | null;
 };
 
 export type organization_user = {
@@ -3179,6 +3273,14 @@ export type CreateOrganizationData = {
      * Enable custom auth connections for this organization.
      */
     is_custom_auth_connections_enabled?: boolean;
+    /**
+     * The name of the organization that will be used in emails
+     */
+    sender_name?: string | null;
+    /**
+     * The email address that will be used in emails. Requires custom SMTP to be set up.
+     */
+    sender_email?: string | null;
   };
 };
 
@@ -3283,6 +3385,14 @@ export type UpdateOrganizationData = {
      * Enforce MFA for all users in this organization.
      */
     is_enforce_mfa?: boolean;
+    /**
+     * The name of the organization that will be used in emails
+     */
+    sender_name?: string | null;
+    /**
+     * The email address that will be used in emails. Requires custom SMTP to be set up.
+     */
+    sender_email?: string | null;
   };
 };
 
@@ -3759,6 +3869,41 @@ export type DeleteOrganizationLogoData = {
 
 export type DeleteOrganizationLogoResponse = success_response;
 
+export type GetOrganizationConnectionsData = {
+  /**
+   * The organization code.
+   */
+  organizationCode: string;
+};
+
+export type GetOrganizationConnectionsResponse = get_connections_response;
+
+export type EnableOrgConnectionData = {
+  /**
+   * The identifier for the connection.
+   */
+  connectionId: string;
+  /**
+   * The unique code for the organization.
+   */
+  organizationCode: string;
+};
+
+export type EnableOrgConnectionResponse = unknown;
+
+export type RemoveOrgConnectionData = {
+  /**
+   * The identifier for the connection.
+   */
+  connectionId: string;
+  /**
+   * The unique code for the organization.
+   */
+  organizationCode: string;
+};
+
+export type RemoveOrgConnectionResponse = success_response;
+
 export type GetPermissionsData = {
   /**
    * A string to get the next page of results if there are more results.
@@ -4136,6 +4281,34 @@ export type RemoveRolePermissionData = {
 };
 
 export type RemoveRolePermissionResponse = success_response;
+
+export type SearchUsersData = {
+  /**
+   * The ID of the user to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * Specify additional data to retrieve. Use "organizations" and/or "identities".
+   */
+  expand?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  properties?: {
+    [key: string]: Array<string>;
+  };
+  /**
+   * Search the users by email or name. Use '*' to search all.
+   */
+  query?: string | null;
+  /**
+   * The ID of the user to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type SearchUsersResponse = search_users_response;
 
 export type GetSubscribersData = {
   /**
