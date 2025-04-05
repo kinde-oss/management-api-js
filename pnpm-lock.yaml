@@ -29,13 +29,13 @@ importers:
         version: 3.5.2
       typescript:
         specifier: ^5.4.5
-        version: 5.7.3
+        version: 5.8.3
       vite:
         specifier: ^5.2.8
         version: 5.4.12(@types/node@22.13.5)
       vite-plugin-dts:
         specifier: ^4.0.0
-        version: 4.5.0(@types/node@22.13.5)(rollup@4.34.8)(typescript@5.7.3)(vite@5.4.12(@types/node@22.13.5))
+        version: 4.5.0(@types/node@22.13.5)(rollup@4.34.8)(typescript@5.8.3)(vite@5.4.12(@types/node@22.13.5))
       vitest:
         specifier: ^3.0.0
         version: 3.0.7(@types/node@22.13.5)
@@ -907,6 +907,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
 
@@ -1371,7 +1376,7 @@ snapshots:
       de-indent: 1.0.2
       he: 1.2.0
 
-  '@vue/language-core@2.2.0(typescript@5.7.3)':
+  '@vue/language-core@2.2.0(typescript@5.8.3)':
     dependencies:
       '@volar/language-core': 2.4.11
       '@vue/compiler-dom': 3.5.13
@@ -1382,7 +1387,7 @@ snapshots:
       muggle-string: 0.4.1
       path-browserify: 1.0.1
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 5.8.3
 
   '@vue/shared@3.5.13': {}
 
@@ -1813,6 +1818,8 @@ snapshots:
 
   typescript@5.7.3: {}
 
+  typescript@5.8.3: {}
+
   ufo@1.5.4: {}
 
   undici-types@6.20.0: {}
@@ -1841,18 +1848,18 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-dts@4.5.0(@types/node@22.13.5)(rollup@4.34.8)(typescript@5.7.3)(vite@5.4.12(@types/node@22.13.5)):
+  vite-plugin-dts@4.5.0(@types/node@22.13.5)(rollup@4.34.8)(typescript@5.8.3)(vite@5.4.12(@types/node@22.13.5)):
     dependencies:
       '@microsoft/api-extractor': 7.50.1(@types/node@22.13.5)
       '@rollup/pluginutils': 5.1.4(rollup@4.34.8)
       '@volar/typescript': 2.4.11
-      '@vue/language-core': 2.2.0(typescript@5.7.3)
+      '@vue/language-core': 2.2.0(typescript@5.8.3)
       compare-versions: 6.1.1
       debug: 4.4.0
       kolorist: 1.8.0
       local-pkg: 0.5.1
       magic-string: 0.30.17
-      typescript: 5.7.3
+      typescript: 5.8.3
     optionalDependencies:
       vite: 5.4.12(@types/node@22.13.5)
     transitivePeerDependencies:
