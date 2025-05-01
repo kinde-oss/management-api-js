@@ -6,6 +6,16 @@
     "dist"
   ],
   "version": "0.13.0",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/kinde-management-api-js.mjs",
+      "require": "./dist/kinde-management-api-js.cjs"
+    }
+  },
+  "main": "./dist/kinde-management-api-js.cjs",
+  "module": "./dist/kinde-management-api-js.mjs",
+  "types": "./dist/main.d.ts",
   "scripts": {
     "dev": "vite",
     "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > lib/version.ts",
@@ -19,9 +29,6 @@
     "spec:update": "curl -o spec/kinde-mgmt-api-specs.yaml https://api-spec.kinde.com/kinde-combined-api-specs.yaml",
     "spec:generate": "npx @hey-api/openapi-ts@0.52.9"
   },
-  "module": "dist/kinde-management-api-js.cjs",
-  "main": "dist/kinde-management-api-js.cjs",
-  "types": "dist/main.d.ts",
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^3.0.0",

@@ -9,13 +9,29 @@ export default defineConfig({
       entry: resolve(__dirname, "lib/main.ts"),
       formats: ["es", "cjs"],
       name: "@kinde/management-api-js",
-      fileName: "kinde-management-api-js",
+      fileName: (format) =>
+        `kinde-management-api-js.${format === "es" ? "mjs" : "cjs"}`,
     },
     target: "esnext",
-    outDir: "../dist",
+    outDir: "./dist",
+    rollupOptions: {
+      external: ["@kinde/jwt-decoder", "aws-jwt-verify", "dotenv"],
+      output: {
+        globals: {
+          "@kinde/jwt-decoder": "jwtDecoder",
+          "aws-jwt-verify": "awsJwtVerify",
+          dotenv: "dotenv",
+        },
+      },
+    },
   },
-  root: "lib",
-  base: "",
-  resolve: { alias: { src: resolve(__dirname, "./lib") } },
-  plugins: [dts({ insertTypesEntry: true, outDir: "../dist" })],
+  resolve: { alias: { src: resolve(__dirname, "lib") } },
+  plugins: [
+    dts({
+      insertTypesEntry: true,
+      outDir: "./dist",
+      include: ["lib/**/*.ts"],
+      exclude: ["lib/**/*.test.ts"],
+    }),
+  ],
 });
