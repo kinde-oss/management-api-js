@@ -29,6 +29,7 @@ export default defineConfig({
   plugins: [
     dts({
       insertTypesEntry: true,
+      rollupTypes: true,
       outDir: "./dist",
       include: ["lib/**/*.ts"],
       exclude: ["lib/**/*.test.ts"],
