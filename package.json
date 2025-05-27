@@ -27,7 +27,7 @@
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
     "spec:update": "curl -o spec/kinde-mgmt-api-specs.yaml https://api-spec.kinde.com/kinde-combined-api-specs.yaml",
-    "spec:generate": "npx @hey-api/openapi-ts@0.52.9"
+    "spec:generate": "@hey-api/openapi-ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -39,6 +39,8 @@
     "vitest": "^3.0.0"
   },
   "dependencies": {
+    "@hey-api/client-fetch": "^0.10.2",
+    "@hey-api/openapi-ts": "^0.67.6",
     "@kinde/jwt-decoder": "^0.2.0",
     "aws-jwt-verify": "^5.0.0",
     "dotenv": "^16.4.5"

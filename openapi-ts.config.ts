@@ -1,4 +1,5 @@
 import path, { format } from "path";
+import { defaultPlugins } from '@hey-api/openapi-ts';
 
 export default {
   input: "./spec/kinde-mgmt-api-specs.yaml",
@@ -8,7 +9,15 @@ export default {
   },
   services: {
     name: "{{name}}",
-    asClass: true,
+    
   },
-  client: "legacy/fetch",
+   plugins: [
+    ...defaultPlugins,
+    '@hey-api/client-fetch',
+    {
+      asClass: true,
+      name: '@hey-api/schemas',
+      // type: 'json', 
+    },
+  ],
 };
