@@ -50,6 +50,14 @@ import type {
   UpdateApplicationsPropertyResponse,
   UpdateApplicationTokensData,
   UpdateApplicationTokensResponse,
+  GetBillingEntitlementsData,
+  GetBillingEntitlementsResponse,
+  GetBillingAgreementsData,
+  GetBillingAgreementsResponse,
+  CreateBillingAgreementData,
+  CreateBillingAgreementResponse,
+  CreateMeterUsageRecordData,
+  CreateMeterUsageRecordResponse,
   GetBusinessResponse,
   UpdateBusinessData,
   UpdateBusinessResponse,
@@ -96,6 +104,11 @@ import type {
   DeleteEnvironementFeatureFlagOverrideResponse,
   UpdateEnvironementFeatureFlagOverrideData,
   UpdateEnvironementFeatureFlagOverrideResponse,
+  ReadLogoResponse,
+  AddLogoData,
+  AddLogoResponse,
+  DeleteLogoData,
+  DeleteLogoResponse,
   GetEnvironmentVariablesResponse,
   CreateEnvironmentVariableData,
   CreateEnvironmentVariableResponse,
@@ -155,6 +168,8 @@ import type {
   DeleteOrganizationUserApiScopeResponse,
   GetOrgUserMfaData,
   GetOrgUserMfaResponse,
+  ResetOrgUserMfaAllData,
+  ResetOrgUserMfaAllResponse,
   ResetOrgUserMfaData,
   ResetOrgUserMfaResponse,
   GetOrganizationFeatureFlagsData,
@@ -187,6 +202,8 @@ import type {
   EnableOrgConnectionResponse,
   RemoveOrgConnectionData,
   RemoveOrgConnectionResponse,
+  UpdateOrganizationSessionsData,
+  UpdateOrganizationSessionsResponse,
   GetPermissionsData,
   GetPermissionsResponse,
   CreatePermissionData,
@@ -219,6 +236,12 @@ import type {
   UpdateRolesResponse,
   DeleteRoleData,
   DeleteRoleResponse,
+  GetRoleScopesData,
+  GetRoleScopesResponse,
+  AddRoleScopeData,
+  AddRoleScopeResponse,
+  DeleteRoleScopeData,
+  DeleteRoleScopeResponse,
   GetRolePermissionsData,
   GetRolePermissionsResponse,
   UpdateRolePermissionsData,
@@ -259,10 +282,14 @@ import type {
   GetUserIdentitiesResponse,
   CreateUserIdentityData,
   CreateUserIdentityResponse,
+  GetUserSessionsData,
+  GetUserSessionsResponse,
   DeleteUserSessionsData,
   DeleteUserSessionsResponse,
   GetUsersMfaData,
   GetUsersMfaResponse,
+  ResetUsersMfaAllData,
+  ResetUsersMfaAllResponse,
   ResetUsersMfaData,
   ResetUsersMfaResponse,
   GetEventData,
@@ -270,11 +297,11 @@ import type {
   GetEventTypesResponse,
   DeleteWebHookData,
   DeleteWebHookResponse,
+  UpdateWebHookData,
+  UpdateWebHookResponse,
   GetWebHooksResponse,
   CreateWebHookData,
   CreateWebHookResponse,
-  UpdateWebHookData,
-  UpdateWebHookResponse,
   GetUserProfileV2Response,
   TokenIntrospectionData,
   TokenIntrospectionResponse,
@@ -988,7 +1015,7 @@ export class Applications {
    * @param data The data for the request.
    * @param data.applicationId The identifier/client ID for the application.
    * @param data.requestBody Application tokens.
-   * @returns success_response Application tokens succesfully updated.
+   * @returns success_response Application tokens successfully updated.
    * @throws ApiError
    */
   public static updateApplicationTokens(
@@ -1000,6 +1027,147 @@ export class Applications {
       path: {
         application_id: data.applicationId,
       },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+}
+
+export class BillingEntitlements {
+  /**
+   * Get billing entitlements
+   * Returns all the entitlements a billing customer currently has access to
+   *
+   * <div>
+   * <code>read:billing_entitlements</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.customerId The ID of the billing customer to retrieve entitlements for
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.startingAfter The ID of the billing entitlement to start after.
+   * @param data.endingBefore The ID of the billing entitlement to end before.
+   * @param data.maxValue When the maximum limit of an entitlement is null, this value is returned as the maximum limit
+   * @param data.expand Specify additional plan data to retrieve. Use "plans".
+   * @returns get_billing_entitlements_response Billing entitlements successfully retrieved.
+   * @throws ApiError
+   */
+  public static getBillingEntitlements(
+    data: GetBillingEntitlementsData,
+  ): CancelablePromise<GetBillingEntitlementsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/billing/entitlements",
+      query: {
+        page_size: data.pageSize,
+        starting_after: data.startingAfter,
+        ending_before: data.endingBefore,
+        customer_id: data.customerId,
+        max_value: data.maxValue,
+        expand: data.expand,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+}
+
+export class BillingAgreements {
+  /**
+   * Get billing agreements
+   * Returns all the agreements a billing customer currently has access to
+   *
+   * <div>
+   * <code>read:billing_agreements</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.customerId The ID of the billing customer to retrieve agreements for
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.startingAfter The ID of the billing agreement to start after.
+   * @param data.endingBefore The ID of the billing agreement to end before.
+   * @param data.featureCode The feature code to filter by agreements only containing that feature
+   * @returns get_billing_agreements_response Billing agreements successfully retrieved.
+   * @throws ApiError
+   */
+  public static getBillingAgreements(
+    data: GetBillingAgreementsData,
+  ): CancelablePromise<GetBillingAgreementsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/billing/agreements",
+      query: {
+        page_size: data.pageSize,
+        starting_after: data.startingAfter,
+        ending_before: data.endingBefore,
+        customer_id: data.customerId,
+        feature_code: data.featureCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Creates a new billing agreement based on the plan code passed, and cancels the customer's existing agreements
+   *
+   * <div>
+   * <code>create:billing_agreements</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.requestBody New agreement request values
+   * @returns success_response Billing agreement successfully changed
+   * @throws ApiError
+   */
+  public static createBillingAgreement(
+    data: CreateBillingAgreementData,
+  ): CancelablePromise<CreateBillingAgreementResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/billing/agreements",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+}
+
+export class BillingMeterUsage {
+  /**
+   * Create meter usage record
+   * Create a new meter usage record
+   *
+   * <div>
+   * <code>create:meter_usage</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.requestBody Meter usage record
+   * @returns create_meter_usage_record_response Meter usage record successfully created.
+   * @throws ApiError
+   */
+  public static createMeterUsageRecord(
+    data: CreateMeterUsageRecordData,
+  ): CancelablePromise<CreateMeterUsageRecordResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/billing/meter_usage",
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
@@ -1479,8 +1647,8 @@ export class ConnectedApps {
 
 export class Connections {
   /**
-   * List Connections
-   * Returns a list of Connections
+   * Get connections
+   * Returns a list of authentication connections. Optionally you can filter this by a home realm domain.
    *
    * <div>
    * <code>read:connections</code>
@@ -1488,6 +1656,7 @@ export class Connections {
    *
    * @param data The data for the request.
    * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.homeRealmDomain Filter the results by the home realm domain.
    * @param data.startingAfter The ID of the connection to start after.
    * @param data.endingBefore The ID of the connection to end before.
    * @returns get_connections_response Connections successfully retrieved.
@@ -1501,6 +1670,7 @@ export class Connections {
       url: "/api/v1/connections",
       query: {
         page_size: data.pageSize,
+        home_realm_domain: data.homeRealmDomain,
         starting_after: data.startingAfter,
         ending_before: data.endingBefore,
       },
@@ -1674,7 +1844,7 @@ export class Connections {
 export class Environments {
   /**
    * Get environment
-   * Get's the current environment.
+   * Gets the current environment.
    *
    * <div>
    * <code>read:environments</code>
@@ -1800,6 +1970,91 @@ export class Environments {
         400: "Invalid request.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Read logo details
+   * Read environment logo details
+   *
+   * <div>
+   * <code>read:environments</code>
+   * </div>
+   *
+   * @returns read_env_logo_response Success
+   * @throws ApiError
+   */
+  public static readLogo(): CancelablePromise<ReadLogoResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/environment/logos",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Add logo
+   * Add environment logo
+   *
+   * <div>
+   * <code>update:environments</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.type The type of logo to add.
+   * @param data.formData Logo details.
+   * @returns success_response Logo successfully updated
+   * @throws ApiError
+   */
+  public static addLogo(data: AddLogoData): CancelablePromise<AddLogoResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/environment/logos/{type}",
+      path: {
+        type: data.type,
+      },
+      formData: data.formData,
+      mediaType: "multipart/form-data",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete logo
+   * Delete environment logo
+   *
+   * <div>
+   * <code>update:environments</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.type The type of logo to delete.
+   * @returns success_response Logo successfully deleted
+   * @returns void No logo found to delete
+   * @throws ApiError
+   */
+  public static deleteLogo(
+    data: DeleteLogoData,
+  ): CancelablePromise<DeleteLogoResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/environment/logos/{type}",
+      path: {
+        type: data.type,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
       },
     });
   }
@@ -2285,6 +2540,7 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
+   * @param data.expand Specify additional data to retrieve. Use "billing".
    * @param data.requestBody Organization details.
    * @returns success_response Organization successfully updated.
    * @throws ApiError
@@ -2297,6 +2553,9 @@ export class Organizations {
       url: "/api/v1/organization/{org_code}",
       path: {
         org_code: data.orgCode,
+      },
+      query: {
+        expand: data.expand,
       },
       body: data.requestBody,
       mediaType: "application/json",
@@ -2788,8 +3047,41 @@ export class Organizations {
   }
 
   /**
-   * Reset MFA for a user
-   * Reset an organization user’s MFA.
+   * Reset all organization MFA for a user
+   * Reset all organization MFA factors for a user.
+   *
+   * <div>
+   * <code>delete:organization_user_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The identifier for the organization.
+   * @param data.userId The identifier for the user
+   * @returns success_response User's MFA successfully reset.
+   * @throws ApiError
+   */
+  public static resetOrgUserMfaAll(
+    data: ResetOrgUserMfaAllData,
+  ): CancelablePromise<ResetOrgUserMfaAllResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/organizations/{org_code}/users/{user_id}/mfa",
+      path: {
+        org_code: data.orgCode,
+        user_id: data.userId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Reset specific organization MFA for a user
+   * Reset a specific organization MFA factor for a user.
    *
    * <div>
    * <code>delete:organization_user_mfa</code>
@@ -3189,6 +3481,7 @@ export class Organizations {
    * @param data.orgCode The organization's code.
    * @param data.type The type of logo to delete.
    * @returns success_response Organization logo successfully deleted
+   * @returns void No logo found to delete
    * @throws ApiError
    */
   public static deleteOrganizationLogo(
@@ -3295,6 +3588,39 @@ export class Organizations {
         organization_code: data.organizationCode,
         connection_id: data.connectionId,
       },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update organization session configuration
+   * Update the organization's session configuration.
+   *
+   * <div>
+   * <code>update:organizations</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.requestBody Organization session configuration.
+   * @returns success_response Organization sessions successfully updated
+   * @throws ApiError
+   */
+  public static updateOrganizationSessions(
+    data: UpdateOrganizationSessionsData,
+  ): CancelablePromise<UpdateOrganizationSessionsResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/organizations/{org_code}/sessions",
+      path: {
+        org_code: data.orgCode,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -3807,6 +4133,101 @@ export class Roles {
       url: "/api/v1/roles/{role_id}",
       path: {
         role_id: data.roleId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get role scopes
+   * Get scopes for a role.
+   *
+   * <div>
+   * <code>read:role_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.roleId The role id.
+   * @returns role_scopes_response A list of scopes for a role
+   * @throws ApiError
+   */
+  public static getRoleScopes(
+    data: GetRoleScopesData,
+  ): CancelablePromise<GetRoleScopesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/roles/{role_id}/scopes",
+      path: {
+        role_id: data.roleId,
+      },
+      errors: {
+        400: "Error removing user",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Add role scope
+   * Add scope to role.
+   *
+   * <div>
+   * <code>create:role_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.roleId The role id.
+   * @param data.requestBody Add scope to role.
+   * @returns add_role_scope_response Role scope successfully added.
+   * @throws ApiError
+   */
+  public static addRoleScope(
+    data: AddRoleScopeData,
+  ): CancelablePromise<AddRoleScopeResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/roles/{role_id}/scopes",
+      path: {
+        role_id: data.roleId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete role scope
+   * Delete scope from role.
+   *
+   * <div>
+   * <code>delete:role_scopes</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.roleId The role id.
+   * @param data.scopeId The scope id.
+   * @returns delete_role_scope_response Role scope successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteRoleScope(
+    data: DeleteRoleScopeData,
+  ): CancelablePromise<DeleteRoleScopeResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/roles/{role_id}/scopes/{scope_id}",
+      path: {
+        role_id: data.roleId,
+        scope_id: data.scopeId,
       },
       errors: {
         400: "Invalid request.",
@@ -4501,6 +4922,37 @@ export class Users {
   }
 
   /**
+   * Get user sessions
+   * Retrieve the list of active sessions for a specific user.
+   *
+   * <div>
+   * <code>read:user_sessions</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.userId The identifier for the user
+   * @returns get_user_sessions_response Successfully retrieved user sessions.
+   * @throws ApiError
+   */
+  public static getUserSessions(
+    data: GetUserSessionsData,
+  ): CancelablePromise<GetUserSessionsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/users/{user_id}/sessions",
+      path: {
+        user_id: data.userId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
    * Delete user sessions
    * Invalidate user sessions.
    *
@@ -4563,8 +5015,39 @@ export class Users {
   }
 
   /**
-   * Reset MFA for a user
-   * Reset a user’s MFA.
+   * Reset all environment MFA for a user
+   * Reset all environment MFA factors for a user.
+   *
+   * <div>
+   * <code>delete:user_mfa</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.userId The identifier for the user
+   * @returns success_response User's MFA successfully reset.
+   * @throws ApiError
+   */
+  public static resetUsersMfaAll(
+    data: ResetUsersMfaAllData,
+  ): CancelablePromise<ResetUsersMfaAllResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/users/{user_id}/mfa",
+      path: {
+        user_id: data.userId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Reset specific environment MFA for a user
+   * Reset a specific environment MFA factor for a user.
    *
    * <div>
    * <code>delete:user_mfa</code>
@@ -4681,6 +5164,39 @@ export class Webhooks {
   }
 
   /**
+   * Update a Webhook
+   * Update a webhook
+   *
+   * <div>
+   * <code>update:webhooks</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.webhookId The webhook id.
+   * @param data.requestBody Update webhook request specification.
+   * @returns update_webhook_response Webhook successfully updated.
+   * @throws ApiError
+   */
+  public static updateWebHook(
+    data: UpdateWebHookData,
+  ): CancelablePromise<UpdateWebHookResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/webhooks/{webhook_id}",
+      path: {
+        webhook_id: data.webhookId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
    * List Webhooks
    * List webhooks
    *
@@ -4721,35 +5237,6 @@ export class Webhooks {
   ): CancelablePromise<CreateWebHookResponse> {
     return __request(OpenAPI, {
       method: "POST",
-      url: "/api/v1/webhooks",
-      body: data.requestBody,
-      mediaType: "application/json",
-      errors: {
-        400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Update a Webhook
-   * Update a webhook
-   *
-   * <div>
-   * <code>update:webhooks</code>
-   * </div>
-   *
-   * @param data The data for the request.
-   * @param data.requestBody Update webhook request specification.
-   * @returns update_webhook_response Webhook successfully updated.
-   * @throws ApiError
-   */
-  public static updateWebHook(
-    data: UpdateWebHookData,
-  ): CancelablePromise<UpdateWebHookResponse> {
-    return __request(OpenAPI, {
-      method: "PATCH",
       url: "/api/v1/webhooks",
       body: data.requestBody,
       mediaType: "application/json",

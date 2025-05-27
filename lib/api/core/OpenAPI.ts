@@ -33,10 +33,7 @@ export type OpenAPIConfig = {
   USERNAME?: string | Resolver<string> | undefined;
   VERSION: string;
   WITH_CREDENTIALS: boolean;
-  interceptors: {
-    request: Interceptors<RequestInit>;
-    response: Interceptors<Response>;
-  };
+  interceptors: {};
 };
 
 export const OpenAPI: OpenAPIConfig = {

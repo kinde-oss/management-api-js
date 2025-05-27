@@ -38,6 +38,12 @@ tags:
     x-displayName: APIs
   - name: Applications
     x-displayName: Applications
+  - name: Billing Entitlements
+    x-displayName: Billing Entitlements
+  - name: Billing Agreements
+    x-displayName: Billing Agreements
+  - name: Billing Meter Usage
+    x-displayName: Billing Meter Usage
   - name: Business
     x-displayName: Business
   - name: Industries
@@ -1069,11 +1075,308 @@ paths:
                   example: true
       responses:
         '200':
-          description: Application tokens succesfully updated.
+          description: Application tokens successfully updated.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/billing/entitlements:
+    get:
+      tags:
+        - Billing Entitlements
+      operationId: getBillingEntitlements
+      description: |
+        Returns all the entitlements a billing customer currently has access to
+
+        <div>
+          <code>read:billing_entitlements</code>
+        </div>
+      summary: Get billing entitlements
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: starting_after
+          in: query
+          required: false
+          description: The ID of the billing entitlement to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: ending_before
+          in: query
+          required: false
+          description: The ID of the billing entitlement to end before.
+          schema:
+            type: string
+            nullable: true
+        - name: customer_id
+          in: query
+          description: The ID of the billing customer to retrieve entitlements for
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: max_value
+          in: query
+          description: >-
+            When the maximum limit of an entitlement is null, this value is
+            returned as the maximum limit
+          schema:
+            type: string
+            nullable: true
+        - name: expand
+          in: query
+          description: Specify additional plan data to retrieve. Use "plans".
+          required: false
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - plans
+      responses:
+        '200':
+          description: Billing entitlements successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_billing_entitlements_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_billing_entitlements_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/billing/agreements:
+    get:
+      tags:
+        - Billing Agreements
+      operationId: getBillingAgreements
+      description: |
+        Returns all the agreements a billing customer currently has access to
+
+        <div>
+          <code>read:billing_agreements</code>
+        </div>
+      summary: Get billing agreements
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: starting_after
+          in: query
+          required: false
+          description: The ID of the billing agreement to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: ending_before
+          in: query
+          required: false
+          description: The ID of the billing agreement to end before.
+          schema:
+            type: string
+            nullable: true
+        - name: customer_id
+          in: query
+          description: The ID of the billing customer to retrieve agreements for
+          required: true
+          schema:
+            type: string
+            nullable: false
+          example: customer_0195ac80a14c2ca2cec97d026d864de0
+        - name: feature_code
+          in: query
+          required: false
+          description: >-
+            The feature code to filter by agreements only containing that
+            feature
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Billing agreements successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_billing_agreements_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_billing_agreements_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Billing Agreements
+      operationId: createBillingAgreement
+      description: >
+        Creates a new billing agreement based on the plan code passed, and
+        cancels the customer's existing agreements
+
+
+        <div>
+          <code>create:billing_agreements</code>
+        </div>
+      requestBody:
+        description: New agreement request values
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customer_id
+                - plan_code
+              properties:
+                customer_id:
+                  description: The ID of the billing customer to create a new agreement for
+                  type: string
+                  example: customer_0195ac80a14c2ca2cec97d026d864de0
+                plan_code:
+                  description: >-
+                    The code of the billing plan the new agreement will be based
+                    on
+                  type: string
+                  example: pro
+                is_invoice_now:
+                  type: boolean
+                  description: Generate a final invoice for any un-invoiced metered usage.
+                  example: true
+                is_prorate:
+                  type: boolean
+                  description: >-
+                    Generate a proration invoice item that credits remaining
+                    unused features.
+                  example: true
+      responses:
+        '200':
+          description: Billing agreement successfully changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/billing/meter_usage:
+    post:
+      tags:
+        - Billing Meter Usage
+      operationId: createMeterUsageRecord
+      summary: Create meter usage record
+      description: |
+        Create a new meter usage record
+
+        <div>
+          <code>create:meter_usage</code>
+        </div>
+      requestBody:
+        description: Meter usage record
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customer_agreement_id
+                - billing_feature_code
+                - meter_value
+              properties:
+                customer_agreement_id:
+                  description: The billing agreement against which to record usage
+                  type: string
+                  example: agreement_0195ac80a14c2ca2cec97d026d864de0
+                billing_feature_code:
+                  description: >-
+                    The code of the feature within the agreement against which
+                    to record usage
+                  type: string
+                  example: pro_gym
+                meter_value:
+                  description: The value of usage to record
+                  type: string
+                  example: pro_gym
+                meter_usage_timestamp:
+                  type: string
+                  format: date-time
+                  description: >-
+                    The date and time the usage needs to be recorded for
+                    (defaults to current date/time)
+                  example: '2024-11-18T13:32:03+11'
+                meter_type_code:
+                  type: string
+                  enum:
+                    - absolute
+                    - delta
+                  description: Absolutes overrides the current usage
+      responses:
+        '200':
+          description: Meter usage record successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_meter_usage_record_response'
         '400':
           $ref: '#/components/responses/bad_request'
         '403':
@@ -1822,19 +2125,28 @@ paths:
       tags:
         - Connections
       operationId: GetConnections
-      description: |
-        Returns a list of Connections
+      description: >
+        Returns a list of authentication connections. Optionally you can filter
+        this by a home realm domain.
+
 
         <div>
           <code>read:connections</code>
         </div>
-      summary: List Connections
+      summary: Get connections
       parameters:
         - name: page_size
           in: query
           description: Number of results per page. Defaults to 10 if parameter not sent.
           schema:
             type: integer
+            nullable: true
+        - name: home_realm_domain
+          in: query
+          description: Filter the results by the home realm domain.
+          schema:
+            example: myapp.com
+            type: string
             nullable: true
         - name: starting_after
           in: query
@@ -1937,6 +2249,13 @@ paths:
                   type: array
                   items:
                     type: string
+                organization_code:
+                  description: >-
+                    Enterprise connections only - the code for organization that
+                    manages this connection.
+                  type: string
+                  nullable: true
+                  example: org_80581732fbe
                 options:
                   oneOf:
                     - type: object
@@ -1995,6 +2314,12 @@ paths:
                           type: boolean
                           description: Include additional user profile information.
                           example: true
+                        is_auto_join_organization_enabled:
+                          type: boolean
+                          description: >-
+                            Users automatically join organization when using
+                            this connection.
+                          example: true
                     - type: object
                       description: SAML connection options (e.g., Cloudflare SAML).
                       properties:
@@ -2018,6 +2343,12 @@ paths:
                           type: string
                           description: URL for the IdP metadata.
                           example: https://kinde.com/saml/metadata
+                        saml_sign_in_url:
+                          type: string
+                          description: >-
+                            Override the default SSO endpoint with a URL your
+                            IdP recognizes.
+                          example: https://kinde.com/saml/signin
                         saml_email_key_attr:
                           type: string
                           description: Attribute key for the user’s email.
@@ -2052,6 +2383,12 @@ paths:
                             MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCy5+KLjTzF6tvl
 
                             -----END PRIVATE KEY-----
+                        is_auto_join_organization_enabled:
+                          type: boolean
+                          description: >-
+                            Users automatically join organization when using
+                            this connection.
+                          example: true
       responses:
         '201':
           description: Connection successfully created.
@@ -2499,7 +2836,7 @@ paths:
       operationId: getEnvironment
       summary: Get environment
       description: |
-        Get's the current environment.
+        Gets the current environment.
 
         <div>
           <code>read:environments</code>
@@ -2691,6 +3028,124 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/environment/logos:
+    get:
+      tags:
+        - Environments
+      operationId: ReadLogo
+      description: |
+        Read environment logo details
+
+        <div>
+          <code>read:environments</code>
+        </div>
+      summary: Read logo details
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/read_env_logo_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/environment/logos/{type}:
+    put:
+      tags:
+        - Environments
+      operationId: AddLogo
+      description: |
+        Add environment logo
+
+        <div>
+          <code>update:environments</code>
+        </div>
+      summary: Add logo
+      parameters:
+        - name: type
+          in: path
+          description: The type of logo to add.
+          required: true
+          schema:
+            type: string
+            example: dark
+            enum:
+              - dark
+              - light
+      requestBody:
+        description: Logo details.
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - logo
+              properties:
+                logo:
+                  type: string
+                  format: binary
+                  description: The logo file to upload.
+      responses:
+        '200':
+          description: Logo successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Environments
+      operationId: DeleteLogo
+      description: |
+        Delete environment logo
+
+        <div>
+          <code>update:environments</code>
+        </div>
+      summary: Delete logo
+      parameters:
+        - name: type
+          in: path
+          description: The type of logo to delete.
+          required: true
+          schema:
+            type: string
+            example: dark
+            enum:
+              - dark
+              - light
+      responses:
+        '200':
+          description: Logo successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '204':
+          description: No logo found to delete
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
   /api/v1/environment_variables:
@@ -3430,9 +3885,6 @@ paths:
                     code is supplied during authentication.
                   type: boolean
                   example: true
-                is_custom_auth_connections_enabled:
-                  description: Enable custom auth connections for this organization.
-                  type: boolean
                 sender_name:
                   nullable: true
                   type: string
@@ -3445,6 +3897,22 @@ paths:
                   description: >-
                     The email address that will be used in emails. Requires
                     custom SMTP to be set up.
+                is_create_billing_customer:
+                  type: boolean
+                  example: false
+                  description: If a billing customer is also created for this organization
+                billing_email:
+                  type: string
+                  example: billing@acmecorp.com
+                  description: >-
+                    The email address used for billing purposes for the
+                    organization
+                billing_plan_code:
+                  type: string
+                  example: pro
+                  description: >-
+                    The billing plan to put the customer on. If not specified,
+                    the default plan is used
       responses:
         '200':
           description: Organization successfully created.
@@ -3531,6 +3999,15 @@ paths:
           schema:
             type: string
             example: org_1ccfb819462
+        - name: expand
+          in: query
+          description: Specify additional data to retrieve. Use "billing".
+          required: false
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - billing
       requestBody:
         description: Organization details.
         required: false
@@ -3599,10 +4076,6 @@ paths:
                   deprecated: true
                   description: Deprecated - Use 'is_auto_membership_enabled' instead.
                   type: boolean
-                is_custom_auth_connections_enabled:
-                  description: Enable custom auth connections for this organization.
-                  type: boolean
-                  example: true
                 is_auto_join_domain_list:
                   description: Users can sign up to this organization.
                   type: boolean
@@ -4419,18 +4892,61 @@ paths:
           $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
+    delete:
+      tags:
+        - Organizations
+      operationId: ResetOrgUserMFAAll
+      description: |
+        Reset all organization MFA factors for a user.
+
+        <div>
+          <code>delete:organization_user_mfa</code>
+        </div>
+      summary: Reset all organization MFA for a user
+      parameters:
+        - name: org_code
+          in: path
+          description: The identifier for the organization.
+          required: true
+          schema:
+            type: string
+            example: org_1ccfb819462
+        - name: user_id
+          in: path
+          description: The identifier for the user
+          required: true
+          schema:
+            type: string
+            example: kp_c3143a4b50ad43c88e541d9077681782
+      responses:
+        '200':
+          description: User's MFA successfully reset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/organizations/{org_code}/users/{user_id}/mfa/{factor_id}:
     delete:
       tags:
         - Organizations
       operationId: ResetOrgUserMFA
       description: |
-        Reset an organization user’s MFA.
+        Reset a specific organization MFA factor for a user.
 
         <div>
           <code>delete:organization_user_mfa</code>
         </div>
-      summary: Reset MFA for a user
+      summary: Reset specific organization MFA for a user
       parameters:
         - name: org_code
           in: path
@@ -5052,6 +5568,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/success_response'
+        '204':
+          description: No logo found to delete
         '400':
           $ref: '#/components/responses/bad_request'
         '403':
@@ -5163,6 +5681,70 @@ paths:
       responses:
         '200':
           description: Connection successfully removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organizations/{org_code}/sessions:
+    patch:
+      tags:
+        - Organizations
+      operationId: UpdateOrganizationSessions
+      description: |
+        Update the organization's session configuration.
+
+        <div>
+          <code>update:organizations</code>
+        </div>
+      summary: Update organization session configuration
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+            example: org_1ccfb819462
+      requestBody:
+        description: Organization session configuration.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_use_org_sso_session_policy:
+                  type: boolean
+                  description: >-
+                    Whether to use the organization's SSO session policy
+                    override.
+                sso_session_persistence_mode:
+                  type: string
+                  enum:
+                    - persistent
+                    - non-persistent
+                  description: Determines if the session should be persistent or not.
+                is_use_org_authenticated_session_lifetime:
+                  type: boolean
+                  description: >-
+                    Whether to apply the organization's authenticated session
+                    lifetime override.
+                authenticated_session_lifetime:
+                  type: integer
+                  description: Authenticated session lifetime in seconds.
+                  example: 86400
+      responses:
+        '200':
+          description: Organization sessions successfully updated
           content:
             application/json:
               schema:
@@ -6077,6 +6659,140 @@ paths:
           $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
+  /api/v1/roles/{role_id}/scopes:
+    get:
+      tags:
+        - Roles
+      operationId: GetRoleScopes
+      description: |
+        Get scopes for a role.
+
+        <div>
+          <code>read:role_scopes</code>
+        </div>
+      summary: Get role scopes
+      parameters:
+        - name: role_id
+          in: path
+          description: The role id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: A list of scopes for a role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/role_scopes_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/role_scopes_response'
+        '400':
+          description: Error removing user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Roles
+      operationId: AddRoleScope
+      description: |
+        Add scope to role.
+
+        <div>
+          <code>create:role_scopes</code>
+        </div>
+      summary: Add role scope
+      parameters:
+        - name: role_id
+          in: path
+          description: The role id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      requestBody:
+        description: Add scope to role.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scope_id:
+                  description: The scope identifier.
+                  type: string
+              required:
+                - scope_id
+      responses:
+        '201':
+          description: Role scope successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/add_role_scope_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/roles/{role_id}/scopes/{scope_id}:
+    delete:
+      tags:
+        - Roles
+      operationId: DeleteRoleScope
+      description: |
+        Delete scope from role.
+
+        <div>
+          <code>delete:role_scopes</code>
+        </div>
+      summary: Delete role scope
+      parameters:
+        - name: role_id
+          in: path
+          description: The role id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: scope_id
+          in: path
+          description: The scope id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: Role scope successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_role_scope_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/roles/{role_id}/permissions:
     get:
       tags:
@@ -6735,6 +7451,12 @@ paths:
                           - email
                           - phone
                           - username
+                      is_verified:
+                        type: boolean
+                        description: >-
+                          Set whether an email or phone identity is verified or
+                          not.
+                        example: true
                       details:
                         type: object
                         description: Additional details required to create the user.
@@ -6757,9 +7479,11 @@ paths:
                             example: myusername
                   example:
                     - type: email
+                      is_verified: true
                       details:
                         email: email@email.com
                     - type: phone
+                      is_verified: false
                       details:
                         phone: '+61426148233'
                         phone_country_id: au
@@ -7291,8 +8015,8 @@ paths:
                 connection_id:
                   type: string
                   description: >-
-                    The social connection ID, only required when identity type
-                    is 'social'.
+                    The social or enterprise connection ID, only required when
+                    identity type is 'social' or 'enterprise'.
                   example: conn_019289347f1193da6c0e4d49b97b4bd2
       responses:
         '201':
@@ -7320,6 +8044,42 @@ paths:
       security:
         - kindeBearerAuth: []
   /api/v1/users/{user_id}/sessions:
+    get:
+      tags:
+        - Users
+      operationId: GetUserSessions
+      description: |
+        Retrieve the list of active sessions for a specific user.
+
+        <div>
+          <code>read:user_sessions</code>
+        </div>
+      summary: Get user sessions
+      parameters:
+        - name: user_id
+          in: path
+          description: The identifier for the user
+          required: true
+          schema:
+            type: string
+            example: kp_c3143a4b50ad43c88e541d9077681782
+      responses:
+        '200':
+          description: Successfully retrieved user sessions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_user_sessions_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
     delete:
       tags:
         - Users
@@ -7393,18 +8153,54 @@ paths:
           $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
+    delete:
+      tags:
+        - Users
+      operationId: ResetUsersMFAAll
+      description: |
+        Reset all environment MFA factors for a user.
+
+        <div>
+          <code>delete:user_mfa</code>
+        </div>
+      summary: Reset all environment MFA for a user
+      parameters:
+        - name: user_id
+          in: path
+          description: The identifier for the user
+          required: true
+          schema:
+            type: string
+            example: kp_c3143a4b50ad43c88e541d9077681782
+      responses:
+        '200':
+          description: User's MFA successfully reset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/users/{user_id}/mfa/{factor_id}:
     delete:
       tags:
         - Users
       operationId: ResetUsersMFA
       description: |
-        Reset a user’s MFA.
+        Reset a specific environment MFA factor for a user.
 
         <div>
           <code>delete:user_mfa</code>
         </div>
-      summary: Reset MFA for a user
+      summary: Reset specific environment MFA for a user
       parameters:
         - name: user_id
           in: path
@@ -7585,6 +8381,79 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+    patch:
+      tags:
+        - Webhooks
+      operationId: UpdateWebHook
+      description: |
+        Update a webhook
+
+        <div>
+          <code>update:webhooks</code>
+        </div>
+      summary: Update a Webhook
+      parameters:
+        - name: webhook_id
+          in: path
+          description: The webhook id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      requestBody:
+        description: Update webhook request specification.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_types:
+                  description: Array of event type keys
+                  type: array
+                  items:
+                    type: string
+                  nullable: false
+                name:
+                  description: The webhook name
+                  type: string
+                  nullable: false
+                description:
+                  description: The webhook description
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Webhook successfully updated.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/update_webhook_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/update_webhook_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
   /api/v1/webhooks:
     get:
       tags:
@@ -7680,71 +8549,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/create_webhook_response'
-        '400':
-          description: Invalid request.
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/error_response'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error_response'
-        '403':
-          description: Invalid credentials.
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/error_response'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error_response'
-        '429':
-          description: Request was throttled.
-      security:
-        - kindeBearerAuth: []
-    patch:
-      tags:
-        - Webhooks
-      operationId: UpdateWebHook
-      description: |
-        Update a webhook
-
-        <div>
-          <code>update:webhooks</code>
-        </div>
-      summary: Update a Webhook
-      requestBody:
-        description: Update webhook request specification.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                event_types:
-                  description: Array of event type keys
-                  type: array
-                  items:
-                    type: string
-                  nullable: false
-                name:
-                  description: The webhook name
-                  type: string
-                  nullable: false
-                description:
-                  description: The webhook description
-                  type: string
-                  nullable: true
-      responses:
-        '200':
-          description: Webhook successfully updated.
-          content:
-            application/json; charset=utf-8:
-              schema:
-                $ref: '#/components/schemas/update_webhook_response'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/update_webhook_response'
         '400':
           description: Invalid request.
           content:
@@ -8707,6 +9511,12 @@ components:
               description: The organization's unique code.
               type: string
               example: org_1ccfb819462
+            billing_customer_id:
+              description: >-
+                The billing customer id if the organization was created with the
+                is_create_billing_customer as true
+              type: string
+              example: customer_1245adbc6789
     user_identity:
       type: object
       properties:
@@ -8762,6 +9572,89 @@ components:
         has_more:
           description: Whether more records exist.
           type: boolean
+    get_user_sessions_response:
+      type: object
+      properties:
+        code:
+          type: string
+          example: OK
+        message:
+          type: string
+          example: Success
+        has_more:
+          type: boolean
+          example: false
+        sessions:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id:
+                description: The unique identifier of the user associated with the session.
+                type: string
+                example: kp_5fc30d0547734f30aca617450202169f
+              org_code:
+                description: >-
+                  The organization code associated with the session, if
+                  applicable.
+                type: string
+                nullable: true
+                example: org_1ccfb819462
+              client_id:
+                description: The client ID used to initiate the session.
+                type: string
+                example: 3b0b5c6c8fcc464fab397f4969b5f482
+              expires_on:
+                description: The timestamp indicating when the session will expire.
+                type: string
+                format: date-time
+                example: '2025-04-02T13:04:20.315701+11:00'
+              session_id:
+                description: The unique identifier of the session.
+                type: string
+                example: session_0xc75ec12fe8434ffc9d527794f00692e5
+              started_on:
+                description: The timestamp when the session was initiated.
+                type: string
+                format: date-time
+                example: '2025-04-01T13:04:20.315701+11:00'
+              updated_on:
+                description: The timestamp of the last update to the session.
+                type: string
+                format: date-time
+                example: '2025-04-01T13:04:20+11'
+              connection_id:
+                description: >-
+                  The identifier of the connection through which the session was
+                  established.
+                type: string
+                example: conn_75ab8ec0faae4f73bae9fc64daf120c9
+              last_ip_address:
+                description: The last known IP address of the user during this session.
+                type: string
+                example: 192.168.65.1
+              last_user_agent:
+                description: >-
+                  The last known user agent (browser or app) used during this
+                  session.
+                type: string
+                example: >-
+                  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)
+                  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0
+                  Safari/537.36
+              initial_ip_address:
+                description: The IP address from which the session was initially started.
+                type: string
+                example: 192.168.65.1
+              initial_user_agent:
+                description: >-
+                  The user agent (browser or app) used when the session was
+                  first created.
+                type: string
+                example: >-
+                  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)
+                  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0
+                  Safari/537.36
     get_user_mfa_response:
       type: object
       properties:
@@ -9497,6 +10390,30 @@ components:
           description: >-
             The email address that will be used in emails. Requires custom SMTP
             to be set up.
+        billing:
+          type: object
+          description: The billing information if the organization is a billing customer.
+          properties:
+            billing_customer_id:
+              type: string
+            agreements:
+              type: array
+              description: >-
+                The billing agreements the billing customer is currently
+                subscribed to
+              items:
+                type: object
+                properties:
+                  plan_code:
+                    type: string
+                    example: pro
+                    description: >-
+                      The code of the plan from which this agreement is taken
+                      from
+                  agreement_id:
+                    type: string
+                    example: agreement_a1234b
+                    description: The id of the billing agreement in Kinde
     organization_user:
       type: object
       properties:
@@ -9533,6 +10450,11 @@ components:
           type: string
           example: '2021-01-01T00:00:00Z'
           description: The date the user joined the organization.
+        last_accessed_on:
+          type: string
+          example: '2022-01-01T00:00:00Z'
+          description: The date the user last accessed the organization.
+          nullable: true
         roles:
           type: array
           description: The roles the user has in the organization.
@@ -9596,20 +10518,40 @@ components:
       properties:
         id:
           type: string
+          description: The unique ID for the identity
+          example: identity_019617f0cd72460a42192cf37b41084f
         type:
           type: string
+          description: The type of identity
+          example: email
         is_confirmed:
           type: boolean
+          description: Whether the identity is confirmed
+          example: true
         created_on:
           type: string
-          description: Date of user creation in ISO 8601 format.
+          description: Date of user creation in ISO 8601 format
+          example: '2025-01-01T00:00:00Z'
         last_login_on:
           type: string
-          description: Date of user creation in ISO 8601 format.
+          description: Date of last login in ISO 8601 format
+          example: '2025-01-05T00:00:00Z'
         total_logins:
           type: integer
+          example: 20
         name:
           type: string
+          description: The value of the identity
+          example: sally@example.com
+        email:
+          type: string
+          description: The associated email of the identity
+          example: sally@example.com
+        is_primary:
+          type: boolean
+          description: Whether the identity is the primary identity for the user
+          nullable: true
+          example: true
     property:
       type: object
       properties:
@@ -9817,6 +10759,28 @@ components:
             id:
               type: string
               description: The role's ID.
+    add_role_scope_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: ROLE_SCOPE_ADDED
+        message:
+          type: string
+          description: Response message.
+          example: Scope added to role
+    delete_role_scope_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: SCOPE_DELETED
+        message:
+          type: string
+          description: Response message.
+          example: Scope deleted from role
     get_organizations_response:
       type: object
       properties:
@@ -10180,6 +11144,25 @@ components:
         description:
           type: string
           description: The permission's description.
+    scopes:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Scope ID.
+          example: api_scope_019541f3fa0c874fc47b3ae73585b21c
+        key:
+          type: string
+          description: Scope key.
+          example: create:users
+        description:
+          type: string
+          description: Description of scope.
+          example: Create users
+        api_id:
+          type: string
+          description: API ID.
+          example: 3635b4431f174de6b789c67481bd0c7a
     roles:
       type: object
       properties:
@@ -10215,6 +11198,21 @@ components:
         next_token:
           type: string
           description: Pagination token.
+    role_scopes_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/scopes'
     read_logo_response:
       type: object
       properties:
@@ -10244,6 +11242,168 @@ components:
           type: string
           description: Response message.
           example: Success
+    read_env_logo_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        logos:
+          type: array
+          description: A list of logos.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The type of logo (light or dark).
+                example: light
+              file_name:
+                type: string
+                description: The name of the logo file.
+                example: kinde_light.jpeg
+        message:
+          type: string
+          description: Response message.
+          example: Success
+    get_billing_entitlements_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        has_more:
+          description: Whether more records exist.
+          type: boolean
+        entitlements:
+          type: array
+          description: A list of entitlements
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The friendly id of an entitlement
+                example: entitlement_0195ac80a14e8d71f42b98e75d3c61ad
+              fixed_charge:
+                type: integer
+                description: >-
+                  The price charged if this is an entitlement for a fixed
+                  charged
+                example: 35
+              price_name:
+                type: string
+                description: The name of the price associated with the entitlement
+                example: Pro gym
+              unit_amount:
+                type: integer
+                description: The price charged for this entitlement in cents
+              feature_code:
+                type: string
+                description: >-
+                  The feature code of the feature corresponding to this
+                  entitlement
+                example: CcdkvEXpbg6UY
+              feature_name:
+                type: string
+                description: >-
+                  The feature name of the feature corresponding to this
+                  entitlement
+                example: Pro Gym
+              entitlement_limit_max:
+                type: integer
+                description: >-
+                  The maximum number of units of the feature the customer is
+                  entitled to
+              entitlement_limit_min:
+                type: integer
+                description: >-
+                  The minimum number of units of the feature the customer is
+                  entitled to
+        plans:
+          type: array
+          description: A list of plans.
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: The plan code the billing customer is subscribed to
+              subscribed_on:
+                type: string
+                format: date-time
+                example: '2024-11-18T13:32:03+11'
+    get_billing_agreements_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        has_more:
+          description: Whether more records exist.
+          type: boolean
+        agreements:
+          type: array
+          description: A list of billing agreements
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The friendly id of an agreement
+                example: agreement_0195ac80a14c2ca2cec97d026d864de0
+              plan_code:
+                type: string
+                description: The plan code the billing customer is subscribed to
+              expires_on:
+                type: string
+                format: date-time
+                description: The date the agreement expired (and was no longer active)
+                example: '2024-11-18T13:32:03+11'
+              billing_group_id:
+                type: string
+                description: >-
+                  The friendly id of the billing group this agreement's plan is
+                  part of
+                example: sbg_0195abf6773fdae18d5da72281a3fde2
+              entitlements:
+                type: array
+                description: A list of billing entitlements that is part of this agreement
+                items:
+                  type: object
+                  properties:
+                    feature_code:
+                      type: string
+                      description: >-
+                        The feature code of the feature corresponding to this
+                        entitlement
+                      example: CcdkvEXpbg6UY
+                    entitlement_id:
+                      type: string
+                      description: The friendly id of an entitlement
+                      example: entitlement_0195ac80a14e8d71f42b98e75d3c61ad
+    create_meter_usage_record_response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        code:
+          type: string
+          description: Response code.
+          example: OK
     user_profile_v2:
       type: object
       properties:
