@@ -113,8 +113,8 @@ describe("main.ts exports", () => {
       "$users",
       "$users_response",
       "$webhook",
-      "ApIs",
       "ApiError",
+      "Apis",
       "Applications",
       "BillingAgreements",
       "BillingEntitlements",
@@ -130,8 +130,8 @@ describe("main.ts exports", () => {
       "FeatureFlags",
       "Identities",
       "Industries",
-      "Oauth",
       "Mfa",
+      "OAuth",
       "OpenAPI",
       "Organizations",
       "Permissions",
@@ -146,6 +146,7 @@ describe("main.ts exports", () => {
 
       // utils
       "checkAudience",
+      // "client",
       "getToken",
       "jwtDecode",
       "jwtDecoder",

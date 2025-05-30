@@ -1273,6 +1273,7 @@ paths:
         <div>
           <code>create:billing_agreements</code>
         </div>
+      summary: Create billing agreement
       requestBody:
         description: New agreement request values
         required: true

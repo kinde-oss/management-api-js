@@ -49,6 +49,8 @@ async function generateM2MToken() {
     scope: constants.DEFAULT_TOKEN_SCOPES,
     client_id: kindeConfig.clientId,
     client_secret: kindeConfig.clientSecret,
+    // TODO: uncomment after migrating to the new Fetch client
+    // audience: client.getConfig().baseUrl + "/api",
     audience: OpenAPI.BASE + "/api",
   });
 

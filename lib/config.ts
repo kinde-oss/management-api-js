@@ -62,6 +62,13 @@ export const init = (
     config,
   );
 
+  // TODO: uncomment after migrating to the new Fetch client
+  // client.setConfig({
+  //   async auth() {
+  //     return await getToken();
+  //   },
+  //   baseUrl: kindeConfig.kindeDomain,
+  // });
   _merge(OpenAPI, {
     BASE: kindeConfig.kindeDomain,
     TOKEN: async () => {
