@@ -41,7 +41,7 @@
   "dependencies": {
     "@kinde/jwt-decoder": "^0.2.0",
     "aws-jwt-verify": "^5.0.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.6.1"
   },
   "publishConfig": {
     "access": "public"
