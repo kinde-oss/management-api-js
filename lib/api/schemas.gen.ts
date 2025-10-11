@@ -1032,6 +1032,12 @@ export const $create_organization_response = {
           type: "string",
           example: "org_1ccfb819462",
         },
+        billing_customer_id: {
+          description:
+            "The billing customer id if the organization was created with the is_create_billing_customer as true",
+          type: "string",
+          example: "customer_1245adbc6789",
+        },
       },
     },
   },
@@ -1119,6 +1125,106 @@ export const $get_identities_response = {
     has_more: {
       description: "Whether more records exist.",
       type: "boolean",
+    },
+  },
+} as const;
+
+export const $get_user_sessions_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      example: "Success",
+    },
+    has_more: {
+      type: "boolean",
+      example: false,
+    },
+    sessions: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          user_id: {
+            description:
+              "The unique identifier of the user associated with the session.",
+            type: "string",
+            example: "kp_5fc30d0547734f30aca617450202169f",
+          },
+          org_code: {
+            description:
+              "The organization code associated with the session, if applicable.",
+            type: "string",
+            nullable: true,
+            example: "org_1ccfb819462",
+          },
+          client_id: {
+            description: "The client ID used to initiate the session.",
+            type: "string",
+            example: "3b0b5c6c8fcc464fab397f4969b5f482",
+          },
+          expires_on: {
+            description:
+              "The timestamp indicating when the session will expire.",
+            type: "string",
+            format: "date-time",
+            example: "2025-04-02T13:04:20.315701+11:00",
+          },
+          session_id: {
+            description: "The unique identifier of the session.",
+            type: "string",
+            example: "session_0xc75ec12fe8434ffc9d527794f00692e5",
+          },
+          started_on: {
+            description: "The timestamp when the session was initiated.",
+            type: "string",
+            format: "date-time",
+            example: "2025-04-01T13:04:20.315701+11:00",
+          },
+          updated_on: {
+            description: "The timestamp of the last update to the session.",
+            type: "string",
+            format: "date-time",
+            example: "2025-04-01T13:04:20+11",
+          },
+          connection_id: {
+            description:
+              "The identifier of the connection through which the session was established.",
+            type: "string",
+            example: "conn_75ab8ec0faae4f73bae9fc64daf120c9",
+          },
+          last_ip_address: {
+            description:
+              "The last known IP address of the user during this session.",
+            type: "string",
+            example: "192.168.65.1",
+          },
+          last_user_agent: {
+            description:
+              "The last known user agent (browser or app) used during this session.",
+            type: "string",
+            example:
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+          },
+          initial_ip_address: {
+            description:
+              "The IP address from which the session was initially started.",
+            type: "string",
+            example: "192.168.65.1",
+          },
+          initial_user_agent: {
+            description:
+              "The user agent (browser or app) used when the session was first created.",
+            type: "string",
+            example:
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+          },
+        },
+      },
     },
   },
 } as const;
@@ -2089,6 +2195,37 @@ export const $get_organization_response = {
       description:
         "The email address that will be used in emails. Requires custom SMTP to be set up.",
     },
+    billing: {
+      type: "object",
+      description:
+        "The billing information if the organization is a billing customer.",
+      properties: {
+        billing_customer_id: {
+          type: "string",
+        },
+        agreements: {
+          type: "array",
+          description:
+            "The billing agreements the billing customer is currently subscribed to",
+          items: {
+            type: "object",
+            properties: {
+              plan_code: {
+                type: "string",
+                example: "pro",
+                description:
+                  "The code of the plan from which this agreement is taken from",
+              },
+              agreement_id: {
+                type: "string",
+                example: "agreement_a1234b",
+                description: "The id of the billing agreement in Kinde",
+              },
+            },
+          },
+        },
+      },
+    },
   },
 } as const;
 
@@ -2134,6 +2271,12 @@ export const $organization_user = {
       type: "string",
       example: "2021-01-01T00:00:00Z",
       description: "The date the user joined the organization.",
+    },
+    last_accessed_on: {
+      type: "string",
+      example: "2022-01-01T00:00:00Z",
+      description: "The date the user last accessed the organization.",
+      nullable: true,
     },
     roles: {
       type: "array",
@@ -2227,26 +2370,48 @@ export const $identity = {
   properties: {
     id: {
       type: "string",
+      description: "The unique ID for the identity",
+      example: "identity_019617f0cd72460a42192cf37b41084f",
     },
     type: {
       type: "string",
+      description: "The type of identity",
+      example: "email",
     },
     is_confirmed: {
       type: "boolean",
+      description: "Whether the identity is confirmed",
+      example: true,
     },
     created_on: {
       type: "string",
-      description: "Date of user creation in ISO 8601 format.",
+      description: "Date of user creation in ISO 8601 format",
+      example: "2025-01-01T00:00:00Z",
     },
     last_login_on: {
       type: "string",
-      description: "Date of user creation in ISO 8601 format.",
+      description: "Date of last login in ISO 8601 format",
+      example: "2025-01-05T00:00:00Z",
     },
     total_logins: {
       type: "integer",
+      example: 20,
     },
     name: {
       type: "string",
+      description: "The value of the identity",
+      example: "sally@example.com",
+    },
+    email: {
+      type: "string",
+      description: "The associated email of the identity",
+      example: "sally@example.com",
+    },
+    is_primary: {
+      type: "boolean",
+      description: "Whether the identity is the primary identity for the user",
+      nullable: true,
+      example: true,
     },
   },
 } as const;
@@ -2565,6 +2730,38 @@ export const $create_roles_response = {
           description: "The role's ID.",
         },
       },
+    },
+  },
+} as const;
+
+export const $add_role_scope_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "ROLE_SCOPE_ADDED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Scope added to role",
+    },
+  },
+} as const;
+
+export const $delete_role_scope_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "SCOPE_DELETED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Scope deleted from role",
     },
   },
 } as const;
@@ -3091,6 +3288,32 @@ export const $permissions = {
   },
 } as const;
 
+export const $scopes = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      description: "Scope ID.",
+      example: "api_scope_019541f3fa0c874fc47b3ae73585b21c",
+    },
+    key: {
+      type: "string",
+      description: "Scope key.",
+      example: "create:users",
+    },
+    description: {
+      type: "string",
+      description: "Description of scope.",
+      example: "Create users",
+    },
+    api_id: {
+      type: "string",
+      description: "API ID.",
+      example: "3635b4431f174de6b789c67481bd0c7a",
+    },
+  },
+} as const;
+
 export const $roles = {
   type: "object",
   properties: {
@@ -3142,6 +3365,28 @@ export const $role_permissions_response = {
   },
 } as const;
 
+export const $role_scopes_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    scopes: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/scopes",
+      },
+    },
+  },
+} as const;
+
 export const $read_logo_response = {
   type: "object",
   properties: {
@@ -3178,6 +3423,219 @@ export const $read_logo_response = {
       type: "string",
       description: "Response message.",
       example: "Success",
+    },
+  },
+} as const;
+
+export const $read_env_logo_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    logos: {
+      type: "array",
+      description: "A list of logos.",
+      items: {
+        type: "object",
+        properties: {
+          type: {
+            type: "string",
+            description: "The type of logo (light or dark).",
+            example: "light",
+          },
+          file_name: {
+            type: "string",
+            description: "The name of the logo file.",
+            example: "kinde_light.jpeg",
+          },
+        },
+      },
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+  },
+} as const;
+
+export const $get_billing_entitlements_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+    entitlements: {
+      type: "array",
+      description: "A list of entitlements",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The friendly id of an entitlement",
+            example: "entitlement_0195ac80a14e8d71f42b98e75d3c61ad",
+          },
+          fixed_charge: {
+            type: "integer",
+            description:
+              "The price charged if this is an entitlement for a fixed charged",
+            example: 35,
+          },
+          price_name: {
+            type: "string",
+            description:
+              "The name of the price associated with the entitlement",
+            example: "Pro gym",
+          },
+          unit_amount: {
+            type: "integer",
+            description: "The price charged for this entitlement in cents",
+          },
+          feature_code: {
+            type: "string",
+            description:
+              "The feature code of the feature corresponding to this entitlement",
+            example: "CcdkvEXpbg6UY",
+          },
+          feature_name: {
+            type: "string",
+            description:
+              "The feature name of the feature corresponding to this entitlement",
+            example: "Pro Gym",
+          },
+          entitlement_limit_max: {
+            type: "integer",
+            description:
+              "The maximum number of units of the feature the customer is entitled to",
+          },
+          entitlement_limit_min: {
+            type: "integer",
+            description:
+              "The minimum number of units of the feature the customer is entitled to",
+          },
+        },
+      },
+    },
+    plans: {
+      type: "array",
+      description: "A list of plans.",
+      items: {
+        type: "object",
+        properties: {
+          code: {
+            type: "string",
+            description: "The plan code the billing customer is subscribed to",
+          },
+          subscribed_on: {
+            type: "string",
+            format: "date-time",
+            example: "2024-11-18T13:32:03+11",
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $get_billing_agreements_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+    agreements: {
+      type: "array",
+      description: "A list of billing agreements",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The friendly id of an agreement",
+            example: "agreement_0195ac80a14c2ca2cec97d026d864de0",
+          },
+          plan_code: {
+            type: "string",
+            description: "The plan code the billing customer is subscribed to",
+          },
+          expires_on: {
+            type: "string",
+            format: "date-time",
+            description:
+              "The date the agreement expired (and was no longer active)",
+            example: "2024-11-18T13:32:03+11",
+          },
+          billing_group_id: {
+            type: "string",
+            description:
+              "The friendly id of the billing group this agreement's plan is part of",
+            example: "sbg_0195abf6773fdae18d5da72281a3fde2",
+          },
+          entitlements: {
+            type: "array",
+            description:
+              "A list of billing entitlements that is part of this agreement",
+            items: {
+              type: "object",
+              properties: {
+                feature_code: {
+                  type: "string",
+                  description:
+                    "The feature code of the feature corresponding to this entitlement",
+                  example: "CcdkvEXpbg6UY",
+                },
+                entitlement_id: {
+                  type: "string",
+                  description: "The friendly id of an entitlement",
+                  example: "entitlement_0195ac80a14e8d71f42b98e75d3c61ad",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $create_meter_usage_record_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
     },
   },
 } as const;

@@ -672,6 +672,10 @@ export type create_organization_response = {
      * The organization's unique code.
      */
     code?: string;
+    /**
+     * The billing customer id if the organization was created with the is_create_billing_customer as true
+     */
+    billing_customer_id?: string;
   };
 };
 
@@ -727,6 +731,62 @@ export type get_identities_response = {
    * Whether more records exist.
    */
   has_more?: boolean;
+};
+
+export type get_user_sessions_response = {
+  code?: string;
+  message?: string;
+  has_more?: boolean;
+  sessions?: Array<{
+    /**
+     * The unique identifier of the user associated with the session.
+     */
+    user_id?: string;
+    /**
+     * The organization code associated with the session, if applicable.
+     */
+    org_code?: string | null;
+    /**
+     * The client ID used to initiate the session.
+     */
+    client_id?: string;
+    /**
+     * The timestamp indicating when the session will expire.
+     */
+    expires_on?: string;
+    /**
+     * The unique identifier of the session.
+     */
+    session_id?: string;
+    /**
+     * The timestamp when the session was initiated.
+     */
+    started_on?: string;
+    /**
+     * The timestamp of the last update to the session.
+     */
+    updated_on?: string;
+    /**
+     * The identifier of the connection through which the session was established.
+     */
+    connection_id?: string;
+    /**
+     * The last known IP address of the user during this session.
+     */
+    last_ip_address?: string;
+    /**
+     * The last known user agent (browser or app) used during this session.
+     */
+    last_user_agent?: string;
+    /**
+     * The IP address from which the session was initially started.
+     */
+    initial_ip_address?: string;
+    /**
+     * The user agent (browser or app) used when the session was first created.
+     */
+    initial_user_agent?: string;
+  }>;
 };
 
 export type get_user_mfa_response = {
@@ -1236,6 +1296,25 @@ export type get_organization_response = {
    * The email address that will be used in emails. Requires custom SMTP to be set up.
    */
   sender_email?: string | null;
+  /**
+   * The billing information if the organization is a billing customer.
+   */
+  billing?: {
+    billing_customer_id?: string;
+    /**
+     * The billing agreements the billing customer is currently subscribed to
+     */
+    agreements?: Array<{
+      /**
+       * The code of the plan from which this agreement is taken from
+       */
+      plan_code?: string;
+      /**
+       * The id of the billing agreement in Kinde
+       */
+      agreement_id?: string;
+    }>;
+  };
 };
 
 export type organization_user = {
@@ -1267,6 +1346,10 @@ export type organization_user = {
    * The date the user joined the organization.
    */
   joined_on?: string;
+  /**
+   * The date the user last accessed the organization.
+   */
+  last_accessed_on?: string | null;
   /**
    * The roles the user has in the organization.
    */
@@ -1319,19 +1402,39 @@ export type environment_variable = {
 };
 
 export type identity = {
+  /**
+   * The unique ID for the identity
+   */
   id?: string;
+  /**
+   * The type of identity
+   */
   type?: string;
+  /**
+   * Whether the identity is confirmed
+   */
   is_confirmed?: boolean;
   /**
-   * Date of user creation in ISO 8601 format.
+   * Date of user creation in ISO 8601 format
    */
   created_on?: string;
   /**
-   * Date of user creation in ISO 8601 format.
+   * Date of last login in ISO 8601 format
    */
   last_login_on?: string;
   total_logins?: number;
+  /**
+   * The value of the identity
+   */
   name?: string;
+  /**
+   * The associated email of the identity
+   */
+  email?: string;
+  /**
+   * Whether the identity is the primary identity for the user
+   */
+  is_primary?: boolean | null;
 };
 
 export type property = {
@@ -1492,6 +1595,28 @@ export type create_roles_response = {
      */
     id?: string;
   };
+};
+
+export type add_role_scope_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+};
+
+export type delete_role_scope_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
 };
 
 export type get_organizations_response = {
@@ -1824,6 +1949,25 @@ export type permissions = {
   description?: string;
 };
 
+export type scopes = {
+  /**
+   * Scope ID.
+   */
+  id?: string;
+  /**
+   * Scope key.
+   */
+  key?: string;
+  /**
+   * Description of scope.
+   */
+  description?: string;
+  /**
+   * API ID.
+   */
+  api_id?: string;
+};
+
 export type roles = {
   /**
    * The role's ID.
@@ -1863,6 +2007,18 @@ export type role_permissions_response = {
   next_token?: string;
 };
 
+export type role_scopes_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  scopes?: Array<scopes>;
+};
+
 export type read_logo_response = {
   /**
    * Response code.
@@ -1889,6 +2045,152 @@ export type read_logo_response = {
    * Response message.
    */
   message?: string;
+};
+
+export type read_env_logo_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * A list of logos.
+   */
+  logos?: Array<{
+    /**
+     * The type of logo (light or dark).
+     */
+    type?: string;
+    /**
+     * The name of the logo file.
+     */
+    file_name?: string;
+  }>;
+  /**
+   * Response message.
+   */
+  message?: string;
+};
+
+export type get_billing_entitlements_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  /**
+   * A list of entitlements
+   */
+  entitlements?: Array<{
+    /**
+     * The friendly id of an entitlement
+     */
+    id?: string;
+    /**
+     * The price charged if this is an entitlement for a fixed charged
+     */
+    fixed_charge?: number;
+    /**
+     * The name of the price associated with the entitlement
+     */
+    price_name?: string;
+    /**
+     * The price charged for this entitlement in cents
+     */
+    unit_amount?: number;
+    /**
+     * The feature code of the feature corresponding to this entitlement
+     */
+    feature_code?: string;
+    /**
+     * The feature name of the feature corresponding to this entitlement
+     */
+    feature_name?: string;
+    /**
+     * The maximum number of units of the feature the customer is entitled to
+     */
+    entitlement_limit_max?: number;
+    /**
+     * The minimum number of units of the feature the customer is entitled to
+     */
+    entitlement_limit_min?: number;
+  }>;
+  /**
+   * A list of plans.
+   */
+  plans?: Array<{
+    /**
+     * The plan code the billing customer is subscribed to
+     */
+    code?: string;
+    subscribed_on?: string;
+  }>;
+};
+
+export type get_billing_agreements_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  /**
+   * A list of billing agreements
+   */
+  agreements?: Array<{
+    /**
+     * The friendly id of an agreement
+     */
+    id?: string;
+    /**
+     * The plan code the billing customer is subscribed to
+     */
+    plan_code?: string;
+    /**
+     * The date the agreement expired (and was no longer active)
+     */
+    expires_on?: string;
+    /**
+     * The friendly id of the billing group this agreement's plan is part of
+     */
+    billing_group_id?: string;
+    /**
+     * A list of billing entitlements that is part of this agreement
+     */
+    entitlements?: Array<{
+      /**
+       * The feature code of the feature corresponding to this entitlement
+       */
+      feature_code?: string;
+      /**
+       * The friendly id of an entitlement
+       */
+      entitlement_id?: string;
+    }>;
+  }>;
+};
+
+export type create_meter_usage_record_response = {
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Response code.
+   */
+  code?: string;
 };
 
 export type user_profile_v2 = {
@@ -2350,6 +2652,116 @@ export type UpdateApplicationTokensData = {
 
 export type UpdateApplicationTokensResponse = success_response;
 
+export type GetBillingEntitlementsData = {
+  /**
+   * The ID of the billing customer to retrieve entitlements for
+   */
+  customerId: string;
+  /**
+   * The ID of the billing entitlement to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * Specify additional plan data to retrieve. Use "plans".
+   */
+  expand?: "plans" | null;
+  /**
+   * When the maximum limit of an entitlement is null, this value is returned as the maximum limit
+   */
+  maxValue?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The ID of the billing entitlement to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type GetBillingEntitlementsResponse = get_billing_entitlements_response;
+
+export type GetBillingAgreementsData = {
+  /**
+   * The ID of the billing customer to retrieve agreements for
+   */
+  customerId: string;
+  /**
+   * The ID of the billing agreement to end before.
+   */
+  endingBefore?: string | null;
+  /**
+   * The feature code to filter by agreements only containing that feature
+   */
+  featureCode?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The ID of the billing agreement to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type GetBillingAgreementsResponse = get_billing_agreements_response;
+
+export type CreateBillingAgreementData = {
+  /**
+   * New agreement request values
+   */
+  requestBody: {
+    /**
+     * The ID of the billing customer to create a new agreement for
+     */
+    customer_id: string;
+    /**
+     * The code of the billing plan the new agreement will be based on
+     */
+    plan_code: string;
+    /**
+     * Generate a final invoice for any un-invoiced metered usage.
+     */
+    is_invoice_now?: boolean;
+    /**
+     * Generate a proration invoice item that credits remaining unused features.
+     */
+    is_prorate?: boolean;
+  };
+};
+
+export type CreateBillingAgreementResponse = success_response;
+
+export type CreateMeterUsageRecordData = {
+  /**
+   * Meter usage record
+   */
+  requestBody: {
+    /**
+     * The billing agreement against which to record usage
+     */
+    customer_agreement_id: string;
+    /**
+     * The code of the feature within the agreement against which to record usage
+     */
+    billing_feature_code: string;
+    /**
+     * The value of usage to record
+     */
+    meter_value: string;
+    /**
+     * The date and time the usage needs to be recorded for (defaults to current date/time)
+     */
+    meter_usage_timestamp?: string;
+    /**
+     * Absolutes overrides the current usage
+     */
+    meter_type_code?: "absolute" | "delta";
+  };
+};
+
+export type CreateMeterUsageRecordResponse = create_meter_usage_record_response;
+
 export type GetBusinessResponse = get_business_response;
 
 export type UpdateBusinessData = {
@@ -2567,6 +2979,10 @@ export type GetConnectionsData = {
    */
   endingBefore?: string | null;
   /**
+   * Filter the results by the home realm domain.
+   */
+  homeRealmDomain?: string | null;
+  /**
    * Number of results per page. Defaults to 10 if parameter not sent.
    */
   pageSize?: number | null;
@@ -2617,6 +3033,10 @@ export type CreateConnectionData = {
      * Client IDs of applications in which this connection is to be enabled.
      */
     enabled_applications?: Array<string>;
+    /**
+     * Enterprise connections only - the code for organization that manages this connection.
+     */
+    organization_code?: string | null;
     options?:
       | {
           /**
@@ -2665,6 +3085,10 @@ export type CreateConnectionData = {
            * Include additional user profile information.
            */
           is_extended_attributes_required?: boolean;
+          /**
+           * Users automatically join organization when using this connection.
+           */
+          is_auto_join_organization_enabled?: boolean;
         }
       | {
           /**
@@ -2683,6 +3107,10 @@ export type CreateConnectionData = {
            * URL for the IdP metadata.
            */
           saml_idp_metadata_url?: string;
+          /**
+           * Override the default SSO endpoint with a URL your IdP recognizes.
+           */
+          saml_sign_in_url?: string;
           /**
            * Attribute key for the user’s email.
            */
@@ -2707,6 +3135,10 @@ export type CreateConnectionData = {
            * Private key associated with the signing certificate.
            */
           saml_signing_private_key?: string;
+          /**
+           * Users automatically join organization when using this connection.
+           */
+          is_auto_join_organization_enabled?: boolean;
         };
   };
 };
@@ -2999,6 +3431,35 @@ export type UpdateEnvironementFeatureFlagOverrideData = {
 
 export type UpdateEnvironementFeatureFlagOverrideResponse = success_response;
 
+export type ReadLogoResponse = read_env_logo_response;
+
+export type AddLogoData = {
+  /**
+   * Logo details.
+   */
+  formData: {
+    /**
+     * The logo file to upload.
+     */
+    logo: Blob | File;
+  };
+  /**
+   * The type of logo to add.
+   */
+  type: "dark" | "light";
+};
+
+export type AddLogoResponse = success_response;
+
+export type DeleteLogoData = {
+  /**
+   * The type of logo to delete.
+   */
+  type: "dark" | "light";
+};
+
+export type DeleteLogoResponse = success_response | void;
+
 export type GetEnvironmentVariablesResponse =
   get_environment_variables_response;
 
@@ -3270,10 +3731,6 @@ export type CreateOrganizationData = {
      */
     is_allow_registrations?: boolean;
     /**
-     * Enable custom auth connections for this organization.
-     */
-    is_custom_auth_connections_enabled?: boolean;
-    /**
      * The name of the organization that will be used in emails
      */
     sender_name?: string | null;
@@ -3281,6 +3738,18 @@ export type CreateOrganizationData = {
      * The email address that will be used in emails. Requires custom SMTP to be set up.
      */
     sender_email?: string | null;
+    /**
+     * If a billing customer is also created for this organization
+     */
+    is_create_billing_customer?: boolean;
+    /**
+     * The email address used for billing purposes for the organization
+     */
+    billing_email?: string;
+    /**
+     * The billing plan to put the customer on. If not specified, the default plan is used
+     */
+    billing_plan_code?: string;
   };
 };
 
@@ -3304,6 +3773,10 @@ export type GetOrganizationsData = {
 export type GetOrganizationsResponse = get_organizations_response;
 
 export type UpdateOrganizationData = {
+  /**
+   * Specify additional data to retrieve. Use "billing".
+   */
+  expand?: "billing" | null;
   /**
    * The identifier for the organization.
    */
@@ -3365,10 +3838,6 @@ export type UpdateOrganizationData = {
      * @deprecated
      */
     is_allow_registrations?: boolean;
-    /**
-     * Enable custom auth connections for this organization.
-     */
-    is_custom_auth_connections_enabled?: boolean;
     /**
      * Users can sign up to this organization.
      */
@@ -3685,6 +4154,19 @@ export type GetOrgUserMfaData = {
 
 export type GetOrgUserMfaResponse = get_user_mfa_response;
 
+export type ResetOrgUserMfaAllData = {
+  /**
+   * The identifier for the organization.
+   */
+  orgCode: string;
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type ResetOrgUserMfaAllResponse = success_response;
+
 export type ResetOrgUserMfaData = {
   /**
    * The identifier for the MFA factor
@@ -3867,7 +4349,7 @@ export type DeleteOrganizationLogoData = {
   type: "dark" | "light";
 };
 
-export type DeleteOrganizationLogoResponse = success_response;
+export type DeleteOrganizationLogoResponse = success_response | void;
 
 export type GetOrganizationConnectionsData = {
   /**
@@ -3903,6 +4385,36 @@ export type RemoveOrgConnectionData = {
 };
 
 export type RemoveOrgConnectionResponse = success_response;
+
+export type UpdateOrganizationSessionsData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Organization session configuration.
+   */
+  requestBody: {
+    /**
+     * Whether to use the organization's SSO session policy override.
+     */
+    is_use_org_sso_session_policy?: boolean;
+    /**
+     * Determines if the session should be persistent or not.
+     */
+    sso_session_persistence_mode?: "persistent" | "non-persistent";
+    /**
+     * Whether to apply the organization's authenticated session lifetime override.
+     */
+    is_use_org_authenticated_session_lifetime?: boolean;
+    /**
+     * Authenticated session lifetime in seconds.
+     */
+    authenticated_session_lifetime?: number;
+  };
+};
+
+export type UpdateOrganizationSessionsResponse = success_response;
 
 export type GetPermissionsData = {
   /**
@@ -4224,6 +4736,46 @@ export type DeleteRoleData = {
 
 export type DeleteRoleResponse = success_response;
 
+export type GetRoleScopesData = {
+  /**
+   * The role id.
+   */
+  roleId: string;
+};
+
+export type GetRoleScopesResponse = role_scopes_response;
+
+export type AddRoleScopeData = {
+  /**
+   * Add scope to role.
+   */
+  requestBody: {
+    /**
+     * The scope identifier.
+     */
+    scope_id: string;
+  };
+  /**
+   * The role id.
+   */
+  roleId: string;
+};
+
+export type AddRoleScopeResponse = add_role_scope_response;
+
+export type DeleteRoleScopeData = {
+  /**
+   * The role id.
+   */
+  roleId: string;
+  /**
+   * The scope id.
+   */
+  scopeId: string;
+};
+
+export type DeleteRoleScopeResponse = delete_role_scope_response;
+
 export type GetRolePermissionsData = {
   /**
    * A string to get the next page of results if there are more results.
@@ -4447,6 +4999,10 @@ export type CreateUserData = {
        */
       type?: "email" | "phone" | "username";
       /**
+       * Set whether an email or phone identity is verified or not.
+       */
+      is_verified?: boolean;
+      /**
        * Additional details required to create the user.
        */
       details?: {
@@ -4656,7 +5212,7 @@ export type CreateUserIdentityData = {
      */
     phone_country_id?: string;
     /**
-     * The social connection ID, only required when identity type is 'social'.
+     * The social or enterprise connection ID, only required when identity type is 'social' or 'enterprise'.
      */
     connection_id?: string;
   };
@@ -4667,6 +5223,15 @@ export type CreateUserIdentityData = {
 };
 
 export type CreateUserIdentityResponse = create_identity_response;
+
+export type GetUserSessionsData = {
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type GetUserSessionsResponse = get_user_sessions_response;
 
 export type DeleteUserSessionsData = {
   /**
@@ -4685,6 +5250,15 @@ export type GetUsersMfaData = {
 };
 
 export type GetUsersMfaResponse = get_user_mfa_response;
+
+export type ResetUsersMfaAllData = {
+  /**
+   * The identifier for the user
+   */
+  userId: string;
+};
+
+export type ResetUsersMfaAllResponse = success_response;
 
 export type ResetUsersMfaData = {
   /**
@@ -4719,6 +5293,32 @@ export type DeleteWebHookData = {
 
 export type DeleteWebHookResponse = delete_webhook_response;
 
+export type UpdateWebHookData = {
+  /**
+   * Update webhook request specification.
+   */
+  requestBody: {
+    /**
+     * Array of event type keys
+     */
+    event_types?: Array<string>;
+    /**
+     * The webhook name
+     */
+    name?: string;
+    /**
+     * The webhook description
+     */
+    description?: string | null;
+  };
+  /**
+   * The webhook id.
+   */
+  webhookId: string;
+};
+
+export type UpdateWebHookResponse = update_webhook_response;
+
 export type GetWebHooksResponse = get_webhooks_response;
 
 export type CreateWebHookData = {
@@ -4746,28 +5346,6 @@ export type CreateWebHookData = {
 };
 
 export type CreateWebHookResponse = create_webhook_response;
-
-export type UpdateWebHookData = {
-  /**
-   * Update webhook request specification.
-   */
-  requestBody: {
-    /**
-     * Array of event type keys
-     */
-    event_types?: Array<string>;
-    /**
-     * The webhook name
-     */
-    name?: string;
-    /**
-     * The webhook description
-     */
-    description?: string | null;
-  };
-};
-
-export type UpdateWebHookResponse = update_webhook_response;
 
 export type GetUserProfileV2Response = user_profile_v2;
 
