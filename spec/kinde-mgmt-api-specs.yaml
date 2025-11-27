@@ -1928,6 +1928,7 @@ paths:
                     - oauth2:twitter
                     - oauth2:xero
                     - saml:custom
+                    - saml:okta
                     - wsfed:azure_ad
                   nullable: false
                 enabled_applications:

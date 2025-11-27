@@ -2612,6 +2612,7 @@ export type CreateConnectionData = {
       | "oauth2:twitter"
       | "oauth2:xero"
       | "saml:custom"
+      | "saml:okta"
       | "wsfed:azure_ad";
     /**
      * Client IDs of applications in which this connection is to be enabled.
