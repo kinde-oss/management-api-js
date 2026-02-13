@@ -19,8 +19,8 @@ importers:
         version: 16.5.0
     devDependencies:
       '@hey-api/client-fetch':
-        specifier: ^0.12.0
-        version: 0.12.0(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))
+        specifier: ^0.13.0
+        version: 0.13.1(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))
       '@hey-api/openapi-ts':
         specifier: ^0.71.1
         version: 0.71.1(magicast@0.3.5)(typescript@5.8.3)
@@ -243,8 +243,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@hey-api/client-fetch@0.12.0':
-    resolution: {integrity: sha512-/iZ6dhs39N0kjzCa9tlNeLNufVUd8zzv/wI1ewQt5AEHaVuDnAxvuQT+fRIPYkfIWKR3gVZKRp5mcCo29voYzQ==}
+  '@hey-api/client-fetch@0.13.1':
+    resolution: {integrity: sha512-29jBRYNdxVGlx5oewFgOrkulZckpIpBIRHth3uHFn1PrL2ucMy52FvWOY3U3dVx2go1Z3kUmMi6lr07iOpUqqA==}
     deprecated: Starting with v0.73.0, this package is bundled directly inside @hey-api/openapi-ts.
     peerDependencies:
       '@hey-api/openapi-ts': < 2
@@ -755,6 +755,7 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   graceful-fs@4.2.11:
@@ -1081,6 +1082,7 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   test-exclude@7.0.1:
     resolution: {integrity: sha512-pFYqmTw68LXVjeWJMST4+borgQP2AyMNbg1BpZh9LbyhUeNkeaPF9gzfPGUAnSMV3qPYdWUwDIjjCLiSDOl7vg==}
@@ -1361,7 +1363,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.4':
     optional: true
 
-  '@hey-api/client-fetch@0.12.0(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))':
+  '@hey-api/client-fetch@0.13.1(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))':
     dependencies:
       '@hey-api/openapi-ts': 0.71.1(magicast@0.3.5)(typescript@5.8.3)
 
