@@ -38,8 +38,8 @@ import type {
   UpdateApiApplicationsResponse,
   AddApiApplicationScopeData,
   AddApiApplicationScopeResponse,
-  DeleteApiAppliationScopeData,
-  DeleteApiAppliationScopeResponse,
+  DeleteApiApplicationScopeData,
+  DeleteApiApplicationScopeResponse,
   GetApplicationsData,
   GetApplicationsResponse,
   CreateApplicationData,
@@ -62,10 +62,6 @@ import type {
   UpdateApplicationsPropertyResponse,
   UpdateApplicationTokensData,
   UpdateApplicationTokensResponse,
-  GetEntitlementsData,
-  GetEntitlementsResponse,
-  GetEntitlementData,
-  GetEntitlementResponse,
   GetBillingAgreementsData,
   GetBillingAgreementsResponse,
   CreateBillingAgreementData,
@@ -138,8 +134,6 @@ import type {
   DeleteFeatureFlagResponse,
   UpdateFeatureFlagData,
   UpdateFeatureFlagResponse,
-  GetFeatureFlagsData,
-  GetFeatureFlagsResponse,
   GetIdentityData,
   GetIdentityResponse,
   UpdateIdentityData,
@@ -149,11 +143,6 @@ import type {
   GetIndustriesResponse,
   ReplaceMfaData,
   ReplaceMfaResponse,
-  GetUserProfileV2Response,
-  TokenIntrospectionData,
-  TokenIntrospectionResponse,
-  TokenRevocationData,
-  TokenRevocationResponse,
   GetOrganizationData,
   GetOrganizationResponse,
   CreateOrganizationData,
@@ -234,8 +223,6 @@ import type {
   UpdatePermissionsResponse,
   DeletePermissionData,
   DeletePermissionResponse,
-  GetUserPermissionsData,
-  GetUserPermissionsResponse,
   GetPropertiesData,
   GetPropertiesResponse,
   CreatePropertyData,
@@ -244,8 +231,6 @@ import type {
   UpdatePropertyResponse,
   DeletePropertyData,
   DeletePropertyResponse,
-  GetUserPropertiesData,
-  GetUserPropertiesResponse,
   GetCategoriesData,
   GetCategoriesResponse,
   CreateCategoryData,
@@ -274,12 +259,8 @@ import type {
   UpdateRolePermissionsResponse,
   RemoveRolePermissionData,
   RemoveRolePermissionResponse,
-  GetUserRolesData,
-  GetUserRolesResponse,
   SearchUsersData,
   SearchUsersResponse,
-  GetPortalLinkData,
-  GetPortalLinkResponse,
   GetSubscribersData,
   GetSubscribersResponse,
   CreateSubscriberData,
@@ -884,9 +865,9 @@ export class Apis {
    * @returns unknown API scope successfully deleted.
    * @throws ApiError
    */
-  public static deleteApiAppliationScope(
-    data: DeleteApiAppliationScopeData,
-  ): CancelablePromise<DeleteApiAppliationScopeResponse> {
+  public static deleteApiApplicationScope(
+    data: DeleteApiApplicationScopeData,
+  ): CancelablePromise<DeleteApiApplicationScopeResponse> {
     return __request(OpenAPI, {
       method: "DELETE",
       url: "/api/v1/apis/{api_id}/applications/{application_id}/scopes/{scope_id}",
@@ -1248,60 +1229,6 @@ export class Applications {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
         429: "Too many requests. Request was throttled.",
-      },
-    });
-  }
-}
-
-export class Billing {
-  /**
-   * Get entitlements
-   * Returns all the entitlements the user currently has access to
-   *
-   * @param data The data for the request.
-   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.startingAfter The ID of the entitlement to start after.
-   * @returns get_entitlements_response Billing entitlements successfully retrieved.
-   * @throws ApiError
-   */
-  public static getEntitlements(
-    data: GetEntitlementsData = {},
-  ): CancelablePromise<GetEntitlementsResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/entitlements",
-      query: {
-        page_size: data.pageSize,
-        starting_after: data.startingAfter,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Get entitlement
-   * Returns a single entitlement by the feature key
-   *
-   * @param data The data for the request.
-   * @param data.key The key of the feature
-   * @returns get_entitlement_response Billing entitlement successfully retrieved.
-   * @throws ApiError
-   */
-  public static getEntitlement(
-    data: GetEntitlementData,
-  ): CancelablePromise<GetEntitlementResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/entitlement",
-      path: {
-        key: data.key,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
       },
     });
   }
@@ -2528,33 +2455,6 @@ export class FeatureFlags {
       },
     });
   }
-
-  /**
-   * Get feature flags
-   * Returns all the feature flags that affect the user
-   *
-   * @param data The data for the request.
-   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.startingAfter The ID of the flag to start after.
-   * @returns get_feature_flags_response Feature flags successfully retrieved.
-   * @throws ApiError
-   */
-  public static getFeatureFlags(
-    data: GetFeatureFlagsData = {},
-  ): CancelablePromise<GetFeatureFlagsResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/feature_flags",
-      query: {
-        page_size: data.pageSize,
-        starting_after: data.startingAfter,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
 }
 
 export class Identities {
@@ -2701,75 +2601,6 @@ export class Mfa {
       mediaType: "application/json",
       errors: {
         400: "Invalid request.",
-        403: "Unauthorized - invalid credentials.",
-        429: "Too many requests. Request was throttled.",
-      },
-    });
-  }
-}
-
-export class OAuth {
-  /**
-   * Get user profile
-   * This endpoint returns a user's ID, names, profile picture URL and email of the currently logged in user.
-   *
-   * @returns user_profile_v2 Details of logged in user.
-   * @throws ApiError
-   */
-  public static getUserProfileV2(): CancelablePromise<GetUserProfileV2Response> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/oauth2/v2/user_profile",
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Introspect
-   * Retrieve information about the provided token.
-   * @param data The data for the request.
-   * @param data.formData Token details.
-   * @returns token_introspect Details of the token.
-   * @throws ApiError
-   */
-  public static tokenIntrospection(
-    data: TokenIntrospectionData,
-  ): CancelablePromise<TokenIntrospectionResponse> {
-    return __request(OpenAPI, {
-      method: "POST",
-      url: "/oauth2/introspect",
-      formData: data.formData,
-      mediaType: "application/x-www-form-urlencoded",
-      errors: {
-        401: "Bad request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Revoke token
-   * Use this endpoint to invalidate an access or refresh token. The token will no longer be valid for use.
-   * @param data The data for the request.
-   * @param data.formData Details of the token to be revoked.
-   * @returns unknown Token successfully revoked.
-   * @throws ApiError
-   */
-  public static tokenRevocation(
-    data: TokenRevocationData,
-  ): CancelablePromise<TokenRevocationResponse> {
-    return __request(OpenAPI, {
-      method: "POST",
-      url: "/oauth2/revoke",
-      formData: data.formData,
-      mediaType: "application/x-www-form-urlencoded",
-      errors: {
-        400: "Invalid request.",
-        401: "Bad request.",
         403: "Unauthorized - invalid credentials.",
         429: "Too many requests. Request was throttled.",
       },
@@ -4097,33 +3928,6 @@ export class Permissions {
       },
     });
   }
-
-  /**
-   * Get permissions
-   * Returns all the permissions the user has
-   *
-   * @param data The data for the request.
-   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.startingAfter The ID of the permission to start after.
-   * @returns get_user_permissions_response Permissions successfully retrieved.
-   * @throws ApiError
-   */
-  public static getUserPermissions(
-    data: GetUserPermissionsData = {},
-  ): CancelablePromise<GetUserPermissionsResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/permissions",
-      query: {
-        page_size: data.pageSize,
-        starting_after: data.startingAfter,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
 }
 
 export class Properties {
@@ -4249,33 +4053,6 @@ export class Properties {
       },
       errors: {
         400: "Invalid request.",
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
-
-  /**
-   * Get properties
-   * Returns all properties for the user
-   *
-   * @param data The data for the request.
-   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.startingAfter The ID of the property to start after.
-   * @returns get_user_properties_response Properties successfully retrieved.
-   * @throws ApiError
-   */
-  public static getUserProperties(
-    data: GetUserPropertiesData = {},
-  ): CancelablePromise<GetUserPropertiesResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/properties",
-      query: {
-        page_size: data.pageSize,
-        starting_after: data.startingAfter,
-      },
-      errors: {
         403: "Invalid credentials.",
         429: "Request was throttled.",
       },
@@ -4734,33 +4511,6 @@ export class Roles {
       },
     });
   }
-
-  /**
-   * Get roles
-   * Returns all roles for the user
-   *
-   * @param data The data for the request.
-   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
-   * @param data.startingAfter The ID of the role to start after.
-   * @returns get_user_roles_response Roles successfully retrieved.
-   * @throws ApiError
-   */
-  public static getUserRoles(
-    data: GetUserRolesData = {},
-  ): CancelablePromise<GetUserRolesResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/roles",
-      query: {
-        page_size: data.pageSize,
-        starting_after: data.startingAfter,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
-      },
-    });
-  }
 }
 
 export class Search {
@@ -4803,35 +4553,6 @@ export class Search {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
         429: "Too many requests. Request was throttled.",
-      },
-    });
-  }
-}
-
-export class SelfServePortal {
-  /**
-   * Get self-serve portal link
-   * Returns a link to the self-serve portal for the authenticated user. The user can use this link to manage their account, update their profile, and view their entitlements.
-   *
-   * @param data The data for the request.
-   * @param data.subnav The area of the portal you want the user to land on
-   * @param data.returnUrl The URL to redirect the user to after they have completed their actions in the portal.
-   * @returns portal_link Successfully generated the portal link
-   * @throws ApiError
-   */
-  public static getPortalLink(
-    data: GetPortalLinkData = {},
-  ): CancelablePromise<GetPortalLinkResponse> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/account_api/v1/portal_link",
-      query: {
-        subnav: data.subnav,
-        return_url: data.returnUrl,
-      },
-      errors: {
-        403: "Invalid credentials.",
-        429: "Request was throttled.",
       },
     });
   }
@@ -4981,6 +4702,7 @@ export class Users {
    * @param data.phone Filter the results by phone. The query string should be comma separated and url encoded.
    * @param data.expand Specify additional data to retrieve. Use "organizations", "identities" and/or "billing".
    * @param data.hasOrganization Filter the results by if the user has at least one organization assigned.
+   * @param data.activeSince Filter the results to only include users who have been active since this date. Date should be in ISO 8601 format.
    * @returns users_response Users successfully retrieved.
    * @throws ApiError
    */
@@ -4999,6 +4721,7 @@ export class Users {
         phone: data.phone,
         expand: data.expand,
         has_organization: data.hasOrganization,
+        active_since: data.activeSince,
       },
       errors: {
         400: "Invalid request.",

@@ -951,128 +951,6 @@ export type get_connections_response = {
   has_more?: boolean;
 };
 
-export type get_entitlement_response = {
-  data?: {
-    /**
-     * The organization code the entitlements are associated with.
-     */
-    org_code?: string;
-    /**
-     * The entitlement data
-     */
-    entitlement?: {
-      /**
-       * The friendly ID of an entitlement
-       */
-      id?: string;
-      /**
-       * The price charged if this is an entitlement for a fixed charged
-       */
-      fixed_charge?: number | null;
-      /**
-       * The name of the price associated with the entitlement
-       */
-      price_name?: string;
-      /**
-       * The price charged for this entitlement in cents
-       */
-      unit_amount?: number | null;
-      /**
-       * The key of the feature corresponding to this entitlement
-       */
-      feature_key?: string;
-      /**
-       * The name of the feature corresponding to this entitlement
-       */
-      feature_name?: string;
-      /**
-       * The maximum number of units of the feature the customer is entitled to
-       */
-      entitlement_limit_max?: number | null;
-      /**
-       * The minimum number of units of the feature the customer is entitled to
-       */
-      entitlement_limit_min?: number | null;
-    };
-  };
-  metadata?: {
-    [key: string]: unknown;
-  };
-};
-
-export type get_entitlements_response = {
-  data?: {
-    /**
-     * The organization code the entitlements are associated with.
-     */
-    org_code?: string;
-    /**
-     * A list of plans the user is subscribed to
-     */
-    plans?: Array<{
-      /**
-       * A unique code for the plan
-       */
-      key?: string;
-      /**
-       * Name of the plan
-       */
-      name?: string;
-      /**
-       * The date the user subscribed to the plan
-       */
-      subscribed_on?: string;
-    }>;
-    /**
-     * A list of entitlements
-     */
-    entitlements?: Array<{
-      /**
-       * The friendly id of an entitlement
-       */
-      id?: string;
-      /**
-       * The price charged if this is an entitlement for a fixed charged
-       */
-      fixed_charge?: number | null;
-      /**
-       * The name of the price associated with the entitlement
-       */
-      price_name?: string;
-      /**
-       * The price charged for this entitlement in cents
-       */
-      unit_amount?: number | null;
-      /**
-       * The key of the feature corresponding to this entitlement
-       */
-      feature_key?: string;
-      /**
-       * The name of the feature corresponding to this entitlement
-       */
-      feature_name?: string;
-      /**
-       * The maximum number of units of the feature the customer is entitled to
-       */
-      entitlement_limit_max?: number | null;
-      /**
-       * The minimum number of units of the feature the customer is entitled to
-       */
-      entitlement_limit_min?: number | null;
-    }>;
-  };
-  metadata?: {
-    /**
-     * Whether more records exist.
-     */
-    has_more?: boolean;
-    /**
-     * The ID of the last record on the current page.
-     */
-    next_page_starting_after?: string;
-  };
-};
-
 export type get_environment_feature_flags_response = {
   /**
    * Response code.
@@ -1296,42 +1174,6 @@ export type get_event_types_response = {
    */
   message?: string;
   event_types?: Array<event_type>;
-};
-
-export type get_feature_flags_response = {
-  data?: {
-    /**
-     * A list of feature flags
-     */
-    feature_flags?: Array<{
-      /**
-       * The friendly ID of an flag
-       */
-      id?: string;
-      /**
-       * The name of the flag
-       */
-      name?: string;
-      /**
-       * The key of the flag
-       */
-      key?: string;
-      /**
-       * The type of the flag
-       */
-      type?: string;
-      /**
-       * The value of the flag
-       */
-      value?:
-        | string
-        | boolean
-        | number
-        | {
-            [key: string]: unknown;
-          };
-    }>;
-  };
 };
 
 export type get_identities_response = {
@@ -1782,114 +1624,6 @@ export type get_user_mfa_response = {
   };
 };
 
-export type get_user_permissions_response = {
-  data?: {
-    /**
-     * The organization code the roles are associated with.
-     */
-    org_code?: string;
-    /**
-     * A list of permissions
-     */
-    permissions?: Array<{
-      /**
-       * The friendly ID of a permission
-       */
-      id?: string;
-      /**
-       * The name of the permission
-       */
-      name?: string;
-      /**
-       * The key of the permission
-       */
-      key?: string;
-    }>;
-  };
-  metadata?: {
-    /**
-     * Whether more records exist.
-     */
-    has_more?: boolean;
-    /**
-     * The ID of the last record on the current page.
-     */
-    next_page_starting_after?: string;
-  };
-};
-
-export type get_user_properties_response = {
-  data?: {
-    /**
-     * A list of properties
-     */
-    properties?: Array<{
-      /**
-       * The friendly ID of a property
-       */
-      id?: string;
-      /**
-       * The name of the property
-       */
-      name?: string;
-      /**
-       * The key of the property
-       */
-      key?: string;
-      /**
-       * The value of the property
-       */
-      value?: string | boolean | number;
-    }>;
-  };
-  metadata?: {
-    /**
-     * Whether more records exist.
-     */
-    has_more?: boolean;
-    /**
-     * The ID of the last record on the current page.
-     */
-    next_page_starting_after?: string;
-  };
-};
-
-export type get_user_roles_response = {
-  data?: {
-    /**
-     * The organization code the roles are associated with.
-     */
-    org_code?: string;
-    /**
-     * A list of roles
-     */
-    roles?: Array<{
-      /**
-       * The friendly ID of a role
-       */
-      id?: string;
-      /**
-       * The name of the role
-       */
-      name?: string;
-      /**
-       * The key of the role
-       */
-      key?: string;
-    }>;
-  };
-  metadata?: {
-    /**
-     * Whether more records exist.
-     */
-    has_more?: boolean;
-    /**
-     * The ID of the last record on the current page.
-     */
-    next_page_starting_after?: string;
-  };
-};
-
 export type get_user_sessions_response = {
   code?: string;
   message?: string;
@@ -2150,13 +1884,6 @@ export type permissions = {
    * The permission's description.
    */
   description?: string;
-};
-
-export type portal_link = {
-  /**
-   * Unique URL to redirect the user to.
-   */
-  url?: string;
 };
 
 export type property = {
@@ -2439,40 +2166,6 @@ export type success_response = {
   code?: string;
 };
 
-export type token_error_response = {
-  /**
-   * Error.
-   */
-  error?: string;
-  /**
-   * The error description.
-   */
-  error_description?: string;
-};
-
-export type token_introspect = {
-  /**
-   * Indicates the status of the token.
-   */
-  active?: boolean;
-  /**
-   * Array of intended token recipients.
-   */
-  aud?: Array<string>;
-  /**
-   * Identifier for the requesting client.
-   */
-  client_id?: string;
-  /**
-   * Token expiration timestamp.
-   */
-  exp?: number;
-  /**
-   * Token issuance timestamp.
-   */
-  iat?: number;
-};
-
 export type update_environment_variable_response = {
   /**
    * A Kinde generated message.
@@ -2623,53 +2316,6 @@ export type user_identity = {
   };
 };
 
-export type user_profile_v2 = {
-  /**
-   * Unique ID of the user in Kinde.
-   */
-  sub?: string;
-  /**
-   * Value of the user's ID in a third-party system when the user is imported into Kinde.
-   */
-  provided_id?: string | null;
-  /**
-   * User's first and last name separated by a space.
-   */
-  name?: string;
-  /**
-   * User's first name.
-   */
-  given_name?: string;
-  /**
-   * User's last name.
-   */
-  family_name?: string;
-  /**
-   * Date the user was last updated at (In Unix time).
-   */
-  updated_at?: number;
-  /**
-   * User's email address if available.
-   */
-  email?: string;
-  /**
-   * Whether the user's email address has been verified.
-   */
-  email_verified?: boolean;
-  /**
-   * URL that point's to the user's picture or avatar
-   */
-  picture?: string | null;
-  /**
-   * User's preferred username.
-   */
-  preferred_username?: string | null;
-  /**
-   * Unique ID of the user in Kinde
-   */
-  id?: string;
-};
-
 /**
  * Array of users.
  */
@@ -2737,6 +2383,19 @@ export type users_response = {
      * Date of user creation in ISO 8601 format.
      */
     created_on?: string | null;
+    /**
+     * Array of organization sign-in information for the user.
+     */
+    last_organization_sign_ins?: Array<{
+      /**
+       * The organization code.
+       */
+      org_code?: string;
+      /**
+       * The date and time the user last signed in to this organization in ISO 8601 format.
+       */
+      last_signed_in?: string;
+    }> | null;
     /**
      * Array of organizations a user belongs to.
      */
@@ -3076,7 +2735,7 @@ export type AddApiApplicationScopeData = {
 
 export type AddApiApplicationScopeResponse = unknown;
 
-export type DeleteApiAppliationScopeData = {
+export type DeleteApiApplicationScopeData = {
   /**
    * API ID
    */
@@ -3091,7 +2750,7 @@ export type DeleteApiAppliationScopeData = {
   scopeId: string;
 };
 
-export type DeleteApiAppliationScopeResponse = unknown;
+export type DeleteApiApplicationScopeResponse = unknown;
 
 export type GetApplicationsData = {
   /**
@@ -3281,28 +2940,6 @@ export type UpdateApplicationTokensData = {
 };
 
 export type UpdateApplicationTokensResponse = success_response;
-
-export type GetEntitlementsData = {
-  /**
-   * Number of results per page. Defaults to 10 if parameter not sent.
-   */
-  pageSize?: number | null;
-  /**
-   * The ID of the entitlement to start after.
-   */
-  startingAfter?: string | null;
-};
-
-export type GetEntitlementsResponse = get_entitlements_response;
-
-export type GetEntitlementData = {
-  /**
-   * The key of the feature
-   */
-  key: string;
-};
-
-export type GetEntitlementResponse = get_entitlement_response;
 
 export type GetBillingAgreementsData = {
   /**
@@ -4316,19 +3953,6 @@ export type UpdateFeatureFlagData = {
 
 export type UpdateFeatureFlagResponse = success_response;
 
-export type GetFeatureFlagsData = {
-  /**
-   * Number of results per page. Defaults to 10 if parameter not sent.
-   */
-  pageSize?: number | null;
-  /**
-   * The ID of the flag to start after.
-   */
-  startingAfter?: string | null;
-};
-
-export type GetFeatureFlagsResponse = get_feature_flags_response;
-
 export type GetIdentityData = {
   /**
    * The unique identifier for the identity.
@@ -4384,52 +4008,6 @@ export type ReplaceMfaData = {
 };
 
 export type ReplaceMfaResponse = success_response;
-
-export type GetUserProfileV2Response = user_profile_v2;
-
-export type TokenIntrospectionData = {
-  /**
-   * Token details.
-   */
-  formData: {
-    /**
-     * The token to be introspected.
-     */
-    token: string;
-    /**
-     * A hint about the token type being queried in the request.
-     */
-    token_type_hint?: "access_token" | "refresh_token";
-  };
-};
-
-export type TokenIntrospectionResponse = token_introspect;
-
-export type TokenRevocationData = {
-  /**
-   * Details of the token to be revoked.
-   */
-  formData: {
-    /**
-     * The `client_id` of your application.
-     */
-    client_id: string;
-    /**
-     * The `client_secret` of your application. Required for backend apps only.
-     */
-    client_secret?: string;
-    /**
-     * The token to be revoked.
-     */
-    token: string;
-    /**
-     * The type of token to be revoked.
-     */
-    token_type_hint?: "access_token" | "refresh_token";
-  };
-};
-
-export type TokenRevocationResponse = unknown;
 
 export type GetOrganizationData = {
   /**
@@ -5266,19 +4844,6 @@ export type DeletePermissionData = {
 
 export type DeletePermissionResponse = success_response;
 
-export type GetUserPermissionsData = {
-  /**
-   * Number of results per page. Defaults to 10 if parameter not sent.
-   */
-  pageSize?: number | null;
-  /**
-   * The ID of the permission to start after.
-   */
-  startingAfter?: string | null;
-};
-
-export type GetUserPermissionsResponse = get_user_permissions_response;
-
 export type GetPropertiesData = {
   /**
    * Filter results by user,  organization or application context
@@ -5376,19 +4941,6 @@ export type DeletePropertyData = {
 };
 
 export type DeletePropertyResponse = success_response;
-
-export type GetUserPropertiesData = {
-  /**
-   * Number of results per page. Defaults to 10 if parameter not sent.
-   */
-  pageSize?: number | null;
-  /**
-   * The ID of the property to start after.
-   */
-  startingAfter?: string | null;
-};
-
-export type GetUserPropertiesResponse = get_user_properties_response;
 
 export type GetCategoriesData = {
   /**
@@ -5644,19 +5196,6 @@ export type RemoveRolePermissionData = {
 
 export type RemoveRolePermissionResponse = success_response;
 
-export type GetUserRolesData = {
-  /**
-   * Number of results per page. Defaults to 10 if parameter not sent.
-   */
-  pageSize?: number | null;
-  /**
-   * The ID of the role to start after.
-   */
-  startingAfter?: string | null;
-};
-
-export type GetUserRolesResponse = get_user_roles_response;
-
 export type SearchUsersData = {
   /**
    * Search the users by api scopes.
@@ -5688,29 +5227,6 @@ export type SearchUsersData = {
 };
 
 export type SearchUsersResponse = search_users_response;
-
-export type GetPortalLinkData = {
-  /**
-   * The URL to redirect the user to after they have completed their actions in the portal.
-   */
-  returnUrl?: string | null;
-  /**
-   * The area of the portal you want the user to land on
-   */
-  subnav?:
-    | (
-        | "profile"
-        | "organization_details"
-        | "organization_payment_details"
-        | "organization_plan_selection"
-        | "payment_details"
-        | "plan_details"
-        | "plan_selection"
-      )
-    | null;
-};
-
-export type GetPortalLinkResponse = portal_link;
 
 export type GetSubscribersData = {
   /**
@@ -5758,6 +5274,10 @@ export type GetSubscriberResponse = get_subscriber_response;
 export type GetTimezonesResponse = get_timezones_response;
 
 export type GetUsersData = {
+  /**
+   * Filter the results to only include users who have been active since this date. Date should be in ISO 8601 format.
+   */
+  activeSince?: string | null;
   /**
    * Filter the results by email address. The query string should be comma separated and url encoded.
    */
