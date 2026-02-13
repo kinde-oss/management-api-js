@@ -25,11 +25,11 @@ importers:
         specifier: ^0.71.1
         version: 0.71.1(magicast@0.3.5)(typescript@5.8.3)
       '@types/node':
-        specifier: ^22.0.0
-        version: 22.15.19
+        specifier: ^24.0.0
+        version: 24.10.13
       '@vitest/coverage-v8':
         specifier: ^4.0.0
-        version: 4.0.18(vitest@4.0.18(@types/node@22.15.19)(jiti@2.6.1))
+        version: 4.0.18(vitest@4.0.18(@types/node@24.10.13)(jiti@2.6.1))
       prettier:
         specifier: ^3.2.5
         version: 3.5.3
@@ -38,16 +38,16 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.0.0
-        version: 6.3.5(@types/node@22.15.19)(jiti@2.6.1)
+        version: 6.3.5(@types/node@24.10.13)(jiti@2.6.1)
       vite-plugin-dts:
         specifier: ^4.0.0
-        version: 4.5.4(@types/node@22.15.19)(rollup@4.41.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.19)(jiti@2.6.1))
+        version: 4.5.4(@types/node@24.10.13)(rollup@4.41.0)(typescript@5.8.3)(vite@6.3.5(@types/node@24.10.13)(jiti@2.6.1))
       vitest:
         specifier: ^4.0.0
-        version: 4.0.18(@types/node@22.15.19)(jiti@2.6.1)
+        version: 4.0.18(@types/node@24.10.13)(jiti@2.6.1)
       vitest-fetch-mock:
         specifier: ^0.4.5
-        version: 0.4.5(vitest@4.0.18(@types/node@22.15.19)(jiti@2.6.1))
+        version: 0.4.5(vitest@4.0.18(@types/node@24.10.13)(jiti@2.6.1))
 
 packages:
 
@@ -433,8 +433,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@22.15.19':
-    resolution: {integrity: sha512-3vMNr4TzNQyjHcRZadojpRaD9Ofr6LsonZAoQ+HMUa/9ORTPoxVIw0e0mpqWpdjj8xybyCM+oKOUH2vwFu/oEw==}
+  '@types/node@24.10.13':
+    resolution: {integrity: sha512-oH72nZRfDv9lADUBSo104Aq7gPHpQZc4BTx38r9xf9pg5LfP6EzSyH2n7qFmmxRQXh7YlUXODcYsg6PuTDSxGg==}
 
   '@vitest/coverage-v8@4.0.18':
     resolution: {integrity: sha512-7i+N2i0+ME+2JFZhfuz7Tg/FqKtilHjGyGvoHYQ6iLV0zahbsJ9sljC9OcFcPDbhYKCet+sG8SsVqlyGvPflZg==}
@@ -1016,8 +1016,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
   universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
@@ -1264,29 +1264,29 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.0
+      '@jridgewell/sourcemap-codec': 1.5.5
 
   '@jsdevtools/ono@7.1.3': {}
 
   '@kinde/jwt-decoder@0.2.0': {}
 
-  '@microsoft/api-extractor-model@7.30.6(@types/node@22.15.19)':
+  '@microsoft/api-extractor-model@7.30.6(@types/node@24.10.13)':
     dependencies:
       '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.1
-      '@rushstack/node-core-library': 5.13.1(@types/node@22.15.19)
+      '@rushstack/node-core-library': 5.13.1(@types/node@24.10.13)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@microsoft/api-extractor@7.52.7(@types/node@22.15.19)':
+  '@microsoft/api-extractor@7.52.7(@types/node@24.10.13)':
     dependencies:
-      '@microsoft/api-extractor-model': 7.30.6(@types/node@22.15.19)
+      '@microsoft/api-extractor-model': 7.30.6(@types/node@24.10.13)
       '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.1
-      '@rushstack/node-core-library': 5.13.1(@types/node@22.15.19)
+      '@rushstack/node-core-library': 5.13.1(@types/node@24.10.13)
       '@rushstack/rig-package': 0.5.3
-      '@rushstack/terminal': 0.15.3(@types/node@22.15.19)
-      '@rushstack/ts-command-line': 5.0.1(@types/node@22.15.19)
+      '@rushstack/terminal': 0.15.3(@types/node@24.10.13)
+      '@rushstack/ts-command-line': 5.0.1(@types/node@24.10.13)
       lodash: 4.17.21
       minimatch: 3.0.8
       resolve: 1.22.10
@@ -1373,7 +1373,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.41.0':
     optional: true
 
-  '@rushstack/node-core-library@5.13.1(@types/node@22.15.19)':
+  '@rushstack/node-core-library@5.13.1(@types/node@24.10.13)':
     dependencies:
       ajv: 8.13.0
       ajv-draft-04: 1.0.0(ajv@8.13.0)
@@ -1384,23 +1384,23 @@ snapshots:
       resolve: 1.22.10
       semver: 7.5.4
     optionalDependencies:
-      '@types/node': 22.15.19
+      '@types/node': 24.10.13
 
   '@rushstack/rig-package@0.5.3':
     dependencies:
       resolve: 1.22.10
       strip-json-comments: 3.1.1
 
-  '@rushstack/terminal@0.15.3(@types/node@22.15.19)':
+  '@rushstack/terminal@0.15.3(@types/node@24.10.13)':
     dependencies:
-      '@rushstack/node-core-library': 5.13.1(@types/node@22.15.19)
+      '@rushstack/node-core-library': 5.13.1(@types/node@24.10.13)
       supports-color: 8.1.1
     optionalDependencies:
-      '@types/node': 22.15.19
+      '@types/node': 24.10.13
 
-  '@rushstack/ts-command-line@5.0.1(@types/node@22.15.19)':
+  '@rushstack/ts-command-line@5.0.1(@types/node@24.10.13)':
     dependencies:
-      '@rushstack/terminal': 0.15.3(@types/node@22.15.19)
+      '@rushstack/terminal': 0.15.3(@types/node@24.10.13)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -1422,11 +1422,11 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@22.15.19':
+  '@types/node@24.10.13':
     dependencies:
-      undici-types: 6.21.0
+      undici-types: 7.16.0
 
-  '@vitest/coverage-v8@4.0.18(vitest@4.0.18(@types/node@22.15.19)(jiti@2.6.1))':
+  '@vitest/coverage-v8@4.0.18(vitest@4.0.18(@types/node@24.10.13)(jiti@2.6.1))':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/utils': 4.0.18
@@ -1438,7 +1438,7 @@ snapshots:
       obug: 2.1.1
       std-env: 3.10.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.18(@types/node@22.15.19)(jiti@2.6.1)
+      vitest: 4.0.18(@types/node@24.10.13)(jiti@2.6.1)
 
   '@vitest/expect@4.0.18':
     dependencies:
@@ -1449,13 +1449,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.18(vite@6.3.5(@types/node@22.15.19)(jiti@2.6.1))':
+  '@vitest/mocker@4.0.18(vite@6.3.5(@types/node@24.10.13)(jiti@2.6.1))':
     dependencies:
       '@vitest/spy': 4.0.18
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 6.3.5(@types/node@22.15.19)(jiti@2.6.1)
+      vite: 6.3.5(@types/node@24.10.13)(jiti@2.6.1)
 
   '@vitest/pretty-format@4.0.18':
     dependencies:
@@ -2012,7 +2012,7 @@ snapshots:
   uglify-js@3.19.3:
     optional: true
 
-  undici-types@6.21.0: {}
+  undici-types@7.16.0: {}
 
   universalify@2.0.1: {}
 
@@ -2020,9 +2020,9 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite-plugin-dts@4.5.4(@types/node@22.15.19)(rollup@4.41.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.19)(jiti@2.6.1)):
+  vite-plugin-dts@4.5.4(@types/node@24.10.13)(rollup@4.41.0)(typescript@5.8.3)(vite@6.3.5(@types/node@24.10.13)(jiti@2.6.1)):
     dependencies:
-      '@microsoft/api-extractor': 7.52.7(@types/node@22.15.19)
+      '@microsoft/api-extractor': 7.52.7(@types/node@24.10.13)
       '@rollup/pluginutils': 5.1.4(rollup@4.41.0)
       '@volar/typescript': 2.4.13
       '@vue/language-core': 2.2.0(typescript@5.8.3)
@@ -2033,13 +2033,13 @@ snapshots:
       magic-string: 0.30.17
       typescript: 5.8.3
     optionalDependencies:
-      vite: 6.3.5(@types/node@22.15.19)(jiti@2.6.1)
+      vite: 6.3.5(@types/node@24.10.13)(jiti@2.6.1)
     transitivePeerDependencies:
       - '@types/node'
       - rollup
       - supports-color
 
-  vite@6.3.5(@types/node@22.15.19)(jiti@2.6.1):
+  vite@6.3.5(@types/node@24.10.13)(jiti@2.6.1):
     dependencies:
       esbuild: 0.25.4
       fdir: 6.4.4(picomatch@4.0.2)
@@ -2048,18 +2048,18 @@ snapshots:
       rollup: 4.41.0
       tinyglobby: 0.2.13
     optionalDependencies:
-      '@types/node': 22.15.19
+      '@types/node': 24.10.13
       fsevents: 2.3.3
       jiti: 2.6.1
 
-  vitest-fetch-mock@0.4.5(vitest@4.0.18(@types/node@22.15.19)(jiti@2.6.1)):
+  vitest-fetch-mock@0.4.5(vitest@4.0.18(@types/node@24.10.13)(jiti@2.6.1)):
     dependencies:
-      vitest: 4.0.18(@types/node@22.15.19)(jiti@2.6.1)
+      vitest: 4.0.18(@types/node@24.10.13)(jiti@2.6.1)
 
-  vitest@4.0.18(@types/node@22.15.19)(jiti@2.6.1):
+  vitest@4.0.18(@types/node@24.10.13)(jiti@2.6.1):
     dependencies:
       '@vitest/expect': 4.0.18
-      '@vitest/mocker': 4.0.18(vite@6.3.5(@types/node@22.15.19)(jiti@2.6.1))
+      '@vitest/mocker': 4.0.18(vite@6.3.5(@types/node@24.10.13)(jiti@2.6.1))
       '@vitest/pretty-format': 4.0.18
       '@vitest/runner': 4.0.18
       '@vitest/snapshot': 4.0.18
@@ -2076,10 +2076,10 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 6.3.5(@types/node@22.15.19)(jiti@2.6.1)
+      vite: 6.3.5(@types/node@24.10.13)(jiti@2.6.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 22.15.19
+      '@types/node': 24.10.13
     transitivePeerDependencies:
       - jiti
       - less
