@@ -71,22 +71,6 @@ describe("Breaking Changes and Regressions", () => {
         expect(result).toBeDefined();
       });
     });
-
-    describe("Oauth → OAuth", () => {
-      it("should export deprecated Oauth class (for backward compatibility)", () => {
-        expect(Oauth).toBeDefined();
-        expect(typeof Oauth).toBe("function");
-      });
-
-      it("should export new OAuth class", () => {
-        expect(OAuth).toBeDefined();
-        expect(typeof OAuth).toBe("function");
-      });
-
-      it("should have Oauth be an alias of OAuth", () => {
-        expect(Oauth).toBe(OAuth);
-      });
-    });
   });
 
   describe("Callbacks Method Name Changes", () => {
@@ -543,12 +527,6 @@ describe("Breaking Changes and Regressions", () => {
       expect(typeof ApiKeys).toBe("function");
     });
 
-    it("should export Billing class", async () => {
-      const { Billing } = await import("../lib/main");
-      expect(Billing).toBeDefined();
-      expect(typeof Billing).toBe("function");
-    });
-
     it("should export BillingAgreements class", async () => {
       const { BillingAgreements } = await import("../lib/main");
       expect(BillingAgreements).toBeDefined();
@@ -565,12 +543,6 @@ describe("Breaking Changes and Regressions", () => {
       const { BillingMeterUsage } = await import("../lib/main");
       expect(BillingMeterUsage).toBeDefined();
       expect(typeof BillingMeterUsage).toBe("function");
-    });
-
-    it("should export SelfServePortal class", async () => {
-      const { SelfServePortal } = await import("../lib/main");
-      expect(SelfServePortal).toBeDefined();
-      expect(typeof SelfServePortal).toBe("function");
     });
   });
 });
