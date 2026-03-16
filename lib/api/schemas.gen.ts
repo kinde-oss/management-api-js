@@ -2264,6 +2264,18 @@ export const $get_organization_response = {
       description:
         "The email address that will be used in emails. Requires custom SMTP to be set up.",
     },
+    is_suspended: {
+      type: "boolean",
+      description: "Whether the organization is currently suspended or not.",
+      example: false,
+    },
+    suspended_on: {
+      type: "string",
+      description:
+        "The date the organization was suspended in ISO 8601 format. Null if not suspended.",
+      nullable: true,
+      example: "2021-01-01T00:00:00Z",
+    },
     billing: {
       type: "object",
       description:

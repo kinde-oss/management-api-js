@@ -515,7 +515,7 @@ export class Apis {
    * </div>
    *
    * @param data The data for the request.
-   * @param data.expand Specify additional data to retrieve. Use "scopes".
+   * @param data.expand Additional data to include in the response. Allowed value: "scopes".
    * @returns get_apis_response A list of APIs.
    * @throws ApiError
    */
@@ -1318,7 +1318,7 @@ export class BillingEntitlements {
    * @param data.startingAfter The ID of the billing entitlement to start after.
    * @param data.endingBefore The ID of the billing entitlement to end before.
    * @param data.maxValue When the maximum limit of an entitlement is null, this value is returned as the maximum limit
-   * @param data.expand Specify additional plan data to retrieve. Use "plans".
+   * @param data.expand Additional plan data to include in the response. Allowed value: "plans".
    * @returns get_billing_entitlements_response Billing entitlements successfully retrieved.
    * @throws ApiError
    */
@@ -2619,7 +2619,7 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.code The organization's code.
-   * @param data.expand Specify additional data to retrieve. Use "billing".
+   * @param data.expand Additional data to include in the response. Allowed value: "billing".
    * @returns get_organization_response Organization successfully retrieved.
    * @throws ApiError
    */
@@ -2714,7 +2714,7 @@ export class Organizations {
    *
    * @param data The data for the request.
    * @param data.orgCode The identifier for the organization.
-   * @param data.expand Specify additional data to retrieve. Use "billing".
+   * @param data.expand Additional data to include in the response. Allowed value: "billing".
    * @param data.requestBody Organization details.
    * @returns success_response Organization successfully updated.
    * @throws ApiError
@@ -2990,7 +2990,7 @@ export class Organizations {
    * @param data The data for the request.
    * @param data.orgCode The organization's code.
    * @param data.userId The user's id.
-   * @param data.expand Specify additional data to retrieve. Use "roles".
+   * @param data.expand Additional data to include in the response. Allowed value: "roles".
    * @returns get_organizations_user_permissions_response A successful response with a list of user permissions.
    * @throws ApiError
    */
@@ -4530,7 +4530,7 @@ export class Search {
    * @param data.properties
    * @param data.startingAfter The ID of the user to start after.
    * @param data.endingBefore The ID of the user to end before.
-   * @param data.expand Specify additional data to retrieve. Use "organizations" and/or "identities".
+   * @param data.expand Additional data to include in the response. One or more of (comma-separated): "organizations", "identities", "properties".
    * @returns search_users_response Users successfully retrieved.
    * @throws ApiError
    */
@@ -4700,7 +4700,7 @@ export class Users {
    * @param data.email Filter the results by email address. The query string should be comma separated and url encoded.
    * @param data.username Filter the results by username. The query string should be comma separated and url encoded.
    * @param data.phone Filter the results by phone. The query string should be comma separated and url encoded.
-   * @param data.expand Specify additional data to retrieve. Use "organizations", "identities" and/or "billing".
+   * @param data.expand Additional data to include in the response. One or more of (comma-separated): "organizations", "identities", "billing".
    * @param data.hasOrganization Filter the results by if the user has at least one organization assigned.
    * @param data.activeSince Filter the results to only include users who have been active since this date. Date should be in ISO 8601 format.
    * @returns users_response Users successfully retrieved.
@@ -4771,7 +4771,7 @@ export class Users {
    *
    * @param data The data for the request.
    * @param data.id The user's id.
-   * @param data.expand Specify additional data to retrieve. Use "organizations", "identities" and/or "billing".
+   * @param data.expand Additional data to include in the response. One or more of (comma-separated): "organizations", "identities", "billing".
    * @returns user User successfully retrieved.
    * @throws ApiError
    */
