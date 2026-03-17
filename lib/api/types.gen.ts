@@ -1356,6 +1356,14 @@ export type get_organization_response = {
    */
   sender_email?: string | null;
   /**
+   * Whether the organization is currently suspended or not.
+   */
+  is_suspended?: boolean;
+  /**
+   * The date the organization was suspended in ISO 8601 format. Null if not suspended.
+   */
+  suspended_on?: string | null;
+  /**
    * The billing information if the organization is a billing customer.
    */
   billing?: {
@@ -2581,7 +2589,7 @@ export type VerifyApiKeyResponse = verify_api_key_response;
 
 export type GetApisData = {
   /**
-   * Specify additional data to retrieve. Use "scopes".
+   * Additional data to include in the response. Allowed value: "scopes".
    */
   expand?: "scopes" | null;
 };
@@ -3002,7 +3010,7 @@ export type GetBillingEntitlementsData = {
    */
   endingBefore?: string | null;
   /**
-   * Specify additional plan data to retrieve. Use "plans".
+   * Additional plan data to include in the response. Allowed value: "plans".
    */
   expand?: "plans" | null;
   /**
@@ -3340,6 +3348,10 @@ export type CreateConnectionData = {
            * Use custom domain callback URL.
            */
           is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         }
       | {
           /**
@@ -3392,6 +3404,14 @@ export type CreateConnectionData = {
           upstream_params?: {
             [key: string]: unknown;
           };
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         }
       | {
           /**
@@ -3411,19 +3431,19 @@ export type CreateConnectionData = {
            */
           saml_sign_in_url?: string;
           /**
-           * Attribute key for the user’s email.
+           * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
           /**
-           * Attribute key for the user’s first name.
+           * Attribute key for the user's first name.
            */
           saml_first_name_key_attr?: string;
           /**
-           * Attribute key for the user’s last name.
+           * Attribute key for the user's last name.
            */
           saml_last_name_key_attr?: string;
           /**
-           * Create user if they don’t exist.
+           * Create user if they don't exist.
            */
           is_create_missing_user?: boolean;
           /**
@@ -3448,6 +3468,14 @@ export type CreateConnectionData = {
            * Users automatically join organization when using this connection.
            */
           is_auto_join_organization_enabled?: boolean;
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         };
   };
 };
@@ -3498,6 +3526,10 @@ export type UpdateConnectionData = {
            * Use custom domain callback URL.
            */
           is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         }
       | {
           /**
@@ -3546,6 +3578,14 @@ export type UpdateConnectionData = {
           upstream_params?: {
             [key: string]: unknown;
           };
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         }
       | {
           /**
@@ -3561,19 +3601,19 @@ export type UpdateConnectionData = {
            */
           saml_idp_metadata_url?: string;
           /**
-           * Attribute key for the user’s email.
+           * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
           /**
-           * Attribute key for the user’s first name.
+           * Attribute key for the user's first name.
            */
           saml_first_name_key_attr?: string;
           /**
-           * Attribute key for the user’s last name.
+           * Attribute key for the user's last name.
            */
           saml_last_name_key_attr?: string;
           /**
-           * Create user if they don’t exist.
+           * Create user if they don't exist.
            */
           is_create_missing_user?: boolean;
           /**
@@ -3594,6 +3634,14 @@ export type UpdateConnectionData = {
            * Private key associated with the signing certificate.
            */
           saml_signing_private_key?: string;
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         };
   };
 };
@@ -3635,6 +3683,10 @@ export type ReplaceConnectionData = {
            * Use custom domain callback URL.
            */
           is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         }
       | {
           /**
@@ -3683,6 +3735,14 @@ export type ReplaceConnectionData = {
           upstream_params?: {
             [key: string]: unknown;
           };
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         }
       | {
           /**
@@ -3698,19 +3758,19 @@ export type ReplaceConnectionData = {
            */
           saml_idp_metadata_url?: string;
           /**
-           * Attribute key for the user’s email.
+           * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
           /**
-           * Attribute key for the user’s first name.
+           * Attribute key for the user's first name.
            */
           saml_first_name_key_attr?: string;
           /**
-           * Attribute key for the user’s last name.
+           * Attribute key for the user's last name.
            */
           saml_last_name_key_attr?: string;
           /**
-           * Create user if they don’t exist.
+           * Create user if they don't exist.
            */
           is_create_missing_user?: boolean;
           /**
@@ -3731,6 +3791,14 @@ export type ReplaceConnectionData = {
            * Private key associated with the signing certificate.
            */
           saml_signing_private_key?: string;
+          /**
+           * Use custom domain callback URL.
+           */
+          is_use_custom_domain?: boolean;
+          /**
+           * Trust this connection for account merging.
+           */
+          is_trusted?: boolean;
         };
   };
 };
@@ -4004,6 +4072,10 @@ export type ReplaceMfaData = {
      * The MFA methods to enable.
      */
     enabled_factors: Array<"mfa:email" | "mfa:sms" | "mfa:authenticator_app">;
+    /**
+     * Determines whether recovery codes are shown to users during MFA setup for the environment.
+     */
+    is_recovery_codes_enabled?: boolean;
   };
 };
 
@@ -4015,7 +4087,7 @@ export type GetOrganizationData = {
    */
   code?: string;
   /**
-   * Specify additional data to retrieve. Use "billing".
+   * Additional data to include in the response. Allowed value: "billing".
    */
   expand?: string;
 };
@@ -4082,9 +4154,14 @@ export type CreateOrganizationData = {
      */
     handle?: string;
     /**
-     * If users become members of this organization when the org code is supplied during authentication.
+     * Deprecated - Use 'is_auto_membership_enabled' instead.
+     * @deprecated
      */
     is_allow_registrations?: boolean;
+    /**
+     * If users become members of this organization when the org code is supplied during authentication.
+     */
+    is_auto_membership_enabled?: boolean;
     /**
      * The name of the organization that will be used in emails
      */
@@ -4129,7 +4206,7 @@ export type GetOrganizationsResponse = get_organizations_response;
 
 export type UpdateOrganizationData = {
   /**
-   * Specify additional data to retrieve. Use "billing".
+   * Additional data to include in the response. Allowed value: "billing".
    */
   expand?: "billing" | null;
   /**
@@ -4194,6 +4271,10 @@ export type UpdateOrganizationData = {
      */
     is_allow_registrations?: boolean;
     /**
+     * If users become members of this organization when the org code is supplied during authentication.
+     */
+    is_auto_membership_enabled?: boolean;
+    /**
      * Users can sign up to this organization.
      */
     is_auto_join_domain_list?: boolean;
@@ -4217,6 +4298,10 @@ export type UpdateOrganizationData = {
      * The email address that will be used in emails. Requires custom SMTP to be set up.
      */
     sender_email?: string | null;
+    /**
+     * Whether to suspend or unsuspend the organization. Setting to true suspends the organization; setting to false unsuspends it. The default organization cannot be suspended.
+     */
+    is_suspended?: boolean;
   };
 };
 
@@ -4385,7 +4470,7 @@ export type DeleteOrganizationUserRoleResponse = success_response;
 
 export type GetOrganizationUserPermissionsData = {
   /**
-   * Specify additional data to retrieve. Use "roles".
+   * Additional data to include in the response. Allowed value: "roles".
    */
   expand?: string | null;
   /**
@@ -4647,6 +4732,10 @@ export type ReplaceOrganizationMfaData = {
      * The MFA methods to enable.
      */
     enabled_factors: Array<"mfa:email" | "mfa:sms" | "mfa:authenticator_app">;
+    /**
+     * Determines whether recovery codes are shown to users during MFA setup for this specific organization. This overrides the environment-level setting.
+     */
+    is_recovery_codes_enabled?: boolean;
   };
 };
 
@@ -5206,7 +5295,7 @@ export type SearchUsersData = {
    */
   endingBefore?: string | null;
   /**
-   * Specify additional data to retrieve. Use "organizations" and/or "identities".
+   * Additional data to include in the response. One or more of (comma-separated): "organizations", "identities", "properties".
    */
   expand?: string | null;
   /**
@@ -5283,7 +5372,7 @@ export type GetUsersData = {
    */
   email?: string | null;
   /**
-   * Specify additional data to retrieve. Use "organizations", "identities" and/or "billing".
+   * Additional data to include in the response. One or more of (comma-separated): "organizations", "identities", "billing".
    */
   expand?: string | null;
   /**
@@ -5325,7 +5414,7 @@ export type RefreshUserClaimsResponse = success_response;
 
 export type GetUserDataData = {
   /**
-   * Specify additional data to retrieve. Use "organizations", "identities" and/or "billing".
+   * Additional data to include in the response. One or more of (comma-separated): "organizations", "identities", "billing".
    */
   expand?: string | null;
   /**
