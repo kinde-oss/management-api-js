@@ -19,8 +19,8 @@ importers:
         version: 17.3.1
     devDependencies:
       '@hey-api/client-fetch':
-        specifier: ^0.12.0
-        version: 0.12.0(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))
+        specifier: ^0.13.0
+        version: 0.13.1(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))
       '@hey-api/openapi-ts':
         specifier: ^0.71.1
         version: 0.71.1(magicast@0.3.5)(typescript@5.8.3)
@@ -228,8 +228,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@hey-api/client-fetch@0.12.0':
-    resolution: {integrity: sha512-/iZ6dhs39N0kjzCa9tlNeLNufVUd8zzv/wI1ewQt5AEHaVuDnAxvuQT+fRIPYkfIWKR3gVZKRp5mcCo29voYzQ==}
+  '@hey-api/client-fetch@0.13.1':
+    resolution: {integrity: sha512-29jBRYNdxVGlx5oewFgOrkulZckpIpBIRHth3uHFn1PrL2ucMy52FvWOY3U3dVx2go1Z3kUmMi6lr07iOpUqqA==}
     deprecated: Starting with v0.73.0, this package is bundled directly inside @hey-api/openapi-ts.
     peerDependencies:
       '@hey-api/openapi-ts': < 2
@@ -1252,7 +1252,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.3':
     optional: true
 
-  '@hey-api/client-fetch@0.12.0(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))':
+  '@hey-api/client-fetch@0.13.1(@hey-api/openapi-ts@0.71.1(magicast@0.3.5)(typescript@5.8.3))':
     dependencies:
       '@hey-api/openapi-ts': 0.71.1(magicast@0.3.5)(typescript@5.8.3)
 
