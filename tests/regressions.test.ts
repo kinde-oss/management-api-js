@@ -93,7 +93,7 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const data: GetCallbackUrlsData = { appId: "test-app-id" };
+        const data: GetCallbackUrlsData = { path: { app_id: "test-app-id" } };
         const result = await Callbacks.getCallbackUrls(data);
         expect(result).toBeDefined();
       });
@@ -106,7 +106,7 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const data: GetCallbackUrlsData = { appId: "test-app-id" };
+        const data: GetCallbackUrlsData = { path: { app_id: "test-app-id" } };
         const result = await Callbacks.getCallbackUrLs(data);
         expect(result).toBeDefined();
       });
@@ -133,8 +133,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.addRedirectCallbackUrls({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/callback"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/callback"] },
         });
         expect(result).toBeDefined();
       });
@@ -149,8 +149,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.addRedirectCallbackUrLs({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/callback"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/callback"] },
         });
         expect(result).toBeDefined();
       });
@@ -177,8 +177,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.replaceRedirectCallbackUrls({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/callback"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/callback"] },
         });
         expect(result).toBeDefined();
       });
@@ -193,8 +193,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.replaceRedirectCallbackUrLs({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/callback"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/callback"] },
         });
         expect(result).toBeDefined();
       });
@@ -221,8 +221,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.deleteCallbackUrls({
-          appId: "test-app-id",
-          urls: "https://example.com/callback",
+          path: { app_id: "test-app-id" },
+          query: { urls: "https://example.com/callback" },
         });
         expect(result).toBeDefined();
       });
@@ -237,8 +237,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.deleteCallbackUrLs({
-          appId: "test-app-id",
-          urls: "https://example.com/callback",
+          path: { app_id: "test-app-id" },
+          query: { urls: "https://example.com/callback" },
         });
         expect(result).toBeDefined();
       });
@@ -263,7 +263,7 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const data: GetLogoutUrlsData = { appId: "test-app-id" };
+        const data: GetLogoutUrlsData = { path: { app_id: "test-app-id" } };
         const result = await Callbacks.getLogoutUrls(data);
         expect(result).toBeDefined();
       });
@@ -276,7 +276,7 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const data: GetLogoutUrlsData = { appId: "test-app-id" };
+        const data: GetLogoutUrlsData = { path: { app_id: "test-app-id" } };
         const result = await Callbacks.getLogoutUrLs(data);
         expect(result).toBeDefined();
       });
@@ -303,8 +303,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.addLogoutRedirectUrls({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/logout"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/logout"] },
         });
         expect(result).toBeDefined();
       });
@@ -319,8 +319,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.addLogoutRedirectUrLs({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/logout"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/logout"] },
         });
         expect(result).toBeDefined();
       });
@@ -347,8 +347,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.replaceLogoutRedirectUrls({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/logout"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/logout"] },
         });
         expect(result).toBeDefined();
       });
@@ -363,8 +363,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.replaceLogoutRedirectUrLs({
-          appId: "test-app-id",
-          requestBody: { urls: ["https://example.com/logout"] },
+          path: { app_id: "test-app-id" },
+          body: { urls: ["https://example.com/logout"] },
         });
         expect(result).toBeDefined();
       });
@@ -391,8 +391,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.deleteLogoutUrls({
-          appId: "test-app-id",
-          urls: "https://example.com/logout",
+          path: { app_id: "test-app-id" },
+          query: { urls: "https://example.com/logout" },
         });
         expect(result).toBeDefined();
       });
@@ -407,8 +407,8 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Callbacks.deleteLogoutUrLs({
-          appId: "test-app-id",
-          urls: "https://example.com/logout",
+          path: { app_id: "test-app-id" },
+          query: { urls: "https://example.com/logout" },
         });
         expect(result).toBeDefined();
       });
@@ -428,7 +428,7 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const result = await Users.getUsers({ phone: "+1234567890" });
+        const result = await Users.getUsers({ query: { phone: "+1234567890" } });
         expect(result).toBeDefined();
       });
     });
@@ -452,11 +452,16 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const result = await Users.getUsers({ expand: "billing" });
+        const result = await Users.getUsers({ query: { expand: "billing" } });
         expect(result).toBeDefined();
-        if (result.users && result.users.length > 0) {
-          expect(result.users[0].billing).toBeDefined();
-          expect(result.users[0].billing?.customer_id).toBe("cust-123");
+        if (
+          (result as { users?: { billing?: { customer_id?: string } }[] }).users
+        ) {
+          const users = (result as { users?: { billing?: { customer_id?: string } }[] }).users!;
+          if (users.length > 0) {
+            expect(users[0].billing).toBeDefined();
+            expect(users[0].billing?.customer_id).toBe("cust-123");
+          }
         }
       });
 
@@ -481,13 +486,18 @@ describe("Breaking Changes and Regressions", () => {
         );
 
         const result = await Users.getUsers({
-          expand: "organizations,identities,billing",
+          query: { expand: "organizations,identities,billing" },
         });
         expect(result).toBeDefined();
-        if (result.users && result.users.length > 0) {
-          expect(result.users[0].billing).toBeDefined();
-          expect(result.users[0].organizations).toBeDefined();
-          expect(result.users[0].identities).toBeDefined();
+        if (
+          (result as { users?: { billing?: unknown; organizations?: unknown; identities?: unknown }[] }).users
+        ) {
+          const users = (result as { users?: { billing?: unknown; organizations?: unknown; identities?: unknown }[] }).users!;
+          if (users.length > 0) {
+            expect(users[0].billing).toBeDefined();
+            expect(users[0].organizations).toBeDefined();
+            expect(users[0].identities).toBeDefined();
+          }
         }
       });
     });
@@ -496,8 +506,8 @@ describe("Breaking Changes and Regressions", () => {
   describe("Type Name Changes", () => {
     it("should export new GetCallbackUrlsData type", () => {
       // This is a compile-time check, but we can verify it's importable
-      const data: GetCallbackUrlsData = { appId: "test" };
-      expect(data.appId).toBe("test");
+      const data: GetCallbackUrlsData = { path: { app_id: "test" } };
+      expect(data.path.app_id).toBe("test");
     });
 
     it("should export new GetCallbackUrlsResponse type", async () => {
@@ -508,15 +518,17 @@ describe("Breaking Changes and Regressions", () => {
         }),
       );
 
-      const result = await Callbacks.getCallbackUrls({ appId: "test-app-id" });
+      const result = await Callbacks.getCallbackUrls({
+        path: { app_id: "test-app-id" },
+      });
       // Type should be GetCallbackUrlsResponse (redirect_callback_urls)
       // The method should work and return a result
       expect(result).toBeDefined();
     });
 
     it("should export new GetLogoutUrlsData type", () => {
-      const data: GetLogoutUrlsData = { appId: "test" };
-      expect(data.appId).toBe("test");
+      const data: GetLogoutUrlsData = { path: { app_id: "test" } };
+      expect(data.path.app_id).toBe("test");
     });
   });
 

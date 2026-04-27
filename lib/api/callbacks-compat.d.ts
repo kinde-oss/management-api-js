@@ -1,24 +1,16 @@
 // TypeScript declaration file for Callbacks deprecated methods
 // This file provides type information for the deprecated methods added at runtime
 
-import type { CancelablePromise } from "./core/CancelablePromise";
+import type { Options } from "./client";
 import type {
   GetCallbackUrlsData,
-  GetCallbackUrlsResponse,
   AddRedirectCallbackUrlsData,
-  AddRedirectCallbackUrlsResponse,
   ReplaceRedirectCallbackUrlsData,
-  ReplaceRedirectCallbackUrlsResponse,
   DeleteCallbackUrlsData,
-  DeleteCallbackUrlsResponse,
   GetLogoutUrlsData,
-  GetLogoutUrlsResponse,
   AddLogoutRedirectUrlsData,
-  AddLogoutRedirectUrlsResponse,
   ReplaceLogoutRedirectUrlsData,
-  ReplaceLogoutRedirectUrlsResponse,
   DeleteLogoutUrlsData,
-  DeleteLogoutUrlsResponse,
 } from "./types.gen";
 
 // Import the Callbacks class type to extend it
@@ -26,63 +18,66 @@ import type { Callbacks as CallbacksClass } from "./sdk.gen";
 
 declare module "./sdk.gen" {
   // Extend the Callbacks class constructor with deprecated static methods
-  // Using type augmentation for static methods
   interface CallbacksStatic {
     /**
      * @deprecated Use `getCallbackUrls` instead. This method will be removed in a future version.
      */
-    getCallbackUrLs(
-      data: GetCallbackUrlsData,
-    ): CancelablePromise<GetCallbackUrlsResponse>;
+    getCallbackUrLs<ThrowOnError extends boolean = false>(
+      options: Options<GetCallbackUrlsData, ThrowOnError>,
+    ): ReturnType<typeof CallbacksClass.getCallbackUrls<ThrowOnError>>;
 
     /**
      * @deprecated Use `addRedirectCallbackUrls` instead. This method will be removed in a future version.
      */
-    addRedirectCallbackUrLs(
-      data: AddRedirectCallbackUrlsData,
-    ): CancelablePromise<AddRedirectCallbackUrlsResponse>;
+    addRedirectCallbackUrLs<ThrowOnError extends boolean = false>(
+      options: Options<AddRedirectCallbackUrlsData, ThrowOnError>,
+    ): ReturnType<typeof CallbacksClass.addRedirectCallbackUrls<ThrowOnError>>;
 
     /**
      * @deprecated Use `replaceRedirectCallbackUrls` instead. This method will be removed in a future version.
      */
-    replaceRedirectCallbackUrLs(
-      data: ReplaceRedirectCallbackUrlsData,
-    ): CancelablePromise<ReplaceRedirectCallbackUrlsResponse>;
+    replaceRedirectCallbackUrLs<ThrowOnError extends boolean = false>(
+      options: Options<ReplaceRedirectCallbackUrlsData, ThrowOnError>,
+    ): ReturnType<
+      typeof CallbacksClass.replaceRedirectCallbackUrls<ThrowOnError>
+    >;
 
     /**
      * @deprecated Use `deleteCallbackUrls` instead. This method will be removed in a future version.
      */
-    deleteCallbackUrLs(
-      data: DeleteCallbackUrlsData,
-    ): CancelablePromise<DeleteCallbackUrlsResponse>;
+    deleteCallbackUrLs<ThrowOnError extends boolean = false>(
+      options: Options<DeleteCallbackUrlsData, ThrowOnError>,
+    ): ReturnType<typeof CallbacksClass.deleteCallbackUrls<ThrowOnError>>;
 
     /**
      * @deprecated Use `getLogoutUrls` instead. This method will be removed in a future version.
      */
-    getLogoutUrLs(
-      data: GetLogoutUrlsData,
-    ): CancelablePromise<GetLogoutUrlsResponse>;
+    getLogoutUrLs<ThrowOnError extends boolean = false>(
+      options: Options<GetLogoutUrlsData, ThrowOnError>,
+    ): ReturnType<typeof CallbacksClass.getLogoutUrls<ThrowOnError>>;
 
     /**
      * @deprecated Use `addLogoutRedirectUrls` instead. This method will be removed in a future version.
      */
-    addLogoutRedirectUrLs(
-      data: AddLogoutRedirectUrlsData,
-    ): CancelablePromise<AddLogoutRedirectUrlsResponse>;
+    addLogoutRedirectUrLs<ThrowOnError extends boolean = false>(
+      options: Options<AddLogoutRedirectUrlsData, ThrowOnError>,
+    ): ReturnType<typeof CallbacksClass.addLogoutRedirectUrls<ThrowOnError>>;
 
     /**
      * @deprecated Use `replaceLogoutRedirectUrls` instead. This method will be removed in a future version.
      */
-    replaceLogoutRedirectUrLs(
-      data: ReplaceLogoutRedirectUrlsData,
-    ): CancelablePromise<ReplaceLogoutRedirectUrlsResponse>;
+    replaceLogoutRedirectUrLs<ThrowOnError extends boolean = false>(
+      options: Options<ReplaceLogoutRedirectUrlsData, ThrowOnError>,
+    ): ReturnType<
+      typeof CallbacksClass.replaceLogoutRedirectUrls<ThrowOnError>
+    >;
 
     /**
      * @deprecated Use `deleteLogoutUrls` instead. This method will be removed in a future version.
      */
-    deleteLogoutUrLs(
-      data: DeleteLogoutUrlsData,
-    ): CancelablePromise<DeleteLogoutUrlsResponse>;
+    deleteLogoutUrLs<ThrowOnError extends boolean = false>(
+      options: Options<DeleteLogoutUrlsData, ThrowOnError>,
+    ): ReturnType<typeof CallbacksClass.deleteLogoutUrls<ThrowOnError>>;
   }
 
   // Merge the static methods with the class constructor

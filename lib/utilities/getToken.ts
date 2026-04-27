@@ -1,7 +1,6 @@
 import * as constants from "../constants";
 import { setToken } from "./setToken";
 import { kindeConfig } from "../config";
-import { OpenAPI } from "../api";
 import { LIB_VERSION } from "../version";
 import { checkAudience } from "./token/checkAudience";
 import { hasTokenExpired } from "./token/hasTokenExpired";
@@ -49,7 +48,7 @@ async function generateM2MToken() {
     scope: constants.DEFAULT_TOKEN_SCOPES,
     client_id: kindeConfig.clientId,
     client_secret: kindeConfig.clientSecret,
-    audience: OpenAPI.BASE + "/api",
+    audience: kindeConfig.kindeDomain + "/api",
   });
 
   const headers = new Headers();
