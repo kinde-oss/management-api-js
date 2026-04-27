@@ -1,4 +1,4 @@
-import { OpenAPI } from "./api/index";
+import { client } from "./api/client.gen";
 import { getToken } from "./utilities/getToken";
 
 export interface TokenStore {
@@ -62,11 +62,9 @@ export const init = (
     config,
   );
 
-  _merge(OpenAPI, {
-    BASE: kindeConfig.kindeDomain,
-    TOKEN: async () => {
-      return await getToken();
-    },
+  client.setConfig({
+    baseUrl: kindeConfig.kindeDomain,
+    auth: async () => await getToken(),
   });
 };
 
