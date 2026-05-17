@@ -107,6 +107,16 @@ import type {
   ReplaceConnectionResponse,
   DeleteConnectionData,
   DeleteConnectionResponse,
+  GetDirectoriesData,
+  GetDirectoriesResponse,
+  CreateDirectoryData,
+  CreateDirectoryResponse,
+  GetDirectoryData,
+  GetDirectoryResponse,
+  UpdateDirectoryData,
+  UpdateDirectoryResponse,
+  DeleteDirectoryData,
+  DeleteDirectoryResponse,
   GetEnvironmentResponse,
   DeleteEnvironementFeatureFlagOverridesResponse,
   GetEnvironementFeatureFlagsResponse,
@@ -143,6 +153,14 @@ import type {
   GetIndustriesResponse,
   ReplaceMfaData,
   ReplaceMfaResponse,
+  GetOrganizationInvitesData,
+  GetOrganizationInvitesResponse,
+  CreateOrganizationInviteData,
+  CreateOrganizationInviteResponse,
+  GetOrganizationInviteData,
+  GetOrganizationInviteResponse,
+  DeleteOrganizationInviteData,
+  DeleteOrganizationInviteResponse,
   GetOrganizationData,
   GetOrganizationResponse,
   CreateOrganizationData,
@@ -1988,6 +2006,164 @@ export class Connections {
   }
 }
 
+export class Directories {
+  /**
+   * Get SCIM directories
+   * Returns a list of SCIM directories for your organization.
+   *
+   * <div>
+   * <code>read:scim_directories</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.pageSize Number of results per page. Defaults to 50 if parameter not sent.
+   * @param data.startingAfter The ID of the directory to start after.
+   * @param data.organizationCode Filter by organization code to get directories for a specific organization.
+   * @returns get_directories_response SCIM directories successfully retrieved.
+   * @throws ApiError
+   */
+  public static getDirectories(
+    data: GetDirectoriesData = {},
+  ): CancelablePromise<GetDirectoriesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/directories",
+      query: {
+        page_size: data.pageSize,
+        starting_after: data.startingAfter,
+        organization_code: data.organizationCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create SCIM directory
+   * Create a new SCIM directory for user and group synchronization.
+   *
+   * <div>
+   * <code>create:scim_directories</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @returns create_directory_response SCIM directory successfully created.
+   * @throws ApiError
+   */
+  public static createDirectory(
+    data: CreateDirectoryData,
+  ): CancelablePromise<CreateDirectoryResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/directories",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        409: "Conflict - Directory already exists.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get SCIM directory
+   * Retrieve SCIM directory details by ID.
+   *
+   * <div>
+   * <code>read:scim_directories</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.directoryId The directory's ID.
+   * @returns get_directory_response SCIM directory successfully retrieved.
+   * @throws ApiError
+   */
+  public static getDirectory(
+    data: GetDirectoryData,
+  ): CancelablePromise<GetDirectoryResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/directories/{directory_id}",
+      path: {
+        directory_id: data.directoryId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update SCIM directory
+   * Update SCIM directory configuration.
+   *
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @param data.directoryId The directory's ID.
+   * @returns update_directory_response SCIM directory successfully updated.
+   * @throws ApiError
+   */
+  public static updateDirectory(
+    data: UpdateDirectoryData,
+  ): CancelablePromise<UpdateDirectoryResponse> {
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/directories/{directory_id}",
+      path: {
+        directory_id: data.directoryId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete SCIM directory
+   * Delete a SCIM directory and all associated data.
+   *
+   * <div>
+   * <code>delete:scim_directories</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.directoryId The directory's ID.
+   * @returns delete_directory_response SCIM directory successfully deleted.
+   * @throws ApiError
+   */
+  public static deleteDirectory(
+    data: DeleteDirectoryData,
+  ): CancelablePromise<DeleteDirectoryResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/directories/{directory_id}",
+      path: {
+        directory_id: data.directoryId,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+}
+
 export class Environments {
   /**
    * Get environment
@@ -2609,6 +2785,153 @@ export class Mfa {
 }
 
 export class Organizations {
+  /**
+   * Get organization invites
+   * Get a list of invitations for an organization. By default, only pending (non-revoked, non-accepted) invitations are returned.
+   *
+   * <div>
+   * <code>read:organization_invites</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.sort Field and order to sort the result by.
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.nextToken A string to get the next page of results if there are more results.
+   * @param data.includeRevoked Include revoked invitations in the results.
+   * @param data.includeAccepted Include accepted invitations in the results.
+   * @returns get_organization_invites_response Invitations successfully retrieved.
+   * @throws ApiError
+   */
+  public static getOrganizationInvites(
+    data: GetOrganizationInvitesData,
+  ): CancelablePromise<GetOrganizationInvitesResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organization/{org_code}/invites",
+      path: {
+        org_code: data.orgCode,
+      },
+      query: {
+        sort: data.sort,
+        page_size: data.pageSize,
+        next_token: data.nextToken,
+        include_revoked: data.includeRevoked,
+        include_accepted: data.includeAccepted,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Create organization invite
+   * Create a new invitation for an organization. An invitation email will be sent to the provided email address if `send_email` is set to `true`.
+   *
+   * Invitations cannot be created for organizations that are managed by directory sync; user and role changes for those organizations must be made in the upstream identity provider.
+   *
+   * Roles that require an explicit assignment permission cannot be granted to an invitee unless the caller (or the user the token represents) holds that permission. On Kinde-hosted plans, roles outside `owner`/`admin` additionally require the `extended_roles` entitlement.
+   *
+   * Per-organization rate limits apply: a maximum number of invitations may be created per rolling 24 hour window, and a maximum number of active (non-accepted, non-revoked) invitations may exist at any time. Requests that exceed either limit are rejected.
+   *
+   * <div>
+   * <code>create:organization_invites</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.requestBody Invitation details. `email` is capped at 254 characters (RFC 5321). `first_name` and `last_name` are capped at 64 characters each. Inputs over these limits are rejected with `EMAIL_TOO_LONG`, `FIRST_NAME_TOO_LONG`, or `LAST_NAME_TOO_LONG`.
+   * @returns create_organization_invite_response Invitation successfully created.
+   * @throws ApiError
+   */
+  public static createOrganizationInvite(
+    data: CreateOrganizationInviteData,
+  ): CancelablePromise<CreateOrganizationInviteResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/organization/{org_code}/invites",
+      path: {
+        org_code: data.orgCode,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get organization invite
+   * Get details of a specific invitation by its code.
+   *
+   * <div>
+   * <code>read:organization_invites</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.inviteCode The invitation's code.
+   * @returns get_organization_invite_response Invitation successfully retrieved.
+   * @throws ApiError
+   */
+  public static getOrganizationInvite(
+    data: GetOrganizationInviteData,
+  ): CancelablePromise<GetOrganizationInviteResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organization/{org_code}/invites/{invite_code}",
+      path: {
+        org_code: data.orgCode,
+        invite_code: data.inviteCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Delete organization invite
+   * Revoke (delete) an invitation. This will mark the invitation as revoked and prevent it from being accepted.
+   *
+   * <div>
+   * <code>delete:organization_invites</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.inviteCode The invitation's code.
+   * @returns success_response Invitation successfully revoked.
+   * @throws ApiError
+   */
+  public static deleteOrganizationInvite(
+    data: DeleteOrganizationInviteData,
+  ): CancelablePromise<DeleteOrganizationInviteResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/organization/{org_code}/invites/{invite_code}",
+      path: {
+        org_code: data.orgCode,
+        invite_code: data.inviteCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        404: "The specified resource was not found",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
   /**
    * Get organization
    * Retrieve organization details by code.
