@@ -51,6 +51,8 @@ tags:
     x-displayName: Connected Apps
   - name: Connections
     x-displayName: Connections
+  - name: Directories
+    x-displayName: Directories
   - name: Environments
     x-displayName: Environments
   - name: Environment variables
@@ -59,10 +61,10 @@ tags:
     x-displayName: Feature Flags
   - name: Identities
     x-displayName: Identities
-  - name: MFA
-    x-displayName: MFA
   - name: Organizations
     x-displayName: Organizations
+  - name: MFA
+    x-displayName: MFA
   - name: Permissions
     x-displayName: Permissions
   - name: Properties
@@ -2661,10 +2663,37 @@ paths:
                           type: string
                           description: Override the default SSO endpoint with a URL your IdP recognizes.
                           example: https://kinde.com/saml/signin
+                        sign_request_algorithm:
+                          type: string
+                          description: Algorithm used to sign SAML requests.
+                          enum:
+                            - RSA-SHA256
+                            - RSA-SHA1
+                          example: RSA-SHA256
+                        protocol_binding:
+                          type: string
+                          description: Protocol binding used to send SAML requests.
+                          enum:
+                            - HTTP-REDIRECT
+                            - HTTP-POST
+                          example: HTTP-REDIRECT
+                        name_id_format:
+                          type: string
+                          description: Format for the Name ID used to identify users in SAML responses.
+                          enum:
+                            - Persistent
+                            - Transient
+                            - Email address
+                            - Unspecified
+                          example: Persistent
                         saml_email_key_attr:
                           type: string
                           description: Attribute key for the user's email.
                           example: email
+                        saml_user_id_key_attr:
+                          type: string
+                          description: Attribute key for the user's ID.
+                          example: user_id
                         saml_first_name_key_attr:
                           type: string
                           description: Attribute key for the user's first name.
@@ -2910,10 +2939,41 @@ paths:
                           type: string
                           description: URL for the IdP metadata.
                           example: https://kinde.com/saml/metadata
+                        saml_sign_in_url:
+                          type: string
+                          description: Override the default SSO endpoint with a URL your IdP recognizes.
+                          example: https://kinde.com/saml/signin
+                        sign_request_algorithm:
+                          type: string
+                          description: Algorithm used to sign SAML requests.
+                          enum:
+                            - RSA-SHA256
+                            - RSA-SHA1
+                          example: RSA-SHA256
+                        protocol_binding:
+                          type: string
+                          description: Protocol binding used to send SAML requests.
+                          enum:
+                            - HTTP-REDIRECT
+                            - HTTP-POST
+                          example: HTTP-REDIRECT
+                        name_id_format:
+                          type: string
+                          description: Format for the Name ID used to identify users in SAML responses.
+                          enum:
+                            - Persistent
+                            - Transient
+                            - Email address
+                            - Unspecified
+                          example: Persistent
                         saml_email_key_attr:
                           type: string
                           description: Attribute key for the user's email.
                           example: email
+                        saml_user_id_key_attr:
+                          type: string
+                          description: Attribute key for the user's ID.
+                          example: user_id
                         saml_first_name_key_attr:
                           type: string
                           description: Attribute key for the user's first name.
@@ -3122,10 +3182,37 @@ paths:
                           type: string
                           description: URL for the IdP metadata.
                           example: https://kinde.com/saml/metadata
+                        sign_request_algorithm:
+                          type: string
+                          description: Algorithm used to sign SAML requests.
+                          enum:
+                            - RSA-SHA256
+                            - RSA-SHA1
+                          example: RSA-SHA256
+                        protocol_binding:
+                          type: string
+                          description: Protocol binding used to send SAML requests.
+                          enum:
+                            - HTTP-REDIRECT
+                            - HTTP-POST
+                          example: HTTP-REDIRECT
+                        name_id_format:
+                          type: string
+                          description: Format for the Name ID used to identify users in SAML responses.
+                          enum:
+                            - Persistent
+                            - Transient
+                            - Email address
+                            - Unspecified
+                          example: Persistent
                         saml_email_key_attr:
                           type: string
                           description: Attribute key for the user's email.
                           example: email
+                        saml_user_id_key_attr:
+                          type: string
+                          description: Attribute key for the user's ID.
+                          example: user_id
                         saml_first_name_key_attr:
                           type: string
                           description: Attribute key for the user's first name.
@@ -3213,6 +3300,272 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/directories:
+    servers: []
+    get:
+      tags:
+        - Directories
+      operationId: getDirectories
+      summary: Get SCIM directories
+      description: |
+        Returns a list of SCIM directories for your organization.
+
+        <div>
+          <code>read:scim_directories</code>
+        </div>
+      parameters:
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 50 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: starting_after
+          in: query
+          description: The ID of the directory to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: organization_code
+          in: query
+          description: Filter by organization code to get directories for a specific organization.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: SCIM directories successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_directories_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Directories
+      operationId: createDirectory
+      summary: Create SCIM directory
+      description: |
+        Create a new SCIM directory for user and group synchronization.
+
+        <div>
+          <code>create:scim_directories</code>
+        </div>
+      externalDocs:
+        url: https://docs.kinde.com/developer-tools/scim-provisioning/
+        description: SCIM Provisioning
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                org_code:
+                  type: string
+                  description: The organization code to create the SCIM directory for.
+                  example: org_1ccfb819462
+                directory_name:
+                  type: string
+                  description: A descriptive name for the SCIM directory.
+                  example: Production Directory
+                provider_code:
+                  type: string
+                  description: The SCIM provider code to use for this directory.
+                  enum:
+                    - entra_id_azure_ad
+                    - okta
+                    - google_workspace
+                    - custom_scim_v2
+                    - cyberark
+                    - jumpcloud
+                    - onelogin
+                    - pingfederate
+                    - rippling
+                  example: entra_id_azure_ad
+              required:
+                - org_code
+                - directory_name
+                - provider_code
+      responses:
+        '201':
+          description: SCIM directory successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_directory_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                organization_required:
+                  summary: Organization code required
+                  value:
+                    errors:
+                      - code: ORGANIZATION_REQUIRED
+                        message: Organization code is required
+                        field: org_code
+                directory_name_required:
+                  summary: Directory name required
+                  value:
+                    errors:
+                      - code: DIRECTORY_NAME_REQUIRED
+                        message: Directory name is required
+                        field: directory_name
+                provider_code_required:
+                  summary: Provider code required
+                  value:
+                    errors:
+                      - code: PROVIDER_CODE_REQUIRED
+                        message: Provider code is required
+                        field: provider_code
+                invalid_provider:
+                  summary: Invalid provider code
+                  value:
+                    errors:
+                      - code: INVALID_PROVIDER
+                        message: Invalid or disabled provider code
+                        field: provider_code
+                organization_not_found:
+                  summary: Organization not found
+                  value:
+                    errors:
+                      - code: ORGANIZATION_NOT_FOUND
+                        message: Organization not found
+                        field: org_code
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '409':
+          description: Conflict - Directory already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_exists:
+                  summary: Directory already exists
+                  value:
+                    errors:
+                      - code: DIRECTORY_EXISTS
+                        message: A SCIM directory already exists for this organization
+                        field: org_code
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/directories/{directory_id}:
+    servers: []
+    parameters:
+      - name: directory_id
+        in: path
+        description: The directory's ID.
+        required: true
+        schema:
+          type: string
+          example: directory_0192b1941f125645fa15bf28a662a0b3
+    get:
+      tags:
+        - Directories
+      operationId: getDirectory
+      summary: Get SCIM directory
+      description: |
+        Retrieve SCIM directory details by ID.
+
+        <div>
+          <code>read:scim_directories</code>
+        </div>
+      responses:
+        '200':
+          description: SCIM directory successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_directory_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    patch:
+      tags:
+        - Directories
+      operationId: updateDirectory
+      summary: Update SCIM directory
+      description: |
+        Update SCIM directory configuration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                directory_name:
+                  type: string
+                  description: A descriptive name for the SCIM directory.
+                  example: Updated Production Directory
+              required:
+                - directory_name
+      responses:
+        '200':
+          description: SCIM directory successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/update_directory_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Directories
+      operationId: deleteDirectory
+      summary: Delete SCIM directory
+      description: |
+        Delete a SCIM directory and all associated data.
+
+        <div>
+          <code>delete:scim_directories</code>
+        </div>
+      responses:
+        '200':
+          description: SCIM directory successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_directory_response'
         '400':
           $ref: '#/components/responses/bad_request'
         '403':
@@ -4100,6 +4453,255 @@ paths:
           description: Invalid credentials.
         '429':
           description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organization/{org_code}/invites:
+    servers: []
+    get:
+      tags:
+        - Organizations
+      operationId: getOrganizationInvites
+      x-scope: read:organization_invites
+      summary: Get organization invites
+      description: |
+        Get a list of invitations for an organization. By default, only pending (non-revoked, non-accepted) invitations are returned.
+
+        <div>
+          <code>read:organization_invites</code>
+        </div>
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            example: org_1ccfb819462
+        - name: sort
+          in: query
+          description: Field and order to sort the result by.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - created_on_asc
+              - created_on_desc
+              - email_asc
+              - email_desc
+              - name_asc
+              - name_desc
+            example: created_on_desc
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+            example: 10
+        - name: next_token
+          in: query
+          description: A string to get the next page of results if there are more results.
+          schema:
+            type: string
+            nullable: true
+        - name: include_revoked
+          in: query
+          description: Include revoked invitations in the results.
+          schema:
+            type: boolean
+            nullable: true
+            default: false
+        - name: include_accepted
+          in: query
+          description: Include accepted invitations in the results.
+          schema:
+            type: boolean
+            nullable: true
+            default: false
+      responses:
+        '200':
+          description: Invitations successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_organization_invites_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    post:
+      tags:
+        - Organizations
+      operationId: createOrganizationInvite
+      x-scope: create:organization_invites
+      summary: Create organization invite
+      description: |
+        Create a new invitation for an organization. An invitation email will be sent to the provided email address if `send_email` is set to `true`.
+
+        Invitations cannot be created for organizations that are managed by directory sync; user and role changes for those organizations must be made in the upstream identity provider.
+
+        Roles that require an explicit assignment permission cannot be granted to an invitee unless the caller (or the user the token represents) holds that permission. On Kinde-hosted plans, roles outside `owner`/`admin` additionally require the `extended_roles` entitlement.
+
+        Per-organization rate limits apply: a maximum number of invitations may be created per rolling 24 hour window, and a maximum number of active (non-accepted, non-revoked) invitations may exist at any time. Requests that exceed either limit are rejected.
+
+        <div>
+          <code>create:organization_invites</code>
+        </div>
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            example: org_1ccfb819462
+      requestBody:
+        description: Invitation details. `email` is capped at 254 characters (RFC 5321). `first_name` and `last_name` are capped at 64 characters each. Inputs over these limits are rejected with `EMAIL_TOO_LONG`, `FIRST_NAME_TOO_LONG`, or `LAST_NAME_TOO_LONG`.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - roles
+              properties:
+                email:
+                  description: The email address of the user to invite. Maximum 254 characters.
+                  type: string
+                  maxLength: 254
+                  example: user@example.com
+                first_name:
+                  description: The first name of the user to invite. Maximum 64 characters.
+                  type: string
+                  maxLength: 64
+                  nullable: true
+                  example: John
+                last_name:
+                  description: The last name of the user to invite. Maximum 64 characters.
+                  type: string
+                  maxLength: 64
+                  nullable: true
+                  example: Doe
+                roles:
+                  description: Array of role keys to assign to the user.
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - admin
+                    - manager
+                send_email:
+                  description: Whether to send an invitation email to the user. Defaults to false.
+                  type: boolean
+                  default: false
+      responses:
+        '201':
+          description: Invitation successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_organization_invite_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organization/{org_code}/invites/{invite_code}:
+    servers: []
+    get:
+      tags:
+        - Organizations
+      operationId: getOrganizationInvite
+      x-scope: read:organization_invites
+      summary: Get organization invite
+      description: |
+        Get details of a specific invitation by its code.
+
+        <div>
+          <code>read:organization_invites</code>
+        </div>
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            example: org_1ccfb819462
+        - name: invite_code
+          in: path
+          description: The invitation's code.
+          required: true
+          schema:
+            type: string
+            example: inv_abc123def456
+      responses:
+        '200':
+          description: Invitation successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_organization_invite_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Organizations
+      operationId: deleteOrganizationInvite
+      x-scope: delete:organization_invites
+      summary: Delete organization invite
+      description: |
+        Revoke (delete) an invitation. This will mark the invitation as revoked and prevent it from being accepted.
+
+        <div>
+          <code>delete:organization_invites</code>
+        </div>
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            example: org_1ccfb819462
+        - name: invite_code
+          in: path
+          description: The invitation's code.
+          required: true
+          schema:
+            type: string
+            example: inv_abc123def456
+      responses:
+        '200':
+          description: Invitation successfully revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
   /api/v1/mfa:
@@ -10338,6 +10940,11 @@ components:
               description: Your Google Analytics tag.
               example: G-1234567
               nullable: true
+            contentsquare_tag_id:
+              type: string
+              description: Your Contentsquare Tag ID.
+              example: 769238b6e1309
+              nullable: true
             is_default:
               type: boolean
               description: Whether the environment is the default. Typically this is your production environment.
@@ -11188,6 +11795,253 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/organization_user_permission'
+    get_organization_invites_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        invites:
+          type: array
+          items:
+            $ref: '#/components/schemas/organization_invite'
+        next_token:
+          type: string
+          description: Pagination token.
+          nullable: true
+    get_organization_invite_response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        id:
+          type: string
+          description: The invitation's unique identifier.
+          example: inv_abc123def456
+        code:
+          type: string
+          description: The invitation's code.
+          example: inv_abc123def456
+        email:
+          type: string
+          description: The email address of the invited user.
+          example: user@example.com
+        first_name:
+          type: string
+          description: The first name of the invited user.
+          nullable: true
+          example: John
+        last_name:
+          type: string
+          description: The last name of the invited user.
+          nullable: true
+          example: Doe
+        full_name:
+          type: string
+          description: The full name of the invited user.
+          example: John Doe
+        created_on:
+          type: string
+          format: date-time
+          description: When the invitation was created.
+          example: '2024-11-18T13:32:03+11'
+        is_sent:
+          type: boolean
+          description: Whether the invitation email was sent.
+          example: true
+        accepted_on:
+          type: string
+          format: date-time
+          description: When the invitation was accepted.
+          nullable: true
+          example: '2024-11-19T10:15:30+11'
+        roles:
+          type: array
+          description: The roles assigned to the invitation.
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: The role's key.
+                example: admin
+              name:
+                type: string
+                description: The role's name.
+                example: Administrator
+          example:
+            - key: admin
+              name: Administrator
+            - key: manager
+              name: Manager
+        is_revoked:
+          type: boolean
+          description: Whether the invitation has been revoked.
+          example: false
+        invite_link:
+          type: string
+          description: URL to share with the invitee to accept the invitation.
+          example: https://example.kinde.com/team_invitation?code=inv_abc123def456
+    create_organization_invite_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: INVITATION_CREATED
+        message:
+          type: string
+          description: Response message.
+          example: Invitation created
+        invite:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The invitation's unique identifier.
+              example: inv_abc123def456
+            code:
+              type: string
+              description: The invitation's code.
+              example: inv_abc123def456
+            email:
+              type: string
+              description: The email address of the invited user.
+              example: user@example.com
+            first_name:
+              type: string
+              description: The first name of the invited user.
+              nullable: true
+              example: John
+            last_name:
+              type: string
+              description: The last name of the invited user.
+              nullable: true
+              example: Doe
+            full_name:
+              type: string
+              description: The full name of the invited user.
+              example: John Doe
+            created_on:
+              type: string
+              format: date-time
+              description: When the invitation was created.
+              example: '2024-11-18T13:32:03+11'
+            is_sent:
+              type: boolean
+              description: Whether the invitation email was sent.
+              example: true
+            accepted_on:
+              type: string
+              format: date-time
+              description: When the invitation was accepted. Always null for a freshly created invitation.
+              nullable: true
+              example: null
+            roles:
+              type: array
+              description: The roles assigned to the invitation.
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: The role's key.
+                    example: admin
+                  name:
+                    type: string
+                    description: The role's name.
+                    example: Administrator
+              example:
+                - key: admin
+                  name: Administrator
+                - key: manager
+                  name: Manager
+            is_revoked:
+              type: boolean
+              description: Whether the invitation has been revoked. Always false for a freshly created invitation.
+              example: false
+            invite_link:
+              type: string
+              description: URL to share with the invitee to accept the invitation.
+              example: https://example.kinde.com/team_invitation?code=inv_abc123def456
+    organization_invite:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The invitation's unique identifier.
+          example: inv_abc123def456
+        code:
+          type: string
+          description: The invitation's code.
+          example: inv_abc123def456
+        email:
+          type: string
+          description: The email address of the invited user.
+          example: user@example.com
+        first_name:
+          type: string
+          description: The first name of the invited user.
+          nullable: true
+          example: John
+        last_name:
+          type: string
+          description: The last name of the invited user.
+          nullable: true
+          example: Doe
+        full_name:
+          type: string
+          description: The full name of the invited user.
+          example: John Doe
+        created_on:
+          type: string
+          format: date-time
+          description: When the invitation was created.
+          example: '2024-11-18T13:32:03+11'
+        is_sent:
+          type: boolean
+          description: Whether the invitation email was sent.
+          example: true
+        accepted_on:
+          type: string
+          format: date-time
+          description: When the invitation was accepted.
+          nullable: true
+          example: '2024-11-19T10:15:30+11'
+        roles:
+          type: array
+          description: The roles assigned to the invitation.
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: The role's key.
+                example: admin
+              name:
+                type: string
+                description: The role's name.
+                example: Administrator
+          example:
+            - key: admin
+              name: Administrator
+            - key: manager
+              name: Manager
+        is_revoked:
+          type: boolean
+          description: Whether the invitation has been revoked.
+          example: false
+        invite_link:
+          type: string
+          description: URL to share with the invitee to accept the invitation.
+          example: https://example.kinde.com/team_invitation?code=inv_abc123def456
     get_organization_feature_flags_response:
       type: object
       properties:
@@ -11994,6 +12848,129 @@ components:
               description: The user ID associated with this key.
               example: user_456
               nullable: true
+    get_directories_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        has_more:
+          description: Whether more records exist.
+          type: boolean
+        directories:
+          type: array
+          items:
+            $ref: '#/components/schemas/directory'
+    get_directory_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        directory:
+          $ref: '#/components/schemas/directory'
+    create_directory_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: DIRECTORY_CREATED
+        message:
+          type: string
+          description: Response message.
+          example: SCIM directory created successfully
+        directory:
+          $ref: '#/components/schemas/directory'
+    update_directory_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: DIRECTORY_UPDATED
+        message:
+          type: string
+          description: Response message.
+          example: SCIM directory updated successfully
+        directory:
+          $ref: '#/components/schemas/directory'
+    delete_directory_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: DIRECTORY_DELETED
+        message:
+          type: string
+          description: Response message.
+          example: SCIM directory deleted successfully
+    directory:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique ID for the SCIM directory.
+          example: directory_0192b1941f125645fa15bf28a662a0b3
+        directory_name:
+          type: string
+          description: The name of the SCIM directory.
+          example: Production Directory
+        directory_endpoint_id:
+          type: string
+          description: The endpoint ID for the SCIM directory.
+          example: ksde_0192b1941f125645fa15bf28a662a0b3
+        secret_token:
+          type: string
+          description: The secret token for SCIM authentication.
+          example: kstkn_0192b1941f125645fa15bf28a662a0b3
+        status:
+          type: string
+          description: The current status of the SCIM directory.
+          enum:
+            - Pending
+            - Validating
+            - Active
+            - Inactive
+            - Error
+          example: Pending
+        organization_code:
+          type: string
+          description: The organization code this directory belongs to.
+          example: org_1ccfb819462
+        last_sync_started_at:
+          type: string
+          format: date-time
+          description: When the last sync started.
+          example: '2024-11-18T13:32:03+11'
+          nullable: true
+        last_sync_completed_at:
+          type: string
+          format: date-time
+          description: When the last sync completed.
+          example: '2024-11-18T13:32:03+11'
+          nullable: true
+        last_sync_error:
+          type: string
+          description: The last sync error message.
+          example: Connection timeout
+          nullable: true
+        created_on:
+          type: string
+          format: date-time
+          description: When the directory was created.
+          example: '2024-11-18T13:32:03+11'
   securitySchemes:
     kindeBearerAuth:
       description: |

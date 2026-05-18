@@ -189,6 +189,18 @@ export type create_connection_response = {
   };
 };
 
+export type create_directory_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: directory;
+};
+
 export type create_environment_variable_response = {
   /**
    * A Kinde generated message.
@@ -226,6 +238,76 @@ export type create_meter_usage_record_response = {
    * Response code.
    */
   code?: string;
+};
+
+export type create_organization_invite_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  invite?: {
+    /**
+     * The invitation's unique identifier.
+     */
+    id?: string;
+    /**
+     * The invitation's code.
+     */
+    code?: string;
+    /**
+     * The email address of the invited user.
+     */
+    email?: string;
+    /**
+     * The first name of the invited user.
+     */
+    first_name?: string | null;
+    /**
+     * The last name of the invited user.
+     */
+    last_name?: string | null;
+    /**
+     * The full name of the invited user.
+     */
+    full_name?: string;
+    /**
+     * When the invitation was created.
+     */
+    created_on?: string;
+    /**
+     * Whether the invitation email was sent.
+     */
+    is_sent?: boolean;
+    /**
+     * When the invitation was accepted. Always null for a freshly created invitation.
+     */
+    accepted_on?: string | null;
+    /**
+     * The roles assigned to the invitation.
+     */
+    roles?: Array<{
+      /**
+       * The role's key.
+       */
+      key?: string;
+      /**
+       * The role's name.
+       */
+      name?: string;
+    }>;
+    /**
+     * Whether the invitation has been revoked. Always false for a freshly created invitation.
+     */
+    is_revoked?: boolean;
+    /**
+     * URL to share with the invitee to accept the invitation.
+     */
+    invite_link?: string;
+  };
 };
 
 export type create_organization_response = {
@@ -318,6 +400,17 @@ export type delete_api_response = {
   code?: string;
 };
 
+export type delete_directory_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+};
+
 export type delete_environment_variable_response = {
   /**
    * A Kinde generated message.
@@ -350,6 +443,54 @@ export type delete_webhook_response = {
    */
   message?: string;
 };
+
+export type directory = {
+  /**
+   * The unique ID for the SCIM directory.
+   */
+  id?: string;
+  /**
+   * The name of the SCIM directory.
+   */
+  directory_name?: string;
+  /**
+   * The endpoint ID for the SCIM directory.
+   */
+  directory_endpoint_id?: string;
+  /**
+   * The secret token for SCIM authentication.
+   */
+  secret_token?: string;
+  /**
+   * The current status of the SCIM directory.
+   */
+  status?: "Pending" | "Validating" | "Active" | "Inactive" | "Error";
+  /**
+   * The organization code this directory belongs to.
+   */
+  organization_code?: string;
+  /**
+   * When the last sync started.
+   */
+  last_sync_started_at?: string | null;
+  /**
+   * When the last sync completed.
+   */
+  last_sync_completed_at?: string | null;
+  /**
+   * The last sync error message.
+   */
+  last_sync_error?: string | null;
+  /**
+   * When the directory was created.
+   */
+  created_on?: string;
+};
+
+/**
+ * The current status of the SCIM directory.
+ */
+export type status = "Pending" | "Validating" | "Active" | "Inactive" | "Error";
 
 export type environment_variable = {
   /**
@@ -951,6 +1092,34 @@ export type get_connections_response = {
   has_more?: boolean;
 };
 
+export type get_directories_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  directories?: Array<directory>;
+};
+
+export type get_directory_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: directory;
+};
+
 export type get_environment_feature_flags_response = {
   /**
    * Response code.
@@ -1001,6 +1170,10 @@ export type get_environment_response = {
      * Your Google Analytics tag.
      */
     google_analytics_tag?: string | null;
+    /**
+     * Your Contentsquare Tag ID.
+     */
+    contentsquare_tag_id?: string | null;
     /**
      * Whether the environment is the default. Typically this is your production environment.
      */
@@ -1231,6 +1404,86 @@ export type get_organization_feature_flags_response = {
       value?: string;
     };
   };
+};
+
+export type get_organization_invite_response = {
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * The invitation's unique identifier.
+   */
+  id?: string;
+  /**
+   * The invitation's code.
+   */
+  code?: string;
+  /**
+   * The email address of the invited user.
+   */
+  email?: string;
+  /**
+   * The first name of the invited user.
+   */
+  first_name?: string | null;
+  /**
+   * The last name of the invited user.
+   */
+  last_name?: string | null;
+  /**
+   * The full name of the invited user.
+   */
+  full_name?: string;
+  /**
+   * When the invitation was created.
+   */
+  created_on?: string;
+  /**
+   * Whether the invitation email was sent.
+   */
+  is_sent?: boolean;
+  /**
+   * When the invitation was accepted.
+   */
+  accepted_on?: string | null;
+  /**
+   * The roles assigned to the invitation.
+   */
+  roles?: Array<{
+    /**
+     * The role's key.
+     */
+    key?: string;
+    /**
+     * The role's name.
+     */
+    name?: string;
+  }>;
+  /**
+   * Whether the invitation has been revoked.
+   */
+  is_revoked?: boolean;
+  /**
+   * URL to share with the invitee to accept the invitation.
+   */
+  invite_link?: string;
+};
+
+export type get_organization_invites_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  invites?: Array<organization_invite>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
 };
 
 export type get_organization_response = {
@@ -1758,6 +2011,66 @@ export type not_found_response = {
   };
 };
 
+export type organization_invite = {
+  /**
+   * The invitation's unique identifier.
+   */
+  id?: string;
+  /**
+   * The invitation's code.
+   */
+  code?: string;
+  /**
+   * The email address of the invited user.
+   */
+  email?: string;
+  /**
+   * The first name of the invited user.
+   */
+  first_name?: string | null;
+  /**
+   * The last name of the invited user.
+   */
+  last_name?: string | null;
+  /**
+   * The full name of the invited user.
+   */
+  full_name?: string;
+  /**
+   * When the invitation was created.
+   */
+  created_on?: string;
+  /**
+   * Whether the invitation email was sent.
+   */
+  is_sent?: boolean;
+  /**
+   * When the invitation was accepted.
+   */
+  accepted_on?: string | null;
+  /**
+   * The roles assigned to the invitation.
+   */
+  roles?: Array<{
+    /**
+     * The role's key.
+     */
+    key?: string;
+    /**
+     * The role's name.
+     */
+    name?: string;
+  }>;
+  /**
+   * Whether the invitation has been revoked.
+   */
+  is_revoked?: boolean;
+  /**
+   * URL to share with the invitee to accept the invitation.
+   */
+  invite_link?: string;
+};
+
 export type organization_item_schema = {
   /**
    * The unique identifier for the organization.
@@ -2172,6 +2485,18 @@ export type subscribers_subscriber = {
 export type success_response = {
   message?: string;
   code?: string;
+};
+
+export type update_directory_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: directory;
 };
 
 export type update_environment_variable_response = {
@@ -3431,9 +3756,29 @@ export type CreateConnectionData = {
            */
           saml_sign_in_url?: string;
           /**
+           * Algorithm used to sign SAML requests.
+           */
+          sign_request_algorithm?: "RSA-SHA256" | "RSA-SHA1";
+          /**
+           * Protocol binding used to send SAML requests.
+           */
+          protocol_binding?: "HTTP-REDIRECT" | "HTTP-POST";
+          /**
+           * Format for the Name ID used to identify users in SAML responses.
+           */
+          name_id_format?:
+            | "Persistent"
+            | "Transient"
+            | "Email address"
+            | "Unspecified";
+          /**
            * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user's ID.
+           */
+          saml_user_id_key_attr?: string;
           /**
            * Attribute key for the user's first name.
            */
@@ -3601,9 +3946,33 @@ export type UpdateConnectionData = {
            */
           saml_idp_metadata_url?: string;
           /**
+           * Override the default SSO endpoint with a URL your IdP recognizes.
+           */
+          saml_sign_in_url?: string;
+          /**
+           * Algorithm used to sign SAML requests.
+           */
+          sign_request_algorithm?: "RSA-SHA256" | "RSA-SHA1";
+          /**
+           * Protocol binding used to send SAML requests.
+           */
+          protocol_binding?: "HTTP-REDIRECT" | "HTTP-POST";
+          /**
+           * Format for the Name ID used to identify users in SAML responses.
+           */
+          name_id_format?:
+            | "Persistent"
+            | "Transient"
+            | "Email address"
+            | "Unspecified";
+          /**
            * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user's ID.
+           */
+          saml_user_id_key_attr?: string;
           /**
            * Attribute key for the user's first name.
            */
@@ -3758,9 +4127,29 @@ export type ReplaceConnectionData = {
            */
           saml_idp_metadata_url?: string;
           /**
+           * Algorithm used to sign SAML requests.
+           */
+          sign_request_algorithm?: "RSA-SHA256" | "RSA-SHA1";
+          /**
+           * Protocol binding used to send SAML requests.
+           */
+          protocol_binding?: "HTTP-REDIRECT" | "HTTP-POST";
+          /**
+           * Format for the Name ID used to identify users in SAML responses.
+           */
+          name_id_format?:
+            | "Persistent"
+            | "Transient"
+            | "Email address"
+            | "Unspecified";
+          /**
            * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user's ID.
+           */
+          saml_user_id_key_attr?: string;
           /**
            * Attribute key for the user's first name.
            */
@@ -3813,6 +4202,84 @@ export type DeleteConnectionData = {
 };
 
 export type DeleteConnectionResponse = success_response;
+
+export type GetDirectoriesData = {
+  /**
+   * Filter by organization code to get directories for a specific organization.
+   */
+  organizationCode?: string | null;
+  /**
+   * Number of results per page. Defaults to 50 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The ID of the directory to start after.
+   */
+  startingAfter?: string | null;
+};
+
+export type GetDirectoriesResponse = get_directories_response;
+
+export type CreateDirectoryData = {
+  requestBody: {
+    /**
+     * The organization code to create the SCIM directory for.
+     */
+    org_code: string;
+    /**
+     * A descriptive name for the SCIM directory.
+     */
+    directory_name: string;
+    /**
+     * The SCIM provider code to use for this directory.
+     */
+    provider_code:
+      | "entra_id_azure_ad"
+      | "okta"
+      | "google_workspace"
+      | "custom_scim_v2"
+      | "cyberark"
+      | "jumpcloud"
+      | "onelogin"
+      | "pingfederate"
+      | "rippling";
+  };
+};
+
+export type CreateDirectoryResponse = create_directory_response;
+
+export type GetDirectoryData = {
+  /**
+   * The directory's ID.
+   */
+  directoryId: string;
+};
+
+export type GetDirectoryResponse = get_directory_response;
+
+export type UpdateDirectoryData = {
+  /**
+   * The directory's ID.
+   */
+  directoryId: string;
+  requestBody: {
+    /**
+     * A descriptive name for the SCIM directory.
+     */
+    directory_name: string;
+  };
+};
+
+export type UpdateDirectoryResponse = update_directory_response;
+
+export type DeleteDirectoryData = {
+  /**
+   * The directory's ID.
+   */
+  directoryId: string;
+};
+
+export type DeleteDirectoryResponse = delete_directory_response;
 
 export type GetEnvironmentResponse = get_environment_response;
 
@@ -4080,6 +4547,105 @@ export type ReplaceMfaData = {
 };
 
 export type ReplaceMfaResponse = success_response;
+
+export type GetOrganizationInvitesData = {
+  /**
+   * Include accepted invitations in the results.
+   */
+  includeAccepted?: boolean | null;
+  /**
+   * Include revoked invitations in the results.
+   */
+  includeRevoked?: boolean | null;
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * Field and order to sort the result by.
+   */
+  sort?:
+    | (
+        | "created_on_asc"
+        | "created_on_desc"
+        | "email_asc"
+        | "email_desc"
+        | "name_asc"
+        | "name_desc"
+      )
+    | null;
+};
+
+export type GetOrganizationInvitesResponse = get_organization_invites_response;
+
+export type CreateOrganizationInviteData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Invitation details. `email` is capped at 254 characters (RFC 5321). `first_name` and `last_name` are capped at 64 characters each. Inputs over these limits are rejected with `EMAIL_TOO_LONG`, `FIRST_NAME_TOO_LONG`, or `LAST_NAME_TOO_LONG`.
+   */
+  requestBody: {
+    /**
+     * The email address of the user to invite. Maximum 254 characters.
+     */
+    email: string;
+    /**
+     * The first name of the user to invite. Maximum 64 characters.
+     */
+    first_name?: string | null;
+    /**
+     * The last name of the user to invite. Maximum 64 characters.
+     */
+    last_name?: string | null;
+    /**
+     * Array of role keys to assign to the user.
+     */
+    roles: Array<string>;
+    /**
+     * Whether to send an invitation email to the user. Defaults to false.
+     */
+    send_email?: boolean;
+  };
+};
+
+export type CreateOrganizationInviteResponse =
+  create_organization_invite_response;
+
+export type GetOrganizationInviteData = {
+  /**
+   * The invitation's code.
+   */
+  inviteCode: string;
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+};
+
+export type GetOrganizationInviteResponse = get_organization_invite_response;
+
+export type DeleteOrganizationInviteData = {
+  /**
+   * The invitation's code.
+   */
+  inviteCode: string;
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+};
+
+export type DeleteOrganizationInviteResponse = success_response;
 
 export type GetOrganizationData = {
   /**

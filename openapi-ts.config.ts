@@ -3,6 +3,7 @@ import { defineConfig } from "@hey-api/openapi-ts";
 export default defineConfig({
   input: "./spec/kinde-mgmt-api-specs.yaml",
   output: {
+    clean: false,
     format: "prettier",
     path: "lib/api",
   },
