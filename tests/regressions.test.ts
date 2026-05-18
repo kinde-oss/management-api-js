@@ -697,10 +697,9 @@ describe("Breaking Changes and Regressions", () => {
   describe("Error Handling", () => {
     it("should throw ApiError on 401 unauthorized from API", async () => {
       mockTokenResponse();
-      fetchMock.mockResponseOnce(
-        JSON.stringify({ error: "unauthorized" }),
-        { status: 401 },
-      );
+      fetchMock.mockResponseOnce(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+      });
 
       await expect(
         Callbacks.getCallbackUrls({ appId: "test-app-id" }),
@@ -709,10 +708,9 @@ describe("Breaking Changes and Regressions", () => {
 
     it("should throw ApiError on 404 not found", async () => {
       mockTokenResponse();
-      fetchMock.mockResponseOnce(
-        JSON.stringify({ error: "not_found" }),
-        { status: 404 },
-      );
+      fetchMock.mockResponseOnce(JSON.stringify({ error: "not_found" }), {
+        status: 404,
+      });
 
       await expect(
         Callbacks.getCallbackUrls({ appId: "non-existent-app" }),
@@ -733,10 +731,9 @@ describe("Breaking Changes and Regressions", () => {
 
     it("should include status code on ApiError", async () => {
       mockTokenResponse();
-      fetchMock.mockResponseOnce(
-        JSON.stringify({ error: "not_found" }),
-        { status: 404 },
-      );
+      fetchMock.mockResponseOnce(JSON.stringify({ error: "not_found" }), {
+        status: 404,
+      });
 
       const error = await Callbacks.getCallbackUrls({
         appId: "non-existent-app",
