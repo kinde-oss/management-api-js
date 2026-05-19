@@ -428,7 +428,9 @@ describe("Breaking Changes and Regressions", () => {
           }),
         );
 
-        const result = await Users.getUsers({ query: { phone: "+1234567890" } });
+        const result = await Users.getUsers({
+          query: { phone: "+1234567890" },
+        });
         expect(result).toBeDefined();
       });
     });
@@ -454,14 +456,11 @@ describe("Breaking Changes and Regressions", () => {
 
         const result = await Users.getUsers({ query: { expand: "billing" } });
         expect(result).toBeDefined();
-        if (
-          (result as { users?: { billing?: { customer_id?: string } }[] }).users
-        ) {
-          const users = (result as { users?: { billing?: { customer_id?: string } }[] }).users!;
-          if (users.length > 0) {
-            expect(users[0].billing).toBeDefined();
-            expect(users[0].billing?.customer_id).toBe("cust-123");
-          }
+        type BillingUser = { billing?: { customer_id?: string } };
+        const users = (result as { users?: BillingUser[] }).users;
+        if (users?.length) {
+          expect(users[0].billing).toBeDefined();
+          expect(users[0].billing?.customer_id).toBe("cust-123");
         }
       });
 
@@ -489,15 +488,16 @@ describe("Breaking Changes and Regressions", () => {
           query: { expand: "organizations,identities,billing" },
         });
         expect(result).toBeDefined();
-        if (
-          (result as { users?: { billing?: unknown; organizations?: unknown; identities?: unknown }[] }).users
-        ) {
-          const users = (result as { users?: { billing?: unknown; organizations?: unknown; identities?: unknown }[] }).users!;
-          if (users.length > 0) {
-            expect(users[0].billing).toBeDefined();
-            expect(users[0].organizations).toBeDefined();
-            expect(users[0].identities).toBeDefined();
-          }
+        type ExpandedUser = {
+          billing?: unknown;
+          organizations?: unknown;
+          identities?: unknown;
+        };
+        const users = (result as { users?: ExpandedUser[] }).users;
+        if (users?.length) {
+          expect(users[0].billing).toBeDefined();
+          expect(users[0].organizations).toBeDefined();
+          expect(users[0].identities).toBeDefined();
         }
       });
     });

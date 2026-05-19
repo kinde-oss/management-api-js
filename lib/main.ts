@@ -1,5 +1,6 @@
 // Schema exports (auto-generated)
 export * from "./api/schemas.gen";
+export type * from "./api/types.gen";
 
 // SDK class exports (all except Callbacks, which is overridden by the compat layer below)
 export {

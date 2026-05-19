@@ -65,6 +65,8 @@ export const init = (
   client.setConfig({
     baseUrl: kindeConfig.kindeDomain,
     auth: async () => await getToken(),
+    responseStyle: "data",
+    throwOnError: true,
   });
 };
 

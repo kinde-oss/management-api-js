@@ -48,7 +48,7 @@ async function generateM2MToken() {
     scope: constants.DEFAULT_TOKEN_SCOPES,
     client_id: kindeConfig.clientId,
     client_secret: kindeConfig.clientSecret,
-    audience: kindeConfig.kindeDomain + "/api",
+    audience: kindeConfig.audience || kindeConfig.kindeDomain + "/api",
   });
 
   const headers = new Headers();
