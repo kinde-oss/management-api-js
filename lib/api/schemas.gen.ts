@@ -1745,6 +1745,12 @@ export const $get_environment_response = {
           example: "G-1234567",
           nullable: true,
         },
+        contentsquare_tag_id: {
+          type: "string",
+          description: "Your Contentsquare Tag ID.",
+          example: "769238b6e1309",
+          nullable: true,
+        },
         is_default: {
           type: "boolean",
           description:
@@ -2949,6 +2955,344 @@ export const $get_organizations_user_permissions_response = {
   },
 } as const;
 
+export const $get_organization_invites_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    invites: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/organization_invite",
+      },
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+      nullable: true,
+    },
+  },
+} as const;
+
+export const $get_organization_invite_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    id: {
+      type: "string",
+      description: "The invitation's unique identifier.",
+      example: "inv_abc123def456",
+    },
+    code: {
+      type: "string",
+      description: "The invitation's code.",
+      example: "inv_abc123def456",
+    },
+    email: {
+      type: "string",
+      description: "The email address of the invited user.",
+      example: "user@example.com",
+    },
+    first_name: {
+      type: "string",
+      description: "The first name of the invited user.",
+      nullable: true,
+      example: "John",
+    },
+    last_name: {
+      type: "string",
+      description: "The last name of the invited user.",
+      nullable: true,
+      example: "Doe",
+    },
+    full_name: {
+      type: "string",
+      description: "The full name of the invited user.",
+      example: "John Doe",
+    },
+    created_on: {
+      type: "string",
+      format: "date-time",
+      description: "When the invitation was created.",
+      example: "2024-11-18T13:32:03+11",
+    },
+    is_sent: {
+      type: "boolean",
+      description: "Whether the invitation email was sent.",
+      example: true,
+    },
+    accepted_on: {
+      type: "string",
+      format: "date-time",
+      description: "When the invitation was accepted.",
+      nullable: true,
+      example: "2024-11-19T10:15:30+11",
+    },
+    roles: {
+      type: "array",
+      description: "The roles assigned to the invitation.",
+      items: {
+        type: "object",
+        properties: {
+          key: {
+            type: "string",
+            description: "The role's key.",
+            example: "admin",
+          },
+          name: {
+            type: "string",
+            description: "The role's name.",
+            example: "Administrator",
+          },
+        },
+      },
+      example: [
+        {
+          key: "admin",
+          name: "Administrator",
+        },
+        {
+          key: "manager",
+          name: "Manager",
+        },
+      ],
+    },
+    is_revoked: {
+      type: "boolean",
+      description: "Whether the invitation has been revoked.",
+      example: false,
+    },
+    invite_link: {
+      type: "string",
+      description: "URL to share with the invitee to accept the invitation.",
+      example:
+        "https://example.kinde.com/team_invitation?code=inv_abc123def456",
+    },
+  },
+} as const;
+
+export const $create_organization_invite_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "INVITATION_CREATED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Invitation created",
+    },
+    invite: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "The invitation's unique identifier.",
+          example: "inv_abc123def456",
+        },
+        code: {
+          type: "string",
+          description: "The invitation's code.",
+          example: "inv_abc123def456",
+        },
+        email: {
+          type: "string",
+          description: "The email address of the invited user.",
+          example: "user@example.com",
+        },
+        first_name: {
+          type: "string",
+          description: "The first name of the invited user.",
+          nullable: true,
+          example: "John",
+        },
+        last_name: {
+          type: "string",
+          description: "The last name of the invited user.",
+          nullable: true,
+          example: "Doe",
+        },
+        full_name: {
+          type: "string",
+          description: "The full name of the invited user.",
+          example: "John Doe",
+        },
+        created_on: {
+          type: "string",
+          format: "date-time",
+          description: "When the invitation was created.",
+          example: "2024-11-18T13:32:03+11",
+        },
+        is_sent: {
+          type: "boolean",
+          description: "Whether the invitation email was sent.",
+          example: true,
+        },
+        accepted_on: {
+          type: "string",
+          format: "date-time",
+          description:
+            "When the invitation was accepted. Always null for a freshly created invitation.",
+          nullable: true,
+          example: null,
+        },
+        roles: {
+          type: "array",
+          description: "The roles assigned to the invitation.",
+          items: {
+            type: "object",
+            properties: {
+              key: {
+                type: "string",
+                description: "The role's key.",
+                example: "admin",
+              },
+              name: {
+                type: "string",
+                description: "The role's name.",
+                example: "Administrator",
+              },
+            },
+          },
+          example: [
+            {
+              key: "admin",
+              name: "Administrator",
+            },
+            {
+              key: "manager",
+              name: "Manager",
+            },
+          ],
+        },
+        is_revoked: {
+          type: "boolean",
+          description:
+            "Whether the invitation has been revoked. Always false for a freshly created invitation.",
+          example: false,
+        },
+        invite_link: {
+          type: "string",
+          description:
+            "URL to share with the invitee to accept the invitation.",
+          example:
+            "https://example.kinde.com/team_invitation?code=inv_abc123def456",
+        },
+      },
+    },
+  },
+} as const;
+
+export const $organization_invite = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      description: "The invitation's unique identifier.",
+      example: "inv_abc123def456",
+    },
+    code: {
+      type: "string",
+      description: "The invitation's code.",
+      example: "inv_abc123def456",
+    },
+    email: {
+      type: "string",
+      description: "The email address of the invited user.",
+      example: "user@example.com",
+    },
+    first_name: {
+      type: "string",
+      description: "The first name of the invited user.",
+      nullable: true,
+      example: "John",
+    },
+    last_name: {
+      type: "string",
+      description: "The last name of the invited user.",
+      nullable: true,
+      example: "Doe",
+    },
+    full_name: {
+      type: "string",
+      description: "The full name of the invited user.",
+      example: "John Doe",
+    },
+    created_on: {
+      type: "string",
+      format: "date-time",
+      description: "When the invitation was created.",
+      example: "2024-11-18T13:32:03+11",
+    },
+    is_sent: {
+      type: "boolean",
+      description: "Whether the invitation email was sent.",
+      example: true,
+    },
+    accepted_on: {
+      type: "string",
+      format: "date-time",
+      description: "When the invitation was accepted.",
+      nullable: true,
+      example: "2024-11-19T10:15:30+11",
+    },
+    roles: {
+      type: "array",
+      description: "The roles assigned to the invitation.",
+      items: {
+        type: "object",
+        properties: {
+          key: {
+            type: "string",
+            description: "The role's key.",
+            example: "admin",
+          },
+          name: {
+            type: "string",
+            description: "The role's name.",
+            example: "Administrator",
+          },
+        },
+      },
+      example: [
+        {
+          key: "admin",
+          name: "Administrator",
+        },
+        {
+          key: "manager",
+          name: "Manager",
+        },
+      ],
+    },
+    is_revoked: {
+      type: "boolean",
+      description: "Whether the invitation has been revoked.",
+      example: false,
+    },
+    invite_link: {
+      type: "string",
+      description: "URL to share with the invitee to accept the invitation.",
+      example:
+        "https://example.kinde.com/team_invitation?code=inv_abc123def456",
+    },
+  },
+} as const;
+
 export const $get_organization_feature_flags_response = {
   type: "object",
   properties: {
@@ -4064,6 +4408,168 @@ export const $get_api_key_response = {
           nullable: true,
         },
       },
+    },
+  },
+} as const;
+
+export const $get_directories_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+    directories: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/directory",
+      },
+    },
+  },
+} as const;
+
+export const $get_directory_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    directory: {
+      $ref: "#/components/schemas/directory",
+    },
+  },
+} as const;
+
+export const $create_directory_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "DIRECTORY_CREATED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "SCIM directory created successfully",
+    },
+    directory: {
+      $ref: "#/components/schemas/directory",
+    },
+  },
+} as const;
+
+export const $update_directory_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "DIRECTORY_UPDATED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "SCIM directory updated successfully",
+    },
+    directory: {
+      $ref: "#/components/schemas/directory",
+    },
+  },
+} as const;
+
+export const $delete_directory_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "DIRECTORY_DELETED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "SCIM directory deleted successfully",
+    },
+  },
+} as const;
+
+export const $directory = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      description: "The unique ID for the SCIM directory.",
+      example: "directory_0192b1941f125645fa15bf28a662a0b3",
+    },
+    directory_name: {
+      type: "string",
+      description: "The name of the SCIM directory.",
+      example: "Production Directory",
+    },
+    directory_endpoint_id: {
+      type: "string",
+      description: "The endpoint ID for the SCIM directory.",
+      example: "ksde_0192b1941f125645fa15bf28a662a0b3",
+    },
+    secret_token: {
+      type: "string",
+      description: "The secret token for SCIM authentication.",
+      example: "kstkn_0192b1941f125645fa15bf28a662a0b3",
+    },
+    status: {
+      type: "string",
+      description: "The current status of the SCIM directory.",
+      enum: ["Pending", "Validating", "Active", "Inactive", "Error"],
+      example: "Pending",
+    },
+    organization_code: {
+      type: "string",
+      description: "The organization code this directory belongs to.",
+      example: "org_1ccfb819462",
+    },
+    last_sync_started_at: {
+      type: "string",
+      format: "date-time",
+      description: "When the last sync started.",
+      example: "2024-11-18T13:32:03+11",
+      nullable: true,
+    },
+    last_sync_completed_at: {
+      type: "string",
+      format: "date-time",
+      description: "When the last sync completed.",
+      example: "2024-11-18T13:32:03+11",
+      nullable: true,
+    },
+    last_sync_error: {
+      type: "string",
+      description: "The last sync error message.",
+      example: "Connection timeout",
+      nullable: true,
+    },
+    created_on: {
+      type: "string",
+      format: "date-time",
+      description: "When the directory was created.",
+      example: "2024-11-18T13:32:03+11",
     },
   },
 } as const;

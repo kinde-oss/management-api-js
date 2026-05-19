@@ -53,6 +53,9 @@ import type {
   CreateConnectionData,
   CreateConnectionErrors,
   CreateConnectionResponses,
+  CreateDirectoryData,
+  CreateDirectoryErrors,
+  CreateDirectoryResponses,
   CreateEnvironmentVariableData,
   CreateEnvironmentVariableErrors,
   CreateEnvironmentVariableResponses,
@@ -64,6 +67,9 @@ import type {
   CreateMeterUsageRecordResponses,
   CreateOrganizationData,
   CreateOrganizationErrors,
+  CreateOrganizationInviteData,
+  CreateOrganizationInviteErrors,
+  CreateOrganizationInviteResponses,
   CreateOrganizationResponses,
   CreateOrganizationUserPermissionData,
   CreateOrganizationUserPermissionErrors,
@@ -113,6 +119,9 @@ import type {
   DeleteConnectionData,
   DeleteConnectionErrors,
   DeleteConnectionResponses,
+  DeleteDirectoryData,
+  DeleteDirectoryErrors,
+  DeleteDirectoryResponses,
   DeleteEnvironementFeatureFlagOverrideData,
   DeleteEnvironementFeatureFlagOverrideErrors,
   DeleteEnvironementFeatureFlagOverrideResponses,
@@ -145,6 +154,9 @@ import type {
   DeleteOrganizationHandleData,
   DeleteOrganizationHandleErrors,
   DeleteOrganizationHandleResponses,
+  DeleteOrganizationInviteData,
+  DeleteOrganizationInviteErrors,
+  DeleteOrganizationInviteResponses,
   DeleteOrganizationLogoData,
   DeleteOrganizationLogoErrors,
   DeleteOrganizationLogoResponses,
@@ -242,6 +254,12 @@ import type {
   GetConnectionsData,
   GetConnectionsErrors,
   GetConnectionsResponses,
+  GetDirectoriesData,
+  GetDirectoriesErrors,
+  GetDirectoriesResponses,
+  GetDirectoryData,
+  GetDirectoryErrors,
+  GetDirectoryResponses,
   GetEnvironementFeatureFlagsData,
   GetEnvironementFeatureFlagsErrors,
   GetEnvironementFeatureFlagsResponses,
@@ -277,6 +295,12 @@ import type {
   GetOrganizationFeatureFlagsData,
   GetOrganizationFeatureFlagsErrors,
   GetOrganizationFeatureFlagsResponses,
+  GetOrganizationInviteData,
+  GetOrganizationInviteErrors,
+  GetOrganizationInviteResponses,
+  GetOrganizationInvitesData,
+  GetOrganizationInvitesErrors,
+  GetOrganizationInvitesResponses,
   GetOrganizationPropertyValuesData,
   GetOrganizationPropertyValuesErrors,
   GetOrganizationPropertyValuesResponses,
@@ -428,6 +452,9 @@ import type {
   UpdateConnectionData,
   UpdateConnectionErrors,
   UpdateConnectionResponses,
+  UpdateDirectoryData,
+  UpdateDirectoryErrors,
+  UpdateDirectoryResponses,
   UpdateEnvironementFeatureFlagOverrideData,
   UpdateEnvironementFeatureFlagOverrideErrors,
   UpdateEnvironementFeatureFlagOverrideResponses,
@@ -1903,6 +1930,132 @@ export class Connections {
   }
 }
 
+export class Directories {
+  /**
+   * Get SCIM directories
+   *
+   * Returns a list of SCIM directories for your organization.
+   *
+   * <div>
+   * <code>read:scim_directories</code>
+   * </div>
+   *
+   */
+  public static getDirectories<ThrowOnError extends boolean = false>(
+    options?: Options<GetDirectoriesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).get<
+      GetDirectoriesResponses,
+      GetDirectoriesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/directories",
+      ...options,
+    });
+  }
+
+  /**
+   * Create SCIM directory
+   *
+   * Create a new SCIM directory for user and group synchronization.
+   *
+   * <div>
+   * <code>create:scim_directories</code>
+   * </div>
+   *
+   */
+  public static createDirectory<ThrowOnError extends boolean = false>(
+    options: Options<CreateDirectoryData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).post<
+      CreateDirectoryResponses,
+      CreateDirectoryErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/directories",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+
+  /**
+   * Delete SCIM directory
+   *
+   * Delete a SCIM directory and all associated data.
+   *
+   * <div>
+   * <code>delete:scim_directories</code>
+   * </div>
+   *
+   */
+  public static deleteDirectory<ThrowOnError extends boolean = false>(
+    options: Options<DeleteDirectoryData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).delete<
+      DeleteDirectoryResponses,
+      DeleteDirectoryErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/directories/{directory_id}",
+      ...options,
+    });
+  }
+
+  /**
+   * Get SCIM directory
+   *
+   * Retrieve SCIM directory details by ID.
+   *
+   * <div>
+   * <code>read:scim_directories</code>
+   * </div>
+   *
+   */
+  public static getDirectory<ThrowOnError extends boolean = false>(
+    options: Options<GetDirectoryData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetDirectoryResponses,
+      GetDirectoryErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/directories/{directory_id}",
+      ...options,
+    });
+  }
+
+  /**
+   * Update SCIM directory
+   *
+   * Update SCIM directory configuration.
+   *
+   */
+  public static updateDirectory<ThrowOnError extends boolean = false>(
+    options: Options<UpdateDirectoryData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).patch<
+      UpdateDirectoryResponses,
+      UpdateDirectoryErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/directories/{directory_id}",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+}
+
 export class Environments {
   /**
    * Get environment
@@ -2394,27 +2547,57 @@ export class Identities {
   }
 }
 
-export class Mfa {
+export class Organizations {
   /**
-   * Replace MFA Configuration
+   * Get organization invites
    *
-   * Replace MFA Configuration.
+   * Get a list of invitations for an organization. By default, only pending (non-revoked, non-accepted) invitations are returned.
    *
    * <div>
-   * <code>update:mfa</code>
+   * <code>read:organization_invites</code>
    * </div>
    *
    */
-  public static replaceMfa<ThrowOnError extends boolean = false>(
-    options: Options<ReplaceMfaData, ThrowOnError>,
+  public static getOrganizationInvites<ThrowOnError extends boolean = false>(
+    options: Options<GetOrganizationInvitesData, ThrowOnError>,
   ) {
-    return (options.client ?? client).put<
-      ReplaceMfaResponses,
-      ReplaceMfaErrors,
+    return (options.client ?? client).get<
+      GetOrganizationInvitesResponses,
+      GetOrganizationInvitesErrors,
       ThrowOnError
     >({
       security: [{ scheme: "bearer", type: "http" }],
-      url: "/api/v1/mfa",
+      url: "/api/v1/organization/{org_code}/invites",
+      ...options,
+    });
+  }
+
+  /**
+   * Create organization invite
+   *
+   * Create a new invitation for an organization. An invitation email will be sent to the provided email address if `send_email` is set to `true`.
+   *
+   * Invitations cannot be created for organizations that are managed by directory sync; user and role changes for those organizations must be made in the upstream identity provider.
+   *
+   * Roles that require an explicit assignment permission cannot be granted to an invitee unless the caller (or the user the token represents) holds that permission. On Kinde-hosted plans, roles outside `owner`/`admin` additionally require the `extended_roles` entitlement.
+   *
+   * Per-organization rate limits apply: a maximum number of invitations may be created per rolling 24 hour window, and a maximum number of active (non-accepted, non-revoked) invitations may exist at any time. Requests that exceed either limit are rejected.
+   *
+   * <div>
+   * <code>create:organization_invites</code>
+   * </div>
+   *
+   */
+  public static createOrganizationInvite<ThrowOnError extends boolean = false>(
+    options: Options<CreateOrganizationInviteData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).post<
+      CreateOrganizationInviteResponses,
+      CreateOrganizationInviteErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organization/{org_code}/invites",
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -2422,9 +2605,55 @@ export class Mfa {
       },
     });
   }
-}
 
-export class Organizations {
+  /**
+   * Delete organization invite
+   *
+   * Revoke (delete) an invitation. This will mark the invitation as revoked and prevent it from being accepted.
+   *
+   * <div>
+   * <code>delete:organization_invites</code>
+   * </div>
+   *
+   */
+  public static deleteOrganizationInvite<ThrowOnError extends boolean = false>(
+    options: Options<DeleteOrganizationInviteData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).delete<
+      DeleteOrganizationInviteResponses,
+      DeleteOrganizationInviteErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organization/{org_code}/invites/{invite_code}",
+      ...options,
+    });
+  }
+
+  /**
+   * Get organization invite
+   *
+   * Get details of a specific invitation by its code.
+   *
+   * <div>
+   * <code>read:organization_invites</code>
+   * </div>
+   *
+   */
+  public static getOrganizationInvite<ThrowOnError extends boolean = false>(
+    options: Options<GetOrganizationInviteData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetOrganizationInviteResponses,
+      GetOrganizationInviteErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organization/{org_code}/invites/{invite_code}",
+      ...options,
+    });
+  }
+
   /**
    * Get organization
    *
@@ -3324,6 +3553,36 @@ export class Organizations {
     >({
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/sessions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+}
+
+export class Mfa {
+  /**
+   * Replace MFA Configuration
+   *
+   * Replace MFA Configuration.
+   *
+   * <div>
+   * <code>update:mfa</code>
+   * </div>
+   *
+   */
+  public static replaceMfa<ThrowOnError extends boolean = false>(
+    options: Options<ReplaceMfaData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).put<
+      ReplaceMfaResponses,
+      ReplaceMfaErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/mfa",
       ...options,
       headers: {
         "Content-Type": "application/json",

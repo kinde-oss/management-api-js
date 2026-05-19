@@ -30,20 +30,20 @@
     "spec:generate": "openapi-ts"
   },
   "devDependencies": {
-    "@hey-api/client-fetch": "^0.12.0",
+    "@hey-api/client-fetch": "^0.13.0",
     "@hey-api/openapi-ts": "^0.96.0",
     "@types/node": "^24.0.0",
-    "@vitest/coverage-v8": "^4.0.0",
+    "@vitest/coverage-v8": "^4.1.5",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.5",
-    "vite": "^7.3.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.0.18",
+    "vitest": "^4.1.5",
     "vitest-fetch-mock": "^0.4.5"
   },
   "dependencies": {
     "@kinde/jwt-decoder": "^0.2.0",
-    "aws-jwt-verify": "^5.0.0",
+    "aws-jwt-verify": "^5.1.1",
     "dotenv": "^17.0.0"
   },
   "publishConfig": {
@@ -52,5 +52,5 @@
   "engines": {
     "node": ">=22.13.0"
   },
-  "packageManager": "pnpm@10.18.1+sha512.77a884a165cbba2d8d1c19e3b4880eee6d2fcabd0d879121e282196b80042351d5eb3ca0935fa599da1dc51265cc68816ad2bddd2a2de5ea9fdf92adbec7cd34"
+  "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800"
 }

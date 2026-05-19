@@ -13,6 +13,7 @@ export {
   Business,
   ConnectedApps,
   Connections,
+  Directories,
   EnvironmentVariables,
   Environments,
   FeatureFlags,
@@ -40,4 +41,5 @@ export { Callbacks } from "./api/callbacks-compat";
  */
 export { Apis as ApIs };
 export * from "./utilities/index";
+export { ApiError } from "./utilities/ApiError";
 export { init } from "./config";

@@ -1105,6 +1105,10 @@ export type GetEnvironmentResponse = {
      */
     google_analytics_tag?: string | null;
     /**
+     * Your Contentsquare Tag ID.
+     */
+    contentsquare_tag_id?: string | null;
+    /**
      * Whether the environment is the default. Typically this is your production environment.
      */
     is_default?: boolean;
@@ -1719,6 +1723,216 @@ export type GetOrganizationsUserPermissionsResponse = {
    */
   message?: string;
   permissions?: Array<OrganizationUserPermission>;
+};
+
+export type GetOrganizationInvitesResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  invites?: Array<OrganizationInvite>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
+};
+
+export type GetOrganizationInviteResponse = {
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * The invitation's unique identifier.
+   */
+  id?: string;
+  /**
+   * The invitation's code.
+   */
+  code?: string;
+  /**
+   * The email address of the invited user.
+   */
+  email?: string;
+  /**
+   * The first name of the invited user.
+   */
+  first_name?: string | null;
+  /**
+   * The last name of the invited user.
+   */
+  last_name?: string | null;
+  /**
+   * The full name of the invited user.
+   */
+  full_name?: string;
+  /**
+   * When the invitation was created.
+   */
+  created_on?: string;
+  /**
+   * Whether the invitation email was sent.
+   */
+  is_sent?: boolean;
+  /**
+   * When the invitation was accepted.
+   */
+  accepted_on?: string | null;
+  /**
+   * The roles assigned to the invitation.
+   */
+  roles?: Array<{
+    /**
+     * The role's key.
+     */
+    key?: string;
+    /**
+     * The role's name.
+     */
+    name?: string;
+  }>;
+  /**
+   * Whether the invitation has been revoked.
+   */
+  is_revoked?: boolean;
+  /**
+   * URL to share with the invitee to accept the invitation.
+   */
+  invite_link?: string;
+};
+
+export type CreateOrganizationInviteResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  invite?: {
+    /**
+     * The invitation's unique identifier.
+     */
+    id?: string;
+    /**
+     * The invitation's code.
+     */
+    code?: string;
+    /**
+     * The email address of the invited user.
+     */
+    email?: string;
+    /**
+     * The first name of the invited user.
+     */
+    first_name?: string | null;
+    /**
+     * The last name of the invited user.
+     */
+    last_name?: string | null;
+    /**
+     * The full name of the invited user.
+     */
+    full_name?: string;
+    /**
+     * When the invitation was created.
+     */
+    created_on?: string;
+    /**
+     * Whether the invitation email was sent.
+     */
+    is_sent?: boolean;
+    /**
+     * When the invitation was accepted. Always null for a freshly created invitation.
+     */
+    accepted_on?: string | null;
+    /**
+     * The roles assigned to the invitation.
+     */
+    roles?: Array<{
+      /**
+       * The role's key.
+       */
+      key?: string;
+      /**
+       * The role's name.
+       */
+      name?: string;
+    }>;
+    /**
+     * Whether the invitation has been revoked. Always false for a freshly created invitation.
+     */
+    is_revoked?: boolean;
+    /**
+     * URL to share with the invitee to accept the invitation.
+     */
+    invite_link?: string;
+  };
+};
+
+export type OrganizationInvite = {
+  /**
+   * The invitation's unique identifier.
+   */
+  id?: string;
+  /**
+   * The invitation's code.
+   */
+  code?: string;
+  /**
+   * The email address of the invited user.
+   */
+  email?: string;
+  /**
+   * The first name of the invited user.
+   */
+  first_name?: string | null;
+  /**
+   * The last name of the invited user.
+   */
+  last_name?: string | null;
+  /**
+   * The full name of the invited user.
+   */
+  full_name?: string;
+  /**
+   * When the invitation was created.
+   */
+  created_on?: string;
+  /**
+   * Whether the invitation email was sent.
+   */
+  is_sent?: boolean;
+  /**
+   * When the invitation was accepted.
+   */
+  accepted_on?: string | null;
+  /**
+   * The roles assigned to the invitation.
+   */
+  roles?: Array<{
+    /**
+     * The role's key.
+     */
+    key?: string;
+    /**
+     * The role's name.
+     */
+    name?: string;
+  }>;
+  /**
+   * Whether the invitation has been revoked.
+   */
+  is_revoked?: boolean;
+  /**
+   * URL to share with the invitee to accept the invitation.
+   */
+  invite_link?: string;
 };
 
 export type GetOrganizationFeatureFlagsResponse = {
@@ -2451,6 +2665,112 @@ export type GetApiKeyResponse = {
      */
     user_id?: string | null;
   };
+};
+
+export type GetDirectoriesResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  directories?: Array<Directory>;
+};
+
+export type GetDirectoryResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: Directory;
+};
+
+export type CreateDirectoryResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: Directory;
+};
+
+export type UpdateDirectoryResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: Directory;
+};
+
+export type DeleteDirectoryResponse = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+};
+
+export type Directory = {
+  /**
+   * The unique ID for the SCIM directory.
+   */
+  id?: string;
+  /**
+   * The name of the SCIM directory.
+   */
+  directory_name?: string;
+  /**
+   * The endpoint ID for the SCIM directory.
+   */
+  directory_endpoint_id?: string;
+  /**
+   * The secret token for SCIM authentication.
+   */
+  secret_token?: string;
+  /**
+   * The current status of the SCIM directory.
+   */
+  status?: "Pending" | "Validating" | "Active" | "Inactive" | "Error";
+  /**
+   * The organization code this directory belongs to.
+   */
+  organization_code?: string;
+  /**
+   * When the last sync started.
+   */
+  last_sync_started_at?: string | null;
+  /**
+   * When the last sync completed.
+   */
+  last_sync_completed_at?: string | null;
+  /**
+   * The last sync error message.
+   */
+  last_sync_error?: string | null;
+  /**
+   * When the directory was created.
+   */
+  created_on?: string;
 };
 
 /**
@@ -4908,9 +5228,29 @@ export type CreateConnectionData = {
            */
           saml_sign_in_url?: string;
           /**
+           * Algorithm used to sign SAML requests.
+           */
+          sign_request_algorithm?: "RSA-SHA256" | "RSA-SHA1";
+          /**
+           * Protocol binding used to send SAML requests.
+           */
+          protocol_binding?: "HTTP-REDIRECT" | "HTTP-POST";
+          /**
+           * Format for the Name ID used to identify users in SAML responses.
+           */
+          name_id_format?:
+            | "Persistent"
+            | "Transient"
+            | "Email address"
+            | "Unspecified";
+          /**
            * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user's ID.
+           */
+          saml_user_id_key_attr?: string;
           /**
            * Attribute key for the user's first name.
            */
@@ -5177,9 +5517,33 @@ export type UpdateConnectionData = {
            */
           saml_idp_metadata_url?: string;
           /**
+           * Override the default SSO endpoint with a URL your IdP recognizes.
+           */
+          saml_sign_in_url?: string;
+          /**
+           * Algorithm used to sign SAML requests.
+           */
+          sign_request_algorithm?: "RSA-SHA256" | "RSA-SHA1";
+          /**
+           * Protocol binding used to send SAML requests.
+           */
+          protocol_binding?: "HTTP-REDIRECT" | "HTTP-POST";
+          /**
+           * Format for the Name ID used to identify users in SAML responses.
+           */
+          name_id_format?:
+            | "Persistent"
+            | "Transient"
+            | "Email address"
+            | "Unspecified";
+          /**
            * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user's ID.
+           */
+          saml_user_id_key_attr?: string;
           /**
            * Attribute key for the user's first name.
            */
@@ -5368,9 +5732,29 @@ export type ReplaceConnectionData = {
            */
           saml_idp_metadata_url?: string;
           /**
+           * Algorithm used to sign SAML requests.
+           */
+          sign_request_algorithm?: "RSA-SHA256" | "RSA-SHA1";
+          /**
+           * Protocol binding used to send SAML requests.
+           */
+          protocol_binding?: "HTTP-REDIRECT" | "HTTP-POST";
+          /**
+           * Format for the Name ID used to identify users in SAML responses.
+           */
+          name_id_format?:
+            | "Persistent"
+            | "Transient"
+            | "Email address"
+            | "Unspecified";
+          /**
            * Attribute key for the user's email.
            */
           saml_email_key_attr?: string;
+          /**
+           * Attribute key for the user's ID.
+           */
+          saml_user_id_key_attr?: string;
           /**
            * Attribute key for the user's first name.
            */
@@ -5452,6 +5836,251 @@ export type ReplaceConnectionResponses = {
 
 export type ReplaceConnectionResponse =
   ReplaceConnectionResponses[keyof ReplaceConnectionResponses];
+
+export type GetDirectoriesData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Number of results per page. Defaults to 50 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * The ID of the directory to start after.
+     */
+    starting_after?: string | null;
+    /**
+     * Filter by organization code to get directories for a specific organization.
+     */
+    organization_code?: string | null;
+  };
+  url: "/api/v1/directories";
+};
+
+export type GetDirectoriesErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type GetDirectoriesError =
+  GetDirectoriesErrors[keyof GetDirectoriesErrors];
+
+export type GetDirectoriesResponses = {
+  /**
+   * SCIM directories successfully retrieved.
+   */
+  200: GetDirectoriesResponse;
+};
+
+export type GetDirectoriesResponse2 =
+  GetDirectoriesResponses[keyof GetDirectoriesResponses];
+
+export type CreateDirectoryData = {
+  body: {
+    /**
+     * The organization code to create the SCIM directory for.
+     */
+    org_code: string;
+    /**
+     * A descriptive name for the SCIM directory.
+     */
+    directory_name: string;
+    /**
+     * The SCIM provider code to use for this directory.
+     */
+    provider_code:
+      | "entra_id_azure_ad"
+      | "okta"
+      | "google_workspace"
+      | "custom_scim_v2"
+      | "cyberark"
+      | "jumpcloud"
+      | "onelogin"
+      | "pingfederate"
+      | "rippling";
+  };
+  path?: never;
+  query?: never;
+  url: "/api/v1/directories";
+};
+
+export type CreateDirectoryErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * Conflict - Directory already exists.
+   */
+  409: ErrorResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type CreateDirectoryError =
+  CreateDirectoryErrors[keyof CreateDirectoryErrors];
+
+export type CreateDirectoryResponses = {
+  /**
+   * SCIM directory successfully created.
+   */
+  201: CreateDirectoryResponse;
+};
+
+export type CreateDirectoryResponse2 =
+  CreateDirectoryResponses[keyof CreateDirectoryResponses];
+
+export type DeleteDirectoryData = {
+  body?: never;
+  path: {
+    /**
+     * The directory's ID.
+     */
+    directory_id: string;
+  };
+  query?: never;
+  url: "/api/v1/directories/{directory_id}";
+};
+
+export type DeleteDirectoryErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * The specified resource was not found
+   */
+  404: NotFoundResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type DeleteDirectoryError =
+  DeleteDirectoryErrors[keyof DeleteDirectoryErrors];
+
+export type DeleteDirectoryResponses = {
+  /**
+   * SCIM directory successfully deleted.
+   */
+  200: DeleteDirectoryResponse;
+};
+
+export type DeleteDirectoryResponse2 =
+  DeleteDirectoryResponses[keyof DeleteDirectoryResponses];
+
+export type GetDirectoryData = {
+  body?: never;
+  path: {
+    /**
+     * The directory's ID.
+     */
+    directory_id: string;
+  };
+  query?: never;
+  url: "/api/v1/directories/{directory_id}";
+};
+
+export type GetDirectoryErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * The specified resource was not found
+   */
+  404: NotFoundResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type GetDirectoryError = GetDirectoryErrors[keyof GetDirectoryErrors];
+
+export type GetDirectoryResponses = {
+  /**
+   * SCIM directory successfully retrieved.
+   */
+  200: GetDirectoryResponse;
+};
+
+export type GetDirectoryResponse2 =
+  GetDirectoryResponses[keyof GetDirectoryResponses];
+
+export type UpdateDirectoryData = {
+  body: {
+    /**
+     * A descriptive name for the SCIM directory.
+     */
+    directory_name: string;
+  };
+  path: {
+    /**
+     * The directory's ID.
+     */
+    directory_id: string;
+  };
+  query?: never;
+  url: "/api/v1/directories/{directory_id}";
+};
+
+export type UpdateDirectoryErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * The specified resource was not found
+   */
+  404: NotFoundResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type UpdateDirectoryError =
+  UpdateDirectoryErrors[keyof UpdateDirectoryErrors];
+
+export type UpdateDirectoryResponses = {
+  /**
+   * SCIM directory successfully updated.
+   */
+  200: UpdateDirectoryResponse;
+};
+
+export type UpdateDirectoryResponse2 =
+  UpdateDirectoryResponses[keyof UpdateDirectoryResponses];
 
 export type GetEnvironmentData = {
   body?: never;
@@ -6279,6 +6908,233 @@ export type UpdateIdentityResponses = {
 
 export type UpdateIdentityResponse =
   UpdateIdentityResponses[keyof UpdateIdentityResponses];
+
+export type GetOrganizationInvitesData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+  };
+  query?: {
+    /**
+     * Field and order to sort the result by.
+     */
+    sort?:
+      | "created_on_asc"
+      | "created_on_desc"
+      | "email_asc"
+      | "email_desc"
+      | "name_asc"
+      | "name_desc";
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * A string to get the next page of results if there are more results.
+     */
+    next_token?: string | null;
+    /**
+     * Include revoked invitations in the results.
+     */
+    include_revoked?: boolean | null;
+    /**
+     * Include accepted invitations in the results.
+     */
+    include_accepted?: boolean | null;
+  };
+  url: "/api/v1/organization/{org_code}/invites";
+};
+
+export type GetOrganizationInvitesErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type GetOrganizationInvitesError =
+  GetOrganizationInvitesErrors[keyof GetOrganizationInvitesErrors];
+
+export type GetOrganizationInvitesResponses = {
+  /**
+   * Invitations successfully retrieved.
+   */
+  200: GetOrganizationInvitesResponse;
+};
+
+export type GetOrganizationInvitesResponse2 =
+  GetOrganizationInvitesResponses[keyof GetOrganizationInvitesResponses];
+
+export type CreateOrganizationInviteData = {
+  /**
+   * Invitation details. `email` is capped at 254 characters (RFC 5321). `first_name` and `last_name` are capped at 64 characters each. Inputs over these limits are rejected with `EMAIL_TOO_LONG`, `FIRST_NAME_TOO_LONG`, or `LAST_NAME_TOO_LONG`.
+   */
+  body: {
+    /**
+     * The email address of the user to invite. Maximum 254 characters.
+     */
+    email: string;
+    /**
+     * The first name of the user to invite. Maximum 64 characters.
+     */
+    first_name?: string | null;
+    /**
+     * The last name of the user to invite. Maximum 64 characters.
+     */
+    last_name?: string | null;
+    /**
+     * Array of role keys to assign to the user.
+     */
+    roles: Array<string>;
+    /**
+     * Whether to send an invitation email to the user. Defaults to false.
+     */
+    send_email?: boolean;
+  };
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+  };
+  query?: never;
+  url: "/api/v1/organization/{org_code}/invites";
+};
+
+export type CreateOrganizationInviteErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type CreateOrganizationInviteError =
+  CreateOrganizationInviteErrors[keyof CreateOrganizationInviteErrors];
+
+export type CreateOrganizationInviteResponses = {
+  /**
+   * Invitation successfully created.
+   */
+  201: CreateOrganizationInviteResponse;
+};
+
+export type CreateOrganizationInviteResponse2 =
+  CreateOrganizationInviteResponses[keyof CreateOrganizationInviteResponses];
+
+export type DeleteOrganizationInviteData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+    /**
+     * The invitation's code.
+     */
+    invite_code: string;
+  };
+  query?: never;
+  url: "/api/v1/organization/{org_code}/invites/{invite_code}";
+};
+
+export type DeleteOrganizationInviteErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * The specified resource was not found
+   */
+  404: NotFoundResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type DeleteOrganizationInviteError =
+  DeleteOrganizationInviteErrors[keyof DeleteOrganizationInviteErrors];
+
+export type DeleteOrganizationInviteResponses = {
+  /**
+   * Invitation successfully revoked.
+   */
+  200: SuccessResponse;
+};
+
+export type DeleteOrganizationInviteResponse =
+  DeleteOrganizationInviteResponses[keyof DeleteOrganizationInviteResponses];
+
+export type GetOrganizationInviteData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+    /**
+     * The invitation's code.
+     */
+    invite_code: string;
+  };
+  query?: never;
+  url: "/api/v1/organization/{org_code}/invites/{invite_code}";
+};
+
+export type GetOrganizationInviteErrors = {
+  /**
+   * Invalid request.
+   */
+  400: ErrorResponse;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: ErrorResponse;
+  /**
+   * The specified resource was not found
+   */
+  404: NotFoundResponse;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: ErrorResponse;
+};
+
+export type GetOrganizationInviteError =
+  GetOrganizationInviteErrors[keyof GetOrganizationInviteErrors];
+
+export type GetOrganizationInviteResponses = {
+  /**
+   * Invitation successfully retrieved.
+   */
+  200: GetOrganizationInviteResponse;
+};
+
+export type GetOrganizationInviteResponse2 =
+  GetOrganizationInviteResponses[keyof GetOrganizationInviteResponses];
 
 export type ReplaceMfaData = {
   /**
