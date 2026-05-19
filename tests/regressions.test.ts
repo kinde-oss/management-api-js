@@ -458,10 +458,10 @@ describe("Breaking Changes and Regressions", () => {
         expect(result).toBeDefined();
         type BillingUser = { billing?: { customer_id?: string } };
         const users = (result as { users?: BillingUser[] }).users;
-        if (users?.length) {
-          expect(users[0].billing).toBeDefined();
-          expect(users[0].billing?.customer_id).toBe("cust-123");
-        }
+        expect(users).toBeDefined();
+        expect(users!.length).toBeGreaterThan(0);
+        expect(users![0].billing).toBeDefined();
+        expect(users![0].billing?.customer_id).toBe("cust-123");
       });
 
       it("should accept multiple expand options including billing", async () => {
@@ -494,11 +494,11 @@ describe("Breaking Changes and Regressions", () => {
           identities?: unknown;
         };
         const users = (result as { users?: ExpandedUser[] }).users;
-        if (users?.length) {
-          expect(users[0].billing).toBeDefined();
-          expect(users[0].organizations).toBeDefined();
-          expect(users[0].identities).toBeDefined();
-        }
+        expect(users).toBeDefined();
+        expect(users!.length).toBeGreaterThan(0);
+        expect(users![0].billing).toBeDefined();
+        expect(users![0].organizations).toBeDefined();
+        expect(users![0].identities).toBeDefined();
       });
     });
   });
