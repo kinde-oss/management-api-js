@@ -1,5 +1,6 @@
-import { OpenAPI } from "./api/index";
+import { client } from "./api/client.gen";
 import { getToken } from "./utilities/getToken";
+import { ApiError } from "./utilities/ApiError";
 
 export interface TokenStore {
   getToken(): Promise<string>;
@@ -62,11 +63,16 @@ export const init = (
     config,
   );
 
-  _merge(OpenAPI, {
-    BASE: kindeConfig.kindeDomain,
-    TOKEN: async () => {
-      return await getToken();
-    },
+  client.setConfig({
+    baseUrl: kindeConfig.kindeDomain,
+    auth: async () => await getToken(),
+    parseAs: "json",
+    responseStyle: "data",
+    throwOnError: true,
+  });
+
+  client.interceptors.error.use((error, response) => {
+    return new ApiError(response.status, error);
   });
 };
 
