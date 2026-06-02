@@ -28,23 +28,33 @@ The following ENV variables are required to run the project:
 ## Usage
 
 ```js
-import { Users, init } from "@kinde/management-api-js";
+import { Users } from "@kinde/management-api-js";
 
-init();
 const { users } = await Users.getUsers();
 ```
 
 ### Params can be passed to the function as an object
 
 ```js
-import { Users, init } from "@kinde/management-api-js";
+import { Users } from "@kinde/management-api-js";
 
 const params = {
   id: "kp_xxx",
 };
 
-init();
 const userData = await Users.getUserData(params);
+```
+
+### Manually Initializing the API
+
+```js
+import { init } from "@kinde/management-api-js";
+
+init({
+  domain: "mybusiness.kinde.com",
+  clientId: "client_id",
+  clientSecret: "client_secret",
+});
 ```
 
 ## API documentation
