@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --config.minimumReleaseAge=0
       - run: pnpm lint
       - name: Cache pnpm modules
         uses: actions/cache@v5
