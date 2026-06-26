@@ -409,6 +409,10 @@ export type delete_directory_response = {
    * Response message.
    */
   message?: string;
+  /**
+   * The ID of the deleted SCIM directory.
+   */
+  directory_id?: string;
 };
 
 export type delete_environment_variable_response = {
@@ -469,6 +473,14 @@ export type directory = {
    * The organization code this directory belongs to.
    */
   organization_code?: string;
+  /**
+   * The enterprise connection ID used for SCIM-provisioned users.
+   */
+  enterprise_connection_id?: string | null;
+  /**
+   * The display name of the selected enterprise connection.
+   */
+  enterprise_connection_name?: string | null;
   /**
    * When the last sync started.
    */
@@ -1637,6 +1649,27 @@ export type get_organization_response = {
   };
 };
 
+export type get_organization_role_users_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  users?: Array<{
+    /**
+     * The user's ID.
+     */
+    id?: string;
+  }>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
+};
+
 export type get_organization_users_response = {
   /**
    * Response code.
@@ -1783,6 +1816,31 @@ export type get_role_response = {
      */
     is_default_role?: boolean;
   };
+};
+
+export type get_role_users_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  users?: Array<{
+    /**
+     * The user's ID.
+     */
+    id?: string;
+    /**
+     * The organization codes where the user has this role.
+     */
+    org_codes?: Array<string>;
+  }>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
 };
 
 export type get_roles_response = {
@@ -1983,6 +2041,10 @@ export type identity = {
    * The associated email of the identity
    */
   email?: string;
+  /**
+   * The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
+   */
+  connection_id?: string | null;
   /**
    * Whether the identity is the primary identity for the user
    */
@@ -2739,6 +2801,10 @@ export type users_response = {
     identities?: Array<{
       type?: string;
       identity?: string;
+      /**
+       * The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
+       */
+      connection_id?: string | null;
     }>;
     billing?: {
       /**
@@ -4243,6 +4309,12 @@ export type CreateDirectoryData = {
       | "onelogin"
       | "pingfederate"
       | "rippling";
+    /**
+     * The enterprise connection ID to associate with this directory for SCIM-provisioned users.
+     * Required when the organization has multiple enabled enterprise connections.
+     *
+     */
+    enterprise_connection_id?: string;
   };
 };
 
@@ -4266,7 +4338,7 @@ export type UpdateDirectoryData = {
     /**
      * A descriptive name for the SCIM directory.
      */
-    directory_name: string;
+    directory_name?: string;
   };
 };
 
@@ -4343,6 +4415,37 @@ export type DeleteLogoData = {
 };
 
 export type DeleteLogoResponse = success_response | void;
+
+export type GetPasskeyResponse = success_response & {
+  /**
+   * Whether passkeys are enabled for this environment (`policy` is not `off`).
+   */
+  enabled?: boolean;
+  /**
+   * Environment passkey policy. `off` disables passkeys; `optional` enables passkeys
+   * and allows users to skip passkey setup after password sign-in; `mandatory` requires
+   * passkey setup after first password sign-in.
+   *
+   */
+  policy?: "off" | "optional" | "mandatory";
+};
+
+export type UpdatePasskeyData = {
+  /**
+   * Environment passkey settings.
+   */
+  requestBody: {
+    /**
+     * Environment passkey policy.
+     */
+    policy: "off" | "optional" | "mandatory";
+  };
+};
+
+export type UpdatePasskeyResponse = success_response & {
+  enabled?: boolean;
+  policy?: "off" | "optional" | "mandatory";
+};
 
 export type GetEnvironmentVariablesResponse =
   get_environment_variables_response;
@@ -4651,7 +4754,7 @@ export type GetOrganizationData = {
   /**
    * The organization's code.
    */
-  code?: string;
+  code: string;
   /**
    * Additional data to include in the response. Allowed value: "billing".
    */
@@ -4906,16 +5009,7 @@ export type GetOrganizationUsersData = {
   /**
    * Field and order to sort the result by.
    */
-  sort?:
-    | (
-        | "name_asc"
-        | "name_desc"
-        | "email_asc"
-        | "email_desc"
-        | "id_asc"
-        | "id_desc"
-      )
-    | null;
+  sort?: ("name_asc" | "name_desc" | "email_asc" | "email_desc") | null;
 };
 
 export type GetOrganizationUsersResponse = get_organization_users_response;
@@ -5033,6 +5127,28 @@ export type DeleteOrganizationUserRoleData = {
 };
 
 export type DeleteOrganizationUserRoleResponse = success_response;
+
+export type GetOrganizationRoleUsersData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The role's public id.
+   */
+  roleId: string;
+};
+
+export type GetOrganizationRoleUsersResponse =
+  get_organization_role_users_response;
 
 export type GetOrganizationUserPermissionsData = {
   /**
@@ -5306,6 +5422,58 @@ export type ReplaceOrganizationMfaData = {
 };
 
 export type ReplaceOrganizationMfaResponse = success_response;
+
+export type GetOrganizationPasskeyData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+};
+
+export type GetOrganizationPasskeyResponse = success_response & {
+  /**
+   * Whether passkeys are enabled for this organization.
+   */
+  enabled?: boolean;
+  /**
+   * The effective passkey policy for this organization.
+   */
+  policy?: "off" | "optional" | "mandatory";
+  /**
+   * Whether this organization uses a custom passkey policy instead of the environment default.
+   */
+  is_override_environment_passkey_settings?: boolean;
+  /**
+   * The environment-level passkey policy.
+   */
+  environment_policy?: "off" | "optional" | "mandatory";
+};
+
+export type UpdateOrganizationPasskeyData = {
+  /**
+   * The organization's code.
+   */
+  orgCode: string;
+  /**
+   * Organization passkey settings.
+   */
+  requestBody: {
+    /**
+     * Passkey policy when overriding the environment default.
+     */
+    policy?: "off" | "optional" | "mandatory";
+    /**
+     * Whether to use a custom passkey policy for this organization. Set to false to revert to the environment default.
+     */
+    is_override_environment_passkey_settings?: boolean;
+  };
+};
+
+export type UpdateOrganizationPasskeyResponse = success_response & {
+  enabled?: boolean;
+  policy?: "off" | "optional" | "mandatory";
+  is_override_environment_passkey_settings?: boolean;
+};
 
 export type DeleteOrganizationHandleData = {
   /**
@@ -5666,7 +5834,7 @@ export type GetRolesData = {
   /**
    * Field and order to sort the result by.
    */
-  sort?: ("name_asc" | "name_desc" | "id_asc" | "id_desc") | null;
+  sort?: ("name_asc" | "name_desc" | "key_asc" | "key_desc") | null;
 };
 
 export type GetRolesResponse = get_roles_response;
@@ -5837,6 +6005,23 @@ export type UpdateRolePermissionsData = {
 };
 
 export type UpdateRolePermissionsResponse = update_role_permissions_response;
+
+export type GetRoleUsersData = {
+  /**
+   * A string to get the next page of results if there are more results.
+   */
+  nextToken?: string | null;
+  /**
+   * Number of results per page. Defaults to 10 if parameter not sent.
+   */
+  pageSize?: number | null;
+  /**
+   * The role's public id.
+   */
+  roleId: string;
+};
+
+export type GetRoleUsersResponse = get_role_users_response;
 
 export type RemoveRolePermissionData = {
   /**
@@ -6186,15 +6371,29 @@ export type SetUserPasswordData = {
     /**
      * The hashing method or algorithm used to encrypt the user’s password. Default is bcrypt.
      */
-    hashing_method?: "bcrypt" | "crypt" | "md5" | "wordpress";
+    hashing_method?:
+      | "bcrypt"
+      | "crypt"
+      | "md5"
+      | "sha256"
+      | "wordpress"
+      | "pbkdf2";
     /**
-     * Extra characters added to passwords to make them stronger. Not required for bcrypt.
+     * Extra characters added to passwords to make them stronger. Not required for bcrypt. Required for pbkdf2; provide the base64-encoded salt.
      */
     salt?: string;
     /**
      * Position of salt in password string. Not required for bcrypt.
      */
     salt_position?: "prefix" | "suffix";
+    /**
+     * The iteration count (factor) used to derive the hash. Optional for pbkdf2; when omitted, verification defaults to 24000 (the FusionAuth default factor).
+     */
+    iterations?: number;
+    /**
+     * The hashing variant. Required for pbkdf2 (e.g. salted-pbkdf2-hmac-sha256, salted-pbkdf2-hmac-sha256-512, salted-pbkdf2-hmac-sha512-512).
+     */
+    variant?: string;
     /**
      * The user will be prompted to set a new password after entering this one.
      */

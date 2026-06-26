@@ -891,6 +891,13 @@ export const $users_response = {
                 identity: {
                   type: "string",
                 },
+                connection_id: {
+                  type: "string",
+                  description:
+                    "The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.",
+                  nullable: true,
+                  example: "conn_019289347f1193da6c0e4d49b97b4bd2",
+                },
               },
             },
           },
@@ -2499,6 +2506,13 @@ export const $identity = {
       description: "The associated email of the identity",
       example: "sally@example.com",
     },
+    connection_id: {
+      type: "string",
+      description:
+        "The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.",
+      nullable: true,
+      example: "conn_019289347f1193da6c0e4d49b97b4bd2",
+    },
     is_primary: {
       type: "boolean",
       description: "Whether the identity is the primary identity for the user",
@@ -3795,6 +3809,75 @@ export const $role_permissions_response = {
   },
 } as const;
 
+export const $get_role_users_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    users: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The user's ID.",
+          },
+          org_codes: {
+            type: "array",
+            description: "The organization codes where the user has this role.",
+            items: {
+              type: "string",
+            },
+          },
+        },
+      },
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+      nullable: true,
+    },
+  },
+} as const;
+
+export const $get_organization_role_users_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    users: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The user's ID.",
+          },
+        },
+      },
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+      nullable: true,
+    },
+  },
+} as const;
+
 export const $role_scopes_response = {
   type: "object",
   properties: {
@@ -4508,6 +4591,11 @@ export const $delete_directory_response = {
       description: "Response message.",
       example: "SCIM directory deleted successfully",
     },
+    directory_id: {
+      type: "string",
+      description: "The ID of the deleted SCIM directory.",
+      example: "directory_0192b1941f125645fa15bf28a662a0b3",
+    },
   },
 } as const;
 
@@ -4544,6 +4632,19 @@ export const $directory = {
       type: "string",
       description: "The organization code this directory belongs to.",
       example: "org_1ccfb819462",
+    },
+    enterprise_connection_id: {
+      type: "string",
+      description:
+        "The enterprise connection ID used for SCIM-provisioned users.",
+      example: "conn_01h9xyzabc123",
+      nullable: true,
+    },
+    enterprise_connection_name: {
+      type: "string",
+      description: "The display name of the selected enterprise connection.",
+      example: "ACME SAML",
+      nullable: true,
     },
     last_sync_started_at: {
       type: "string",
