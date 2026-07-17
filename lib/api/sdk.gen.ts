@@ -129,6 +129,9 @@ import type {
   AddLogoResponse,
   DeleteLogoData,
   DeleteLogoResponse,
+  GetPasskeyResponse,
+  UpdatePasskeyData,
+  UpdatePasskeyResponse,
   GetEnvironmentVariablesResponse,
   CreateEnvironmentVariableData,
   CreateEnvironmentVariableResponse,
@@ -183,6 +186,8 @@ import type {
   CreateOrganizationUserRoleResponse,
   DeleteOrganizationUserRoleData,
   DeleteOrganizationUserRoleResponse,
+  GetOrganizationRoleUsersData,
+  GetOrganizationRoleUsersResponse,
   GetOrganizationUserPermissionsData,
   GetOrganizationUserPermissionsResponse,
   CreateOrganizationUserPermissionData,
@@ -217,6 +222,10 @@ import type {
   UpdateOrganizationPropertiesResponse,
   ReplaceOrganizationMfaData,
   ReplaceOrganizationMfaResponse,
+  GetOrganizationPasskeyData,
+  GetOrganizationPasskeyResponse,
+  UpdateOrganizationPasskeyData,
+  UpdateOrganizationPasskeyResponse,
   DeleteOrganizationHandleData,
   DeleteOrganizationHandleResponse,
   ReadOrganizationLogoData,
@@ -275,6 +284,8 @@ import type {
   GetRolePermissionsResponse,
   UpdateRolePermissionsData,
   UpdateRolePermissionsResponse,
+  GetRoleUsersData,
+  GetRoleUsersResponse,
   RemoveRolePermissionData,
   RemoveRolePermissionResponse,
   SearchUsersData,
@@ -2096,7 +2107,7 @@ export class Directories {
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
-        404: "The specified resource was not found",
+        404: "Directory not found.",
         429: "Too many requests. Request was throttled.",
       },
     });
@@ -2105,6 +2116,10 @@ export class Directories {
   /**
    * Update SCIM directory
    * Update SCIM directory configuration.
+   *
+   * <div>
+   * <code>update:scim_directories</code>
+   * </div>
    *
    * @param data The data for the request.
    * @param data.requestBody
@@ -2126,7 +2141,7 @@ export class Directories {
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
-        404: "The specified resource was not found",
+        404: "Directory not found.",
         429: "Too many requests. Request was throttled.",
       },
     });
@@ -2157,7 +2172,7 @@ export class Directories {
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
-        404: "The specified resource was not found",
+        404: "Directory not found.",
         429: "Too many requests. Request was throttled.",
       },
     });
@@ -2374,6 +2389,58 @@ export class Environments {
       path: {
         type: data.type,
       },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get environment passkey settings
+   * Retrieve passkey policy for the current environment.
+   *
+   * <div>
+   * <code>read:passkey</code>
+   * </div>
+   *
+   * @returns unknown Passkey settings successfully retrieved.
+   * @throws ApiError
+   */
+  public static getPasskey(): CancelablePromise<GetPasskeyResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/passkey",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update environment passkey settings
+   * Set the passkey policy for the current environment. Policies other than `off` require the `passkeys` entitlement.
+   *
+   * <div>
+   * <code>update:passkey</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.requestBody Environment passkey settings.
+   * @returns unknown Passkey settings successfully updated.
+   * @throws ApiError
+   */
+  public static updatePasskey(
+    data: UpdatePasskeyData,
+  ): CancelablePromise<UpdatePasskeyResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/passkey",
+      body: data.requestBody,
+      mediaType: "application/json",
       errors: {
         400: "Invalid request.",
         403: "Unauthorized - invalid credentials.",
@@ -2947,7 +3014,7 @@ export class Organizations {
    * @throws ApiError
    */
   public static getOrganization(
-    data: GetOrganizationData = {},
+    data: GetOrganizationData,
   ): CancelablePromise<GetOrganizationResponse> {
     return __request(OpenAPI, {
       method: "GET",
@@ -3296,6 +3363,44 @@ export class Organizations {
       },
       errors: {
         400: "Error creating user.",
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * List organization role users
+   * Get users that have a given role within a specific organization.
+   *
+   * <div>
+   * <code>read:organization_user_roles</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.roleId The role's public id.
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.nextToken A string to get the next page of results if there are more results.
+   * @returns get_organization_role_users_response A list of users with the specified role in the organization.
+   * @throws ApiError
+   */
+  public static getOrganizationRoleUsers(
+    data: GetOrganizationRoleUsersData,
+  ): CancelablePromise<GetOrganizationRoleUsersResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organizations/{org_code}/roles/{role_id}/users",
+      path: {
+        org_code: data.orgCode,
+        role_id: data.roleId,
+      },
+      query: {
+        page_size: data.pageSize,
+        next_token: data.nextToken,
+      },
+      errors: {
+        400: "Bad request.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
       },
@@ -3857,6 +3962,69 @@ export class Organizations {
     return __request(OpenAPI, {
       method: "PUT",
       url: "/api/v1/organizations/{org_code}/mfa",
+      path: {
+        org_code: data.orgCode,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Get organization passkey settings
+   * Retrieve passkey settings for an organization, including whether the organization overrides the environment default.
+   *
+   * <div>
+   * <code>read:organization_passkey</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @returns unknown Organization passkey settings successfully retrieved.
+   * @throws ApiError
+   */
+  public static getOrganizationPasskey(
+    data: GetOrganizationPasskeyData,
+  ): CancelablePromise<GetOrganizationPasskeyResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/organizations/{org_code}/passkey",
+      path: {
+        org_code: data.orgCode,
+      },
+      errors: {
+        400: "Invalid request.",
+        403: "Unauthorized - invalid credentials.",
+        429: "Too many requests. Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * Update organization passkey settings
+   * Update passkey settings for an organization. Set `is_override_environment_passkey_settings` to `false` to revert to the environment default without providing a policy.
+   *
+   * <div>
+   * <code>update:organization_passkey</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.orgCode The organization's code.
+   * @param data.requestBody Organization passkey settings.
+   * @returns unknown Organization passkey settings successfully updated.
+   * @throws ApiError
+   */
+  public static updateOrganizationPasskey(
+    data: UpdateOrganizationPasskeyData,
+  ): CancelablePromise<UpdateOrganizationPasskeyResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/organizations/{org_code}/passkey",
       path: {
         org_code: data.orgCode,
       },
@@ -4486,7 +4654,7 @@ export class PropertyCategories {
 export class Roles {
   /**
    * List roles
-   * The returned list can be sorted by role name or role ID in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
+   * The returned list can be sorted by role name or role key in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
    *
    * <div>
    * <code>read:roles</code>
@@ -4797,6 +4965,43 @@ export class Roles {
       body: data.requestBody,
       mediaType: "application/json",
       errors: {
+        403: "Invalid credentials.",
+        429: "Request was throttled.",
+      },
+    });
+  }
+
+  /**
+   * List role users
+   * Get users that have a given role, across all organizations. Each user entry
+   * includes the organization codes where they hold that role.
+   *
+   * <div>
+   * <code>read:organization_user_roles</code>
+   * </div>
+   *
+   * @param data The data for the request.
+   * @param data.roleId The role's public id.
+   * @param data.pageSize Number of results per page. Defaults to 10 if parameter not sent.
+   * @param data.nextToken A string to get the next page of results if there are more results.
+   * @returns get_role_users_response A list of users with the specified role.
+   * @throws ApiError
+   */
+  public static getRoleUsers(
+    data: GetRoleUsersData,
+  ): CancelablePromise<GetRoleUsersResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/roles/{role_id}/users",
+      path: {
+        role_id: data.roleId,
+      },
+      query: {
+        page_size: data.pageSize,
+        next_token: data.nextToken,
+      },
+      errors: {
+        400: "Bad request.",
         403: "Invalid credentials.",
         429: "Request was throttled.",
       },
