@@ -1,3 +1,4 @@
+import { init } from "../../config";
 import { ApiError } from "./ApiError";
 import type { ApiRequestOptions } from "./ApiRequestOptions";
 import type { ApiResult } from "./ApiResult";
@@ -348,6 +349,11 @@ export const request = <T>(
   config: OpenAPIConfig,
   options: ApiRequestOptions<T>,
 ): CancelablePromise<T> => {
+  // Verify that config has been initialized
+  if (!config.INITIALIZED) {
+    init();
+  }
+
   return new CancelablePromise(async (resolve, reject, onCancel) => {
     try {
       const url = getUrl(config, options);
