@@ -26,7 +26,7 @@ importers:
         version: 0.71.1(typescript@6.0.3)
       '@types/node':
         specifier: ^24.0.0
-        version: 24.13.2
+        version: 24.13.3
       '@vitest/coverage-v8':
         specifier: ^4.1.5
         version: 4.1.10(vitest@4.1.10)
@@ -38,13 +38,13 @@ importers:
         version: 6.0.3
       vite:
         specifier: ^8.0.12
-        version: 8.1.0(@types/node@24.13.2)(jiti@2.7.0)
+        version: 8.1.0(@types/node@24.13.3)(jiti@2.7.0)
       vite-plugin-dts:
         specifier: ^5.0.0
-        version: 5.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))
+        version: 5.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))
       vitest:
         specifier: ^4.1.5
-        version: 4.1.10(@types/node@24.13.2)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))
+        version: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))
       vitest-fetch-mock:
         specifier: ^0.4.5
         version: 0.4.5(vitest@4.1.10)
@@ -254,8 +254,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@24.13.2':
-    resolution: {integrity: sha512-fRa09kZTgu8o71KFcDjUFuc7F+dEbZYZmkI0mg5YBTRs0yMKjYHsq/c0urDKeDb+D5qVgXOdFcuu+DZPKOITwA==}
+  '@types/node@24.13.3':
+    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
 
   '@vitest/coverage-v8@4.1.10':
     resolution: {integrity: sha512-IM49HmthevbgAO4anp1hwtoT9wYe59w0LR00gr+eagHE+ZJ5lK4sLPeO0ubgoJcwLk6dehU3R24N+FbEEKDc8g==}
@@ -1056,7 +1056,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@24.13.2':
+  '@types/node@24.13.3':
     dependencies:
       undici-types: 7.18.2
 
@@ -1072,7 +1072,7 @@ snapshots:
       obug: 2.1.4
       std-env: 4.2.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@types/node@24.13.2)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))
+      vitest: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))
 
   '@vitest/expect@4.1.10':
     dependencies:
@@ -1083,13 +1083,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.10(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))':
+  '@vitest/mocker@4.1.10(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))':
     dependencies:
       '@vitest/spy': 4.1.10
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.1.0(@types/node@24.13.2)(jiti@2.7.0)
+      vite: 8.1.0(@types/node@24.13.3)(jiti@2.7.0)
 
   '@vitest/pretty-format@4.1.10':
     dependencies:
@@ -1495,7 +1495,7 @@ snapshots:
 
   undici-types@7.18.2: {}
 
-  unplugin-dts@1.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0)):
+  unplugin-dts@1.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0)):
     dependencies:
       '@rollup/pluginutils': 5.4.0
       '@volar/typescript': 2.4.28
@@ -1508,7 +1508,7 @@ snapshots:
       unplugin: 2.3.11
     optionalDependencies:
       rolldown: 1.1.3
-      vite: 8.1.0(@types/node@24.13.2)(jiti@2.7.0)
+      vite: 8.1.0(@types/node@24.13.3)(jiti@2.7.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -1519,11 +1519,11 @@ snapshots:
       picomatch: 4.0.4
       webpack-virtual-modules: 0.6.2
 
-  vite-plugin-dts@5.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0)):
+  vite-plugin-dts@5.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0)):
     dependencies:
-      unplugin-dts: 1.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))
+      unplugin-dts: 1.0.3(rolldown@1.1.3)(typescript@6.0.3)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))
     optionalDependencies:
-      vite: 8.1.0(@types/node@24.13.2)(jiti@2.7.0)
+      vite: 8.1.0(@types/node@24.13.3)(jiti@2.7.0)
     transitivePeerDependencies:
       - '@rspack/core'
       - '@vue/language-core'
@@ -1533,7 +1533,7 @@ snapshots:
       - typescript
       - webpack
 
-  vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0):
+  vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -1541,18 +1541,18 @@ snapshots:
       rolldown: 1.1.3
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 24.13.2
+      '@types/node': 24.13.3
       fsevents: 2.3.3
       jiti: 2.7.0
 
   vitest-fetch-mock@0.4.5(vitest@4.1.10):
     dependencies:
-      vitest: 4.1.10(@types/node@24.13.2)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))
+      vitest: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))
 
-  vitest@4.1.10(@types/node@24.13.2)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0)):
+  vitest@4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0)):
     dependencies:
       '@vitest/expect': 4.1.10
-      '@vitest/mocker': 4.1.10(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0))
+      '@vitest/mocker': 4.1.10(vite@8.1.0(@types/node@24.13.3)(jiti@2.7.0))
       '@vitest/pretty-format': 4.1.10
       '@vitest/runner': 4.1.10
       '@vitest/snapshot': 4.1.10
@@ -1569,10 +1569,10 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.1.0(@types/node@24.13.2)(jiti@2.7.0)
+      vite: 8.1.0(@types/node@24.13.3)(jiti@2.7.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.13.2
+      '@types/node': 24.13.3
       '@vitest/coverage-v8': 4.1.10(vitest@4.1.10)
     transitivePeerDependencies:
       - msw
