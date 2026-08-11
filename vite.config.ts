@@ -14,7 +14,7 @@ export default defineConfig({
     },
     target: "esnext",
     outDir: "./dist",
-    rollupOptions: {
+    rolldownOptions: {
       external: ["@kinde/jwt-decoder", "aws-jwt-verify", "dotenv"],
       output: {
         globals: {
