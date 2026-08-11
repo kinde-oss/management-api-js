@@ -3767,10 +3767,7 @@ export type CreateConnectionData = {
            * Format for the Name ID used to identify users in SAML responses.
            */
           name_id_format?:
-            | "Persistent"
-            | "Transient"
-            | "Email address"
-            | "Unspecified";
+            "Persistent" | "Transient" | "Email address" | "Unspecified";
           /**
            * Attribute key for the user's email.
            */
@@ -3961,10 +3958,7 @@ export type UpdateConnectionData = {
            * Format for the Name ID used to identify users in SAML responses.
            */
           name_id_format?:
-            | "Persistent"
-            | "Transient"
-            | "Email address"
-            | "Unspecified";
+            "Persistent" | "Transient" | "Email address" | "Unspecified";
           /**
            * Attribute key for the user's email.
            */
@@ -4138,10 +4132,7 @@ export type ReplaceConnectionData = {
            * Format for the Name ID used to identify users in SAML responses.
            */
           name_id_format?:
-            | "Persistent"
-            | "Transient"
-            | "Email address"
-            | "Unspecified";
+            "Persistent" | "Transient" | "Email address" | "Unspecified";
           /**
            * Attribute key for the user's email.
            */
