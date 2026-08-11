@@ -25,6 +25,15 @@ export const kindeConfig: configType = {
   audience: "",
 };
 
+const errorInterceptor = (error: unknown, response: Response | undefined) => {
+  // Transport failures (network errors, aborts) have no response — pass the
+  // original error through instead of wrapping it in an ApiError
+  if (!response) {
+    return error;
+  }
+  return new ApiError(response.status, error);
+};
+
 /**
  * Initializes the integration with Kinde, using either provided configuration
  * or default values from `kindeConfig`.
@@ -71,9 +80,9 @@ export const init = (
     throwOnError: true,
   });
 
-  client.interceptors.error.use((error, response) => {
-    return new ApiError(response.status, error);
-  });
+  if (!client.interceptors.error.exists(errorInterceptor)) {
+    client.interceptors.error.use(errorInterceptor);
+  }
 };
 
 function _merge(target: object = {}, ...objects: object[]): object {

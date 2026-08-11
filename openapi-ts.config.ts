@@ -13,7 +13,9 @@ export default defineConfig({
       name: "@hey-api/client-fetch",
     },
     {
-      identifierCase: "preserve",
+      definitions: {
+        case: "preserve",
+      },
       name: "@hey-api/typescript",
     },
     {
@@ -21,6 +23,7 @@ export default defineConfig({
       operations: {
         strategy: "byTags",
       },
+      responseStyle: "data",
     },
     {
       includeInEntry: true,
