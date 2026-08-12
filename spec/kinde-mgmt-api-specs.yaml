@@ -1084,11 +1084,52 @@ paths:
                 homepage_uri:
                   description: The homepage link to your application.
                   type: string
+                is_allow_faceless_auth:
+                  description: Bypass Kinde's sign up and sign in screens and use your own design.
+                  type: boolean
+                is_ask_for_name:
+                  description: Show fields to collect name details from users signing up with email or phone.
+                  type: boolean
+                has_marketing_consent:
+                  description: Show a marketing consent checkbox on the sign-up page.
+                  type: boolean
+                has_sign_in_link_on_sign_up_page:
+                  description: Allow users to switch to the login page from the sign-up page.
+                  type: boolean
+                has_register_link_on_sign_in_page:
+                  description: Allow users to switch to the register page from the sign-in page.
+                  type: boolean
+                has_sign_in_with_sso_button:
+                  description: When home realm discovery is configured, users see a button to prompt them to use their work email.
+                  type: boolean
+                use_gravatar_fallback:
+                  description: Use a backup image if a profile picture is not available.
+                  type: boolean
+                is_access_control_enabled:
+                  description: Whether role-based access control is enforced for the application. At least one allowed role must be configured before enabling.
+                  type: boolean
       responses:
         '200':
           description: Application successfully updated.
         '400':
-          $ref: '#/components/responses/bad_request'
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                access_control_not_supported:
+                  summary: Access control not supported for application type
+                  value:
+                    errors:
+                      - code: ACCESS_CONTROL_NOT_SUPPORTED
+                        message: Role-based access control is not supported for this application type
+                access_roles_required:
+                  summary: Enabling access control requires at least one allowed role
+                  value:
+                    errors:
+                      - code: ACCESS_ROLES_REQUIRED
+                        message: Add at least one allowed role before enabling role-based access control
         '403':
           $ref: '#/components/responses/forbidden'
         '429':
@@ -1240,6 +1281,244 @@ paths:
                 $ref: '#/components/schemas/success_response'
         '400':
           $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/applications/{application_id}/access_roles:
+    servers: []
+    get:
+      tags:
+        - Applications
+      operationId: GetApplicationAccessRoles
+      description: |
+        Gets the roles configured as allowed to access an application. These
+        roles are enforced only when role-based access control is enabled for
+        the application.
+
+        <div>
+          <code>read:applications</code>
+        </div>
+      summary: Get application access roles
+      parameters:
+        - name: application_id
+          in: path
+          description: The identifier/client ID for the application.
+          required: true
+          schema:
+            type: string
+            nullable: false
+            example: 20bbffaa4c5e492a962273039d4ae18b
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          description: The ID of the role to start after.
+          required: false
+          schema:
+            type: string
+        - name: ending_before
+          in: query
+          description: The ID of the role to end before.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Application access roles successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_application_access_roles_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                application_required:
+                  summary: Application ID required
+                  value:
+                    errors:
+                      - code: APPLICATION_REQUIRED
+                        message: No application ID provided
+                application_not_found:
+                  summary: Application not found
+                  value:
+                    errors:
+                      - code: APPLICATION_NOT_FOUND
+                        message: Application not found
+                too_many_parameters:
+                  summary: Only one pagination cursor may be provided
+                  value:
+                    errors:
+                      - code: TOO_MANY_PARAMETERS
+                        message: Only one of starting_after or ending_before may be specified
+                page_size_limit_exceeded:
+                  summary: Page size exceeds the allowed limit
+                  value:
+                    errors:
+                      - code: PAGE_SIZE_LIMIT_EXCEEDED
+                        message: Page size cannot be greater than 100
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/applications/{application_id}/access_roles/{role_id}:
+    servers: []
+    post:
+      tags:
+        - Applications
+      operationId: AddApplicationAccessRole
+      summary: Add application access role
+      description: |
+        Add a role to the set configured as allowed to access an application.
+        Adding a role does not enable role-based access control for the
+        application.
+
+        <div>
+          <code>update:applications</code>
+        </div>
+      parameters:
+        - name: application_id
+          in: path
+          description: The identifier/client ID for the application.
+          required: true
+          schema:
+            type: string
+            example: 20bbffaa4c5e492a962273039d4ae18b
+        - name: role_id
+          in: path
+          description: The identifier for the role.
+          required: true
+          schema:
+            type: string
+            example: 0192c16a-bb53-b442-77e5-97d31877ba5b
+      responses:
+        '200':
+          description: Access role successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                application_required:
+                  summary: Application ID required
+                  value:
+                    errors:
+                      - code: APPLICATION_REQUIRED
+                        message: No application ID provided
+                role_required:
+                  summary: Role ID required
+                  value:
+                    errors:
+                      - code: ROLE_REQUIRED
+                        message: No role ID provided
+                application_not_found:
+                  summary: Application not found
+                  value:
+                    errors:
+                      - code: APPLICATION_NOT_FOUND
+                        message: Application not found
+                application_type_not_supported:
+                  summary: Application type does not support access roles
+                  value:
+                    errors:
+                      - code: APPLICATION_TYPE_NOT_SUPPORTED
+                        message: Role-based access control is only supported for front-end, back-end, and device applications
+                role_not_found:
+                  summary: Role not found
+                  value:
+                    errors:
+                      - code: ROLE_NOT_FOUND
+                        message: Role not found
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    delete:
+      tags:
+        - Applications
+      operationId: RemoveApplicationAccessRole
+      summary: Remove application access role
+      description: |
+        Remove a role from the set that is allowed to access an application.
+        Removing a role does not change whether role-based access control is
+        enabled for the application.
+
+        <div>
+          <code>update:applications</code>
+        </div>
+      parameters:
+        - name: application_id
+          in: path
+          description: The identifier/client ID for the application.
+          required: true
+          schema:
+            type: string
+            example: 20bbffaa4c5e492a962273039d4ae18b
+        - name: role_id
+          in: path
+          description: The identifier for the role.
+          required: true
+          schema:
+            type: string
+            example: 0192c16a-bb53-b442-77e5-97d31877ba5b
+      responses:
+        '200':
+          description: Access role successfully removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                application_required:
+                  summary: Application ID required
+                  value:
+                    errors:
+                      - code: APPLICATION_REQUIRED
+                        message: No application ID provided
+                role_required:
+                  summary: Role ID required
+                  value:
+                    errors:
+                      - code: ROLE_REQUIRED
+                        message: No role ID provided
+                application_not_found:
+                  summary: Application not found
+                  value:
+                    errors:
+                      - code: APPLICATION_NOT_FOUND
+                        message: Application not found
+                role_not_found:
+                  summary: Role not found
+                  value:
+                    errors:
+                      - code: ROLE_NOT_FOUND
+                        message: Role not found
         '403':
           $ref: '#/components/responses/forbidden'
         '429':
@@ -2657,8 +2936,12 @@ paths:
                           example: https://kinde.com
                         saml_idp_metadata_url:
                           type: string
-                          description: URL for the IdP metadata.
+                          description: URL for the IdP metadata. Optional if saml_idp_metadata_xml is provided.
                           example: https://kinde.com/saml/metadata
+                        saml_idp_metadata_xml:
+                          type: string
+                          description: Raw IdP metadata XML. Use when the IdP does not host a metadata URL (e.g. Google Workspace). Takes precedence over saml_idp_metadata_url when both are set.
+                          example: <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://accounts.google.com/o/saml2?idpid=C012345">...</EntityDescriptor>
                         saml_sign_in_url:
                           type: string
                           description: Override the default SSO endpoint with a URL your IdP recognizes.
@@ -2937,8 +3220,12 @@ paths:
                           example: https://kinde.com
                         saml_idp_metadata_url:
                           type: string
-                          description: URL for the IdP metadata.
+                          description: URL for the IdP metadata. Optional if saml_idp_metadata_xml is provided.
                           example: https://kinde.com/saml/metadata
+                        saml_idp_metadata_xml:
+                          type: string
+                          description: Raw IdP metadata XML. Use when the IdP does not host a metadata URL (e.g. Google Workspace). Takes precedence over saml_idp_metadata_url when both are set.
+                          example: <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://accounts.google.com/o/saml2?idpid=C012345">...</EntityDescriptor>
                         saml_sign_in_url:
                           type: string
                           description: Override the default SSO endpoint with a URL your IdP recognizes.
@@ -3180,8 +3467,12 @@ paths:
                           example: https://kinde.com
                         saml_idp_metadata_url:
                           type: string
-                          description: URL for the IdP metadata.
+                          description: URL for the IdP metadata. Optional if saml_idp_metadata_xml is provided.
                           example: https://kinde.com/saml/metadata
+                        saml_idp_metadata_xml:
+                          type: string
+                          description: Raw IdP metadata XML. Use when the IdP does not host a metadata URL (e.g. Google Workspace). Takes precedence over saml_idp_metadata_url when both are set.
+                          example: <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://accounts.google.com/o/saml2?idpid=C012345">...</EntityDescriptor>
                         sign_request_algorithm:
                           type: string
                           description: Algorithm used to sign SAML requests.
@@ -5014,15 +5305,18 @@ paths:
                 is_create_billing_customer:
                   type: boolean
                   example: false
-                  description: If a billing customer is also created for this organization
+                  description: If an organization billing customer is also created for this organization
                 billing_email:
                   type: string
                   example: billing@acmecorp.com
-                  description: The email address used for billing purposes for the organization
+                  description: The email address used for billing purposes for the organization. Required when is_create_billing_customer is true
                 billing_plan_code:
                   type: string
                   example: pro
-                  description: The billing plan to put the customer on. If not specified, the default plan is used
+                  description: |
+                    Code of a published organization billing plan to assign to the new billing customer.
+                    If omitted, the default organization plan is used.
+                    User plans and unpublished plans are rejected.
       responses:
         '200':
           description: Organization successfully created.
@@ -5688,6 +5982,147 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/get_organization_role_users_response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organizations/{org_code}/roles/{role_id}/users/count:
+    servers: []
+    get:
+      tags:
+        - Organizations
+      operationId: GetOrganizationRoleUsersCount
+      x-scope: read:organization_user_roles
+      description: |
+        Get the number of users that have a given role within a specific organization.
+
+        <div>
+          <code>read:organization_user_roles</code>
+        </div>
+      summary: Count organization role users
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: role_id
+          in: path
+          description: The role's public id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: The number of users with the specified role in the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_organization_role_users_count_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_organization_role_users_count_response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organizations/{org_code}/roles/{role_id}/active_users/count:
+    servers: []
+    get:
+      tags:
+        - Organizations
+      operationId: GetOrganizationRoleActiveUsersCount
+      x-scope: read:organization_user_roles
+      description: |
+        Get the number of active users that hold a given role within a specific organization.
+
+        A user is counted as active if they were issued at least one access token during the requested period,
+        regardless of organization context on the token. Only users who currently hold the role in the
+        organization are included. The count is scoped to the current environment.
+
+        Both `date_time_from` and `date_time_to` are required, inclusive, and must be ISO 8601 datetimes in UTC.
+        Provide them at second precision (no fractional seconds). If a value includes fractional seconds, it is
+        normalized before any other processing: `date_time_from` is rounded down and `date_time_to` is rounded up
+        to the nearest second. Window validation, the active-user query, and the echoed response bounds all use
+        those normalized values.
+
+        The requested window must not exceed 3 days. Because both bounds are inclusive, this means `date_time_to`
+        must be earlier than `date_time_from` plus 3 days. For example, `2026-07-01T00:00:00Z` to
+        `2026-07-03T23:59:59Z` is a full 3 day window covering the whole of 1, 2 and 3 July. A longer window is
+        rejected with `DATE_TIME_RANGE_TOO_LARGE`.
+
+        <div>
+          <code>read:organization_user_roles</code>
+        </div>
+      summary: Get organization role active users count
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: role_id
+          in: path
+          description: The role's public id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: date_time_from
+          in: query
+          description: Start of the active period (inclusive), as an ISO 8601 datetime in UTC at second precision. Fractional seconds are accepted but rounded down to the nearest second before validation.
+          required: true
+          schema:
+            type: string
+            format: date-time
+            nullable: false
+            example: '2026-07-01T00:00:00Z'
+        - name: date_time_to
+          in: query
+          description: End of the active period (inclusive), as an ISO 8601 datetime in UTC at second precision. Fractional seconds are accepted but rounded up to the nearest second before validation. The window must not exceed 3 days, so this must be earlier than `date_time_from` plus 3 days.
+          required: true
+          schema:
+            type: string
+            format: date-time
+            nullable: false
+            example: '2026-07-03T23:59:59Z'
+      responses:
+        '200':
+          description: Active users count for the role in the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_organization_role_active_users_count_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_organization_role_active_users_count_response'
         '400':
           description: Bad request.
           content:
@@ -8394,6 +8829,151 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/roles/{role_id}/system_permissions:
+    servers: []
+    get:
+      tags:
+        - Roles
+      operationId: GetRoleSystemPermissions
+      x-scope: read:role_system_permissions
+      description: |
+        Get system permissions for a role.
+
+        System permissions control what organization users can do in the self-serve portal.
+
+        <div>
+          <code>read:role_system_permissions</code>
+        </div>
+      summary: Get role system permissions
+      parameters:
+        - name: role_id
+          in: path
+          description: The role's public id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: sort
+          in: query
+          description: Field and order to sort the result by.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - name_asc
+              - name_desc
+              - id_asc
+              - id_desc
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: next_token
+          in: query
+          description: A string to get the next page of results if there are more results.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: A list of system permissions for a role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/role_system_permissions_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/role_system_permissions_response'
+        '400':
+          description: Error retrieving system permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+    patch:
+      tags:
+        - Roles
+      operationId: UpdateRoleSystemPermissions
+      x-scope: update:role_system_permissions
+      description: |
+        Update role system permissions.
+
+        System permissions control what organization users can do in the self-serve portal.
+
+        <div>
+          <code>update:role_system_permissions</code>
+        </div>
+      summary: Update role system permissions
+      parameters:
+        - name: role_id
+          in: path
+          description: The identifier for the role.
+          required: true
+          schema:
+            type: string
+            nullable: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                system_permissions:
+                  description: System permissions to add or remove from the role.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        description: The system permission id.
+                        type: string
+                      operation:
+                        description: Optional operation, set to 'delete' to remove the system permission from the role.
+                        type: string
+      responses:
+        '200':
+          description: System permissions successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/update_role_system_permissions_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/update_role_system_permissions_response'
+        '400':
+          description: Error updating system permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
   /api/v1/roles/{role_id}/users:
     servers: []
     get:
@@ -8757,6 +9337,69 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/system_permissions:
+    servers: []
+    get:
+      tags:
+        - Roles
+      operationId: GetSystemPermissions
+      x-scope: read:system_permissions
+      description: |
+        The returned list can be sorted by system permission name or ID in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
+
+        System permissions control what organization users can do in the self-serve portal.
+
+        <div>
+          <code>read:system_permissions</code>
+        </div>
+      summary: List system permissions
+      parameters:
+        - name: sort
+          in: query
+          description: Field and order to sort the result by.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - name_asc
+              - name_desc
+              - id_asc
+              - id_desc
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: next_token
+          in: query
+          description: A string to get the next page of results if there are more results.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: System permissions successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_system_permissions_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_system_permissions_response'
         '403':
           description: Invalid credentials.
           content:
@@ -9408,7 +10051,7 @@ paths:
               type: object
               properties:
                 hashed_password:
-                  description: The hashed password.
+                  description: The hashed password. For aspnet-identity-v2, provide the base64-encoded AspNetUsers.PasswordHash value as-is.
                   type: string
                 hashing_method:
                   description: The hashing method or algorithm used to encrypt the user’s password. Default is bcrypt.
@@ -9420,9 +10063,11 @@ paths:
                     - sha256
                     - wordpress
                     - pbkdf2
+                    - firebase-scrypt
+                    - aspnet-identity-v2
                 salt:
                   type: string
-                  description: Extra characters added to passwords to make them stronger. Not required for bcrypt. Required for pbkdf2; provide the base64-encoded salt.
+                  description: Extra characters added to passwords to make them stronger. Not required for bcrypt. Required for pbkdf2; provide the base64-encoded salt. Required for firebase-scrypt; provide the base64-encoded per-user salt. Not used for aspnet-identity-v2 (the salt is embedded in the hash); do not provide salt, salt_position, iterations, or variant with aspnet-identity-v2.
                 salt_position:
                   type: string
                   description: Position of salt in password string. Not required for bcrypt.
@@ -9431,10 +10076,22 @@ paths:
                     - suffix
                 iterations:
                   type: integer
-                  description: The iteration count (factor) used to derive the hash. Optional for pbkdf2; when omitted, verification defaults to 24000 (the FusionAuth default factor).
+                  description: The iteration count (factor) used to derive the hash. Optional for pbkdf2; when omitted, verification defaults to 24000 (the FusionAuth default factor). Rejected for firebase-scrypt.
                 variant:
                   type: string
-                  description: The hashing variant. Required for pbkdf2 (e.g. salted-pbkdf2-hmac-sha256, salted-pbkdf2-hmac-sha256-512, salted-pbkdf2-hmac-sha512-512).
+                  description: The hashing variant. Required for pbkdf2 (e.g. salted-pbkdf2-hmac-sha256, salted-pbkdf2-hmac-sha256-512, salted-pbkdf2-hmac-sha512-512). Rejected for firebase-scrypt.
+                signer_key:
+                  type: string
+                  description: The base64-encoded signer key from the Firebase project's password hash parameters. Required for firebase-scrypt; rejected for other hashing methods.
+                salt_separator:
+                  type: string
+                  description: The base64-encoded salt separator from the Firebase project's password hash parameters. Required for firebase-scrypt; rejected for other hashing methods.
+                rounds:
+                  type: integer
+                  description: The scrypt rounds from the Firebase project's password hash parameters (1-16). Required for firebase-scrypt; rejected for other hashing methods.
+                mem_cost:
+                  type: integer
+                  description: The scrypt memory cost from the Firebase project's password hash parameters (1-20). Required for firebase-scrypt; rejected for other hashing methods.
                 is_temporary_password:
                   type: boolean
                   description: The user will be prompted to set a new password after entering this one.
@@ -12602,6 +13259,21 @@ components:
           type: array
           items:
             type: string
+    update_role_system_permissions_response:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        system_permissions_added:
+          type: array
+          items:
+            type: string
+        system_permissions_removed:
+          type: array
+          items:
+            type: string
     update_organization_users_response:
       type: object
       properties:
@@ -12710,6 +13382,7 @@ components:
                 - m2m
                 - reg
                 - spa
+                - device
             client_id:
               description: The application's client ID.
               type: string
@@ -12730,6 +13403,40 @@ components:
               description: Whether the application has a cancel button to allow users to exit the auth flow [Beta].
               type: boolean
               example: false
+            is_access_control_enabled:
+              description: |
+                Whether role-based access control is enforced for the application.
+                Always false for application types that do not support connections.
+              type: boolean
+              example: false
+            is_allow_faceless_auth:
+              description: Bypass Kinde's sign up and sign in screens and use your own design.
+              type: boolean
+              example: false
+            is_ask_for_name:
+              description: Show fields to collect name details from users signing up with email or phone.
+              type: boolean
+              example: true
+            has_marketing_consent:
+              description: Show a marketing consent checkbox on the sign-up page.
+              type: boolean
+              example: false
+            has_sign_in_link_on_sign_up_page:
+              description: Allow users to switch to the login page from the sign-up page.
+              type: boolean
+              example: true
+            has_register_link_on_sign_in_page:
+              description: Allow users to switch to the register page from the sign-in page.
+              type: boolean
+              example: true
+            has_sign_in_with_sso_button:
+              description: When home realm discovery is configured, users see a button to prompt them to use their work email.
+              type: boolean
+              example: false
+            use_gravatar_fallback:
+              description: Use a backup image if a profile picture is not available.
+              type: boolean
+              example: true
     applications:
       type: object
       properties:
@@ -12803,6 +13510,23 @@ components:
         next_token:
           type: string
           description: Pagination token.
+    get_system_permissions_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        system_permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/system_permissions'
+        next_token:
+          type: string
+          description: Pagination token.
+          nullable: true
     permissions:
       type: object
       properties:
@@ -12856,6 +13580,44 @@ components:
         is_default_role:
           type: boolean
           description: Whether the role is the default role.
+    application_access_role:
+      type: object
+      description: A business role configured as allowed to access an application.
+      properties:
+        id:
+          type: string
+          description: The role's ID.
+          example: 0192c16a-bb53-b442-77e5-97d31877ba5b
+        key:
+          type: string
+          description: The role identifier to use in code.
+          example: admin
+        name:
+          type: string
+          description: The role's name.
+          example: Administrator
+        description:
+          type: string
+          description: The role's description.
+          nullable: true
+          example: Full access to all resources.
+    get_application_access_roles_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        roles:
+          type: array
+          description: Roles configured as allowed to access the application.
+          items:
+            $ref: '#/components/schemas/application_access_role'
+        has_more:
+          type: boolean
+          description: Whether more records exist.
     role_permissions_response:
       type: object
       properties:
@@ -12872,6 +13634,42 @@ components:
         next_token:
           type: string
           description: Pagination token.
+    system_permissions:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The system permission's ID.
+          example: perm_019541f3fa0c874fc47b3ae73585b21c
+        key:
+          type: string
+          description: The system permission identifier to use in code.
+          example: org:read:billing
+        name:
+          type: string
+          description: The system permission's name.
+          example: Read billing details
+        description:
+          type: string
+          description: The system permission's description.
+          example: View plan and update card details
+    role_system_permissions_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        system_permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/system_permissions'
+        next_token:
+          type: string
+          description: Pagination token.
+          nullable: true
     get_role_users_response:
       type: object
       properties:
@@ -12919,6 +13717,41 @@ components:
           type: string
           description: Pagination token.
           nullable: true
+    get_organization_role_users_count_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        count:
+          type: integer
+          description: The number of users with the specified role in the organization.
+          example: 42
+    get_organization_role_active_users_count_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        active_users_count:
+          type: integer
+          description: Number of users with the role who received at least one access token during the requested period.
+        date_time_from:
+          type: string
+          format: date-time
+          description: Start of the active period that was used (inclusive), in UTC at second precision after any rounding.
+        date_time_to:
+          type: string
+          format: date-time
+          description: End of the active period that was used (inclusive), in UTC at second precision after any rounding.
     role_scopes_response:
       type: object
       properties:
@@ -13080,12 +13913,28 @@ components:
               expires_on:
                 type: string
                 format: date-time
+                nullable: true
                 description: The date the agreement expired (and was no longer active)
                 example: '2024-11-18T13:32:03+11'
               billing_group_id:
                 type: string
+                nullable: true
                 description: The friendly id of the billing group this agreement's plan is part of
                 example: sbg_0195abf6773fdae18d5da72281a3fde2
+              current_period_start:
+                type: string
+                format: date-time
+                nullable: true
+                description: |
+                  The start date of the agreement's current billing period. Null when the agreement has no current billing cycle.
+                example: '2026-08-06T12:53:57Z'
+              current_period_end:
+                type: string
+                format: date-time
+                nullable: true
+                description: |
+                  The end date of the agreement's current billing period (typically the next billing date). Null when the agreement has no current billing cycle; may be in the past if cycle roll or provider sync has lagged.
+                example: '2026-09-06T12:53:57Z'
               entitlements:
                 type: array
                 description: A list of billing entitlements that is part of this agreement

@@ -581,6 +581,10 @@ export type users_response = {
     identities?: Array<{
       type?: string;
       identity?: string;
+      /**
+       * The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
+       */
+      connection_id?: string | null;
     }>;
     billing?: {
       /**
@@ -1478,6 +1482,10 @@ export type identity = {
    */
   email?: string;
   /**
+   * The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
+   */
+  connection_id?: string | null;
+  /**
    * Whether the identity is the primary identity for the user
    */
   is_primary?: boolean | null;
@@ -1998,6 +2006,13 @@ export type update_role_permissions_response = {
   permissions_removed?: Array<string>;
 };
 
+export type update_role_system_permissions_response = {
+  code?: string;
+  message?: string;
+  system_permissions_added?: Array<string>;
+  system_permissions_removed?: Array<string>;
+};
+
 export type update_organization_users_response = {
   message?: string;
   code?: string;
@@ -2090,7 +2105,7 @@ export type get_application_response = {
     /**
      * The application's type.
      */
-    type?: "m2m" | "reg" | "spa";
+    type?: "m2m" | "reg" | "spa" | "device";
     /**
      * The application's client ID.
      */
@@ -2111,6 +2126,40 @@ export type get_application_response = {
      * Whether the application has a cancel button to allow users to exit the auth flow [Beta].
      */
     has_cancel_button?: boolean;
+    /**
+     * Whether role-based access control is enforced for the application.
+     * Always false for application types that do not support connections.
+     *
+     */
+    is_access_control_enabled?: boolean;
+    /**
+     * Bypass Kinde's sign up and sign in screens and use your own design.
+     */
+    is_allow_faceless_auth?: boolean;
+    /**
+     * Show fields to collect name details from users signing up with email or phone.
+     */
+    is_ask_for_name?: boolean;
+    /**
+     * Show a marketing consent checkbox on the sign-up page.
+     */
+    has_marketing_consent?: boolean;
+    /**
+     * Allow users to switch to the login page from the sign-up page.
+     */
+    has_sign_in_link_on_sign_up_page?: boolean;
+    /**
+     * Allow users to switch to the register page from the sign-in page.
+     */
+    has_register_link_on_sign_in_page?: boolean;
+    /**
+     * When home realm discovery is configured, users see a button to prompt them to use their work email.
+     */
+    has_sign_in_with_sso_button?: boolean;
+    /**
+     * Use a backup image if a profile picture is not available.
+     */
+    use_gravatar_fallback?: boolean;
   };
 };
 
@@ -2181,6 +2230,22 @@ export type get_permissions_response = {
   next_token?: string;
 };
 
+export type get_system_permissions_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  system_permissions?: Array<system_permissions>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
+};
+
 export type permissions = {
   /**
    * The permission's ID.
@@ -2242,6 +2307,47 @@ export type roles = {
   is_default_role?: boolean;
 };
 
+/**
+ * A business role configured as allowed to access an application.
+ */
+export type application_access_role = {
+  /**
+   * The role's ID.
+   */
+  id?: string;
+  /**
+   * The role identifier to use in code.
+   */
+  key?: string;
+  /**
+   * The role's name.
+   */
+  name?: string;
+  /**
+   * The role's description.
+   */
+  description?: string | null;
+};
+
+export type get_application_access_roles_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Roles configured as allowed to access the application.
+   */
+  roles?: Array<application_access_role>;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+};
+
 export type role_permissions_response = {
   /**
    * Response code.
@@ -2256,6 +2362,125 @@ export type role_permissions_response = {
    * Pagination token.
    */
   next_token?: string;
+};
+
+export type system_permissions = {
+  /**
+   * The system permission's ID.
+   */
+  id?: string;
+  /**
+   * The system permission identifier to use in code.
+   */
+  key?: string;
+  /**
+   * The system permission's name.
+   */
+  name?: string;
+  /**
+   * The system permission's description.
+   */
+  description?: string;
+};
+
+export type role_system_permissions_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  system_permissions?: Array<system_permissions>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
+};
+
+export type get_role_users_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  users?: Array<{
+    /**
+     * The user's ID.
+     */
+    id?: string;
+    /**
+     * The organization codes where the user has this role.
+     */
+    org_codes?: Array<string>;
+  }>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
+};
+
+export type get_organization_role_users_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  users?: Array<{
+    /**
+     * The user's ID.
+     */
+    id?: string;
+  }>;
+  /**
+   * Pagination token.
+   */
+  next_token?: string | null;
+};
+
+export type get_organization_role_users_count_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * The number of users with the specified role in the organization.
+   */
+  count?: number;
+};
+
+export type get_organization_role_active_users_count_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Number of users with the role who received at least one access token during the requested period.
+   */
+  active_users_count?: number;
+  /**
+   * Start of the active period that was used (inclusive), in UTC at second precision after any rounding.
+   */
+  date_time_from?: string;
+  /**
+   * End of the active period that was used (inclusive), in UTC at second precision after any rounding.
+   */
+  date_time_to?: string;
 };
 
 export type role_scopes_response = {
@@ -2412,11 +2637,21 @@ export type get_billing_agreements_response = {
     /**
      * The date the agreement expired (and was no longer active)
      */
-    expires_on?: string;
+    expires_on?: string | null;
     /**
      * The friendly id of the billing group this agreement's plan is part of
      */
-    billing_group_id?: string;
+    billing_group_id?: string | null;
+    /**
+     * The start date of the agreement's current billing period. Null when the agreement has no current billing cycle.
+     *
+     */
+    current_period_start?: string | null;
+    /**
+     * The end date of the agreement's current billing period (typically the next billing date). Null when the agreement has no current billing cycle; may be in the past if cycle roll or provider sync has lagged.
+     *
+     */
+    current_period_end?: string | null;
     /**
      * A list of billing entitlements that is part of this agreement
      */
@@ -2728,6 +2963,10 @@ export type delete_directory_response = {
    * Response message.
    */
   message?: string;
+  /**
+   * The ID of the deleted SCIM directory.
+   */
+  directory_id?: string;
 };
 
 export type directory = {
@@ -2755,6 +2994,14 @@ export type directory = {
    * The organization code this directory belongs to.
    */
   organization_code?: string;
+  /**
+   * The enterprise connection ID used for SCIM-provisioned users.
+   */
+  enterprise_connection_id?: string | null;
+  /**
+   * The display name of the selected enterprise connection.
+   */
+  enterprise_connection_name?: string | null;
   /**
    * When the last sync started.
    */
@@ -3805,6 +4052,38 @@ export type UpdateApplicationData = {
      * The homepage link to your application.
      */
     homepage_uri?: string;
+    /**
+     * Bypass Kinde's sign up and sign in screens and use your own design.
+     */
+    is_allow_faceless_auth?: boolean;
+    /**
+     * Show fields to collect name details from users signing up with email or phone.
+     */
+    is_ask_for_name?: boolean;
+    /**
+     * Show a marketing consent checkbox on the sign-up page.
+     */
+    has_marketing_consent?: boolean;
+    /**
+     * Allow users to switch to the login page from the sign-up page.
+     */
+    has_sign_in_link_on_sign_up_page?: boolean;
+    /**
+     * Allow users to switch to the register page from the sign-in page.
+     */
+    has_register_link_on_sign_in_page?: boolean;
+    /**
+     * When home realm discovery is configured, users see a button to prompt them to use their work email.
+     */
+    has_sign_in_with_sso_button?: boolean;
+    /**
+     * Use a backup image if a profile picture is not available.
+     */
+    use_gravatar_fallback?: boolean;
+    /**
+     * Whether role-based access control is enforced for the application. At least one allowed role must be configured before enabling.
+     */
+    is_access_control_enabled?: boolean;
   };
   path: {
     /**
@@ -3965,6 +4244,147 @@ export type EnableConnectionResponses = {
    */
   200: unknown;
 };
+
+export type GetApplicationAccessRolesData = {
+  body?: never;
+  path: {
+    /**
+     * The identifier/client ID for the application.
+     */
+    application_id: string;
+  };
+  query?: {
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number;
+    /**
+     * The ID of the role to start after.
+     */
+    starting_after?: string;
+    /**
+     * The ID of the role to end before.
+     */
+    ending_before?: string;
+  };
+  url: "/api/v1/applications/{application_id}/access_roles";
+};
+
+export type GetApplicationAccessRolesErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type GetApplicationAccessRolesError =
+  GetApplicationAccessRolesErrors[keyof GetApplicationAccessRolesErrors];
+
+export type GetApplicationAccessRolesResponses = {
+  /**
+   * Application access roles successfully retrieved.
+   */
+  200: get_application_access_roles_response;
+};
+
+export type GetApplicationAccessRolesResponse =
+  GetApplicationAccessRolesResponses[keyof GetApplicationAccessRolesResponses];
+
+export type RemoveApplicationAccessRoleData = {
+  body?: never;
+  path: {
+    /**
+     * The identifier/client ID for the application.
+     */
+    application_id: string;
+    /**
+     * The identifier for the role.
+     */
+    role_id: string;
+  };
+  query?: never;
+  url: "/api/v1/applications/{application_id}/access_roles/{role_id}";
+};
+
+export type RemoveApplicationAccessRoleErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type RemoveApplicationAccessRoleError =
+  RemoveApplicationAccessRoleErrors[keyof RemoveApplicationAccessRoleErrors];
+
+export type RemoveApplicationAccessRoleResponses = {
+  /**
+   * Access role successfully removed.
+   */
+  200: success_response;
+};
+
+export type RemoveApplicationAccessRoleResponse =
+  RemoveApplicationAccessRoleResponses[keyof RemoveApplicationAccessRoleResponses];
+
+export type AddApplicationAccessRoleData = {
+  body?: never;
+  path: {
+    /**
+     * The identifier/client ID for the application.
+     */
+    application_id: string;
+    /**
+     * The identifier for the role.
+     */
+    role_id: string;
+  };
+  query?: never;
+  url: "/api/v1/applications/{application_id}/access_roles/{role_id}";
+};
+
+export type AddApplicationAccessRoleErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type AddApplicationAccessRoleError =
+  AddApplicationAccessRoleErrors[keyof AddApplicationAccessRoleErrors];
+
+export type AddApplicationAccessRoleResponses = {
+  /**
+   * Access role successfully added.
+   */
+  200: success_response;
+};
+
+export type AddApplicationAccessRoleResponse =
+  AddApplicationAccessRoleResponses[keyof AddApplicationAccessRoleResponses];
 
 export type GetApplicationPropertyValuesData = {
   body?: never;
@@ -5219,9 +5639,13 @@ export type CreateConnectionData = {
            */
           saml_entity_id?: string;
           /**
-           * URL for the IdP metadata.
+           * URL for the IdP metadata. Optional if saml_idp_metadata_xml is provided.
            */
           saml_idp_metadata_url?: string;
+          /**
+           * Raw IdP metadata XML. Use when the IdP does not host a metadata URL (e.g. Google Workspace). Takes precedence over saml_idp_metadata_url when both are set.
+           */
+          saml_idp_metadata_xml?: string;
           /**
            * Override the default SSO endpoint with a URL your IdP recognizes.
            */
@@ -5509,9 +5933,13 @@ export type UpdateConnectionData = {
            */
           saml_entity_id?: string;
           /**
-           * URL for the IdP metadata.
+           * URL for the IdP metadata. Optional if saml_idp_metadata_xml is provided.
            */
           saml_idp_metadata_url?: string;
+          /**
+           * Raw IdP metadata XML. Use when the IdP does not host a metadata URL (e.g. Google Workspace). Takes precedence over saml_idp_metadata_url when both are set.
+           */
+          saml_idp_metadata_xml?: string;
           /**
            * Override the default SSO endpoint with a URL your IdP recognizes.
            */
@@ -5721,9 +6149,13 @@ export type ReplaceConnectionData = {
            */
           saml_entity_id?: string;
           /**
-           * URL for the IdP metadata.
+           * URL for the IdP metadata. Optional if saml_idp_metadata_xml is provided.
            */
           saml_idp_metadata_url?: string;
+          /**
+           * Raw IdP metadata XML. Use when the IdP does not host a metadata URL (e.g. Google Workspace). Takes precedence over saml_idp_metadata_url when both are set.
+           */
+          saml_idp_metadata_xml?: string;
           /**
            * Algorithm used to sign SAML requests.
            */
@@ -5898,6 +6330,12 @@ export type CreateDirectoryData = {
       | "onelogin"
       | "pingfederate"
       | "rippling";
+    /**
+     * The enterprise connection ID to associate with this directory for SCIM-provisioned users.
+     * Required when the organization has multiple enabled enterprise connections.
+     *
+     */
+    enterprise_connection_id?: string;
   };
   path?: never;
   query?: never;
@@ -5958,9 +6396,9 @@ export type DeleteDirectoryErrors = {
    */
   403: error_response;
   /**
-   * The specified resource was not found
+   * Directory not found.
    */
-  404: not_found_response;
+  404: error_response;
   /**
    * Too many requests. Request was throttled.
    */
@@ -6002,9 +6440,9 @@ export type GetDirectoryErrors = {
    */
   403: error_response;
   /**
-   * The specified resource was not found
+   * Directory not found.
    */
-  404: not_found_response;
+  404: error_response;
   /**
    * Too many requests. Request was throttled.
    */
@@ -6028,7 +6466,7 @@ export type UpdateDirectoryData = {
     /**
      * A descriptive name for the SCIM directory.
      */
-    directory_name: string;
+    directory_name?: string;
   };
   path: {
     /**
@@ -6050,9 +6488,9 @@ export type UpdateDirectoryErrors = {
    */
   403: error_response;
   /**
-   * The specified resource was not found
+   * Directory not found.
    */
-  404: not_found_response;
+  404: error_response;
   /**
    * Too many requests. Request was throttled.
    */
@@ -7178,11 +7616,11 @@ export type ReplaceMfaResponse = ReplaceMfaResponses[keyof ReplaceMfaResponses];
 export type GetOrganizationData = {
   body?: never;
   path?: never;
-  query?: {
+  query: {
     /**
      * The organization's code.
      */
-    code?: string;
+    code: string;
     /**
      * Additional data to include in the response. Allowed value: "billing".
      */
@@ -7297,15 +7735,18 @@ export type CreateOrganizationData = {
      */
     sender_email?: string | null;
     /**
-     * If a billing customer is also created for this organization
+     * If an organization billing customer is also created for this organization
      */
     is_create_billing_customer?: boolean;
     /**
-     * The email address used for billing purposes for the organization
+     * The email address used for billing purposes for the organization. Required when is_create_billing_customer is true
      */
     billing_email?: string;
     /**
-     * The billing plan to put the customer on. If not specified, the default plan is used
+     * Code of a published organization billing plan to assign to the new billing customer.
+     * If omitted, the default organization plan is used.
+     * User plans and unpublished plans are rejected.
+     *
      */
     billing_plan_code?: string;
   };
@@ -7581,13 +8022,7 @@ export type GetOrganizationUsersData = {
     /**
      * Field and order to sort the result by.
      */
-    sort?:
-      | "name_asc"
-      | "name_desc"
-      | "email_asc"
-      | "email_desc"
-      | "id_asc"
-      | "id_desc";
+    sort?: "name_asc" | "name_desc" | "email_asc" | "email_desc";
     /**
      * Number of results per page. Defaults to 10 if parameter not sent.
      */
@@ -7885,6 +8320,156 @@ export type DeleteOrganizationUserRoleResponses = {
 
 export type DeleteOrganizationUserRoleResponse =
   DeleteOrganizationUserRoleResponses[keyof DeleteOrganizationUserRoleResponses];
+
+export type GetOrganizationRoleUsersData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+    /**
+     * The role's public id.
+     */
+    role_id: string;
+  };
+  query?: {
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * A string to get the next page of results if there are more results.
+     */
+    next_token?: string | null;
+  };
+  url: "/api/v1/organizations/{org_code}/roles/{role_id}/users";
+};
+
+export type GetOrganizationRoleUsersErrors = {
+  /**
+   * Bad request.
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: unknown;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetOrganizationRoleUsersError =
+  GetOrganizationRoleUsersErrors[keyof GetOrganizationRoleUsersErrors];
+
+export type GetOrganizationRoleUsersResponses = {
+  /**
+   * A list of users with the specified role in the organization.
+   */
+  200: get_organization_role_users_response;
+};
+
+export type GetOrganizationRoleUsersResponse =
+  GetOrganizationRoleUsersResponses[keyof GetOrganizationRoleUsersResponses];
+
+export type GetOrganizationRoleUsersCountData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+    /**
+     * The role's public id.
+     */
+    role_id: string;
+  };
+  query?: never;
+  url: "/api/v1/organizations/{org_code}/roles/{role_id}/users/count";
+};
+
+export type GetOrganizationRoleUsersCountErrors = {
+  /**
+   * Bad request.
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: unknown;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetOrganizationRoleUsersCountError =
+  GetOrganizationRoleUsersCountErrors[keyof GetOrganizationRoleUsersCountErrors];
+
+export type GetOrganizationRoleUsersCountResponses = {
+  /**
+   * The number of users with the specified role in the organization.
+   */
+  200: get_organization_role_users_count_response;
+};
+
+export type GetOrganizationRoleUsersCountResponse =
+  GetOrganizationRoleUsersCountResponses[keyof GetOrganizationRoleUsersCountResponses];
+
+export type GetOrganizationRoleActiveUsersCountData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+    /**
+     * The role's public id.
+     */
+    role_id: string;
+  };
+  query: {
+    /**
+     * Start of the active period (inclusive), as an ISO 8601 datetime in UTC at second precision. Fractional seconds are accepted but rounded down to the nearest second before validation.
+     */
+    date_time_from: string;
+    /**
+     * End of the active period (inclusive), as an ISO 8601 datetime in UTC at second precision. Fractional seconds are accepted but rounded up to the nearest second before validation. The window must not exceed 3 days, so this must be earlier than `date_time_from` plus 3 days.
+     */
+    date_time_to: string;
+  };
+  url: "/api/v1/organizations/{org_code}/roles/{role_id}/active_users/count";
+};
+
+export type GetOrganizationRoleActiveUsersCountErrors = {
+  /**
+   * Bad request.
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: unknown;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetOrganizationRoleActiveUsersCountError =
+  GetOrganizationRoleActiveUsersCountErrors[keyof GetOrganizationRoleActiveUsersCountErrors];
+
+export type GetOrganizationRoleActiveUsersCountResponses = {
+  /**
+   * Active users count for the role in the organization.
+   */
+  200: get_organization_role_active_users_count_response;
+};
+
+export type GetOrganizationRoleActiveUsersCountResponse =
+  GetOrganizationRoleActiveUsersCountResponses[keyof GetOrganizationRoleActiveUsersCountResponses];
 
 export type GetOrganizationUserPermissionsData = {
   body?: never;
@@ -8674,6 +9259,119 @@ export type ReplaceOrganizationMfaResponses = {
 export type ReplaceOrganizationMfaResponse =
   ReplaceOrganizationMfaResponses[keyof ReplaceOrganizationMfaResponses];
 
+export type GetOrganizationPasskeyData = {
+  body?: never;
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+  };
+  query?: never;
+  url: "/api/v1/organizations/{org_code}/passkey";
+};
+
+export type GetOrganizationPasskeyErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type GetOrganizationPasskeyError =
+  GetOrganizationPasskeyErrors[keyof GetOrganizationPasskeyErrors];
+
+export type GetOrganizationPasskeyResponses = {
+  /**
+   * Organization passkey settings successfully retrieved.
+   */
+  200: success_response & {
+    /**
+     * Whether passkeys are enabled for this organization.
+     */
+    enabled?: boolean;
+    /**
+     * The effective passkey policy for this organization.
+     */
+    policy?: "off" | "optional" | "mandatory";
+    /**
+     * Whether this organization uses a custom passkey policy instead of the environment default.
+     */
+    is_override_environment_passkey_settings?: boolean;
+    /**
+     * The environment-level passkey policy.
+     */
+    environment_policy?: "off" | "optional" | "mandatory";
+  };
+};
+
+export type GetOrganizationPasskeyResponse =
+  GetOrganizationPasskeyResponses[keyof GetOrganizationPasskeyResponses];
+
+export type UpdateOrganizationPasskeyData = {
+  /**
+   * Organization passkey settings.
+   */
+  body: {
+    /**
+     * Passkey policy when overriding the environment default.
+     */
+    policy?: "off" | "optional" | "mandatory";
+    /**
+     * Whether to use a custom passkey policy for this organization. Set to false to revert to the environment default.
+     */
+    is_override_environment_passkey_settings?: boolean;
+  };
+  path: {
+    /**
+     * The organization's code.
+     */
+    org_code: string;
+  };
+  query?: never;
+  url: "/api/v1/organizations/{org_code}/passkey";
+};
+
+export type UpdateOrganizationPasskeyErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type UpdateOrganizationPasskeyError =
+  UpdateOrganizationPasskeyErrors[keyof UpdateOrganizationPasskeyErrors];
+
+export type UpdateOrganizationPasskeyResponses = {
+  /**
+   * Organization passkey settings successfully updated.
+   */
+  200: success_response & {
+    enabled?: boolean;
+    policy?: "off" | "optional" | "mandatory";
+    is_override_environment_passkey_settings?: boolean;
+  };
+};
+
+export type UpdateOrganizationPasskeyResponse =
+  UpdateOrganizationPasskeyResponses[keyof UpdateOrganizationPasskeyResponses];
+
 export type DeleteOrganizationHandleData = {
   body?: never;
   path: {
@@ -9038,6 +9736,96 @@ export type UpdateOrganizationSessionsResponses = {
 
 export type UpdateOrganizationSessionsResponse =
   UpdateOrganizationSessionsResponses[keyof UpdateOrganizationSessionsResponses];
+
+export type GetPasskeyData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/api/v1/passkey";
+};
+
+export type GetPasskeyErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type GetPasskeyError = GetPasskeyErrors[keyof GetPasskeyErrors];
+
+export type GetPasskeyResponses = {
+  /**
+   * Passkey settings successfully retrieved.
+   */
+  200: success_response & {
+    /**
+     * Whether passkeys are enabled for this environment (`policy` is not `off`).
+     */
+    enabled?: boolean;
+    /**
+     * Environment passkey policy. `off` disables passkeys; `optional` enables passkeys
+     * and allows users to skip passkey setup after password sign-in; `mandatory` requires
+     * passkey setup after first password sign-in.
+     *
+     */
+    policy?: "off" | "optional" | "mandatory";
+  };
+};
+
+export type GetPasskeyResponse = GetPasskeyResponses[keyof GetPasskeyResponses];
+
+export type UpdatePasskeyData = {
+  /**
+   * Environment passkey settings.
+   */
+  body: {
+    /**
+     * Environment passkey policy.
+     */
+    policy: "off" | "optional" | "mandatory";
+  };
+  path?: never;
+  query?: never;
+  url: "/api/v1/passkey";
+};
+
+export type UpdatePasskeyErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type UpdatePasskeyError = UpdatePasskeyErrors[keyof UpdatePasskeyErrors];
+
+export type UpdatePasskeyResponses = {
+  /**
+   * Passkey settings successfully updated.
+   */
+  200: success_response & {
+    enabled?: boolean;
+    policy?: "off" | "optional" | "mandatory";
+  };
+};
+
+export type UpdatePasskeyResponse =
+  UpdatePasskeyResponses[keyof UpdatePasskeyResponses];
 
 export type GetPermissionsData = {
   body?: never;
@@ -9601,7 +10389,7 @@ export type GetRolesData = {
     /**
      * Field and order to sort the result by.
      */
-    sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc";
+    sort?: "name_asc" | "name_desc" | "key_asc" | "key_desc";
     /**
      * Number of results per page. Defaults to 10 if parameter not sent.
      */
@@ -10069,6 +10857,161 @@ export type UpdateRolePermissionsResponses = {
 export type UpdateRolePermissionsResponse =
   UpdateRolePermissionsResponses[keyof UpdateRolePermissionsResponses];
 
+export type GetRoleSystemPermissionsData = {
+  body?: never;
+  path: {
+    /**
+     * The role's public id.
+     */
+    role_id: string;
+  };
+  query?: {
+    /**
+     * Field and order to sort the result by.
+     */
+    sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc";
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * A string to get the next page of results if there are more results.
+     */
+    next_token?: string | null;
+  };
+  url: "/api/v1/roles/{role_id}/system_permissions";
+};
+
+export type GetRoleSystemPermissionsErrors = {
+  /**
+   * Error retrieving system permissions
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: unknown;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetRoleSystemPermissionsError =
+  GetRoleSystemPermissionsErrors[keyof GetRoleSystemPermissionsErrors];
+
+export type GetRoleSystemPermissionsResponses = {
+  /**
+   * A list of system permissions for a role
+   */
+  200: role_system_permissions_response;
+};
+
+export type GetRoleSystemPermissionsResponse =
+  GetRoleSystemPermissionsResponses[keyof GetRoleSystemPermissionsResponses];
+
+export type UpdateRoleSystemPermissionsData = {
+  body: {
+    /**
+     * System permissions to add or remove from the role.
+     */
+    system_permissions?: Array<{
+      /**
+       * The system permission id.
+       */
+      id?: string;
+      /**
+       * Optional operation, set to 'delete' to remove the system permission from the role.
+       */
+      operation?: string;
+    }>;
+  };
+  path: {
+    /**
+     * The identifier for the role.
+     */
+    role_id: string;
+  };
+  query?: never;
+  url: "/api/v1/roles/{role_id}/system_permissions";
+};
+
+export type UpdateRoleSystemPermissionsErrors = {
+  /**
+   * Error updating system permissions
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type UpdateRoleSystemPermissionsError =
+  UpdateRoleSystemPermissionsErrors[keyof UpdateRoleSystemPermissionsErrors];
+
+export type UpdateRoleSystemPermissionsResponses = {
+  /**
+   * System permissions successfully updated.
+   */
+  200: update_role_system_permissions_response;
+};
+
+export type UpdateRoleSystemPermissionsResponse =
+  UpdateRoleSystemPermissionsResponses[keyof UpdateRoleSystemPermissionsResponses];
+
+export type GetRoleUsersData = {
+  body?: never;
+  path: {
+    /**
+     * The role's public id.
+     */
+    role_id: string;
+  };
+  query?: {
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * A string to get the next page of results if there are more results.
+     */
+    next_token?: string | null;
+  };
+  url: "/api/v1/roles/{role_id}/users";
+};
+
+export type GetRoleUsersErrors = {
+  /**
+   * Bad request.
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: unknown;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetRoleUsersError = GetRoleUsersErrors[keyof GetRoleUsersErrors];
+
+export type GetRoleUsersResponses = {
+  /**
+   * A list of users with the specified role.
+   */
+  200: get_role_users_response;
+};
+
+export type GetRoleUsersResponse =
+  GetRoleUsersResponses[keyof GetRoleUsersResponses];
+
 export type RemoveRolePermissionData = {
   body?: never;
   path: {
@@ -10305,6 +11248,50 @@ export type GetSubscriberResponses = {
 
 export type GetSubscriberResponse =
   GetSubscriberResponses[keyof GetSubscriberResponses];
+
+export type GetSystemPermissionsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Field and order to sort the result by.
+     */
+    sort?: "name_asc" | "name_desc" | "id_asc" | "id_desc";
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * A string to get the next page of results if there are more results.
+     */
+    next_token?: string | null;
+  };
+  url: "/api/v1/system_permissions";
+};
+
+export type GetSystemPermissionsErrors = {
+  /**
+   * Invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetSystemPermissionsError =
+  GetSystemPermissionsErrors[keyof GetSystemPermissionsErrors];
+
+export type GetSystemPermissionsResponses = {
+  /**
+   * System permissions successfully retrieved.
+   */
+  200: get_system_permissions_response;
+};
+
+export type GetSystemPermissionsResponse =
+  GetSystemPermissionsResponses[keyof GetSystemPermissionsResponses];
 
 export type GetUsersData = {
   body?: never;
@@ -10857,21 +11844,53 @@ export type SetUserPasswordData = {
    */
   body: {
     /**
-     * The hashed password.
+     * The hashed password. For aspnet-identity-v2, provide the base64-encoded AspNetUsers.PasswordHash value as-is.
      */
     hashed_password: string;
     /**
      * The hashing method or algorithm used to encrypt the user’s password. Default is bcrypt.
      */
-    hashing_method?: "bcrypt" | "crypt" | "md5" | "wordpress";
+    hashing_method?:
+      | "bcrypt"
+      | "crypt"
+      | "md5"
+      | "sha256"
+      | "wordpress"
+      | "pbkdf2"
+      | "firebase-scrypt"
+      | "aspnet-identity-v2";
     /**
-     * Extra characters added to passwords to make them stronger. Not required for bcrypt.
+     * Extra characters added to passwords to make them stronger. Not required for bcrypt. Required for pbkdf2; provide the base64-encoded salt. Required for firebase-scrypt; provide the base64-encoded per-user salt. Not used for aspnet-identity-v2 (the salt is embedded in the hash); do not provide salt, salt_position, iterations, or variant with aspnet-identity-v2.
      */
     salt?: string;
     /**
      * Position of salt in password string. Not required for bcrypt.
      */
     salt_position?: "prefix" | "suffix";
+    /**
+     * The iteration count (factor) used to derive the hash. Optional for pbkdf2; when omitted, verification defaults to 24000 (the FusionAuth default factor). Rejected for firebase-scrypt.
+     */
+    iterations?: number;
+    /**
+     * The hashing variant. Required for pbkdf2 (e.g. salted-pbkdf2-hmac-sha256, salted-pbkdf2-hmac-sha256-512, salted-pbkdf2-hmac-sha512-512). Rejected for firebase-scrypt.
+     */
+    variant?: string;
+    /**
+     * The base64-encoded signer key from the Firebase project's password hash parameters. Required for firebase-scrypt; rejected for other hashing methods.
+     */
+    signer_key?: string;
+    /**
+     * The base64-encoded salt separator from the Firebase project's password hash parameters. Required for firebase-scrypt; rejected for other hashing methods.
+     */
+    salt_separator?: string;
+    /**
+     * The scrypt rounds from the Firebase project's password hash parameters (1-16). Required for firebase-scrypt; rejected for other hashing methods.
+     */
+    rounds?: number;
+    /**
+     * The scrypt memory cost from the Firebase project's password hash parameters (1-20). Required for firebase-scrypt; rejected for other hashing methods.
+     */
+    mem_cost?: number;
     /**
      * The user will be prompted to set a new password after entering this one.
      */
