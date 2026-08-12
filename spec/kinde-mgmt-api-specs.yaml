@@ -3400,6 +3400,12 @@ paths:
                     - pingfederate
                     - rippling
                   example: entra_id_azure_ad
+                enterprise_connection_id:
+                  type: string
+                  description: |
+                    The enterprise connection ID to associate with this directory for SCIM-provisioned users.
+                    Required when the organization has multiple enabled enterprise connections.
+                  example: conn_01h9xyzabc123
               required:
                 - org_code
                 - directory_name
@@ -3453,6 +3459,34 @@ paths:
                       - code: ORGANIZATION_NOT_FOUND
                         message: Organization not found
                         field: org_code
+                no_enterprise_connections:
+                  summary: Organization has no enterprise connections
+                  value:
+                    errors:
+                      - code: NO_ENTERPRISE_CONNECTIONS
+                        message: Set up an enterprise connection for this organization before creating a directory
+                        field: org_code
+                enterprise_connection_required:
+                  summary: Enterprise connection selection required
+                  value:
+                    errors:
+                      - code: ENTERPRISE_CONNECTION_REQUIRED
+                        message: Select which enterprise connection this directory should use
+                        field: enterprise_connection_id
+                invalid_enterprise_connection:
+                  summary: Invalid enterprise connection for organization
+                  value:
+                    errors:
+                      - code: INVALID_ENTERPRISE_CONNECTION
+                        message: Provide a valid enabled enterprise connection for this organization
+                        field: enterprise_connection_id
+                provider_endpoint_not_configured:
+                  summary: Provider missing directory endpoint configuration
+                  value:
+                    errors:
+                      - code: INVALID_PROVIDER
+                        message: Provider directory endpoint is not configured
+                        field: provider_code
         '403':
           $ref: '#/components/responses/forbidden'
         '409':
@@ -3502,11 +3536,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/get_directory_response'
         '400':
-          $ref: '#/components/responses/bad_request'
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_id_required:
+                  summary: Directory ID required
+                  value:
+                    errors:
+                      - code: DIRECTORY_ID_REQUIRED
+                        message: Directory ID is required
+                        field: directory_id
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
-          $ref: '#/components/responses/not_found'
+          description: Directory not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_not_found:
+                  summary: Directory not found
+                  value:
+                    errors:
+                      - code: DIRECTORY_NOT_FOUND
+                        message: Directory not found
         '429':
           $ref: '#/components/responses/too_many_requests'
       security:
@@ -3518,6 +3575,10 @@ paths:
       summary: Update SCIM directory
       description: |
         Update SCIM directory configuration.
+
+        <div>
+          <code>update:scim_directories</code>
+        </div>
       requestBody:
         required: true
         content:
@@ -3529,8 +3590,6 @@ paths:
                   type: string
                   description: A descriptive name for the SCIM directory.
                   example: Updated Production Directory
-              required:
-                - directory_name
       responses:
         '200':
           description: SCIM directory successfully updated.
@@ -3539,11 +3598,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/update_directory_response'
         '400':
-          $ref: '#/components/responses/bad_request'
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_id_required:
+                  summary: Directory ID required
+                  value:
+                    errors:
+                      - code: DIRECTORY_ID_REQUIRED
+                        message: Directory ID is required
+                        field: directory_id
+                no_fields_to_update:
+                  summary: No fields provided for update
+                  value:
+                    errors:
+                      - code: NO_FIELDS_TO_UPDATE
+                        message: At least one field must be provided for update
+                        field: directory_name
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
-          $ref: '#/components/responses/not_found'
+          description: Directory not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_not_found:
+                  summary: Directory not found
+                  value:
+                    errors:
+                      - code: DIRECTORY_NOT_FOUND
+                        message: Directory not found
         '429':
           $ref: '#/components/responses/too_many_requests'
       security:
@@ -3567,11 +3656,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/delete_directory_response'
         '400':
-          $ref: '#/components/responses/bad_request'
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_id_required:
+                  summary: Directory ID required
+                  value:
+                    errors:
+                      - code: DIRECTORY_ID_REQUIRED
+                        message: Directory ID is required
+                        field: directory_id
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
-          $ref: '#/components/responses/not_found'
+          description: Directory not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_not_found:
+                  summary: Directory not found
+                  value:
+                    errors:
+                      - code: DIRECTORY_NOT_FOUND
+                        message: Directory not found
         '429':
           $ref: '#/components/responses/too_many_requests'
       security:
@@ -4783,6 +4895,7 @@ paths:
       parameters:
         - in: query
           name: code
+          required: true
           description: The organization's code.
           schema:
             type: string
@@ -5187,8 +5300,6 @@ paths:
               - name_desc
               - email_asc
               - email_desc
-              - id_asc
-              - id_desc
         - name: page_size
           in: query
           description: Number of results per page. Defaults to 10 if parameter not sent.
@@ -5513,6 +5624,72 @@ paths:
                 $ref: '#/components/schemas/success_response'
         '400':
           description: Error creating user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/organizations/{org_code}/roles/{role_id}/users:
+    servers: []
+    get:
+      tags:
+        - Organizations
+      operationId: GetOrganizationRoleUsers
+      x-scope: read:organization_user_roles
+      description: |
+        Get users that have a given role within a specific organization.
+
+        <div>
+          <code>read:organization_user_roles</code>
+        </div>
+      summary: List organization role users
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: role_id
+          in: path
+          description: The role's public id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: next_token
+          in: query
+          description: A string to get the next page of results if there are more results.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: A list of users with the specified role in the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_organization_role_users_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_organization_role_users_response'
+        '400':
+          description: Bad request.
           content:
             application/json:
               schema:
@@ -6406,6 +6583,134 @@ paths:
           $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
+  /api/v1/organizations/{org_code}/passkey:
+    servers: []
+    get:
+      tags:
+        - Organizations
+      operationId: GetOrganizationPasskey
+      x-scope: read:organization_passkey
+      summary: Get organization passkey settings
+      description: |
+        Retrieve passkey settings for an organization, including whether the organization overrides the environment default.
+
+        <div>
+          <code>read:organization_passkey</code>
+        </div>
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+            example: org_1ccfb819462
+      responses:
+        '200':
+          description: Organization passkey settings successfully retrieved.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/success_response'
+                  - type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                        description: Whether passkeys are enabled for this organization.
+                      policy:
+                        type: string
+                        enum:
+                          - 'off'
+                          - optional
+                          - mandatory
+                        description: The effective passkey policy for this organization.
+                      is_override_environment_passkey_settings:
+                        type: boolean
+                        description: Whether this organization uses a custom passkey policy instead of the environment default.
+                      environment_policy:
+                        type: string
+                        enum:
+                          - 'off'
+                          - optional
+                          - mandatory
+                        description: The environment-level passkey policy.
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    put:
+      tags:
+        - Organizations
+      operationId: UpdateOrganizationPasskey
+      x-scope: update:organization_passkey
+      summary: Update organization passkey settings
+      description: |
+        Update passkey settings for an organization. Set `is_override_environment_passkey_settings` to `false` to revert to the environment default without providing a policy.
+
+        <div>
+          <code>update:organization_passkey</code>
+        </div>
+      parameters:
+        - name: org_code
+          in: path
+          description: The organization's code.
+          required: true
+          schema:
+            type: string
+            nullable: false
+            example: org_1ccfb819462
+      requestBody:
+        description: Organization passkey settings.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                policy:
+                  type: string
+                  enum:
+                    - 'off'
+                    - optional
+                    - mandatory
+                  description: Passkey policy when overriding the environment default.
+                is_override_environment_passkey_settings:
+                  type: boolean
+                  description: Whether to use a custom passkey policy for this organization. Set to false to revert to the environment default.
+      responses:
+        '200':
+          description: Organization passkey settings successfully updated.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/success_response'
+                  - type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      policy:
+                        type: string
+                        enum:
+                          - 'off'
+                          - optional
+                          - mandatory
+                      is_override_environment_passkey_settings:
+                        type: boolean
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/organization/{org_code}/handle:
     servers: []
     delete:
@@ -6767,6 +7072,106 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/passkey:
+    servers: []
+    get:
+      tags:
+        - Environments
+      operationId: GetPasskey
+      x-scope: read:passkey
+      summary: Get environment passkey settings
+      description: |
+        Retrieve passkey policy for the current environment.
+
+        <div>
+          <code>read:passkey</code>
+        </div>
+      responses:
+        '200':
+          description: Passkey settings successfully retrieved.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/success_response'
+                  - type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                        description: Whether passkeys are enabled for this environment (`policy` is not `off`).
+                      policy:
+                        type: string
+                        enum:
+                          - 'off'
+                          - optional
+                          - mandatory
+                        description: |
+                          Environment passkey policy. `off` disables passkeys; `optional` enables passkeys
+                          and allows users to skip passkey setup after password sign-in; `mandatory` requires
+                          passkey setup after first password sign-in.
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+    put:
+      tags:
+        - Environments
+      operationId: UpdatePasskey
+      x-scope: update:passkey
+      summary: Update environment passkey settings
+      description: |
+        Set the passkey policy for the current environment. Policies other than `off` require the `passkeys` entitlement.
+
+        <div>
+          <code>update:passkey</code>
+        </div>
+      requestBody:
+        description: Environment passkey settings.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - policy
+              properties:
+                policy:
+                  type: string
+                  enum:
+                    - 'off'
+                    - optional
+                    - mandatory
+                  description: Environment passkey policy.
+      responses:
+        '200':
+          description: Passkey settings successfully updated.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/success_response'
+                  - type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      policy:
+                        type: string
+                        enum:
+                          - 'off'
+                          - optional
+                          - mandatory
         '400':
           $ref: '#/components/responses/bad_request'
         '403':
@@ -7489,7 +7894,7 @@ paths:
       operationId: GetRoles
       x-scope: read:roles
       description: |
-        The returned list can be sorted by role name or role ID in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
+        The returned list can be sorted by role name or role key in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
 
         <div>
           <code>read:roles</code>
@@ -7505,8 +7910,8 @@ paths:
             enum:
               - name_asc
               - name_desc
-              - id_asc
-              - id_desc
+              - key_asc
+              - key_desc
         - name: page_size
           in: query
           description: Number of results per page. Defaults to 10 if parameter not sent.
@@ -7985,6 +8390,66 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
+  /api/v1/roles/{role_id}/users:
+    servers: []
+    get:
+      tags:
+        - Roles
+      operationId: GetRoleUsers
+      x-scope: read:organization_user_roles
+      description: |
+        Get users that have a given role, across all organizations. Each user entry
+        includes the organization codes where they hold that role.
+
+        <div>
+          <code>read:organization_user_roles</code>
+        </div>
+      summary: List role users
+      parameters:
+        - name: role_id
+          in: path
+          description: The role's public id.
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - name: page_size
+          in: query
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: next_token
+          in: query
+          description: A string to get the next page of results if there are more results.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: A list of users with the specified role.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_role_users_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_role_users_response'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
         '429':
           description: Request was throttled.
       security:
@@ -8952,16 +9417,24 @@ paths:
                     - bcrypt
                     - crypt
                     - md5
+                    - sha256
                     - wordpress
+                    - pbkdf2
                 salt:
                   type: string
-                  description: Extra characters added to passwords to make them stronger. Not required for bcrypt.
+                  description: Extra characters added to passwords to make them stronger. Not required for bcrypt. Required for pbkdf2; provide the base64-encoded salt.
                 salt_position:
                   type: string
                   description: Position of salt in password string. Not required for bcrypt.
                   enum:
                     - prefix
                     - suffix
+                iterations:
+                  type: integer
+                  description: The iteration count (factor) used to derive the hash. Optional for pbkdf2; when omitted, verification defaults to 24000 (the FusionAuth default factor).
+                variant:
+                  type: string
+                  description: The hashing variant. Required for pbkdf2 (e.g. salted-pbkdf2-hmac-sha256, salted-pbkdf2-hmac-sha256-512, salted-pbkdf2-hmac-sha512-512).
                 is_temporary_password:
                   type: boolean
                   description: The user will be prompted to set a new password after entering this one.
@@ -10360,6 +10833,11 @@ components:
                       type: string
                     identity:
                       type: string
+                    connection_id:
+                      type: string
+                      description: The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
+                      nullable: true
+                      example: conn_019289347f1193da6c0e4d49b97b4bd2
               billing:
                 type: object
                 properties:
@@ -11495,6 +11973,11 @@ components:
           type: string
           description: The associated email of the identity
           example: sally@example.com
+        connection_id:
+          type: string
+          description: The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
+          nullable: true
+          example: conn_019289347f1193da6c0e4d49b97b4bd2
         is_primary:
           type: boolean
           description: Whether the identity is the primary identity for the user
@@ -12389,6 +12872,53 @@ components:
         next_token:
           type: string
           description: Pagination token.
+    get_role_users_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        users:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The user's ID.
+              org_codes:
+                type: array
+                description: The organization codes where the user has this role.
+                items:
+                  type: string
+        next_token:
+          type: string
+          description: Pagination token.
+          nullable: true
+    get_organization_role_users_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        users:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The user's ID.
+        next_token:
+          type: string
+          description: Pagination token.
+          nullable: true
     role_scopes_response:
       type: object
       properties:
@@ -12916,6 +13446,10 @@ components:
           type: string
           description: Response message.
           example: SCIM directory deleted successfully
+        directory_id:
+          type: string
+          description: The ID of the deleted SCIM directory.
+          example: directory_0192b1941f125645fa15bf28a662a0b3
     directory:
       type: object
       properties:
@@ -12949,6 +13483,16 @@ components:
           type: string
           description: The organization code this directory belongs to.
           example: org_1ccfb819462
+        enterprise_connection_id:
+          type: string
+          description: The enterprise connection ID used for SCIM-provisioned users.
+          example: conn_01h9xyzabc123
+          nullable: true
+        enterprise_connection_name:
+          type: string
+          description: The display name of the selected enterprise connection.
+          example: ACME SAML
+          nullable: true
         last_sync_started_at:
           type: string
           format: date-time
