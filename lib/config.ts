@@ -1,5 +1,6 @@
-import { OpenAPI } from "./api/index";
+import { client } from "./api/client.gen";
 import { getToken } from "./utilities/getToken";
+import { ApiError } from "./utilities/ApiError";
 
 export interface TokenStore {
   getToken(): Promise<string>;
@@ -22,6 +23,15 @@ export const kindeConfig: configType = {
   clientSecret: "",
   token: "",
   audience: "",
+};
+
+const errorInterceptor = (error: unknown, response: Response | undefined) => {
+  // Transport failures (network errors, aborts) have no response — pass the
+  // original error through instead of wrapping it in an ApiError
+  if (!response) {
+    return error;
+  }
+  return new ApiError(response.status, error);
 };
 
 /**
@@ -62,12 +72,17 @@ export const init = (
     config,
   );
 
-  _merge(OpenAPI, {
-    BASE: kindeConfig.kindeDomain,
-    TOKEN: async () => {
-      return await getToken();
-    },
+  client.setConfig({
+    baseUrl: kindeConfig.kindeDomain,
+    auth: async () => await getToken(),
+    parseAs: "json",
+    responseStyle: "data",
+    throwOnError: true,
   });
+
+  if (!client.interceptors.error.exists(errorInterceptor)) {
+    client.interceptors.error.use(errorInterceptor);
+  }
 };
 
 function _merge(target: object = {}, ...objects: object[]): object {
