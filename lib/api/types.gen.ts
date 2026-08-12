@@ -4,12 +4,12 @@ export type ClientOptions = {
   baseUrl: "https://{subdomain}.kinde.com" | (string & {});
 };
 
-export type SuccessResponse = {
+export type success_response = {
   message?: string;
   code?: string;
 };
 
-export type Error = {
+export type error = {
   /**
    * Error code.
    */
@@ -20,18 +20,18 @@ export type Error = {
   message?: string;
 };
 
-export type ErrorResponse = {
-  errors?: Array<Error>;
+export type error_response = {
+  errors?: Array<error>;
 };
 
-export type NotFoundResponse = {
+export type not_found_response = {
   errors?: {
     code?: string;
     message?: string;
   };
 };
 
-export type GetApisResponse = {
+export type get_apis_response = {
   /**
    * Response code.
    */
@@ -68,7 +68,7 @@ export type GetApisResponse = {
   }>;
 };
 
-export type CreateApisResponse = {
+export type create_apis_response = {
   /**
    * A Kinde generated message.
    */
@@ -85,7 +85,7 @@ export type CreateApisResponse = {
   };
 };
 
-export type CreateApiScopesResponse = {
+export type create_api_scopes_response = {
   /**
    * A Kinde generated message.
    */
@@ -102,7 +102,7 @@ export type CreateApiScopesResponse = {
   };
 };
 
-export type GetEnvironmentVariablesResponse = {
+export type get_environment_variables_response = {
   /**
    * Response code.
    */
@@ -115,10 +115,10 @@ export type GetEnvironmentVariablesResponse = {
    * Whether more records exist.
    */
   has_more?: boolean;
-  environment_variables?: Array<EnvironmentVariable>;
+  environment_variables?: Array<environment_variable>;
 };
 
-export type GetEnvironmentVariableResponse = {
+export type get_environment_variable_response = {
   /**
    * Response code.
    */
@@ -127,10 +127,10 @@ export type GetEnvironmentVariableResponse = {
    * Response message.
    */
   message?: string;
-  environment_variable?: EnvironmentVariable;
+  environment_variable?: environment_variable;
 };
 
-export type CreateEnvironmentVariableResponse = {
+export type create_environment_variable_response = {
   /**
    * A Kinde generated message.
    */
@@ -147,7 +147,7 @@ export type CreateEnvironmentVariableResponse = {
   };
 };
 
-export type UpdateEnvironmentVariableResponse = {
+export type update_environment_variable_response = {
   /**
    * A Kinde generated message.
    */
@@ -158,7 +158,7 @@ export type UpdateEnvironmentVariableResponse = {
   code?: string;
 };
 
-export type DeleteEnvironmentVariableResponse = {
+export type delete_environment_variable_response = {
   /**
    * A Kinde generated message.
    */
@@ -169,7 +169,7 @@ export type DeleteEnvironmentVariableResponse = {
   code?: string;
 };
 
-export type GetBusinessResponse = {
+export type get_business_response = {
   /**
    * Response code.
    */
@@ -226,7 +226,7 @@ export type GetBusinessResponse = {
   };
 };
 
-export type GetIndustriesResponse = {
+export type get_industries_response = {
   /**
    * Response code.
    */
@@ -247,7 +247,7 @@ export type GetIndustriesResponse = {
   }>;
 };
 
-export type GetTimezonesResponse = {
+export type get_timezones_response = {
   /**
    * Response code.
    */
@@ -268,7 +268,7 @@ export type GetTimezonesResponse = {
   }>;
 };
 
-export type GetApiResponse = {
+export type get_api_response = {
   /**
    * Response code.
    */
@@ -329,7 +329,7 @@ export type GetApiResponse = {
   };
 };
 
-export type GetApiScopesResponse = {
+export type get_api_scopes_response = {
   /**
    * Response code.
    */
@@ -354,7 +354,7 @@ export type GetApiScopesResponse = {
   }>;
 };
 
-export type GetApiScopeResponse = {
+export type get_api_scope_response = {
   /**
    * Response code.
    */
@@ -379,19 +379,19 @@ export type GetApiScopeResponse = {
   };
 };
 
-export type AuthorizeAppApiResponse = {
+export type authorize_app_api_response = {
   message?: string;
   code?: string;
   applications_disconnected?: Array<string>;
   applications_connected?: Array<string>;
 };
 
-export type DeleteApiResponse = {
+export type delete_api_response = {
   message?: string;
   code?: string;
 };
 
-export type User = {
+export type user = {
   /**
    * Unique ID of the user in Kinde.
    */
@@ -460,7 +460,7 @@ export type User = {
   };
 };
 
-export type UpdateUserResponse = {
+export type update_user_response = {
   /**
    * Unique ID of the user in Kinde.
    */
@@ -494,9 +494,9 @@ export type UpdateUserResponse = {
 /**
  * Array of users.
  */
-export type Users = Array<User>;
+export type users = Array<user>;
 
-export type UsersResponse = {
+export type users_response = {
   /**
    * Response code.
    */
@@ -595,7 +595,7 @@ export type UsersResponse = {
   next_token?: string;
 };
 
-export type SearchUsersResponse = {
+export type search_users_response = {
   /**
    * Response code.
    */
@@ -681,7 +681,7 @@ export type SearchUsersResponse = {
   }>;
 };
 
-export type CreateUserResponse = {
+export type create_user_response = {
   /**
    * Unique ID of the user in Kinde.
    */
@@ -690,10 +690,10 @@ export type CreateUserResponse = {
    * True if the user was successfully created.
    */
   created?: boolean;
-  identities?: Array<UserIdentity>;
+  identities?: Array<user_identity>;
 };
 
-export type CreateOrganizationResponse = {
+export type create_organization_response = {
   /**
    * Response message.
    */
@@ -714,7 +714,7 @@ export type CreateOrganizationResponse = {
   };
 };
 
-export type UserIdentity = {
+export type user_identity = {
   /**
    * The type of identity object created.
    */
@@ -730,7 +730,7 @@ export type UserIdentity = {
   };
 };
 
-export type CreatePropertyResponse = {
+export type create_property_response = {
   message?: string;
   code?: string;
   property?: {
@@ -741,7 +741,7 @@ export type CreatePropertyResponse = {
   };
 };
 
-export type CreateIdentityResponse = {
+export type create_identity_response = {
   message?: string;
   code?: string;
   identity?: {
@@ -752,7 +752,7 @@ export type CreateIdentityResponse = {
   };
 };
 
-export type GetIdentitiesResponse = {
+export type get_identities_response = {
   /**
    * Response code.
    */
@@ -761,14 +761,14 @@ export type GetIdentitiesResponse = {
    * Response message.
    */
   message?: string;
-  identities?: Array<Identity>;
+  identities?: Array<identity>;
   /**
    * Whether more records exist.
    */
   has_more?: boolean;
 };
 
-export type GetUserSessionsResponse = {
+export type get_user_sessions_response = {
   code?: string;
   message?: string;
   has_more?: boolean;
@@ -824,7 +824,7 @@ export type GetUserSessionsResponse = {
   }>;
 };
 
-export type GetUserMfaResponse = {
+export type get_user_mfa_response = {
   message?: string;
   code?: string;
   mfa?: {
@@ -859,7 +859,7 @@ export type GetUserMfaResponse = {
   };
 };
 
-export type GetPropertiesResponse = {
+export type get_properties_response = {
   /**
    * Response code.
    */
@@ -868,14 +868,14 @@ export type GetPropertiesResponse = {
    * Response message.
    */
   message?: string;
-  properties?: Array<Property>;
+  properties?: Array<property>;
   /**
    * Whether more records exist.
    */
   has_more?: boolean;
 };
 
-export type GetPropertyValuesResponse = {
+export type get_property_values_response = {
   /**
    * Response code.
    */
@@ -884,14 +884,14 @@ export type GetPropertyValuesResponse = {
    * Response message.
    */
   message?: string;
-  properties?: Array<PropertyValue>;
+  properties?: Array<property_value>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type CreateCategoryResponse = {
+export type create_category_response = {
   message?: string;
   code?: string;
   category?: {
@@ -902,7 +902,7 @@ export type CreateCategoryResponse = {
   };
 };
 
-export type GetCategoriesResponse = {
+export type get_categories_response = {
   /**
    * Response code.
    */
@@ -911,14 +911,14 @@ export type GetCategoriesResponse = {
    * Response message.
    */
   message?: string;
-  categories?: Array<Category>;
+  categories?: Array<category>;
   /**
    * Whether more records exist.
    */
   has_more?: boolean;
 };
 
-export type GetEventResponse = {
+export type get_event_response = {
   /**
    * Response code.
    */
@@ -944,7 +944,7 @@ export type GetEventResponse = {
   };
 };
 
-export type GetEventTypesResponse = {
+export type get_event_types_response = {
   /**
    * Response code.
    */
@@ -953,10 +953,10 @@ export type GetEventTypesResponse = {
    * Response message.
    */
   message?: string;
-  event_types?: Array<EventType>;
+  event_types?: Array<event_type>;
 };
 
-export type GetWebhooksResponse = {
+export type get_webhooks_response = {
   /**
    * Response code.
    */
@@ -965,10 +965,10 @@ export type GetWebhooksResponse = {
    * Response message.
    */
   message?: string;
-  webhooks?: Array<Webhook>;
+  webhooks?: Array<webhook>;
 };
 
-export type Webhook = {
+export type webhook = {
   id?: string;
   name?: string;
   endpoint?: string;
@@ -980,7 +980,7 @@ export type Webhook = {
   created_on?: string;
 };
 
-export type CreateWebhookResponse = {
+export type create_webhook_response = {
   /**
    * Response code.
    */
@@ -995,7 +995,7 @@ export type CreateWebhookResponse = {
   };
 };
 
-export type UpdateWebhookResponse = {
+export type update_webhook_response = {
   message?: string;
   code?: string;
   webhook?: {
@@ -1003,7 +1003,7 @@ export type UpdateWebhookResponse = {
   };
 };
 
-export type CreateConnectionResponse = {
+export type create_connection_response = {
   message?: string;
   code?: string;
   connection?: {
@@ -1014,7 +1014,7 @@ export type CreateConnectionResponse = {
   };
 };
 
-export type GetConnectionsResponse = {
+export type get_connections_response = {
   /**
    * Response code.
    */
@@ -1023,14 +1023,14 @@ export type GetConnectionsResponse = {
    * Response message.
    */
   message?: string;
-  connections?: Array<Connection>;
+  connections?: Array<connection>;
   /**
    * Whether more records exist.
    */
   has_more?: boolean;
 };
 
-export type DeleteWebhookResponse = {
+export type delete_webhook_response = {
   /**
    * Response code.
    */
@@ -1041,7 +1041,7 @@ export type DeleteWebhookResponse = {
   message?: string;
 };
 
-export type EventType = {
+export type event_type = {
   id?: string;
   code?: string;
   name?: string;
@@ -1051,7 +1051,7 @@ export type EventType = {
   };
 };
 
-export type OrganizationItemSchema = {
+export type organization_item_schema = {
   /**
    * The unique identifier for the organization.
    */
@@ -1078,7 +1078,7 @@ export type OrganizationItemSchema = {
   is_auto_membership_enabled?: boolean;
 };
 
-export type GetEnvironmentResponse = {
+export type get_environment_response = {
   /**
    * Response code.
    */
@@ -1207,7 +1207,7 @@ export type GetEnvironmentResponse = {
   };
 };
 
-export type GetOrganizationResponse = {
+export type get_organization_response = {
   /**
    * The unique identifier for the organization.
    */
@@ -1359,7 +1359,7 @@ export type GetOrganizationResponse = {
   };
 };
 
-export type OrganizationUser = {
+export type organization_user = {
   /**
    * The unique ID for the user.
    */
@@ -1402,12 +1402,12 @@ export type OrganizationUser = {
   roles?: Array<string>;
 };
 
-export type Category = {
+export type category = {
   id?: string;
   name?: string;
 };
 
-export type Connection = {
+export type connection = {
   /**
    * Response code.
    */
@@ -1424,7 +1424,7 @@ export type Connection = {
   };
 };
 
-export type EnvironmentVariable = {
+export type environment_variable = {
   /**
    * The unique ID for the environment variable.
    */
@@ -1447,7 +1447,7 @@ export type EnvironmentVariable = {
   created_on?: string;
 };
 
-export type Identity = {
+export type identity = {
   /**
    * The unique ID for the identity
    */
@@ -1483,7 +1483,7 @@ export type Identity = {
   is_primary?: boolean | null;
 };
 
-export type Property = {
+export type property = {
   id?: string;
   key?: string;
   name?: string;
@@ -1492,7 +1492,7 @@ export type Property = {
   is_kinde_property?: boolean;
 };
 
-export type PropertyValue = {
+export type property_value = {
   id?: string;
   name?: string;
   description?: string | null;
@@ -1500,14 +1500,14 @@ export type PropertyValue = {
   value?: string | null;
 };
 
-export type Role = {
+export type role = {
   id?: string;
   key?: string;
   name?: string;
   description?: string;
 };
 
-export type SubscribersSubscriber = {
+export type subscribers_subscriber = {
   id?: string;
   email?: string;
   full_name?: string;
@@ -1515,20 +1515,20 @@ export type SubscribersSubscriber = {
   last_name?: string;
 };
 
-export type Subscriber = {
+export type subscriber = {
   id?: string;
   preferred_email?: string;
   first_name?: string;
   last_name?: string;
 };
 
-export type OrganizationUserRole = {
+export type organization_user_role = {
   id?: string;
   key?: string;
   name?: string;
 };
 
-export type OrganizationUserRolePermissions = {
+export type organization_user_role_permissions = {
   id?: string;
   role?: string;
   permissions?: {
@@ -1536,7 +1536,7 @@ export type OrganizationUserRolePermissions = {
   };
 };
 
-export type OrganizationUserPermission = {
+export type organization_user_permission = {
   id?: string;
   key?: string;
   name?: string;
@@ -1547,9 +1547,9 @@ export type OrganizationUserPermission = {
   }>;
 };
 
-export type OrganizationUsers = Array<OrganizationUser>;
+export type organization_users = Array<organization_user>;
 
-export type GetSubscriberResponse = {
+export type get_subscriber_response = {
   /**
    * Response code.
    */
@@ -1558,10 +1558,10 @@ export type GetSubscriberResponse = {
    * Response message.
    */
   message?: string;
-  subscribers?: Array<Subscriber>;
+  subscribers?: Array<subscriber>;
 };
 
-export type GetSubscribersResponse = {
+export type get_subscribers_response = {
   /**
    * Response code.
    */
@@ -1570,14 +1570,14 @@ export type GetSubscribersResponse = {
    * Response message.
    */
   message?: string;
-  subscribers?: Array<SubscribersSubscriber>;
+  subscribers?: Array<subscribers_subscriber>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type GetRolesResponse = {
+export type get_roles_response = {
   /**
    * Response code.
    */
@@ -1586,14 +1586,14 @@ export type GetRolesResponse = {
    * Response message.
    */
   message?: string;
-  roles?: Array<Roles>;
+  roles?: Array<roles>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type GetRoleResponse = {
+export type get_role_response = {
   /**
    * Response code.
    */
@@ -1626,7 +1626,7 @@ export type GetRoleResponse = {
   };
 };
 
-export type CreateRolesResponse = {
+export type create_roles_response = {
   /**
    * Response code.
    */
@@ -1643,7 +1643,7 @@ export type CreateRolesResponse = {
   };
 };
 
-export type AddRoleScopeResponse = {
+export type add_role_scope_response = {
   /**
    * Response code.
    */
@@ -1654,7 +1654,7 @@ export type AddRoleScopeResponse = {
   message?: string;
 };
 
-export type DeleteRoleScopeResponse = {
+export type delete_role_scope_response = {
   /**
    * Response code.
    */
@@ -1665,7 +1665,7 @@ export type DeleteRoleScopeResponse = {
   message?: string;
 };
 
-export type GetOrganizationsResponse = {
+export type get_organizations_response = {
   /**
    * Response code.
    */
@@ -1674,14 +1674,14 @@ export type GetOrganizationsResponse = {
    * Response message.
    */
   message?: string;
-  organizations?: Array<OrganizationItemSchema>;
+  organizations?: Array<organization_item_schema>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type GetOrganizationUsersResponse = {
+export type get_organization_users_response = {
   /**
    * Response code.
    */
@@ -1690,14 +1690,14 @@ export type GetOrganizationUsersResponse = {
    * Response message.
    */
   message?: string;
-  organization_users?: Array<OrganizationUser>;
+  organization_users?: Array<organization_user>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type GetOrganizationsUserRolesResponse = {
+export type get_organizations_user_roles_response = {
   /**
    * Response code.
    */
@@ -1706,14 +1706,14 @@ export type GetOrganizationsUserRolesResponse = {
    * Response message.
    */
   message?: string;
-  roles?: Array<OrganizationUserRole>;
+  roles?: Array<organization_user_role>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type GetOrganizationsUserPermissionsResponse = {
+export type get_organizations_user_permissions_response = {
   /**
    * Response code.
    */
@@ -1722,10 +1722,10 @@ export type GetOrganizationsUserPermissionsResponse = {
    * Response message.
    */
   message?: string;
-  permissions?: Array<OrganizationUserPermission>;
+  permissions?: Array<organization_user_permission>;
 };
 
-export type GetOrganizationInvitesResponse = {
+export type get_organization_invites_response = {
   /**
    * Response code.
    */
@@ -1734,14 +1734,14 @@ export type GetOrganizationInvitesResponse = {
    * Response message.
    */
   message?: string;
-  invites?: Array<OrganizationInvite>;
+  invites?: Array<organization_invite>;
   /**
    * Pagination token.
    */
   next_token?: string | null;
 };
 
-export type GetOrganizationInviteResponse = {
+export type get_organization_invite_response = {
   /**
    * Response message.
    */
@@ -1805,7 +1805,7 @@ export type GetOrganizationInviteResponse = {
   invite_link?: string;
 };
 
-export type CreateOrganizationInviteResponse = {
+export type create_organization_invite_response = {
   /**
    * Response code.
    */
@@ -1875,7 +1875,7 @@ export type CreateOrganizationInviteResponse = {
   };
 };
 
-export type OrganizationInvite = {
+export type organization_invite = {
   /**
    * The invitation's unique identifier.
    */
@@ -1935,7 +1935,7 @@ export type OrganizationInvite = {
   invite_link?: string;
 };
 
-export type GetOrganizationFeatureFlagsResponse = {
+export type get_organization_feature_flags_response = {
   /**
    * Response code.
    */
@@ -1955,7 +1955,7 @@ export type GetOrganizationFeatureFlagsResponse = {
   };
 };
 
-export type GetEnvironmentFeatureFlagsResponse = {
+export type get_environment_feature_flags_response = {
   /**
    * Response code.
    */
@@ -1979,7 +1979,7 @@ export type GetEnvironmentFeatureFlagsResponse = {
   next_token?: string;
 };
 
-export type AddOrganizationUsersResponse = {
+export type add_organization_users_response = {
   /**
    * Response code.
    */
@@ -1991,14 +1991,14 @@ export type AddOrganizationUsersResponse = {
   users_added?: Array<string>;
 };
 
-export type UpdateRolePermissionsResponse = {
+export type update_role_permissions_response = {
   code?: string;
   message?: string;
   permissions_added?: Array<string>;
   permissions_removed?: Array<string>;
 };
 
-export type UpdateOrganizationUsersResponse = {
+export type update_organization_users_response = {
   message?: string;
   code?: string;
   users_added?: Array<string>;
@@ -2006,7 +2006,7 @@ export type UpdateOrganizationUsersResponse = {
   users_removed?: Array<string>;
 };
 
-export type ConnectedAppsAuthUrl = {
+export type connected_apps_auth_url = {
   /**
    * A URL that is used to authenticate an end-user against a connected app.
    */
@@ -2017,7 +2017,7 @@ export type ConnectedAppsAuthUrl = {
   session_id?: string;
 };
 
-export type CreateSubscriberSuccessResponse = {
+export type create_subscriber_success_response = {
   subscriber?: {
     /**
      * A unique identifier for the subscriber.
@@ -2026,7 +2026,7 @@ export type CreateSubscriberSuccessResponse = {
   };
 };
 
-export type ConnectedAppsAccessToken = {
+export type connected_apps_access_token = {
   /**
    * The access token to access a third-party provider.
    */
@@ -2037,14 +2037,14 @@ export type ConnectedAppsAccessToken = {
   access_token_expiry?: string;
 };
 
-export type ApiResult = {
+export type api_result = {
   /**
    * The result of the api operation.
    */
   result?: string;
 };
 
-export type CreateApplicationResponse = {
+export type create_application_response = {
   /**
    * Response code.
    */
@@ -2069,7 +2069,7 @@ export type CreateApplicationResponse = {
   };
 };
 
-export type GetApplicationResponse = {
+export type get_application_response = {
   /**
    * Response code.
    */
@@ -2114,13 +2114,13 @@ export type GetApplicationResponse = {
   };
 };
 
-export type Applications = {
+export type applications = {
   id?: string;
   name?: string;
   type?: string;
 };
 
-export type GetApplicationsResponse = {
+export type get_applications_response = {
   /**
    * Response code.
    */
@@ -2129,28 +2129,28 @@ export type GetApplicationsResponse = {
    * Response message.
    */
   message?: string;
-  applications?: Array<Applications>;
+  applications?: Array<applications>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type RedirectCallbackUrls = {
+export type redirect_callback_urls = {
   /**
    * An application's redirect URLs.
    */
   redirect_urls?: Array<string>;
 };
 
-export type GetRedirectCallbackUrlsResponse = {
+export type get_redirect_callback_urls_response = {
   /**
    * An application's redirect callback URLs.
    */
-  redirect_urls?: Array<RedirectCallbackUrls>;
+  redirect_urls?: Array<redirect_callback_urls>;
 };
 
-export type LogoutRedirectUrls = {
+export type logout_redirect_urls = {
   /**
    * An application's logout URLs.
    */
@@ -2165,7 +2165,7 @@ export type LogoutRedirectUrls = {
   message?: string;
 };
 
-export type GetPermissionsResponse = {
+export type get_permissions_response = {
   /**
    * Response code.
    */
@@ -2174,14 +2174,14 @@ export type GetPermissionsResponse = {
    * Response message.
    */
   message?: string;
-  permissions?: Array<Permissions>;
+  permissions?: Array<permissions>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type Permissions = {
+export type permissions = {
   /**
    * The permission's ID.
    */
@@ -2200,7 +2200,7 @@ export type Permissions = {
   description?: string;
 };
 
-export type Scopes = {
+export type scopes = {
   /**
    * Scope ID.
    */
@@ -2219,7 +2219,7 @@ export type Scopes = {
   api_id?: string;
 };
 
-export type Roles = {
+export type roles = {
   /**
    * The role's ID.
    */
@@ -2242,7 +2242,7 @@ export type Roles = {
   is_default_role?: boolean;
 };
 
-export type RolePermissionsResponse = {
+export type role_permissions_response = {
   /**
    * Response code.
    */
@@ -2251,14 +2251,14 @@ export type RolePermissionsResponse = {
    * Response message.
    */
   message?: string;
-  permissions?: Array<Permissions>;
+  permissions?: Array<permissions>;
   /**
    * Pagination token.
    */
   next_token?: string;
 };
 
-export type RoleScopesResponse = {
+export type role_scopes_response = {
   /**
    * Response code.
    */
@@ -2267,10 +2267,10 @@ export type RoleScopesResponse = {
    * Response message.
    */
   message?: string;
-  scopes?: Array<Scopes>;
+  scopes?: Array<scopes>;
 };
 
-export type ReadLogoResponse = {
+export type read_logo_response = {
   /**
    * Response code.
    */
@@ -2298,7 +2298,7 @@ export type ReadLogoResponse = {
   message?: string;
 };
 
-export type ReadEnvLogoResponse = {
+export type read_env_logo_response = {
   /**
    * Response code.
    */
@@ -2322,7 +2322,7 @@ export type ReadEnvLogoResponse = {
   message?: string;
 };
 
-export type GetBillingEntitlementsResponse = {
+export type get_billing_entitlements_response = {
   /**
    * Response code.
    */
@@ -2384,7 +2384,7 @@ export type GetBillingEntitlementsResponse = {
   }>;
 };
 
-export type GetBillingAgreementsResponse = {
+export type get_billing_agreements_response = {
   /**
    * Response code.
    */
@@ -2433,7 +2433,7 @@ export type GetBillingAgreementsResponse = {
   }>;
 };
 
-export type CreateMeterUsageRecordResponse = {
+export type create_meter_usage_record_response = {
   /**
    * Response message.
    */
@@ -2444,7 +2444,7 @@ export type CreateMeterUsageRecordResponse = {
   code?: string;
 };
 
-export type GetApiKeysResponse = {
+export type get_api_keys_response = {
   /**
    * Response code.
    */
@@ -2509,7 +2509,7 @@ export type GetApiKeysResponse = {
   }>;
 };
 
-export type RotateApiKeyResponse = {
+export type rotate_api_key_response = {
   /**
    * Response code.
    */
@@ -2530,7 +2530,7 @@ export type RotateApiKeyResponse = {
   };
 };
 
-export type CreateApiKeyResponse = {
+export type create_api_key_response = {
   /**
    * A Kinde generated message.
    */
@@ -2551,7 +2551,7 @@ export type CreateApiKeyResponse = {
   };
 };
 
-export type VerifyApiKeyResponse = {
+export type verify_api_key_response = {
   /**
    * Response code.
    */
@@ -2594,7 +2594,7 @@ export type VerifyApiKeyResponse = {
   verification_count?: number;
 };
 
-export type GetApiKeyResponse = {
+export type get_api_key_response = {
   /**
    * Response code.
    */
@@ -2667,7 +2667,7 @@ export type GetApiKeyResponse = {
   };
 };
 
-export type GetDirectoriesResponse = {
+export type get_directories_response = {
   /**
    * Response code.
    */
@@ -2680,10 +2680,10 @@ export type GetDirectoriesResponse = {
    * Whether more records exist.
    */
   has_more?: boolean;
-  directories?: Array<Directory>;
+  directories?: Array<directory>;
 };
 
-export type GetDirectoryResponse = {
+export type get_directory_response = {
   /**
    * Response code.
    */
@@ -2692,10 +2692,10 @@ export type GetDirectoryResponse = {
    * Response message.
    */
   message?: string;
-  directory?: Directory;
+  directory?: directory;
 };
 
-export type CreateDirectoryResponse = {
+export type create_directory_response = {
   /**
    * Response code.
    */
@@ -2704,10 +2704,10 @@ export type CreateDirectoryResponse = {
    * Response message.
    */
   message?: string;
-  directory?: Directory;
+  directory?: directory;
 };
 
-export type UpdateDirectoryResponse = {
+export type update_directory_response = {
   /**
    * Response code.
    */
@@ -2716,10 +2716,10 @@ export type UpdateDirectoryResponse = {
    * Response message.
    */
   message?: string;
-  directory?: Directory;
+  directory?: directory;
 };
 
-export type DeleteDirectoryResponse = {
+export type delete_directory_response = {
   /**
    * Response code.
    */
@@ -2730,7 +2730,7 @@ export type DeleteDirectoryResponse = {
   message?: string;
 };
 
-export type Directory = {
+export type directory = {
   /**
    * The unique ID for the SCIM directory.
    */
@@ -2776,22 +2776,22 @@ export type Directory = {
 /**
  * The API's ID.
  */
-export type ApiId = string;
+export type api_id = string;
 
 /**
  * The application's ID / client ID.
  */
-export type ApplicationId = string;
+export type application_id = string;
 
 /**
  * The property's key.
  */
-export type PropertyKey = string;
+export type property_key = string;
 
 /**
  * The environment variable's ID.
  */
-export type VariableId = string;
+export type variable_id = string;
 
 export type GetApiKeysData = {
   body?: never;
@@ -2829,15 +2829,15 @@ export type GetApiKeysErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApiKeysError = GetApiKeysErrors[keyof GetApiKeysErrors];
@@ -2846,11 +2846,10 @@ export type GetApiKeysResponses = {
   /**
    * API keys successfully retrieved.
    */
-  200: GetApiKeysResponse;
+  200: get_api_keys_response;
 };
 
-export type GetApiKeysResponse2 =
-  GetApiKeysResponses[keyof GetApiKeysResponses];
+export type GetApiKeysResponse = GetApiKeysResponses[keyof GetApiKeysResponses];
 
 export type CreateApiKeyData = {
   /**
@@ -2891,15 +2890,15 @@ export type CreateApiKeyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateApiKeyError = CreateApiKeyErrors[keyof CreateApiKeyErrors];
@@ -2908,10 +2907,10 @@ export type CreateApiKeyResponses = {
   /**
    * API key successfully created.
    */
-  201: CreateApiKeyResponse;
+  201: create_api_key_response;
 };
 
-export type CreateApiKeyResponse2 =
+export type CreateApiKeyResponse =
   CreateApiKeyResponses[keyof CreateApiKeyResponses];
 
 export type DeleteApiKeyData = {
@@ -2930,19 +2929,19 @@ export type DeleteApiKeyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteApiKeyError = DeleteApiKeyErrors[keyof DeleteApiKeyErrors];
@@ -2951,7 +2950,7 @@ export type DeleteApiKeyResponses = {
   /**
    * API key successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteApiKeyResponse =
@@ -2973,19 +2972,19 @@ export type GetApiKeyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApiKeyError = GetApiKeyErrors[keyof GetApiKeyErrors];
@@ -2994,10 +2993,10 @@ export type GetApiKeyResponses = {
   /**
    * API key successfully retrieved.
    */
-  200: GetApiKeyResponse;
+  200: get_api_key_response;
 };
 
-export type GetApiKeyResponse2 = GetApiKeyResponses[keyof GetApiKeyResponses];
+export type GetApiKeyResponse = GetApiKeyResponses[keyof GetApiKeyResponses];
 
 export type RotateApiKeyData = {
   body?: never;
@@ -3015,19 +3014,19 @@ export type RotateApiKeyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type RotateApiKeyError = RotateApiKeyErrors[keyof RotateApiKeyErrors];
@@ -3036,10 +3035,10 @@ export type RotateApiKeyResponses = {
   /**
    * API key successfully rotated.
    */
-  201: RotateApiKeyResponse;
+  201: rotate_api_key_response;
 };
 
-export type RotateApiKeyResponse2 =
+export type RotateApiKeyResponse =
   RotateApiKeyResponses[keyof RotateApiKeyResponses];
 
 export type VerifyApiKeyData = {
@@ -3061,15 +3060,15 @@ export type VerifyApiKeyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  401: ErrorResponse;
+  401: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type VerifyApiKeyError = VerifyApiKeyErrors[keyof VerifyApiKeyErrors];
@@ -3078,10 +3077,10 @@ export type VerifyApiKeyResponses = {
   /**
    * API key verification result.
    */
-  200: VerifyApiKeyResponse;
+  200: verify_api_key_response;
 };
 
-export type VerifyApiKeyResponse2 =
+export type VerifyApiKeyResponse =
   VerifyApiKeyResponses[keyof VerifyApiKeyResponses];
 
 export type GetApisData = {
@@ -3100,15 +3099,15 @@ export type GetApisErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApisError = GetApisErrors[keyof GetApisErrors];
@@ -3117,10 +3116,10 @@ export type GetApisResponses = {
   /**
    * A list of APIs.
    */
-  200: GetApisResponse;
+  200: get_apis_response;
 };
 
-export type GetApisResponse2 = GetApisResponses[keyof GetApisResponses];
+export type GetApisResponse = GetApisResponses[keyof GetApisResponses];
 
 export type AddApisData = {
   body: {
@@ -3142,15 +3141,15 @@ export type AddApisErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddApisError = AddApisErrors[keyof AddApisErrors];
@@ -3159,7 +3158,7 @@ export type AddApisResponses = {
   /**
    * APIs successfully updated
    */
-  200: CreateApisResponse;
+  200: create_apis_response;
 };
 
 export type AddApisResponse = AddApisResponses[keyof AddApisResponses];
@@ -3180,15 +3179,15 @@ export type DeleteApiErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteApiError = DeleteApiErrors[keyof DeleteApiErrors];
@@ -3197,10 +3196,10 @@ export type DeleteApiResponses = {
   /**
    * API successfully deleted.
    */
-  200: DeleteApiResponse;
+  200: delete_api_response;
 };
 
-export type DeleteApiResponse2 = DeleteApiResponses[keyof DeleteApiResponses];
+export type DeleteApiResponse = DeleteApiResponses[keyof DeleteApiResponses];
 
 export type GetApiData = {
   body?: never;
@@ -3218,15 +3217,15 @@ export type GetApiErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApiError = GetApiErrors[keyof GetApiErrors];
@@ -3235,10 +3234,10 @@ export type GetApiResponses = {
   /**
    * API successfully retrieved.
    */
-  200: GetApiResponse;
+  200: get_api_response;
 };
 
-export type GetApiResponse2 = GetApiResponses[keyof GetApiResponses];
+export type GetApiResponse = GetApiResponses[keyof GetApiResponses];
 
 export type GetApiScopesData = {
   body?: never;
@@ -3256,15 +3255,15 @@ export type GetApiScopesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApiScopesError = GetApiScopesErrors[keyof GetApiScopesErrors];
@@ -3273,10 +3272,10 @@ export type GetApiScopesResponses = {
   /**
    * API scopes successfully retrieved.
    */
-  200: GetApiScopesResponse;
+  200: get_api_scopes_response;
 };
 
-export type GetApiScopesResponse2 =
+export type GetApiScopesResponse =
   GetApiScopesResponses[keyof GetApiScopesResponses];
 
 export type AddApiScopeData = {
@@ -3304,15 +3303,15 @@ export type AddApiScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddApiScopeError = AddApiScopeErrors[keyof AddApiScopeErrors];
@@ -3321,7 +3320,7 @@ export type AddApiScopeResponses = {
   /**
    * API scopes successfully created
    */
-  200: CreateApiScopesResponse;
+  200: create_api_scopes_response;
 };
 
 export type AddApiScopeResponse =
@@ -3347,15 +3346,15 @@ export type DeleteApiScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteApiScopeError =
@@ -3388,15 +3387,15 @@ export type GetApiScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApiScopeError = GetApiScopeErrors[keyof GetApiScopeErrors];
@@ -3405,10 +3404,10 @@ export type GetApiScopeResponses = {
   /**
    * API scope successfully retrieved.
    */
-  200: GetApiScopeResponse;
+  200: get_api_scope_response;
 };
 
-export type GetApiScopeResponse2 =
+export type GetApiScopeResponse =
   GetApiScopeResponses[keyof GetApiScopeResponses];
 
 export type UpdateApiScopeData = {
@@ -3436,15 +3435,15 @@ export type UpdateApiScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateApiScopeError =
@@ -3487,15 +3486,15 @@ export type UpdateApiApplicationsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateApiApplicationsError =
@@ -3505,7 +3504,7 @@ export type UpdateApiApplicationsResponses = {
   /**
    * Authorized applications updated.
    */
-  200: AuthorizeAppApiResponse;
+  200: authorize_app_api_response;
 };
 
 export type UpdateApiApplicationsResponse =
@@ -3535,15 +3534,15 @@ export type DeleteApiApplicationScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteApiApplicationScopeError =
@@ -3580,15 +3579,15 @@ export type AddApiApplicationScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddApiApplicationScopeError =
@@ -3625,15 +3624,15 @@ export type GetApplicationsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApplicationsError =
@@ -3643,10 +3642,10 @@ export type GetApplicationsResponses = {
   /**
    * A successful response with a list of applications or an empty list.
    */
-  200: GetApplicationsResponse;
+  200: get_applications_response;
 };
 
-export type GetApplicationsResponse2 =
+export type GetApplicationsResponse =
   GetApplicationsResponses[keyof GetApplicationsResponses];
 
 export type CreateApplicationData = {
@@ -3673,15 +3672,15 @@ export type CreateApplicationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateApplicationError =
@@ -3691,10 +3690,10 @@ export type CreateApplicationResponses = {
   /**
    * Application successfully created.
    */
-  201: CreateApplicationResponse;
+  201: create_application_response;
 };
 
-export type CreateApplicationResponse2 =
+export type CreateApplicationResponse =
   CreateApplicationResponses[keyof CreateApplicationResponses];
 
 export type DeleteApplicationData = {
@@ -3713,15 +3712,15 @@ export type DeleteApplicationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteApplicationError =
@@ -3731,7 +3730,7 @@ export type DeleteApplicationResponses = {
   /**
    * Application successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteApplicationResponse =
@@ -3753,15 +3752,15 @@ export type GetApplicationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApplicationError =
@@ -3771,10 +3770,10 @@ export type GetApplicationResponses = {
   /**
    * Application successfully retrieved.
    */
-  200: GetApplicationResponse;
+  200: get_application_response;
 };
 
-export type GetApplicationResponse2 =
+export type GetApplicationResponse =
   GetApplicationResponses[keyof GetApplicationResponses];
 
 export type UpdateApplicationData = {
@@ -3821,15 +3820,15 @@ export type UpdateApplicationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateApplicationError =
@@ -3858,15 +3857,15 @@ export type GetApplicationConnectionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApplicationConnectionsError =
@@ -3876,7 +3875,7 @@ export type GetApplicationConnectionsResponses = {
   /**
    * Application connections successfully retrieved.
    */
-  200: GetConnectionsResponse;
+  200: get_connections_response;
 };
 
 export type GetApplicationConnectionsResponse =
@@ -3902,15 +3901,15 @@ export type RemoveConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type RemoveConnectionError =
@@ -3920,7 +3919,7 @@ export type RemoveConnectionResponses = {
   /**
    * Connection successfully removed.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type RemoveConnectionResponse =
@@ -3946,15 +3945,15 @@ export type EnableConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type EnableConnectionError =
@@ -3983,15 +3982,15 @@ export type GetApplicationPropertyValuesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetApplicationPropertyValuesError =
@@ -4001,7 +4000,7 @@ export type GetApplicationPropertyValuesResponses = {
   /**
    * Properties successfully retrieved.
    */
-  200: GetPropertyValuesResponse;
+  200: get_property_values_response;
 };
 
 export type GetApplicationPropertyValuesResponse =
@@ -4032,15 +4031,15 @@ export type UpdateApplicationsPropertyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateApplicationsPropertyError =
@@ -4050,7 +4049,7 @@ export type UpdateApplicationsPropertyResponses = {
   /**
    * Property successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateApplicationsPropertyResponse =
@@ -4096,15 +4095,15 @@ export type UpdateApplicationTokensErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateApplicationTokensError =
@@ -4114,7 +4113,7 @@ export type UpdateApplicationTokensResponses = {
   /**
    * Application tokens successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateApplicationTokensResponse =
@@ -4156,11 +4155,11 @@ export type GetBillingEntitlementsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -4174,10 +4173,10 @@ export type GetBillingEntitlementsResponses = {
   /**
    * Billing entitlements successfully retrieved.
    */
-  200: GetBillingEntitlementsResponse;
+  200: get_billing_entitlements_response;
 };
 
-export type GetBillingEntitlementsResponse2 =
+export type GetBillingEntitlementsResponse =
   GetBillingEntitlementsResponses[keyof GetBillingEntitlementsResponses];
 
 export type GetBillingAgreementsData = {
@@ -4212,11 +4211,11 @@ export type GetBillingAgreementsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -4230,10 +4229,10 @@ export type GetBillingAgreementsResponses = {
   /**
    * Billing agreements successfully retrieved.
    */
-  200: GetBillingAgreementsResponse;
+  200: get_billing_agreements_response;
 };
 
-export type GetBillingAgreementsResponse2 =
+export type GetBillingAgreementsResponse =
   GetBillingAgreementsResponses[keyof GetBillingAgreementsResponses];
 
 export type CreateBillingAgreementData = {
@@ -4267,15 +4266,15 @@ export type CreateBillingAgreementErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateBillingAgreementError =
@@ -4285,7 +4284,7 @@ export type CreateBillingAgreementResponses = {
   /**
    * Billing agreement successfully changed
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type CreateBillingAgreementResponse =
@@ -4326,15 +4325,15 @@ export type CreateMeterUsageRecordErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateMeterUsageRecordError =
@@ -4344,10 +4343,10 @@ export type CreateMeterUsageRecordResponses = {
   /**
    * Meter usage record successfully created.
    */
-  200: CreateMeterUsageRecordResponse;
+  200: create_meter_usage_record_response;
 };
 
-export type CreateMeterUsageRecordResponse2 =
+export type CreateMeterUsageRecordResponse =
   CreateMeterUsageRecordResponses[keyof CreateMeterUsageRecordResponses];
 
 export type GetBusinessData = {
@@ -4361,15 +4360,15 @@ export type GetBusinessErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetBusinessError = GetBusinessErrors[keyof GetBusinessErrors];
@@ -4378,10 +4377,10 @@ export type GetBusinessResponses = {
   /**
    * Your business details.
    */
-  200: GetBusinessResponse;
+  200: get_business_response;
 };
 
-export type GetBusinessResponse2 =
+export type GetBusinessResponse =
   GetBusinessResponses[keyof GetBusinessResponses];
 
 export type UpdateBusinessData = {
@@ -4439,15 +4438,15 @@ export type UpdateBusinessErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateBusinessError =
@@ -4457,7 +4456,7 @@ export type UpdateBusinessResponses = {
   /**
    * Business successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateBusinessResponse =
@@ -4474,15 +4473,15 @@ export type GetIndustriesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetIndustriesError = GetIndustriesErrors[keyof GetIndustriesErrors];
@@ -4491,10 +4490,10 @@ export type GetIndustriesResponses = {
   /**
    * A list of industries.
    */
-  200: GetIndustriesResponse;
+  200: get_industries_response;
 };
 
-export type GetIndustriesResponse2 =
+export type GetIndustriesResponse =
   GetIndustriesResponses[keyof GetIndustriesResponses];
 
 export type GetTimezonesData = {
@@ -4508,15 +4507,15 @@ export type GetTimezonesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetTimezonesError = GetTimezonesErrors[keyof GetTimezonesErrors];
@@ -4525,10 +4524,10 @@ export type GetTimezonesResponses = {
   /**
    * A list of timezones.
    */
-  200: GetTimezonesResponse;
+  200: get_timezones_response;
 };
 
-export type GetTimezonesResponse2 =
+export type GetTimezonesResponse =
   GetTimezonesResponses[keyof GetTimezonesResponses];
 
 export type DeleteCallbackUrlsData = {
@@ -4552,11 +4551,11 @@ export type DeleteCallbackUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -4570,7 +4569,7 @@ export type DeleteCallbackUrlsResponses = {
   /**
    * Callback URLs successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteCallbackUrlsResponse =
@@ -4592,7 +4591,7 @@ export type GetCallbackUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -4610,7 +4609,7 @@ export type GetCallbackUrlsResponses = {
   /**
    * Callback URLs successfully retrieved.
    */
-  200: RedirectCallbackUrls;
+  200: redirect_callback_urls;
 };
 
 export type GetCallbackUrlsResponse =
@@ -4640,11 +4639,11 @@ export type AddRedirectCallbackUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -4658,7 +4657,7 @@ export type AddRedirectCallbackUrlsResponses = {
   /**
    * Callbacks successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type AddRedirectCallbackUrlsResponse =
@@ -4688,7 +4687,7 @@ export type ReplaceRedirectCallbackUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -4706,7 +4705,7 @@ export type ReplaceRedirectCallbackUrlsResponses = {
   /**
    * Callbacks successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ReplaceRedirectCallbackUrlsResponse =
@@ -4733,15 +4732,15 @@ export type DeleteLogoutUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteLogoutUrlsError =
@@ -4751,7 +4750,7 @@ export type DeleteLogoutUrlsResponses = {
   /**
    * Logout URLs successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteLogoutUrlsResponse =
@@ -4773,15 +4772,15 @@ export type GetLogoutUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetLogoutUrlsError = GetLogoutUrlsErrors[keyof GetLogoutUrlsErrors];
@@ -4790,7 +4789,7 @@ export type GetLogoutUrlsResponses = {
   /**
    * Logout URLs successfully retrieved.
    */
-  200: LogoutRedirectUrls;
+  200: logout_redirect_urls;
 };
 
 export type GetLogoutUrlsResponse =
@@ -4820,15 +4819,15 @@ export type AddLogoutRedirectUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddLogoutRedirectUrlsError =
@@ -4838,7 +4837,7 @@ export type AddLogoutRedirectUrlsResponses = {
   /**
    * Logout URLs successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type AddLogoutRedirectUrlsResponse =
@@ -4868,15 +4867,15 @@ export type ReplaceLogoutRedirectUrlsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ReplaceLogoutRedirectUrlsError =
@@ -4886,7 +4885,7 @@ export type ReplaceLogoutRedirectUrlsResponses = {
   /**
    * Logout URLs successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ReplaceLogoutRedirectUrlsResponse =
@@ -4920,7 +4919,7 @@ export type GetConnectedAppAuthUrlErrors = {
   /**
    * Error retrieving connected app auth url.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -4928,7 +4927,7 @@ export type GetConnectedAppAuthUrlErrors = {
   /**
    * Error retrieving connected app auth url.
    */
-  404: ErrorResponse;
+  404: error_response;
   /**
    * Request was throttled.
    */
@@ -4942,7 +4941,7 @@ export type GetConnectedAppAuthUrlResponses = {
   /**
    * A URL that can be used to authenticate and a session id to identify this authentication session.
    */
-  200: ConnectedAppsAuthUrl;
+  200: connected_apps_auth_url;
 };
 
 export type GetConnectedAppAuthUrlResponse =
@@ -4964,11 +4963,11 @@ export type GetConnectedAppTokenErrors = {
   /**
    * The session id provided points to an invalid session.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -4982,7 +4981,7 @@ export type GetConnectedAppTokenResponses = {
   /**
    * An access token that can be used to query a third-party provider, as well as the token's expiry time.
    */
-  200: ConnectedAppsAccessToken;
+  200: connected_apps_access_token;
 };
 
 export type GetConnectedAppTokenResponse =
@@ -5004,11 +5003,11 @@ export type RevokeConnectedAppTokenErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Invalid HTTP method used.
    */
@@ -5026,7 +5025,7 @@ export type RevokeConnectedAppTokenResponses = {
   /**
    * An access token that can be used to query a third-party provider, as well as the token's expiry time.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type RevokeConnectedAppTokenResponse =
@@ -5060,11 +5059,11 @@ export type GetConnectionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -5078,10 +5077,10 @@ export type GetConnectionsResponses = {
   /**
    * Connections successfully retrieved.
    */
-  200: GetConnectionsResponse;
+  200: get_connections_response;
 };
 
-export type GetConnectionsResponse2 =
+export type GetConnectionsResponse =
   GetConnectionsResponses[keyof GetConnectionsResponses];
 
 export type CreateConnectionData = {
@@ -5301,15 +5300,15 @@ export type CreateConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateConnectionError =
@@ -5319,10 +5318,10 @@ export type CreateConnectionResponses = {
   /**
    * Connection successfully created.
    */
-  201: CreateConnectionResponse;
+  201: create_connection_response;
 };
 
-export type CreateConnectionResponse2 =
+export type CreateConnectionResponse =
   CreateConnectionResponses[keyof CreateConnectionResponses];
 
 export type DeleteConnectionData = {
@@ -5341,19 +5340,19 @@ export type DeleteConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteConnectionError =
@@ -5363,7 +5362,7 @@ export type DeleteConnectionResponses = {
   /**
    * Connection successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteConnectionResponse =
@@ -5385,15 +5384,15 @@ export type GetConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetConnectionError = GetConnectionErrors[keyof GetConnectionErrors];
@@ -5402,7 +5401,7 @@ export type GetConnectionResponses = {
   /**
    * Connection successfully retrieved.
    */
-  200: Connection;
+  200: connection;
 };
 
 export type GetConnectionResponse =
@@ -5592,19 +5591,19 @@ export type UpdateConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateConnectionError =
@@ -5614,7 +5613,7 @@ export type UpdateConnectionResponses = {
   /**
    * Connection successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateConnectionResponse =
@@ -5800,19 +5799,19 @@ export type ReplaceConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ReplaceConnectionError =
@@ -5822,7 +5821,7 @@ export type ReplaceConnectionResponses = {
   /**
    * Connection successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ReplaceConnectionResponse =
@@ -5852,15 +5851,15 @@ export type GetDirectoriesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetDirectoriesError =
@@ -5870,10 +5869,10 @@ export type GetDirectoriesResponses = {
   /**
    * SCIM directories successfully retrieved.
    */
-  200: GetDirectoriesResponse;
+  200: get_directories_response;
 };
 
-export type GetDirectoriesResponse2 =
+export type GetDirectoriesResponse =
   GetDirectoriesResponses[keyof GetDirectoriesResponses];
 
 export type CreateDirectoryData = {
@@ -5909,19 +5908,19 @@ export type CreateDirectoryErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Conflict - Directory already exists.
    */
-  409: ErrorResponse;
+  409: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateDirectoryError =
@@ -5931,10 +5930,10 @@ export type CreateDirectoryResponses = {
   /**
    * SCIM directory successfully created.
    */
-  201: CreateDirectoryResponse;
+  201: create_directory_response;
 };
 
-export type CreateDirectoryResponse2 =
+export type CreateDirectoryResponse =
   CreateDirectoryResponses[keyof CreateDirectoryResponses];
 
 export type DeleteDirectoryData = {
@@ -5953,19 +5952,19 @@ export type DeleteDirectoryErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteDirectoryError =
@@ -5975,10 +5974,10 @@ export type DeleteDirectoryResponses = {
   /**
    * SCIM directory successfully deleted.
    */
-  200: DeleteDirectoryResponse;
+  200: delete_directory_response;
 };
 
-export type DeleteDirectoryResponse2 =
+export type DeleteDirectoryResponse =
   DeleteDirectoryResponses[keyof DeleteDirectoryResponses];
 
 export type GetDirectoryData = {
@@ -5997,19 +5996,19 @@ export type GetDirectoryErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetDirectoryError = GetDirectoryErrors[keyof GetDirectoryErrors];
@@ -6018,10 +6017,10 @@ export type GetDirectoryResponses = {
   /**
    * SCIM directory successfully retrieved.
    */
-  200: GetDirectoryResponse;
+  200: get_directory_response;
 };
 
-export type GetDirectoryResponse2 =
+export type GetDirectoryResponse =
   GetDirectoryResponses[keyof GetDirectoryResponses];
 
 export type UpdateDirectoryData = {
@@ -6045,19 +6044,19 @@ export type UpdateDirectoryErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateDirectoryError =
@@ -6067,10 +6066,10 @@ export type UpdateDirectoryResponses = {
   /**
    * SCIM directory successfully updated.
    */
-  200: UpdateDirectoryResponse;
+  200: update_directory_response;
 };
 
-export type UpdateDirectoryResponse2 =
+export type UpdateDirectoryResponse =
   UpdateDirectoryResponses[keyof UpdateDirectoryResponses];
 
 export type GetEnvironmentData = {
@@ -6084,15 +6083,15 @@ export type GetEnvironmentErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetEnvironmentError =
@@ -6102,10 +6101,10 @@ export type GetEnvironmentResponses = {
   /**
    * Environment successfully retrieved.
    */
-  200: GetEnvironmentResponse;
+  200: get_environment_response;
 };
 
-export type GetEnvironmentResponse2 =
+export type GetEnvironmentResponse =
   GetEnvironmentResponses[keyof GetEnvironmentResponses];
 
 export type DeleteEnvironementFeatureFlagOverridesData = {
@@ -6119,7 +6118,7 @@ export type DeleteEnvironementFeatureFlagOverridesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6137,7 +6136,7 @@ export type DeleteEnvironementFeatureFlagOverridesResponses = {
   /**
    * Feature flag overrides deleted successfully.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteEnvironementFeatureFlagOverridesResponse =
@@ -6154,7 +6153,7 @@ export type GetEnvironementFeatureFlagsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6172,7 +6171,7 @@ export type GetEnvironementFeatureFlagsResponses = {
   /**
    * Feature flags retrieved successfully.
    */
-  200: GetEnvironmentFeatureFlagsResponse;
+  200: get_environment_feature_flags_response;
 };
 
 export type GetEnvironementFeatureFlagsResponse =
@@ -6194,7 +6193,7 @@ export type DeleteEnvironementFeatureFlagOverrideErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6212,7 +6211,7 @@ export type DeleteEnvironementFeatureFlagOverrideResponses = {
   /**
    * Feature flag deleted successfully.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteEnvironementFeatureFlagOverrideResponse =
@@ -6242,7 +6241,7 @@ export type UpdateEnvironementFeatureFlagOverrideErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6260,7 +6259,7 @@ export type UpdateEnvironementFeatureFlagOverrideResponses = {
   /**
    * Feature flag override successful
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateEnvironementFeatureFlagOverrideResponse =
@@ -6277,15 +6276,15 @@ export type ReadLogoErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ReadLogoError = ReadLogoErrors[keyof ReadLogoErrors];
@@ -6294,10 +6293,10 @@ export type ReadLogoResponses = {
   /**
    * Success
    */
-  200: ReadEnvLogoResponse;
+  200: read_env_logo_response;
 };
 
-export type ReadLogoResponse2 = ReadLogoResponses[keyof ReadLogoResponses];
+export type ReadLogoResponse = ReadLogoResponses[keyof ReadLogoResponses];
 
 export type DeleteLogoData = {
   body?: never;
@@ -6315,15 +6314,15 @@ export type DeleteLogoErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteLogoError = DeleteLogoErrors[keyof DeleteLogoErrors];
@@ -6332,7 +6331,7 @@ export type DeleteLogoResponses = {
   /**
    * Logo successfully deleted
    */
-  200: SuccessResponse;
+  200: success_response;
   /**
    * No logo found to delete
    */
@@ -6365,15 +6364,15 @@ export type AddLogoErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddLogoError = AddLogoErrors[keyof AddLogoErrors];
@@ -6382,7 +6381,7 @@ export type AddLogoResponses = {
   /**
    * Logo successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type AddLogoResponse = AddLogoResponses[keyof AddLogoResponses];
@@ -6398,15 +6397,15 @@ export type GetEnvironmentVariablesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetEnvironmentVariablesError =
@@ -6416,10 +6415,10 @@ export type GetEnvironmentVariablesResponses = {
   /**
    * A successful response with a list of environment variables or an empty list.
    */
-  200: GetEnvironmentVariablesResponse;
+  200: get_environment_variables_response;
 };
 
-export type GetEnvironmentVariablesResponse2 =
+export type GetEnvironmentVariablesResponse =
   GetEnvironmentVariablesResponses[keyof GetEnvironmentVariablesResponses];
 
 export type CreateEnvironmentVariableData = {
@@ -6449,15 +6448,15 @@ export type CreateEnvironmentVariableErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateEnvironmentVariableError =
@@ -6467,10 +6466,10 @@ export type CreateEnvironmentVariableResponses = {
   /**
    * Environment variable successfully created.
    */
-  201: CreateEnvironmentVariableResponse;
+  201: create_environment_variable_response;
 };
 
-export type CreateEnvironmentVariableResponse2 =
+export type CreateEnvironmentVariableResponse =
   CreateEnvironmentVariableResponses[keyof CreateEnvironmentVariableResponses];
 
 export type DeleteEnvironmentVariableData = {
@@ -6489,15 +6488,15 @@ export type DeleteEnvironmentVariableErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteEnvironmentVariableError =
@@ -6507,10 +6506,10 @@ export type DeleteEnvironmentVariableResponses = {
   /**
    * Environment variable successfully deleted.
    */
-  200: DeleteEnvironmentVariableResponse;
+  200: delete_environment_variable_response;
 };
 
-export type DeleteEnvironmentVariableResponse2 =
+export type DeleteEnvironmentVariableResponse =
   DeleteEnvironmentVariableResponses[keyof DeleteEnvironmentVariableResponses];
 
 export type GetEnvironmentVariableData = {
@@ -6529,15 +6528,15 @@ export type GetEnvironmentVariableErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetEnvironmentVariableError =
@@ -6547,10 +6546,10 @@ export type GetEnvironmentVariableResponses = {
   /**
    * Environment variable successfully retrieved.
    */
-  200: GetEnvironmentVariableResponse;
+  200: get_environment_variable_response;
 };
 
-export type GetEnvironmentVariableResponse2 =
+export type GetEnvironmentVariableResponse =
   GetEnvironmentVariableResponses[keyof GetEnvironmentVariableResponses];
 
 export type UpdateEnvironmentVariableData = {
@@ -6585,15 +6584,15 @@ export type UpdateEnvironmentVariableErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateEnvironmentVariableError =
@@ -6603,10 +6602,10 @@ export type UpdateEnvironmentVariableResponses = {
   /**
    * Environment variable successfully updated.
    */
-  200: UpdateEnvironmentVariableResponse;
+  200: update_environment_variable_response;
 };
 
-export type UpdateEnvironmentVariableResponse2 =
+export type UpdateEnvironmentVariableResponse =
   UpdateEnvironmentVariableResponses[keyof UpdateEnvironmentVariableResponses];
 
 export type CreateFeatureFlagData = {
@@ -6648,7 +6647,7 @@ export type CreateFeatureFlagErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6666,7 +6665,7 @@ export type CreateFeatureFlagResponses = {
   /**
    * Feature flag successfully created
    */
-  201: SuccessResponse;
+  201: success_response;
 };
 
 export type CreateFeatureFlagResponse =
@@ -6688,7 +6687,7 @@ export type DeleteFeatureFlagErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6706,7 +6705,7 @@ export type DeleteFeatureFlagResponses = {
   /**
    * Feature flag successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteFeatureFlagResponse =
@@ -6749,7 +6748,7 @@ export type UpdateFeatureFlagErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6767,7 +6766,7 @@ export type UpdateFeatureFlagResponses = {
   /**
    * Feature flag successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateFeatureFlagResponse =
@@ -6789,7 +6788,7 @@ export type DeleteIdentityErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6807,7 +6806,7 @@ export type DeleteIdentityResponses = {
   /**
    * Identity successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteIdentityResponse =
@@ -6829,11 +6828,11 @@ export type GetIdentityErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -6846,7 +6845,7 @@ export type GetIdentityResponses = {
   /**
    * Identity successfully retrieved.
    */
-  200: Identity;
+  200: identity;
 };
 
 export type GetIdentityResponse =
@@ -6876,7 +6875,7 @@ export type UpdateIdentityErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -6894,7 +6893,7 @@ export type UpdateIdentityResponses = {
   /**
    * Identity successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateIdentityResponse =
@@ -6943,15 +6942,15 @@ export type GetOrganizationInvitesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrganizationInvitesError =
@@ -6961,10 +6960,10 @@ export type GetOrganizationInvitesResponses = {
   /**
    * Invitations successfully retrieved.
    */
-  200: GetOrganizationInvitesResponse;
+  200: get_organization_invites_response;
 };
 
-export type GetOrganizationInvitesResponse2 =
+export type GetOrganizationInvitesResponse =
   GetOrganizationInvitesResponses[keyof GetOrganizationInvitesResponses];
 
 export type CreateOrganizationInviteData = {
@@ -7007,15 +7006,15 @@ export type CreateOrganizationInviteErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateOrganizationInviteError =
@@ -7025,10 +7024,10 @@ export type CreateOrganizationInviteResponses = {
   /**
    * Invitation successfully created.
    */
-  201: CreateOrganizationInviteResponse;
+  201: create_organization_invite_response;
 };
 
-export type CreateOrganizationInviteResponse2 =
+export type CreateOrganizationInviteResponse =
   CreateOrganizationInviteResponses[keyof CreateOrganizationInviteResponses];
 
 export type DeleteOrganizationInviteData = {
@@ -7051,19 +7050,19 @@ export type DeleteOrganizationInviteErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteOrganizationInviteError =
@@ -7073,7 +7072,7 @@ export type DeleteOrganizationInviteResponses = {
   /**
    * Invitation successfully revoked.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationInviteResponse =
@@ -7099,19 +7098,19 @@ export type GetOrganizationInviteErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrganizationInviteError =
@@ -7121,10 +7120,10 @@ export type GetOrganizationInviteResponses = {
   /**
    * Invitation successfully retrieved.
    */
-  200: GetOrganizationInviteResponse;
+  200: get_organization_invite_response;
 };
 
-export type GetOrganizationInviteResponse2 =
+export type GetOrganizationInviteResponse =
   GetOrganizationInviteResponses[keyof GetOrganizationInviteResponses];
 
 export type ReplaceMfaData = {
@@ -7154,15 +7153,15 @@ export type ReplaceMfaErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ReplaceMfaError = ReplaceMfaErrors[keyof ReplaceMfaErrors];
@@ -7171,7 +7170,7 @@ export type ReplaceMfaResponses = {
   /**
    * MFA Configuration updated successfully.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ReplaceMfaResponse = ReplaceMfaResponses[keyof ReplaceMfaResponses];
@@ -7196,15 +7195,15 @@ export type GetOrganizationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrganizationError =
@@ -7214,10 +7213,10 @@ export type GetOrganizationResponses = {
   /**
    * Organization successfully retrieved.
    */
-  200: GetOrganizationResponse;
+  200: get_organization_response;
 };
 
-export type GetOrganizationResponse2 =
+export type GetOrganizationResponse =
   GetOrganizationResponses[keyof GetOrganizationResponses];
 
 export type CreateOrganizationData = {
@@ -7319,15 +7318,15 @@ export type CreateOrganizationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateOrganizationError =
@@ -7337,10 +7336,10 @@ export type CreateOrganizationResponses = {
   /**
    * Organization successfully created.
    */
-  200: CreateOrganizationResponse;
+  200: create_organization_response;
 };
 
-export type CreateOrganizationResponse2 =
+export type CreateOrganizationResponse =
   CreateOrganizationResponses[keyof CreateOrganizationResponses];
 
 export type GetOrganizationsData = {
@@ -7367,15 +7366,15 @@ export type GetOrganizationsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrganizationsError =
@@ -7385,10 +7384,10 @@ export type GetOrganizationsResponses = {
   /**
    * Organizations successfully retreived.
    */
-  200: GetOrganizationsResponse;
+  200: get_organizations_response;
 };
 
-export type GetOrganizationsResponse2 =
+export type GetOrganizationsResponse =
   GetOrganizationsResponses[keyof GetOrganizationsResponses];
 
 export type DeleteOrganizationData = {
@@ -7407,19 +7406,19 @@ export type DeleteOrganizationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteOrganizationError =
@@ -7429,7 +7428,7 @@ export type DeleteOrganizationResponses = {
   /**
    * Organization successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationResponse =
@@ -7546,15 +7545,15 @@ export type UpdateOrganizationErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateOrganizationError =
@@ -7564,7 +7563,7 @@ export type UpdateOrganizationResponses = {
   /**
    * Organization successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateOrganizationResponse =
@@ -7613,15 +7612,15 @@ export type GetOrganizationUsersErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrganizationUsersError =
@@ -7631,10 +7630,10 @@ export type GetOrganizationUsersResponses = {
   /**
    * A successful response with a list of organization users or an empty list.
    */
-  200: GetOrganizationUsersResponse;
+  200: get_organization_users_response;
 };
 
-export type GetOrganizationUsersResponse2 =
+export type GetOrganizationUsersResponse =
   GetOrganizationUsersResponses[keyof GetOrganizationUsersResponses];
 
 export type UpdateOrganizationUsersData = {
@@ -7675,15 +7674,15 @@ export type UpdateOrganizationUsersErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateOrganizationUsersError =
@@ -7693,10 +7692,10 @@ export type UpdateOrganizationUsersResponses = {
   /**
    * Users successfully removed.
    */
-  200: UpdateOrganizationUsersResponse;
+  200: update_organization_users_response;
 };
 
-export type UpdateOrganizationUsersResponse2 =
+export type UpdateOrganizationUsersResponse =
   UpdateOrganizationUsersResponses[keyof UpdateOrganizationUsersResponses];
 
 export type AddOrganizationUsersData = {
@@ -7733,15 +7732,15 @@ export type AddOrganizationUsersErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddOrganizationUsersError =
@@ -7751,10 +7750,10 @@ export type AddOrganizationUsersResponses = {
   /**
    * Add organization users request successfully processed.
    */
-  200: AddOrganizationUsersResponse;
+  200: add_organization_users_response;
 };
 
-export type AddOrganizationUsersResponse2 =
+export type AddOrganizationUsersResponse =
   AddOrganizationUsersResponses[keyof AddOrganizationUsersResponses];
 
 export type GetOrganizationUserRolesData = {
@@ -7788,7 +7787,7 @@ export type GetOrganizationUserRolesResponses = {
   /**
    * A successful response with a list of user roles.
    */
-  200: GetOrganizationsUserRolesResponse;
+  200: get_organizations_user_roles_response;
 };
 
 export type GetOrganizationUserRolesResponse =
@@ -7833,7 +7832,7 @@ export type CreateOrganizationUserRoleResponses = {
   /**
    * Role successfully added.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type CreateOrganizationUserRoleResponse =
@@ -7863,7 +7862,7 @@ export type DeleteOrganizationUserRoleErrors = {
   /**
    * Error creating user.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -7881,7 +7880,7 @@ export type DeleteOrganizationUserRoleResponses = {
   /**
    * User successfully removed.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationUserRoleResponse =
@@ -7923,7 +7922,7 @@ export type GetOrganizationUserPermissionsResponses = {
   /**
    * A successful response with a list of user permissions.
    */
-  200: GetOrganizationsUserPermissionsResponse;
+  200: get_organizations_user_permissions_response;
 };
 
 export type GetOrganizationUserPermissionsResponse =
@@ -7968,7 +7967,7 @@ export type CreateOrganizationUserPermissionResponses = {
   /**
    * User permission successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type CreateOrganizationUserPermissionResponse =
@@ -7998,7 +7997,7 @@ export type DeleteOrganizationUserPermissionErrors = {
   /**
    * Error creating user.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8016,7 +8015,7 @@ export type DeleteOrganizationUserPermissionResponses = {
   /**
    * User successfully removed.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationUserPermissionResponse =
@@ -8042,7 +8041,7 @@ export type RemoveOrganizationUserErrors = {
   /**
    * Error removing user
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8060,7 +8059,7 @@ export type RemoveOrganizationUserResponses = {
   /**
    * User successfully removed from organization
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type RemoveOrganizationUserResponse =
@@ -8094,15 +8093,15 @@ export type DeleteOrganizationUserApiScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteOrganizationUserApiScopeError =
@@ -8143,15 +8142,15 @@ export type AddOrganizationUserApiScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddOrganizationUserApiScopeError =
@@ -8184,19 +8183,19 @@ export type ResetOrgUserMfaAllErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ResetOrgUserMfaAllError =
@@ -8206,7 +8205,7 @@ export type ResetOrgUserMfaAllResponses = {
   /**
    * User's MFA successfully reset.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ResetOrgUserMfaAllResponse =
@@ -8232,19 +8231,19 @@ export type GetOrgUserMfaErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrgUserMfaError = GetOrgUserMfaErrors[keyof GetOrgUserMfaErrors];
@@ -8253,7 +8252,7 @@ export type GetOrgUserMfaResponses = {
   /**
    * Successfully retrieve user's MFA configuration.
    */
-  200: GetUserMfaResponse;
+  200: get_user_mfa_response;
 };
 
 export type GetOrgUserMfaResponse =
@@ -8283,19 +8282,19 @@ export type ResetOrgUserMfaErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ResetOrgUserMfaError =
@@ -8305,7 +8304,7 @@ export type ResetOrgUserMfaResponses = {
   /**
    * User's MFA successfully reset.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ResetOrgUserMfaResponse =
@@ -8327,7 +8326,7 @@ export type DeleteOrganizationFeatureFlagOverridesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8345,7 +8344,7 @@ export type DeleteOrganizationFeatureFlagOverridesResponses = {
   /**
    * Feature flag overrides successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationFeatureFlagOverridesResponse =
@@ -8367,7 +8366,7 @@ export type GetOrganizationFeatureFlagsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8385,10 +8384,10 @@ export type GetOrganizationFeatureFlagsResponses = {
   /**
    * Feature flag overrides successfully returned.
    */
-  200: GetOrganizationFeatureFlagsResponse;
+  200: get_organization_feature_flags_response;
 };
 
-export type GetOrganizationFeatureFlagsResponse2 =
+export type GetOrganizationFeatureFlagsResponse =
   GetOrganizationFeatureFlagsResponses[keyof GetOrganizationFeatureFlagsResponses];
 
 export type DeleteOrganizationFeatureFlagOverrideData = {
@@ -8411,7 +8410,7 @@ export type DeleteOrganizationFeatureFlagOverrideErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8429,7 +8428,7 @@ export type DeleteOrganizationFeatureFlagOverrideResponses = {
   /**
    * Feature flag override successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationFeatureFlagOverrideResponse =
@@ -8460,7 +8459,7 @@ export type UpdateOrganizationFeatureFlagOverrideErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8478,7 +8477,7 @@ export type UpdateOrganizationFeatureFlagOverrideResponses = {
   /**
    * Feature flag override successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateOrganizationFeatureFlagOverrideResponse =
@@ -8509,7 +8508,7 @@ export type UpdateOrganizationPropertyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8527,7 +8526,7 @@ export type UpdateOrganizationPropertyResponses = {
   /**
    * Property successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateOrganizationPropertyResponse =
@@ -8549,7 +8548,7 @@ export type GetOrganizationPropertyValuesErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8567,7 +8566,7 @@ export type GetOrganizationPropertyValuesResponses = {
   /**
    * Properties successfully retrieved.
    */
-  200: GetPropertyValuesResponse;
+  200: get_property_values_response;
 };
 
 export type GetOrganizationPropertyValuesResponse =
@@ -8599,7 +8598,7 @@ export type UpdateOrganizationPropertiesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8617,7 +8616,7 @@ export type UpdateOrganizationPropertiesResponses = {
   /**
    * Properties successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateOrganizationPropertiesResponse =
@@ -8651,15 +8650,15 @@ export type ReplaceOrganizationMfaErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ReplaceOrganizationMfaError =
@@ -8669,7 +8668,7 @@ export type ReplaceOrganizationMfaResponses = {
   /**
    * MFA Configuration updated successfully.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ReplaceOrganizationMfaResponse =
@@ -8691,7 +8690,7 @@ export type DeleteOrganizationHandleErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -8709,7 +8708,7 @@ export type DeleteOrganizationHandleResponses = {
   /**
    * Handle successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteOrganizationHandleResponse =
@@ -8731,15 +8730,15 @@ export type ReadOrganizationLogoErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ReadOrganizationLogoError =
@@ -8749,7 +8748,7 @@ export type ReadOrganizationLogoResponses = {
   /**
    * Successfully retrieved organization logo details
    */
-  200: ReadLogoResponse;
+  200: read_logo_response;
 };
 
 export type ReadOrganizationLogoResponse =
@@ -8775,15 +8774,15 @@ export type DeleteOrganizationLogoErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteOrganizationLogoError =
@@ -8793,7 +8792,7 @@ export type DeleteOrganizationLogoResponses = {
   /**
    * Organization logo successfully deleted
    */
-  200: SuccessResponse;
+  200: success_response;
   /**
    * No logo found to delete
    */
@@ -8831,15 +8830,15 @@ export type AddOrganizationLogoErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddOrganizationLogoError =
@@ -8849,7 +8848,7 @@ export type AddOrganizationLogoResponses = {
   /**
    * Organization logo successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type AddOrganizationLogoResponse =
@@ -8871,15 +8870,15 @@ export type GetOrganizationConnectionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetOrganizationConnectionsError =
@@ -8889,7 +8888,7 @@ export type GetOrganizationConnectionsResponses = {
   /**
    * Organization connections successfully retrieved.
    */
-  200: GetConnectionsResponse;
+  200: get_connections_response;
 };
 
 export type GetOrganizationConnectionsResponse =
@@ -8915,15 +8914,15 @@ export type RemoveOrgConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type RemoveOrgConnectionError =
@@ -8933,7 +8932,7 @@ export type RemoveOrgConnectionResponses = {
   /**
    * Connection successfully removed.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type RemoveOrgConnectionResponse =
@@ -8959,15 +8958,15 @@ export type EnableOrgConnectionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type EnableOrgConnectionError =
@@ -9016,15 +9015,15 @@ export type UpdateOrganizationSessionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateOrganizationSessionsError =
@@ -9034,7 +9033,7 @@ export type UpdateOrganizationSessionsResponses = {
   /**
    * Organization sessions successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateOrganizationSessionsResponse =
@@ -9064,7 +9063,7 @@ export type GetPermissionsErrors = {
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -9078,10 +9077,10 @@ export type GetPermissionsResponses = {
   /**
    * Permissions successfully retrieved.
    */
-  200: GetPermissionsResponse;
+  200: get_permissions_response;
 };
 
-export type GetPermissionsResponse2 =
+export type GetPermissionsResponse =
   GetPermissionsResponses[keyof GetPermissionsResponses];
 
 export type CreatePermissionData = {
@@ -9111,11 +9110,11 @@ export type CreatePermissionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -9129,7 +9128,7 @@ export type CreatePermissionResponses = {
   /**
    * Permission successfully created
    */
-  201: SuccessResponse;
+  201: success_response;
 };
 
 export type CreatePermissionResponse =
@@ -9151,7 +9150,7 @@ export type DeletePermissionErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9169,7 +9168,7 @@ export type DeletePermissionResponses = {
   /**
    * permission successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeletePermissionResponse =
@@ -9207,11 +9206,11 @@ export type UpdatePermissionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -9225,7 +9224,7 @@ export type UpdatePermissionsResponses = {
   /**
    * Permission successfully updated
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdatePermissionsResponse =
@@ -9259,11 +9258,11 @@ export type GetPropertiesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -9276,10 +9275,10 @@ export type GetPropertiesResponses = {
   /**
    * Properties successfully retrieved.
    */
-  200: GetPropertiesResponse;
+  200: get_properties_response;
 };
 
-export type GetPropertiesResponse2 =
+export type GetPropertiesResponse =
   GetPropertiesResponses[keyof GetPropertiesResponses];
 
 export type CreatePropertyData = {
@@ -9325,7 +9324,7 @@ export type CreatePropertyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9343,10 +9342,10 @@ export type CreatePropertyResponses = {
   /**
    * Property successfully created
    */
-  201: CreatePropertyResponse;
+  201: create_property_response;
 };
 
-export type CreatePropertyResponse2 =
+export type CreatePropertyResponse =
   CreatePropertyResponses[keyof CreatePropertyResponses];
 
 export type DeletePropertyData = {
@@ -9365,7 +9364,7 @@ export type DeletePropertyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9383,7 +9382,7 @@ export type DeletePropertyResponses = {
   /**
    * Property successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeletePropertyResponse =
@@ -9425,7 +9424,7 @@ export type UpdatePropertyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9443,7 +9442,7 @@ export type UpdatePropertyResponses = {
   /**
    * Property successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdatePropertyResponse =
@@ -9477,11 +9476,11 @@ export type GetCategoriesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -9494,10 +9493,10 @@ export type GetCategoriesResponses = {
   /**
    * Categories successfully retrieved.
    */
-  200: GetCategoriesResponse;
+  200: get_categories_response;
 };
 
-export type GetCategoriesResponse2 =
+export type GetCategoriesResponse =
   GetCategoriesResponses[keyof GetCategoriesResponses];
 
 export type CreateCategoryData = {
@@ -9523,7 +9522,7 @@ export type CreateCategoryErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9541,10 +9540,10 @@ export type CreateCategoryResponses = {
   /**
    * Category successfully created
    */
-  201: CreateCategoryResponse;
+  201: create_category_response;
 };
 
-export type CreateCategoryResponse2 =
+export type CreateCategoryResponse =
   CreateCategoryResponses[keyof CreateCategoryResponses];
 
 export type UpdateCategoryData = {
@@ -9571,7 +9570,7 @@ export type UpdateCategoryErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9589,7 +9588,7 @@ export type UpdateCategoryResponses = {
   /**
    * category successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateCategoryResponse =
@@ -9619,15 +9618,15 @@ export type GetRolesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetRolesError = GetRolesErrors[keyof GetRolesErrors];
@@ -9636,10 +9635,10 @@ export type GetRolesResponses = {
   /**
    * Roles successfully retrieved.
    */
-  200: GetRolesResponse;
+  200: get_roles_response;
 };
 
-export type GetRolesResponse2 = GetRolesResponses[keyof GetRolesResponses];
+export type GetRolesResponse = GetRolesResponses[keyof GetRolesResponses];
 
 export type CreateRoleData = {
   /**
@@ -9676,15 +9675,15 @@ export type CreateRoleErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateRoleError = CreateRoleErrors[keyof CreateRoleErrors];
@@ -9693,7 +9692,7 @@ export type CreateRoleResponses = {
   /**
    * Role successfully created
    */
-  201: CreateRolesResponse;
+  201: create_roles_response;
 };
 
 export type CreateRoleResponse = CreateRoleResponses[keyof CreateRoleResponses];
@@ -9714,15 +9713,15 @@ export type DeleteRoleErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteRoleError = DeleteRoleErrors[keyof DeleteRoleErrors];
@@ -9731,7 +9730,7 @@ export type DeleteRoleResponses = {
   /**
    * Role successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteRoleResponse = DeleteRoleResponses[keyof DeleteRoleResponses];
@@ -9752,15 +9751,15 @@ export type GetRoleErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetRoleError = GetRoleErrors[keyof GetRoleErrors];
@@ -9769,10 +9768,10 @@ export type GetRoleResponses = {
   /**
    * Role successfully retrieved.
    */
-  200: GetRoleResponse;
+  200: get_role_response;
 };
 
-export type GetRoleResponse2 = GetRoleResponses[keyof GetRoleResponses];
+export type GetRoleResponse = GetRoleResponses[keyof GetRoleResponses];
 
 export type UpdateRolesData = {
   /**
@@ -9814,15 +9813,15 @@ export type UpdateRolesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateRolesError = UpdateRolesErrors[keyof UpdateRolesErrors];
@@ -9831,7 +9830,7 @@ export type UpdateRolesResponses = {
   /**
    * Role successfully updated
    */
-  201: SuccessResponse;
+  201: success_response;
 };
 
 export type UpdateRolesResponse =
@@ -9853,7 +9852,7 @@ export type GetRoleScopesErrors = {
   /**
    * Error removing user
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -9870,7 +9869,7 @@ export type GetRoleScopesResponses = {
   /**
    * A list of scopes for a role
    */
-  200: RoleScopesResponse;
+  200: role_scopes_response;
 };
 
 export type GetRoleScopesResponse =
@@ -9900,15 +9899,15 @@ export type AddRoleScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type AddRoleScopeError = AddRoleScopeErrors[keyof AddRoleScopeErrors];
@@ -9917,10 +9916,10 @@ export type AddRoleScopeResponses = {
   /**
    * Role scope successfully added.
    */
-  201: AddRoleScopeResponse;
+  201: add_role_scope_response;
 };
 
-export type AddRoleScopeResponse2 =
+export type AddRoleScopeResponse =
   AddRoleScopeResponses[keyof AddRoleScopeResponses];
 
 export type DeleteRoleScopeData = {
@@ -9943,15 +9942,15 @@ export type DeleteRoleScopeErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteRoleScopeError =
@@ -9961,10 +9960,10 @@ export type DeleteRoleScopeResponses = {
   /**
    * Role scope successfully deleted.
    */
-  200: DeleteRoleScopeResponse;
+  200: delete_role_scope_response;
 };
 
-export type DeleteRoleScopeResponse2 =
+export type DeleteRoleScopeResponse =
   DeleteRoleScopeResponses[keyof DeleteRoleScopeResponses];
 
 export type GetRolePermissionsData = {
@@ -9996,7 +9995,7 @@ export type GetRolePermissionsErrors = {
   /**
    * Error removing user
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10014,7 +10013,7 @@ export type GetRolePermissionsResponses = {
   /**
    * A list of permissions for a role
    */
-  200: RolePermissionsResponse;
+  200: role_permissions_response;
 };
 
 export type GetRolePermissionsResponse =
@@ -10050,7 +10049,7 @@ export type UpdateRolePermissionsErrors = {
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -10064,10 +10063,10 @@ export type UpdateRolePermissionsResponses = {
   /**
    * Permissions successfully updated.
    */
-  200: UpdateRolePermissionsResponse;
+  200: update_role_permissions_response;
 };
 
-export type UpdateRolePermissionsResponse2 =
+export type UpdateRolePermissionsResponse =
   UpdateRolePermissionsResponses[keyof UpdateRolePermissionsResponses];
 
 export type RemoveRolePermissionData = {
@@ -10090,7 +10089,7 @@ export type RemoveRolePermissionErrors = {
   /**
    * Error removing user
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10108,7 +10107,7 @@ export type RemoveRolePermissionResponses = {
   /**
    * Permission successfully removed from role
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type RemoveRolePermissionResponse =
@@ -10153,15 +10152,15 @@ export type SearchUsersErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type SearchUsersError = SearchUsersErrors[keyof SearchUsersErrors];
@@ -10170,10 +10169,10 @@ export type SearchUsersResponses = {
   /**
    * Users successfully retrieved.
    */
-  200: SearchUsersResponse;
+  200: search_users_response;
 };
 
-export type SearchUsersResponse2 =
+export type SearchUsersResponse =
   SearchUsersResponses[keyof SearchUsersResponses];
 
 export type GetSubscribersData = {
@@ -10200,7 +10199,7 @@ export type GetSubscribersErrors = {
   /**
    * Bad request.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -10214,10 +10213,10 @@ export type GetSubscribersResponses = {
   /**
    * Subscriber successfully retrieved.
    */
-  200: GetSubscribersResponse;
+  200: get_subscribers_response;
 };
 
-export type GetSubscribersResponse2 =
+export type GetSubscribersResponse =
   GetSubscribersResponses[keyof GetSubscribersResponses];
 
 export type CreateSubscriberData = {
@@ -10244,11 +10243,11 @@ export type CreateSubscriberErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -10262,7 +10261,7 @@ export type CreateSubscriberResponses = {
   /**
    * Subscriber successfully created
    */
-  201: CreateSubscriberSuccessResponse;
+  201: create_subscriber_success_response;
 };
 
 export type CreateSubscriberResponse =
@@ -10284,11 +10283,11 @@ export type GetSubscriberErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -10301,10 +10300,10 @@ export type GetSubscriberResponses = {
   /**
    * Subscriber successfully retrieved.
    */
-  200: GetSubscriberResponse;
+  200: get_subscriber_response;
 };
 
-export type GetSubscriberResponse2 =
+export type GetSubscriberResponse =
   GetSubscriberResponses[keyof GetSubscriberResponses];
 
 export type GetUsersData = {
@@ -10355,15 +10354,15 @@ export type GetUsersErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetUsersError = GetUsersErrors[keyof GetUsersErrors];
@@ -10372,7 +10371,7 @@ export type GetUsersResponses = {
   /**
    * Users successfully retrieved.
    */
-  200: UsersResponse;
+  200: users_response;
 };
 
 export type GetUsersResponse = GetUsersResponses[keyof GetUsersResponses];
@@ -10393,11 +10392,11 @@ export type RefreshUserClaimsErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Bad request.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -10411,7 +10410,7 @@ export type RefreshUserClaimsResponses = {
   /**
    * Claims successfully refreshed.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type RefreshUserClaimsResponse =
@@ -10437,15 +10436,15 @@ export type DeleteUserErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteUserError = DeleteUserErrors[keyof DeleteUserErrors];
@@ -10454,7 +10453,7 @@ export type DeleteUserResponses = {
   /**
    * User successfully deleted.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteUserResponse = DeleteUserResponses[keyof DeleteUserResponses];
@@ -10479,15 +10478,15 @@ export type GetUserDataErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetUserDataError = GetUserDataErrors[keyof GetUserDataErrors];
@@ -10496,7 +10495,7 @@ export type GetUserDataResponses = {
   /**
    * User successfully retrieved.
    */
-  200: User;
+  200: user;
 };
 
 export type GetUserDataResponse =
@@ -10546,15 +10545,15 @@ export type UpdateUserErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type UpdateUserError = UpdateUserErrors[keyof UpdateUserErrors];
@@ -10563,11 +10562,10 @@ export type UpdateUserResponses = {
   /**
    * User successfully updated.
    */
-  200: UpdateUserResponse;
+  200: update_user_response;
 };
 
-export type UpdateUserResponse2 =
-  UpdateUserResponses[keyof UpdateUserResponses];
+export type UpdateUserResponse = UpdateUserResponses[keyof UpdateUserResponses];
 
 export type CreateUserData = {
   /**
@@ -10643,15 +10641,15 @@ export type CreateUserErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type CreateUserError = CreateUserErrors[keyof CreateUserErrors];
@@ -10660,11 +10658,10 @@ export type CreateUserResponses = {
   /**
    * User successfully created.
    */
-  200: CreateUserResponse;
+  200: create_user_response;
 };
 
-export type CreateUserResponse2 =
-  CreateUserResponses[keyof CreateUserResponses];
+export type CreateUserResponse = CreateUserResponses[keyof CreateUserResponses];
 
 export type UpdateUserFeatureFlagOverrideData = {
   body?: never;
@@ -10691,7 +10688,7 @@ export type UpdateUserFeatureFlagOverrideErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10709,7 +10706,7 @@ export type UpdateUserFeatureFlagOverrideResponses = {
   /**
    * Feature flag override successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateUserFeatureFlagOverrideResponse =
@@ -10740,7 +10737,7 @@ export type UpdateUserPropertyErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10758,7 +10755,7 @@ export type UpdateUserPropertyResponses = {
   /**
    * Property successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateUserPropertyResponse =
@@ -10780,7 +10777,7 @@ export type GetUserPropertyValuesErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10798,7 +10795,7 @@ export type GetUserPropertyValuesResponses = {
   /**
    * Properties successfully retrieved.
    */
-  200: GetPropertyValuesResponse;
+  200: get_property_values_response;
 };
 
 export type GetUserPropertyValuesResponse =
@@ -10830,7 +10827,7 @@ export type UpdateUserPropertiesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10848,7 +10845,7 @@ export type UpdateUserPropertiesResponses = {
   /**
    * Properties successfully updated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type UpdateUserPropertiesResponse =
@@ -10894,7 +10891,7 @@ export type SetUserPasswordErrors = {
   /**
    * Error creating user.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10912,7 +10909,7 @@ export type SetUserPasswordResponses = {
   /**
    * User successfully created.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type SetUserPasswordResponse =
@@ -10943,7 +10940,7 @@ export type GetUserIdentitiesErrors = {
   /**
    * Bad request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -10961,7 +10958,7 @@ export type GetUserIdentitiesResponses = {
   /**
    * Identities successfully retrieved.
    */
-  200: GetIdentitiesResponse;
+  200: get_identities_response;
 };
 
 export type GetUserIdentitiesResponse =
@@ -11003,7 +11000,7 @@ export type CreateUserIdentityErrors = {
   /**
    * Error creating identity.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
@@ -11021,7 +11018,7 @@ export type CreateUserIdentityResponses = {
   /**
    * Identity successfully created.
    */
-  201: CreateIdentityResponse;
+  201: create_identity_response;
 };
 
 export type CreateUserIdentityResponse =
@@ -11043,19 +11040,19 @@ export type DeleteUserSessionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type DeleteUserSessionsError =
@@ -11065,7 +11062,7 @@ export type DeleteUserSessionsResponses = {
   /**
    * User sessions successfully invalidated.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type DeleteUserSessionsResponse =
@@ -11087,19 +11084,19 @@ export type GetUserSessionsErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetUserSessionsError =
@@ -11109,10 +11106,10 @@ export type GetUserSessionsResponses = {
   /**
    * Successfully retrieved user sessions.
    */
-  200: GetUserSessionsResponse;
+  200: get_user_sessions_response;
 };
 
-export type GetUserSessionsResponse2 =
+export type GetUserSessionsResponse =
   GetUserSessionsResponses[keyof GetUserSessionsResponses];
 
 export type ResetUsersMfaAllData = {
@@ -11131,19 +11128,19 @@ export type ResetUsersMfaAllErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ResetUsersMfaAllError =
@@ -11153,7 +11150,7 @@ export type ResetUsersMfaAllResponses = {
   /**
    * User's MFA successfully reset.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ResetUsersMfaAllResponse =
@@ -11175,19 +11172,19 @@ export type GetUsersMfaErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type GetUsersMfaError = GetUsersMfaErrors[keyof GetUsersMfaErrors];
@@ -11196,7 +11193,7 @@ export type GetUsersMfaResponses = {
   /**
    * Successfully retrieve user's MFA configuration.
    */
-  200: GetUserMfaResponse;
+  200: get_user_mfa_response;
 };
 
 export type GetUsersMfaResponse =
@@ -11222,19 +11219,19 @@ export type ResetUsersMfaErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Unauthorized - invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * The specified resource was not found
    */
-  404: NotFoundResponse;
+  404: not_found_response;
   /**
    * Too many requests. Request was throttled.
    */
-  429: ErrorResponse;
+  429: error_response;
 };
 
 export type ResetUsersMfaError = ResetUsersMfaErrors[keyof ResetUsersMfaErrors];
@@ -11243,7 +11240,7 @@ export type ResetUsersMfaResponses = {
   /**
    * User's MFA successfully reset.
    */
-  200: SuccessResponse;
+  200: success_response;
 };
 
 export type ResetUsersMfaResponse =
@@ -11265,11 +11262,11 @@ export type GetEventErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -11282,10 +11279,10 @@ export type GetEventResponses = {
   /**
    * Event successfully retrieved.
    */
-  200: GetEventResponse;
+  200: get_event_response;
 };
 
-export type GetEventResponse2 = GetEventResponses[keyof GetEventResponses];
+export type GetEventResponse = GetEventResponses[keyof GetEventResponses];
 
 export type GetEventTypesData = {
   body?: never;
@@ -11298,11 +11295,11 @@ export type GetEventTypesErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -11315,10 +11312,10 @@ export type GetEventTypesResponses = {
   /**
    * Event types successfully retrieved.
    */
-  200: GetEventTypesResponse;
+  200: get_event_types_response;
 };
 
-export type GetEventTypesResponse2 =
+export type GetEventTypesResponse =
   GetEventTypesResponses[keyof GetEventTypesResponses];
 
 export type DeleteWebHookData = {
@@ -11337,11 +11334,11 @@ export type DeleteWebHookErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -11354,7 +11351,7 @@ export type DeleteWebHookResponses = {
   /**
    * Webhook successfully deleted.
    */
-  200: DeleteWebhookResponse;
+  200: delete_webhook_response;
 };
 
 export type DeleteWebHookResponse =
@@ -11392,11 +11389,11 @@ export type UpdateWebHookErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -11409,7 +11406,7 @@ export type UpdateWebHookResponses = {
   /**
    * Webhook successfully updated.
    */
-  200: UpdateWebhookResponse;
+  200: update_webhook_response;
 };
 
 export type UpdateWebHookResponse =
@@ -11426,11 +11423,11 @@ export type GetWebHooksErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -11443,7 +11440,7 @@ export type GetWebHooksResponses = {
   /**
    * Webhook list successfully returned.
    */
-  200: GetWebhooksResponse;
+  200: get_webhooks_response;
 };
 
 export type GetWebHooksResponse =
@@ -11480,11 +11477,11 @@ export type CreateWebHookErrors = {
   /**
    * Invalid request.
    */
-  400: ErrorResponse;
+  400: error_response;
   /**
    * Invalid credentials.
    */
-  403: ErrorResponse;
+  403: error_response;
   /**
    * Request was throttled.
    */
@@ -11497,7 +11494,7 @@ export type CreateWebHookResponses = {
   /**
    * Webhook successfully created.
    */
-  200: CreateWebhookResponse;
+  200: create_webhook_response;
 };
 
 export type CreateWebHookResponse =

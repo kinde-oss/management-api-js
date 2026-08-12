@@ -552,8 +552,10 @@ export class ApiKeys {
     return (options?.client ?? client).get<
       GetApiKeysResponses,
       GetApiKeysErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/api_keys",
       ...options,
@@ -576,8 +578,10 @@ export class ApiKeys {
     return (options.client ?? client).post<
       CreateApiKeyResponses,
       CreateApiKeyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/api_keys",
       ...options,
@@ -604,8 +608,10 @@ export class ApiKeys {
     return (options.client ?? client).delete<
       DeleteApiKeyResponses,
       DeleteApiKeyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/api_keys/{key_id}",
       ...options,
@@ -628,8 +634,10 @@ export class ApiKeys {
     return (options.client ?? client).get<
       GetApiKeyResponses,
       GetApiKeyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/api_keys/{key_id}",
       ...options,
@@ -652,8 +660,10 @@ export class ApiKeys {
     return (options.client ?? client).put<
       RotateApiKeyResponses,
       RotateApiKeyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/api_keys/{key_id}",
       ...options,
@@ -672,8 +682,10 @@ export class ApiKeys {
     return (options.client ?? client).post<
       VerifyApiKeyResponses,
       VerifyApiKeyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/api_keys/verify",
       ...options,
@@ -702,8 +714,10 @@ export class Apis {
     return (options?.client ?? client).get<
       GetApisResponses,
       GetApisErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis",
       ...options,
@@ -726,8 +740,10 @@ export class Apis {
     return (options.client ?? client).post<
       AddApisResponses,
       AddApisErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis",
       ...options,
@@ -754,8 +770,10 @@ export class Apis {
     return (options.client ?? client).delete<
       DeleteApiResponses,
       DeleteApiErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}",
       ...options,
@@ -778,8 +796,10 @@ export class Apis {
     return (options.client ?? client).get<
       GetApiResponses,
       GetApiErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}",
       ...options,
@@ -802,8 +822,10 @@ export class Apis {
     return (options.client ?? client).get<
       GetApiScopesResponses,
       GetApiScopesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/scopes",
       ...options,
@@ -826,8 +848,10 @@ export class Apis {
     return (options.client ?? client).post<
       AddApiScopeResponses,
       AddApiScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/scopes",
       ...options,
@@ -854,8 +878,10 @@ export class Apis {
     return (options.client ?? client).delete<
       DeleteApiScopeResponses,
       DeleteApiScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/scopes/{scope_id}",
       ...options,
@@ -878,8 +904,10 @@ export class Apis {
     return (options.client ?? client).get<
       GetApiScopeResponses,
       GetApiScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/scopes/{scope_id}",
       ...options,
@@ -902,8 +930,10 @@ export class Apis {
     return (options.client ?? client).patch<
       UpdateApiScopeResponses,
       UpdateApiScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/scopes/{scope_id}",
       ...options,
@@ -930,8 +960,10 @@ export class Apis {
     return (options.client ?? client).patch<
       UpdateApiApplicationsResponses,
       UpdateApiApplicationsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/applications",
       ...options,
@@ -958,8 +990,10 @@ export class Apis {
     return (options.client ?? client).delete<
       DeleteApiApplicationScopeResponses,
       DeleteApiApplicationScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/applications/{application_id}/scopes/{scope_id}",
       ...options,
@@ -982,8 +1016,10 @@ export class Apis {
     return (options.client ?? client).post<
       AddApiApplicationScopeResponses,
       AddApiApplicationScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/apis/{api_id}/applications/{application_id}/scopes/{scope_id}",
       ...options,
@@ -1008,8 +1044,10 @@ export class Applications {
     return (options?.client ?? client).get<
       GetApplicationsResponses,
       GetApplicationsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications",
       ...options,
@@ -1032,8 +1070,10 @@ export class Applications {
     return (options.client ?? client).post<
       CreateApplicationResponses,
       CreateApplicationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications",
       ...options,
@@ -1060,8 +1100,10 @@ export class Applications {
     return (options.client ?? client).delete<
       DeleteApplicationResponses,
       DeleteApplicationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}",
       ...options,
@@ -1084,8 +1126,10 @@ export class Applications {
     return (options.client ?? client).get<
       GetApplicationResponses,
       GetApplicationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}",
       ...options,
@@ -1108,8 +1152,10 @@ export class Applications {
     return (options.client ?? client).patch<
       UpdateApplicationResponses,
       UpdateApplicationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}",
       ...options,
@@ -1136,8 +1182,10 @@ export class Applications {
     return (options.client ?? client).get<
       GetApplicationConnectionsResponses,
       GetApplicationConnectionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/connections",
       ...options,
@@ -1160,8 +1208,10 @@ export class Applications {
     return (options.client ?? client).delete<
       RemoveConnectionResponses,
       RemoveConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/connections/{connection_id}",
       ...options,
@@ -1184,8 +1234,10 @@ export class Applications {
     return (options.client ?? client).post<
       EnableConnectionResponses,
       EnableConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/connections/{connection_id}",
       ...options,
@@ -1208,8 +1260,10 @@ export class Applications {
     return (options.client ?? client).get<
       GetApplicationPropertyValuesResponses,
       GetApplicationPropertyValuesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/properties",
       ...options,
@@ -1232,8 +1286,10 @@ export class Applications {
     return (options.client ?? client).put<
       UpdateApplicationsPropertyResponses,
       UpdateApplicationsPropertyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/properties/{property_key}",
       ...options,
@@ -1259,8 +1315,10 @@ export class Applications {
     return (options.client ?? client).patch<
       UpdateApplicationTokensResponses,
       UpdateApplicationTokensErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/tokens",
       ...options,
@@ -1289,8 +1347,10 @@ export class BillingEntitlements {
     return (options.client ?? client).get<
       GetBillingEntitlementsResponses,
       GetBillingEntitlementsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/billing/entitlements",
       ...options,
@@ -1315,8 +1375,10 @@ export class BillingAgreements {
     return (options.client ?? client).get<
       GetBillingAgreementsResponses,
       GetBillingAgreementsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/billing/agreements",
       ...options,
@@ -1339,8 +1401,10 @@ export class BillingAgreements {
     return (options.client ?? client).post<
       CreateBillingAgreementResponses,
       CreateBillingAgreementErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/billing/agreements",
       ...options,
@@ -1369,8 +1433,10 @@ export class BillingMeterUsage {
     return (options.client ?? client).post<
       CreateMeterUsageRecordResponses,
       CreateMeterUsageRecordErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/billing/meter_usage",
       ...options,
@@ -1399,8 +1465,10 @@ export class Business {
     return (options?.client ?? client).get<
       GetBusinessResponses,
       GetBusinessErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/business",
       ...options,
@@ -1423,8 +1491,10 @@ export class Business {
     return (options.client ?? client).patch<
       UpdateBusinessResponses,
       UpdateBusinessErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/business",
       ...options,
@@ -1453,8 +1523,10 @@ export class Industries {
     return (options?.client ?? client).get<
       GetIndustriesResponses,
       GetIndustriesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/industries",
       ...options,
@@ -1479,8 +1551,10 @@ export class Timezones {
     return (options?.client ?? client).get<
       GetTimezonesResponses,
       GetTimezonesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/timezones",
       ...options,
@@ -1505,8 +1579,10 @@ export class Callbacks {
     return (options.client ?? client).delete<
       DeleteCallbackUrlsResponses,
       DeleteCallbackUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       ...options,
@@ -1529,8 +1605,10 @@ export class Callbacks {
     return (options.client ?? client).get<
       GetCallbackUrlsResponses,
       GetCallbackUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       ...options,
@@ -1553,8 +1631,10 @@ export class Callbacks {
     return (options.client ?? client).post<
       AddRedirectCallbackUrlsResponses,
       AddRedirectCallbackUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       ...options,
@@ -1581,8 +1661,10 @@ export class Callbacks {
     return (options.client ?? client).put<
       ReplaceRedirectCallbackUrlsResponses,
       ReplaceRedirectCallbackUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_redirect_urls",
       ...options,
@@ -1609,8 +1691,10 @@ export class Callbacks {
     return (options.client ?? client).delete<
       DeleteLogoutUrlsResponses,
       DeleteLogoutUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       ...options,
@@ -1633,8 +1717,10 @@ export class Callbacks {
     return (options.client ?? client).get<
       GetLogoutUrlsResponses,
       GetLogoutUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       ...options,
@@ -1657,8 +1743,10 @@ export class Callbacks {
     return (options.client ?? client).post<
       AddLogoutRedirectUrlsResponses,
       AddLogoutRedirectUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       ...options,
@@ -1685,8 +1773,10 @@ export class Callbacks {
     return (options.client ?? client).put<
       ReplaceLogoutRedirectUrlsResponses,
       ReplaceLogoutRedirectUrlsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{app_id}/auth_logout_urls",
       ...options,
@@ -1715,8 +1805,10 @@ export class ConnectedApps {
     return (options.client ?? client).get<
       GetConnectedAppAuthUrlResponses,
       GetConnectedAppAuthUrlErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connected_apps/auth_url",
       ...options,
@@ -1739,8 +1831,10 @@ export class ConnectedApps {
     return (options.client ?? client).get<
       GetConnectedAppTokenResponses,
       GetConnectedAppTokenErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connected_apps/token",
       ...options,
@@ -1763,8 +1857,10 @@ export class ConnectedApps {
     return (options.client ?? client).post<
       RevokeConnectedAppTokenResponses,
       RevokeConnectedAppTokenErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connected_apps/revoke",
       ...options,
@@ -1789,8 +1885,10 @@ export class Connections {
     return (options?.client ?? client).get<
       GetConnectionsResponses,
       GetConnectionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connections",
       ...options,
@@ -1813,8 +1911,10 @@ export class Connections {
     return (options.client ?? client).post<
       CreateConnectionResponses,
       CreateConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connections",
       ...options,
@@ -1841,8 +1941,10 @@ export class Connections {
     return (options.client ?? client).delete<
       DeleteConnectionResponses,
       DeleteConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connections/{connection_id}",
       ...options,
@@ -1865,8 +1967,10 @@ export class Connections {
     return (options.client ?? client).get<
       GetConnectionResponses,
       GetConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connections/{connection_id}",
       ...options,
@@ -1889,8 +1993,10 @@ export class Connections {
     return (options.client ?? client).patch<
       UpdateConnectionResponses,
       UpdateConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connections/{connection_id}",
       ...options,
@@ -1917,8 +2023,10 @@ export class Connections {
     return (options.client ?? client).put<
       ReplaceConnectionResponses,
       ReplaceConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/connections/{connection_id}",
       ...options,
@@ -1947,8 +2055,10 @@ export class Directories {
     return (options?.client ?? client).get<
       GetDirectoriesResponses,
       GetDirectoriesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/directories",
       ...options,
@@ -1971,8 +2081,10 @@ export class Directories {
     return (options.client ?? client).post<
       CreateDirectoryResponses,
       CreateDirectoryErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/directories",
       ...options,
@@ -1999,8 +2111,10 @@ export class Directories {
     return (options.client ?? client).delete<
       DeleteDirectoryResponses,
       DeleteDirectoryErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/directories/{directory_id}",
       ...options,
@@ -2023,8 +2137,10 @@ export class Directories {
     return (options.client ?? client).get<
       GetDirectoryResponses,
       GetDirectoryErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/directories/{directory_id}",
       ...options,
@@ -2043,8 +2159,10 @@ export class Directories {
     return (options.client ?? client).patch<
       UpdateDirectoryResponses,
       UpdateDirectoryErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/directories/{directory_id}",
       ...options,
@@ -2073,8 +2191,10 @@ export class Environments {
     return (options?.client ?? client).get<
       GetEnvironmentResponses,
       GetEnvironmentErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment",
       ...options,
@@ -2099,8 +2219,10 @@ export class Environments {
     return (options?.client ?? client).delete<
       DeleteEnvironementFeatureFlagOverridesResponses,
       DeleteEnvironementFeatureFlagOverridesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/feature_flags",
       ...options,
@@ -2123,8 +2245,10 @@ export class Environments {
     return (options?.client ?? client).get<
       GetEnvironementFeatureFlagsResponses,
       GetEnvironementFeatureFlagsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/feature_flags",
       ...options,
@@ -2147,8 +2271,10 @@ export class Environments {
     return (options.client ?? client).delete<
       DeleteEnvironementFeatureFlagOverrideResponses,
       DeleteEnvironementFeatureFlagOverrideErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/feature_flags/{feature_flag_key}",
       ...options,
@@ -2171,8 +2297,10 @@ export class Environments {
     return (options.client ?? client).patch<
       UpdateEnvironementFeatureFlagOverrideResponses,
       UpdateEnvironementFeatureFlagOverrideErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/feature_flags/{feature_flag_key}",
       ...options,
@@ -2199,8 +2327,10 @@ export class Environments {
     return (options?.client ?? client).get<
       ReadLogoResponses,
       ReadLogoErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/logos",
       ...options,
@@ -2223,8 +2353,10 @@ export class Environments {
     return (options.client ?? client).delete<
       DeleteLogoResponses,
       DeleteLogoErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/logos/{type}",
       ...options,
@@ -2247,9 +2379,11 @@ export class Environments {
     return (options.client ?? client).put<
       AddLogoResponses,
       AddLogoErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
       ...formDataBodySerializer,
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment/logos/{type}",
       ...options,
@@ -2278,8 +2412,10 @@ export class EnvironmentVariables {
     return (options?.client ?? client).get<
       GetEnvironmentVariablesResponses,
       GetEnvironmentVariablesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment_variables",
       ...options,
@@ -2302,8 +2438,10 @@ export class EnvironmentVariables {
     return (options.client ?? client).post<
       CreateEnvironmentVariableResponses,
       CreateEnvironmentVariableErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment_variables",
       ...options,
@@ -2330,8 +2468,10 @@ export class EnvironmentVariables {
     return (options.client ?? client).delete<
       DeleteEnvironmentVariableResponses,
       DeleteEnvironmentVariableErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment_variables/{variable_id}",
       ...options,
@@ -2354,8 +2494,10 @@ export class EnvironmentVariables {
     return (options.client ?? client).get<
       GetEnvironmentVariableResponses,
       GetEnvironmentVariableErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment_variables/{variable_id}",
       ...options,
@@ -2378,8 +2520,10 @@ export class EnvironmentVariables {
     return (options.client ?? client).patch<
       UpdateEnvironmentVariableResponses,
       UpdateEnvironmentVariableErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/environment_variables/{variable_id}",
       ...options,
@@ -2408,8 +2552,10 @@ export class FeatureFlags {
     return (options.client ?? client).post<
       CreateFeatureFlagResponses,
       CreateFeatureFlagErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/feature_flags",
       ...options,
@@ -2436,8 +2582,10 @@ export class FeatureFlags {
     return (options.client ?? client).delete<
       DeleteFeatureFlagResponses,
       DeleteFeatureFlagErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/feature_flags/{feature_flag_key}",
       ...options,
@@ -2460,8 +2608,10 @@ export class FeatureFlags {
     return (options.client ?? client).put<
       UpdateFeatureFlagResponses,
       UpdateFeatureFlagErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/feature_flags/{feature_flag_key}",
       ...options,
@@ -2486,8 +2636,10 @@ export class Identities {
     return (options.client ?? client).delete<
       DeleteIdentityResponses,
       DeleteIdentityErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/identities/{identity_id}",
       ...options,
@@ -2510,8 +2662,10 @@ export class Identities {
     return (options.client ?? client).get<
       GetIdentityResponses,
       GetIdentityErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/identities/{identity_id}",
       ...options,
@@ -2534,8 +2688,10 @@ export class Identities {
     return (options.client ?? client).patch<
       UpdateIdentityResponses,
       UpdateIdentityErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/identities/{identity_id}",
       ...options,
@@ -2564,8 +2720,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationInvitesResponses,
       GetOrganizationInvitesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}/invites",
       ...options,
@@ -2594,8 +2752,10 @@ export class Organizations {
     return (options.client ?? client).post<
       CreateOrganizationInviteResponses,
       CreateOrganizationInviteErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}/invites",
       ...options,
@@ -2622,8 +2782,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationInviteResponses,
       DeleteOrganizationInviteErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}/invites/{invite_code}",
       ...options,
@@ -2646,8 +2808,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationInviteResponses,
       GetOrganizationInviteErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}/invites/{invite_code}",
       ...options,
@@ -2670,8 +2834,10 @@ export class Organizations {
     return (options?.client ?? client).get<
       GetOrganizationResponses,
       GetOrganizationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization",
       ...options,
@@ -2694,8 +2860,10 @@ export class Organizations {
     return (options.client ?? client).post<
       CreateOrganizationResponses,
       CreateOrganizationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization",
       ...options,
@@ -2722,8 +2890,10 @@ export class Organizations {
     return (options?.client ?? client).get<
       GetOrganizationsResponses,
       GetOrganizationsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations",
       ...options,
@@ -2746,8 +2916,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationResponses,
       DeleteOrganizationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}",
       ...options,
@@ -2770,8 +2942,10 @@ export class Organizations {
     return (options.client ?? client).patch<
       UpdateOrganizationResponses,
       UpdateOrganizationErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}",
       ...options,
@@ -2798,8 +2972,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationUsersResponses,
       GetOrganizationUsersErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users",
       ...options,
@@ -2822,8 +2998,10 @@ export class Organizations {
     return (options.client ?? client).patch<
       UpdateOrganizationUsersResponses,
       UpdateOrganizationUsersErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users",
       ...options,
@@ -2850,8 +3028,10 @@ export class Organizations {
     return (options.client ?? client).post<
       AddOrganizationUsersResponses,
       AddOrganizationUsersErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users",
       ...options,
@@ -2878,8 +3058,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationUserRolesResponses,
       GetOrganizationUserRolesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/roles",
       ...options,
@@ -2902,8 +3084,10 @@ export class Organizations {
     return (options.client ?? client).post<
       CreateOrganizationUserRoleResponses,
       CreateOrganizationUserRoleErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/roles",
       ...options,
@@ -2930,8 +3114,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationUserRoleResponses,
       DeleteOrganizationUserRoleErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/roles/{role_id}",
       ...options,
@@ -2954,8 +3140,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationUserPermissionsResponses,
       GetOrganizationUserPermissionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/permissions",
       ...options,
@@ -2978,8 +3166,10 @@ export class Organizations {
     return (options.client ?? client).post<
       CreateOrganizationUserPermissionResponses,
       CreateOrganizationUserPermissionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/permissions",
       ...options,
@@ -3006,8 +3196,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationUserPermissionResponses,
       DeleteOrganizationUserPermissionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/permissions/{permission_id}",
       ...options,
@@ -3030,8 +3222,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       RemoveOrganizationUserResponses,
       RemoveOrganizationUserErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}",
       ...options,
@@ -3054,8 +3248,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationUserApiScopeResponses,
       DeleteOrganizationUserApiScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/apis/{api_id}/scopes/{scope_id}",
       ...options,
@@ -3078,8 +3274,10 @@ export class Organizations {
     return (options.client ?? client).post<
       AddOrganizationUserApiScopeResponses,
       AddOrganizationUserApiScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/apis/{api_id}/scopes/{scope_id}",
       ...options,
@@ -3102,8 +3300,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       ResetOrgUserMfaAllResponses,
       ResetOrgUserMfaAllErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/mfa",
       ...options,
@@ -3126,8 +3326,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrgUserMfaResponses,
       GetOrgUserMfaErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/mfa",
       ...options,
@@ -3150,8 +3352,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       ResetOrgUserMfaResponses,
       ResetOrgUserMfaErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/mfa/{factor_id}",
       ...options,
@@ -3176,8 +3380,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationFeatureFlagOverridesResponses,
       DeleteOrganizationFeatureFlagOverridesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/feature_flags",
       ...options,
@@ -3200,8 +3406,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationFeatureFlagsResponses,
       GetOrganizationFeatureFlagsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/feature_flags",
       ...options,
@@ -3224,8 +3432,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationFeatureFlagOverrideResponses,
       DeleteOrganizationFeatureFlagOverrideErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/feature_flags/{feature_flag_key}",
       ...options,
@@ -3248,8 +3458,10 @@ export class Organizations {
     return (options.client ?? client).patch<
       UpdateOrganizationFeatureFlagOverrideResponses,
       UpdateOrganizationFeatureFlagOverrideErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/feature_flags/{feature_flag_key}",
       ...options,
@@ -3272,8 +3484,10 @@ export class Organizations {
     return (options.client ?? client).put<
       UpdateOrganizationPropertyResponses,
       UpdateOrganizationPropertyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/properties/{property_key}",
       ...options,
@@ -3296,8 +3510,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationPropertyValuesResponses,
       GetOrganizationPropertyValuesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/properties",
       ...options,
@@ -3320,8 +3536,10 @@ export class Organizations {
     return (options.client ?? client).patch<
       UpdateOrganizationPropertiesResponses,
       UpdateOrganizationPropertiesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/properties",
       ...options,
@@ -3348,8 +3566,10 @@ export class Organizations {
     return (options.client ?? client).put<
       ReplaceOrganizationMfaResponses,
       ReplaceOrganizationMfaErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/mfa",
       ...options,
@@ -3376,8 +3596,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationHandleResponses,
       DeleteOrganizationHandleErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organization/{org_code}/handle",
       ...options,
@@ -3400,8 +3622,10 @@ export class Organizations {
     return (options.client ?? client).get<
       ReadOrganizationLogoResponses,
       ReadOrganizationLogoErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/logos",
       ...options,
@@ -3424,8 +3648,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       DeleteOrganizationLogoResponses,
       DeleteOrganizationLogoErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/logos/{type}",
       ...options,
@@ -3448,9 +3674,11 @@ export class Organizations {
     return (options.client ?? client).post<
       AddOrganizationLogoResponses,
       AddOrganizationLogoErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
       ...formDataBodySerializer,
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/logos/{type}",
       ...options,
@@ -3477,8 +3705,10 @@ export class Organizations {
     return (options.client ?? client).get<
       GetOrganizationConnectionsResponses,
       GetOrganizationConnectionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{organization_code}/connections",
       ...options,
@@ -3501,8 +3731,10 @@ export class Organizations {
     return (options.client ?? client).delete<
       RemoveOrgConnectionResponses,
       RemoveOrgConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{organization_code}/connections/{connection_id}",
       ...options,
@@ -3525,8 +3757,10 @@ export class Organizations {
     return (options.client ?? client).post<
       EnableOrgConnectionResponses,
       EnableOrgConnectionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{organization_code}/connections/{connection_id}",
       ...options,
@@ -3549,8 +3783,10 @@ export class Organizations {
     return (options.client ?? client).patch<
       UpdateOrganizationSessionsResponses,
       UpdateOrganizationSessionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/sessions",
       ...options,
@@ -3579,8 +3815,10 @@ export class Mfa {
     return (options.client ?? client).put<
       ReplaceMfaResponses,
       ReplaceMfaErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/mfa",
       ...options,
@@ -3609,8 +3847,10 @@ export class Permissions {
     return (options?.client ?? client).get<
       GetPermissionsResponses,
       GetPermissionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/permissions",
       ...options,
@@ -3633,8 +3873,10 @@ export class Permissions {
     return (options?.client ?? client).post<
       CreatePermissionResponses,
       CreatePermissionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/permissions",
       ...options,
@@ -3661,8 +3903,10 @@ export class Permissions {
     return (options.client ?? client).delete<
       DeletePermissionResponses,
       DeletePermissionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/permissions/{permission_id}",
       ...options,
@@ -3685,8 +3929,10 @@ export class Permissions {
     return (options.client ?? client).patch<
       UpdatePermissionsResponses,
       UpdatePermissionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/permissions/{permission_id}",
       ...options,
@@ -3715,8 +3961,10 @@ export class Properties {
     return (options?.client ?? client).get<
       GetPropertiesResponses,
       GetPropertiesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/properties",
       ...options,
@@ -3739,8 +3987,10 @@ export class Properties {
     return (options.client ?? client).post<
       CreatePropertyResponses,
       CreatePropertyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/properties",
       ...options,
@@ -3767,8 +4017,10 @@ export class Properties {
     return (options.client ?? client).delete<
       DeletePropertyResponses,
       DeletePropertyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/properties/{property_id}",
       ...options,
@@ -3791,8 +4043,10 @@ export class Properties {
     return (options.client ?? client).put<
       UpdatePropertyResponses,
       UpdatePropertyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/properties/{property_id}",
       ...options,
@@ -3821,8 +4075,10 @@ export class PropertyCategories {
     return (options?.client ?? client).get<
       GetCategoriesResponses,
       GetCategoriesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/property_categories",
       ...options,
@@ -3845,8 +4101,10 @@ export class PropertyCategories {
     return (options.client ?? client).post<
       CreateCategoryResponses,
       CreateCategoryErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/property_categories",
       ...options,
@@ -3873,8 +4131,10 @@ export class PropertyCategories {
     return (options.client ?? client).put<
       UpdateCategoryResponses,
       UpdateCategoryErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/property_categories/{category_id}",
       ...options,
@@ -3903,8 +4163,10 @@ export class Roles {
     return (options?.client ?? client).get<
       GetRolesResponses,
       GetRolesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles",
       ...options,
@@ -3927,8 +4189,10 @@ export class Roles {
     return (options?.client ?? client).post<
       CreateRoleResponses,
       CreateRoleErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles",
       ...options,
@@ -3955,8 +4219,10 @@ export class Roles {
     return (options.client ?? client).delete<
       DeleteRoleResponses,
       DeleteRoleErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}",
       ...options,
@@ -3979,8 +4245,10 @@ export class Roles {
     return (options.client ?? client).get<
       GetRoleResponses,
       GetRoleErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}",
       ...options,
@@ -4003,8 +4271,10 @@ export class Roles {
     return (options.client ?? client).patch<
       UpdateRolesResponses,
       UpdateRolesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}",
       ...options,
@@ -4031,8 +4301,10 @@ export class Roles {
     return (options.client ?? client).get<
       GetRoleScopesResponses,
       GetRoleScopesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/scopes",
       ...options,
@@ -4055,8 +4327,10 @@ export class Roles {
     return (options.client ?? client).post<
       AddRoleScopeResponses,
       AddRoleScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/scopes",
       ...options,
@@ -4083,8 +4357,10 @@ export class Roles {
     return (options.client ?? client).delete<
       DeleteRoleScopeResponses,
       DeleteRoleScopeErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/scopes/{scope_id}",
       ...options,
@@ -4107,8 +4383,10 @@ export class Roles {
     return (options.client ?? client).get<
       GetRolePermissionsResponses,
       GetRolePermissionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/permissions",
       ...options,
@@ -4131,8 +4409,10 @@ export class Roles {
     return (options.client ?? client).patch<
       UpdateRolePermissionsResponses,
       UpdateRolePermissionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/permissions",
       ...options,
@@ -4159,8 +4439,10 @@ export class Roles {
     return (options.client ?? client).delete<
       RemoveRolePermissionResponses,
       RemoveRolePermissionErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/permissions/{permission_id}",
       ...options,
@@ -4186,8 +4468,10 @@ export class Search {
     return (options?.client ?? client).get<
       SearchUsersResponses,
       SearchUsersErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/search/users",
       ...options,
@@ -4214,8 +4498,10 @@ export class Subscribers {
     return (options?.client ?? client).get<
       GetSubscribersResponses,
       GetSubscribersErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/subscribers",
       ...options,
@@ -4238,8 +4524,10 @@ export class Subscribers {
     return (options.client ?? client).post<
       CreateSubscriberResponses,
       CreateSubscriberErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/subscribers",
       ...options,
@@ -4262,8 +4550,10 @@ export class Subscribers {
     return (options.client ?? client).get<
       GetSubscriberResponses,
       GetSubscriberErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/subscribers/{subscriber_id}",
       ...options,
@@ -4288,8 +4578,10 @@ export class Users {
     return (options?.client ?? client).get<
       GetUsersResponses,
       GetUsersErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users",
       ...options,
@@ -4312,8 +4604,10 @@ export class Users {
     return (options.client ?? client).post<
       RefreshUserClaimsResponses,
       RefreshUserClaimsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/refresh_claims",
       ...options,
@@ -4336,8 +4630,10 @@ export class Users {
     return (options.client ?? client).delete<
       DeleteUserResponses,
       DeleteUserErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/user",
       ...options,
@@ -4360,8 +4656,10 @@ export class Users {
     return (options.client ?? client).get<
       GetUserDataResponses,
       GetUserDataErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/user",
       ...options,
@@ -4384,8 +4682,10 @@ export class Users {
     return (options.client ?? client).patch<
       UpdateUserResponses,
       UpdateUserErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/user",
       ...options,
@@ -4413,8 +4713,10 @@ export class Users {
     return (options?.client ?? client).post<
       CreateUserResponses,
       CreateUserErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/user",
       ...options,
@@ -4441,8 +4743,10 @@ export class Users {
     return (options.client ?? client).patch<
       UpdateUserFeatureFlagOverrideResponses,
       UpdateUserFeatureFlagOverrideErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/feature_flags/{feature_flag_key}",
       ...options,
@@ -4465,8 +4769,10 @@ export class Users {
     return (options.client ?? client).put<
       UpdateUserPropertyResponses,
       UpdateUserPropertyErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/properties/{property_key}",
       ...options,
@@ -4489,8 +4795,10 @@ export class Users {
     return (options.client ?? client).get<
       GetUserPropertyValuesResponses,
       GetUserPropertyValuesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/properties",
       ...options,
@@ -4513,8 +4821,10 @@ export class Users {
     return (options.client ?? client).patch<
       UpdateUserPropertiesResponses,
       UpdateUserPropertiesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/properties",
       ...options,
@@ -4541,8 +4851,10 @@ export class Users {
     return (options.client ?? client).put<
       SetUserPasswordResponses,
       SetUserPasswordErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/password",
       ...options,
@@ -4569,8 +4881,10 @@ export class Users {
     return (options.client ?? client).get<
       GetUserIdentitiesResponses,
       GetUserIdentitiesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/identities",
       ...options,
@@ -4593,8 +4907,10 @@ export class Users {
     return (options.client ?? client).post<
       CreateUserIdentityResponses,
       CreateUserIdentityErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/identities",
       ...options,
@@ -4621,8 +4937,10 @@ export class Users {
     return (options.client ?? client).delete<
       DeleteUserSessionsResponses,
       DeleteUserSessionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/sessions",
       ...options,
@@ -4645,8 +4963,10 @@ export class Users {
     return (options.client ?? client).get<
       GetUserSessionsResponses,
       GetUserSessionsErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/sessions",
       ...options,
@@ -4669,8 +4989,10 @@ export class Users {
     return (options.client ?? client).delete<
       ResetUsersMfaAllResponses,
       ResetUsersMfaAllErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/mfa",
       ...options,
@@ -4693,8 +5015,10 @@ export class Users {
     return (options.client ?? client).get<
       GetUsersMfaResponses,
       GetUsersMfaErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/mfa",
       ...options,
@@ -4717,8 +5041,10 @@ export class Users {
     return (options.client ?? client).delete<
       ResetUsersMfaResponses,
       ResetUsersMfaErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/users/{user_id}/mfa/{factor_id}",
       ...options,
@@ -4743,8 +5069,10 @@ export class Webhooks {
     return (options.client ?? client).get<
       GetEventResponses,
       GetEventErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/events/{event_id}",
       ...options,
@@ -4767,8 +5095,10 @@ export class Webhooks {
     return (options?.client ?? client).get<
       GetEventTypesResponses,
       GetEventTypesErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/event_types",
       ...options,
@@ -4791,8 +5121,10 @@ export class Webhooks {
     return (options.client ?? client).delete<
       DeleteWebHookResponses,
       DeleteWebHookErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/webhooks/{webhook_id}",
       ...options,
@@ -4815,8 +5147,10 @@ export class Webhooks {
     return (options.client ?? client).patch<
       UpdateWebHookResponses,
       UpdateWebHookErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/webhooks/{webhook_id}",
       ...options,
@@ -4843,8 +5177,10 @@ export class Webhooks {
     return (options?.client ?? client).get<
       GetWebHooksResponses,
       GetWebHooksErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/webhooks",
       ...options,
@@ -4867,8 +5203,10 @@ export class Webhooks {
     return (options.client ?? client).post<
       CreateWebHookResponses,
       CreateWebHookErrors,
-      ThrowOnError
+      ThrowOnError,
+      "data"
     >({
+      responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/webhooks",
       ...options,
