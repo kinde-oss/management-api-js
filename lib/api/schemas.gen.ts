@@ -3415,6 +3415,30 @@ export const $update_role_permissions_response = {
   },
 } as const;
 
+export const $update_role_system_permissions_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+    },
+    message: {
+      type: "string",
+    },
+    system_permissions_added: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
+    system_permissions_removed: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
+  },
+} as const;
+
 export const $update_organization_users_response = {
   type: "object",
   properties: {
@@ -3565,7 +3589,7 @@ export const $get_application_response = {
         type: {
           description: "The application's type.",
           type: "string",
-          enum: ["m2m", "reg", "spa"],
+          enum: ["m2m", "reg", "spa", "device"],
         },
         client_id: {
           description: "The application's client ID.",
@@ -3592,6 +3616,53 @@ export const $get_application_response = {
             "Whether the application has a cancel button to allow users to exit the auth flow [Beta].",
           type: "boolean",
           example: false,
+        },
+        is_access_control_enabled: {
+          description:
+            "Whether role-based access control is enforced for the application.\nAlways false for application types that do not support connections.\n",
+          type: "boolean",
+          example: false,
+        },
+        is_allow_faceless_auth: {
+          description:
+            "Bypass Kinde's sign up and sign in screens and use your own design.",
+          type: "boolean",
+          example: false,
+        },
+        is_ask_for_name: {
+          description:
+            "Show fields to collect name details from users signing up with email or phone.",
+          type: "boolean",
+          example: true,
+        },
+        has_marketing_consent: {
+          description: "Show a marketing consent checkbox on the sign-up page.",
+          type: "boolean",
+          example: false,
+        },
+        has_sign_in_link_on_sign_up_page: {
+          description:
+            "Allow users to switch to the login page from the sign-up page.",
+          type: "boolean",
+          example: true,
+        },
+        has_register_link_on_sign_in_page: {
+          description:
+            "Allow users to switch to the register page from the sign-in page.",
+          type: "boolean",
+          example: true,
+        },
+        has_sign_in_with_sso_button: {
+          description:
+            "When home realm discovery is configured, users see a button to prompt them to use their work email.",
+          type: "boolean",
+          example: false,
+        },
+        use_gravatar_fallback: {
+          description:
+            "Use a backup image if a profile picture is not available.",
+          type: "boolean",
+          example: true,
         },
       },
     },
@@ -3710,6 +3781,31 @@ export const $get_permissions_response = {
   },
 } as const;
 
+export const $get_system_permissions_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    system_permissions: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/system_permissions",
+      },
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+      nullable: true,
+    },
+  },
+} as const;
+
 export const $permissions = {
   type: "object",
   properties: {
@@ -3785,6 +3881,60 @@ export const $roles = {
   },
 } as const;
 
+export const $application_access_role = {
+  type: "object",
+  description:
+    "A business role configured as allowed to access an application.",
+  properties: {
+    id: {
+      type: "string",
+      description: "The role's ID.",
+      example: "0192c16a-bb53-b442-77e5-97d31877ba5b",
+    },
+    key: {
+      type: "string",
+      description: "The role identifier to use in code.",
+      example: "admin",
+    },
+    name: {
+      type: "string",
+      description: "The role's name.",
+      example: "Administrator",
+    },
+    description: {
+      type: "string",
+      description: "The role's description.",
+      nullable: true,
+      example: "Full access to all resources.",
+    },
+  },
+} as const;
+
+export const $get_application_access_roles_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    roles: {
+      type: "array",
+      description: "Roles configured as allowed to access the application.",
+      items: {
+        $ref: "#/components/schemas/application_access_role",
+      },
+    },
+    has_more: {
+      type: "boolean",
+      description: "Whether more records exist.",
+    },
+  },
+} as const;
+
 export const $role_permissions_response = {
   type: "object",
   properties: {
@@ -3805,6 +3955,57 @@ export const $role_permissions_response = {
     next_token: {
       type: "string",
       description: "Pagination token.",
+    },
+  },
+} as const;
+
+export const $system_permissions = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      description: "The system permission's ID.",
+      example: "perm_019541f3fa0c874fc47b3ae73585b21c",
+    },
+    key: {
+      type: "string",
+      description: "The system permission identifier to use in code.",
+      example: "org:read:billing",
+    },
+    name: {
+      type: "string",
+      description: "The system permission's name.",
+      example: "Read billing details",
+    },
+    description: {
+      type: "string",
+      description: "The system permission's description.",
+      example: "View plan and update card details",
+    },
+  },
+} as const;
+
+export const $role_system_permissions_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    system_permissions: {
+      type: "array",
+      items: {
+        $ref: "#/components/schemas/system_permissions",
+      },
+    },
+    next_token: {
+      type: "string",
+      description: "Pagination token.",
+      nullable: true,
     },
   },
 } as const;
@@ -3874,6 +4075,59 @@ export const $get_organization_role_users_response = {
       type: "string",
       description: "Pagination token.",
       nullable: true,
+    },
+  },
+} as const;
+
+export const $get_organization_role_users_count_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    count: {
+      type: "integer",
+      description:
+        "The number of users with the specified role in the organization.",
+      example: 42,
+    },
+  },
+} as const;
+
+export const $get_organization_role_active_users_count_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    active_users_count: {
+      type: "integer",
+      description:
+        "Number of users with the role who received at least one access token during the requested period.",
+    },
+    date_time_from: {
+      type: "string",
+      format: "date-time",
+      description:
+        "Start of the active period that was used (inclusive), in UTC at second precision after any rounding.",
+    },
+    date_time_to: {
+      type: "string",
+      format: "date-time",
+      description:
+        "End of the active period that was used (inclusive), in UTC at second precision after any rounding.",
     },
   },
 } as const;
@@ -4100,15 +4354,33 @@ export const $get_billing_agreements_response = {
           expires_on: {
             type: "string",
             format: "date-time",
+            nullable: true,
             description:
               "The date the agreement expired (and was no longer active)",
             example: "2024-11-18T13:32:03+11",
           },
           billing_group_id: {
             type: "string",
+            nullable: true,
             description:
               "The friendly id of the billing group this agreement's plan is part of",
             example: "sbg_0195abf6773fdae18d5da72281a3fde2",
+          },
+          current_period_start: {
+            type: "string",
+            format: "date-time",
+            nullable: true,
+            description:
+              "The start date of the agreement's current billing period. Null when the agreement has no current billing cycle.\n",
+            example: "2026-08-06T12:53:57Z",
+          },
+          current_period_end: {
+            type: "string",
+            format: "date-time",
+            nullable: true,
+            description:
+              "The end date of the agreement's current billing period (typically the next billing date). Null when the agreement has no current billing cycle; may be in the past if cycle roll or provider sync has lagged.\n",
+            example: "2026-09-06T12:53:57Z",
           },
           entitlements: {
             type: "array",

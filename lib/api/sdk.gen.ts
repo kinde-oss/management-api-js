@@ -17,6 +17,9 @@ import type {
   AddApisData,
   AddApisErrors,
   AddApisResponses,
+  AddApplicationAccessRoleData,
+  AddApplicationAccessRoleErrors,
+  AddApplicationAccessRoleResponses,
   AddLogoData,
   AddLogoErrors,
   AddLogoResponses,
@@ -215,6 +218,9 @@ import type {
   GetApisData,
   GetApisErrors,
   GetApisResponses,
+  GetApplicationAccessRolesData,
+  GetApplicationAccessRolesErrors,
+  GetApplicationAccessRolesResponses,
   GetApplicationConnectionsData,
   GetApplicationConnectionsErrors,
   GetApplicationConnectionsResponses,
@@ -301,10 +307,22 @@ import type {
   GetOrganizationInvitesData,
   GetOrganizationInvitesErrors,
   GetOrganizationInvitesResponses,
+  GetOrganizationPasskeyData,
+  GetOrganizationPasskeyErrors,
+  GetOrganizationPasskeyResponses,
   GetOrganizationPropertyValuesData,
   GetOrganizationPropertyValuesErrors,
   GetOrganizationPropertyValuesResponses,
   GetOrganizationResponses,
+  GetOrganizationRoleActiveUsersCountData,
+  GetOrganizationRoleActiveUsersCountErrors,
+  GetOrganizationRoleActiveUsersCountResponses,
+  GetOrganizationRoleUsersCountData,
+  GetOrganizationRoleUsersCountErrors,
+  GetOrganizationRoleUsersCountResponses,
+  GetOrganizationRoleUsersData,
+  GetOrganizationRoleUsersErrors,
+  GetOrganizationRoleUsersResponses,
   GetOrganizationsData,
   GetOrganizationsErrors,
   GetOrganizationsResponses,
@@ -320,6 +338,9 @@ import type {
   GetOrgUserMfaData,
   GetOrgUserMfaErrors,
   GetOrgUserMfaResponses,
+  GetPasskeyData,
+  GetPasskeyErrors,
+  GetPasskeyResponses,
   GetPermissionsData,
   GetPermissionsErrors,
   GetPermissionsResponses,
@@ -338,12 +359,21 @@ import type {
   GetRolesData,
   GetRolesErrors,
   GetRolesResponses,
+  GetRoleSystemPermissionsData,
+  GetRoleSystemPermissionsErrors,
+  GetRoleSystemPermissionsResponses,
+  GetRoleUsersData,
+  GetRoleUsersErrors,
+  GetRoleUsersResponses,
   GetSubscriberData,
   GetSubscriberErrors,
   GetSubscriberResponses,
   GetSubscribersData,
   GetSubscribersErrors,
   GetSubscribersResponses,
+  GetSystemPermissionsData,
+  GetSystemPermissionsErrors,
+  GetSystemPermissionsResponses,
   GetTimezonesData,
   GetTimezonesErrors,
   GetTimezonesResponses,
@@ -377,6 +407,9 @@ import type {
   RefreshUserClaimsData,
   RefreshUserClaimsErrors,
   RefreshUserClaimsResponses,
+  RemoveApplicationAccessRoleData,
+  RemoveApplicationAccessRoleErrors,
+  RemoveApplicationAccessRoleResponses,
   RemoveConnectionData,
   RemoveConnectionErrors,
   RemoveConnectionResponses,
@@ -472,6 +505,9 @@ import type {
   UpdateOrganizationFeatureFlagOverrideData,
   UpdateOrganizationFeatureFlagOverrideErrors,
   UpdateOrganizationFeatureFlagOverrideResponses,
+  UpdateOrganizationPasskeyData,
+  UpdateOrganizationPasskeyErrors,
+  UpdateOrganizationPasskeyResponses,
   UpdateOrganizationPropertiesData,
   UpdateOrganizationPropertiesErrors,
   UpdateOrganizationPropertiesResponses,
@@ -485,6 +521,9 @@ import type {
   UpdateOrganizationUsersData,
   UpdateOrganizationUsersErrors,
   UpdateOrganizationUsersResponses,
+  UpdatePasskeyData,
+  UpdatePasskeyErrors,
+  UpdatePasskeyResponses,
   UpdatePermissionsData,
   UpdatePermissionsErrors,
   UpdatePermissionsResponses,
@@ -497,6 +536,9 @@ import type {
   UpdateRolesData,
   UpdateRolesErrors,
   UpdateRolesResponses,
+  UpdateRoleSystemPermissionsData,
+  UpdateRoleSystemPermissionsErrors,
+  UpdateRoleSystemPermissionsResponses,
   UpdateUserData,
   UpdateUserErrors,
   UpdateUserFeatureFlagOverrideData,
@@ -1240,6 +1282,90 @@ export class Applications {
       responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/applications/{application_id}/connections/{connection_id}",
+      ...options,
+    });
+  }
+
+  /**
+   * Get application access roles
+   *
+   * Gets the roles configured as allowed to access an application. These
+   * roles are enforced only when role-based access control is enabled for
+   * the application.
+   *
+   * <div>
+   * <code>read:applications</code>
+   * </div>
+   *
+   */
+  public static getApplicationAccessRoles<ThrowOnError extends boolean = false>(
+    options: Options<GetApplicationAccessRolesData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetApplicationAccessRolesResponses,
+      GetApplicationAccessRolesErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/applications/{application_id}/access_roles",
+      ...options,
+    });
+  }
+
+  /**
+   * Remove application access role
+   *
+   * Remove a role from the set that is allowed to access an application.
+   * Removing a role does not change whether role-based access control is
+   * enabled for the application.
+   *
+   * <div>
+   * <code>update:applications</code>
+   * </div>
+   *
+   */
+  public static removeApplicationAccessRole<
+    ThrowOnError extends boolean = false,
+  >(options: Options<RemoveApplicationAccessRoleData, ThrowOnError>) {
+    return (options.client ?? client).delete<
+      RemoveApplicationAccessRoleResponses,
+      RemoveApplicationAccessRoleErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/applications/{application_id}/access_roles/{role_id}",
+      ...options,
+    });
+  }
+
+  /**
+   * Add application access role
+   *
+   * Add a role to the set configured as allowed to access an application.
+   * Adding a role does not enable role-based access control for the
+   * application.
+   *
+   * <div>
+   * <code>update:applications</code>
+   * </div>
+   *
+   */
+  public static addApplicationAccessRole<ThrowOnError extends boolean = false>(
+    options: Options<AddApplicationAccessRoleData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).post<
+      AddApplicationAccessRoleResponses,
+      AddApplicationAccessRoleErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/applications/{application_id}/access_roles/{role_id}",
       ...options,
     });
   }
@@ -2152,6 +2278,10 @@ export class Directories {
    *
    * Update SCIM directory configuration.
    *
+   * <div>
+   * <code>update:scim_directories</code>
+   * </div>
+   *
    */
   public static updateDirectory<ThrowOnError extends boolean = false>(
     options: Options<UpdateDirectoryData, ThrowOnError>,
@@ -2389,6 +2519,62 @@ export class Environments {
       ...options,
       headers: {
         "Content-Type": null,
+        ...options.headers,
+      },
+    });
+  }
+
+  /**
+   * Get environment passkey settings
+   *
+   * Retrieve passkey policy for the current environment.
+   *
+   * <div>
+   * <code>read:passkey</code>
+   * </div>
+   *
+   */
+  public static getPasskey<ThrowOnError extends boolean = false>(
+    options?: Options<GetPasskeyData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).get<
+      GetPasskeyResponses,
+      GetPasskeyErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/passkey",
+      ...options,
+    });
+  }
+
+  /**
+   * Update environment passkey settings
+   *
+   * Set the passkey policy for the current environment. Policies other than `off` require the `passkeys` entitlement.
+   *
+   * <div>
+   * <code>update:passkey</code>
+   * </div>
+   *
+   */
+  public static updatePasskey<ThrowOnError extends boolean = false>(
+    options: Options<UpdatePasskeyData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).put<
+      UpdatePasskeyResponses,
+      UpdatePasskeyErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/passkey",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
         ...options.headers,
       },
     });
@@ -2829,9 +3015,9 @@ export class Organizations {
    *
    */
   public static getOrganization<ThrowOnError extends boolean = false>(
-    options?: Options<GetOrganizationData, ThrowOnError>,
+    options: Options<GetOrganizationData, ThrowOnError>,
   ) {
-    return (options?.client ?? client).get<
+    return (options.client ?? client).get<
       GetOrganizationResponses,
       GetOrganizationErrors,
       ThrowOnError,
@@ -3120,6 +3306,99 @@ export class Organizations {
       responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/users/{user_id}/roles/{role_id}",
+      ...options,
+    });
+  }
+
+  /**
+   * List organization role users
+   *
+   * Get users that have a given role within a specific organization.
+   *
+   * <div>
+   * <code>read:organization_user_roles</code>
+   * </div>
+   *
+   */
+  public static getOrganizationRoleUsers<ThrowOnError extends boolean = false>(
+    options: Options<GetOrganizationRoleUsersData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetOrganizationRoleUsersResponses,
+      GetOrganizationRoleUsersErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organizations/{org_code}/roles/{role_id}/users",
+      ...options,
+    });
+  }
+
+  /**
+   * Count organization role users
+   *
+   * Get the number of users that have a given role within a specific organization.
+   *
+   * <div>
+   * <code>read:organization_user_roles</code>
+   * </div>
+   *
+   */
+  public static getOrganizationRoleUsersCount<
+    ThrowOnError extends boolean = false,
+  >(options: Options<GetOrganizationRoleUsersCountData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetOrganizationRoleUsersCountResponses,
+      GetOrganizationRoleUsersCountErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organizations/{org_code}/roles/{role_id}/users/count",
+      ...options,
+    });
+  }
+
+  /**
+   * Get organization role active users count
+   *
+   * Get the number of active users that hold a given role within a specific organization.
+   *
+   * A user is counted as active if they were issued at least one access token during the requested period,
+   * regardless of organization context on the token. Only users who currently hold the role in the
+   * organization are included. The count is scoped to the current environment.
+   *
+   * Both `date_time_from` and `date_time_to` are required, inclusive, and must be ISO 8601 datetimes in UTC.
+   * Provide them at second precision (no fractional seconds). If a value includes fractional seconds, it is
+   * normalized before any other processing: `date_time_from` is rounded down and `date_time_to` is rounded up
+   * to the nearest second. Window validation, the active-user query, and the echoed response bounds all use
+   * those normalized values.
+   *
+   * The requested window must not exceed 3 days. Because both bounds are inclusive, this means `date_time_to`
+   * must be earlier than `date_time_from` plus 3 days. For example, `2026-07-01T00:00:00Z` to
+   * `2026-07-03T23:59:59Z` is a full 3 day window covering the whole of 1, 2 and 3 July. A longer window is
+   * rejected with `DATE_TIME_RANGE_TOO_LARGE`.
+   *
+   * <div>
+   * <code>read:organization_user_roles</code>
+   * </div>
+   *
+   */
+  public static getOrganizationRoleActiveUsersCount<
+    ThrowOnError extends boolean = false,
+  >(options: Options<GetOrganizationRoleActiveUsersCountData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetOrganizationRoleActiveUsersCountResponses,
+      GetOrganizationRoleActiveUsersCountErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organizations/{org_code}/roles/{role_id}/active_users/count",
       ...options,
     });
   }
@@ -3572,6 +3851,62 @@ export class Organizations {
       responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/organizations/{org_code}/mfa",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+
+  /**
+   * Get organization passkey settings
+   *
+   * Retrieve passkey settings for an organization, including whether the organization overrides the environment default.
+   *
+   * <div>
+   * <code>read:organization_passkey</code>
+   * </div>
+   *
+   */
+  public static getOrganizationPasskey<ThrowOnError extends boolean = false>(
+    options: Options<GetOrganizationPasskeyData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetOrganizationPasskeyResponses,
+      GetOrganizationPasskeyErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organizations/{org_code}/passkey",
+      ...options,
+    });
+  }
+
+  /**
+   * Update organization passkey settings
+   *
+   * Update passkey settings for an organization. Set `is_override_environment_passkey_settings` to `false` to revert to the environment default without providing a policy.
+   *
+   * <div>
+   * <code>update:organization_passkey</code>
+   * </div>
+   *
+   */
+  public static updateOrganizationPasskey<ThrowOnError extends boolean = false>(
+    options: Options<UpdateOrganizationPasskeyData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).put<
+      UpdateOrganizationPasskeyResponses,
+      UpdateOrganizationPasskeyErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/organizations/{org_code}/passkey",
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -4150,7 +4485,7 @@ export class Roles {
   /**
    * List roles
    *
-   * The returned list can be sorted by role name or role ID in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
+   * The returned list can be sorted by role name or role key in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
    *
    * <div>
    * <code>read:roles</code>
@@ -4424,6 +4759,93 @@ export class Roles {
   }
 
   /**
+   * Get role system permissions
+   *
+   * Get system permissions for a role.
+   *
+   * System permissions control what organization users can do in the self-serve portal.
+   *
+   * <div>
+   * <code>read:role_system_permissions</code>
+   * </div>
+   *
+   */
+  public static getRoleSystemPermissions<ThrowOnError extends boolean = false>(
+    options: Options<GetRoleSystemPermissionsData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetRoleSystemPermissionsResponses,
+      GetRoleSystemPermissionsErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/roles/{role_id}/system_permissions",
+      ...options,
+    });
+  }
+
+  /**
+   * Update role system permissions
+   *
+   * Update role system permissions.
+   *
+   * System permissions control what organization users can do in the self-serve portal.
+   *
+   * <div>
+   * <code>update:role_system_permissions</code>
+   * </div>
+   *
+   */
+  public static updateRoleSystemPermissions<
+    ThrowOnError extends boolean = false,
+  >(options: Options<UpdateRoleSystemPermissionsData, ThrowOnError>) {
+    return (options.client ?? client).patch<
+      UpdateRoleSystemPermissionsResponses,
+      UpdateRoleSystemPermissionsErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/roles/{role_id}/system_permissions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+
+  /**
+   * List role users
+   *
+   * Get users that have a given role, across all organizations. Each user entry
+   * includes the organization codes where they hold that role.
+   *
+   * <div>
+   * <code>read:organization_user_roles</code>
+   * </div>
+   *
+   */
+  public static getRoleUsers<ThrowOnError extends boolean = false>(
+    options: Options<GetRoleUsersData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetRoleUsersResponses,
+      GetRoleUsersErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/roles/{role_id}/users",
+      ...options,
+    });
+  }
+
+  /**
    * Remove role permission
    *
    * Remove a permission from a role.
@@ -4445,6 +4867,34 @@ export class Roles {
       responseStyle: "data",
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/roles/{role_id}/permissions/{permission_id}",
+      ...options,
+    });
+  }
+
+  /**
+   * List system permissions
+   *
+   * The returned list can be sorted by system permission name or ID in ascending or descending order. The number of records to return at a time can also be controlled using the `page_size` query string parameter.
+   *
+   * System permissions control what organization users can do in the self-serve portal.
+   *
+   * <div>
+   * <code>read:system_permissions</code>
+   * </div>
+   *
+   */
+  public static getSystemPermissions<ThrowOnError extends boolean = false>(
+    options?: Options<GetSystemPermissionsData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).get<
+      GetSystemPermissionsResponses,
+      GetSystemPermissionsErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/system_permissions",
       ...options,
     });
   }
