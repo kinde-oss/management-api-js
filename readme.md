@@ -25,6 +25,18 @@ The following ENV variables are required to run the project:
 - `KINDE_MANAGEMENT_CLIENT_ID`: Client ID of your M2M token
 - `KINDE_MANAGEMENT_CLIENT_SECRET`: Client Secret of your M2M token
 
+Alternatively, the configuration can be passed to `init` directly:
+
+```js
+import { init } from "@kinde/management-api-js";
+
+init({
+  kindeDomain: "mybusiness.kinde.com",
+  clientId: "your_m2m_client_id",
+  clientSecret: "your_m2m_client_secret",
+});
+```
+
 ## Usage
 
 ```js
@@ -34,17 +46,40 @@ init();
 const { users } = await Users.getUsers();
 ```
 
-### Params can be passed to the function as an object
+### Passing parameters
+
+Parameters are grouped by where they are sent in the request: `path`, `query` and `body`.
 
 ```js
 import { Users, init } from "@kinde/management-api-js";
 
 const params = {
-  id: "kp_xxx",
+  query: {
+    id: "kp_xxx",
+  },
 };
 
 init();
 const userData = await Users.getUserData(params);
+```
+
+```js
+await Users.updateUser({
+  query: {
+    id: "kp_xxx",
+  },
+  body: {
+    given_name: "Ada",
+  },
+});
+```
+
+### TypeScript
+
+Calls resolve with the response payload and throw an `ApiError` on failure. The generated types don't assume this, so responses are typed as possibly `undefined`; pass `throwOnError: true` to a call to get a non-optional response type:
+
+```ts
+const { users } = await Users.getUsers({ throwOnError: true });
 ```
 
 ## API documentation
