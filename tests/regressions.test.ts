@@ -758,11 +758,15 @@ describe("Breaking Changes and Regressions", () => {
 
   describe("init configuration", () => {
     it("should throw if kindeDomain is not set", () => {
+      // Both explicit config and KINDE_DOMAIN env must be absent for the error to fire
+      const orig = process.env.KINDE_DOMAIN;
+      process.env.KINDE_DOMAIN = "";
       expect(() =>
         init({ clientId: "id", clientSecret: "secret" } as Parameters<
           typeof init
         >[0]),
       ).toThrow();
+      process.env.KINDE_DOMAIN = orig;
     });
 
     it("should accept kindeDomain with trailing slash", () => {
