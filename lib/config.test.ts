@@ -54,6 +54,7 @@ describe("init method", () => {
       kindeDomain: "https://test.com",
       clientId: "testClientId",
       clientSecret: "testClientSecret",
+      audience: undefined as unknown as string,
     };
 
     init(testConfig);
@@ -71,10 +72,11 @@ describe("init method", () => {
 
     const testConfig: Pick<
       configType,
-      "kindeDomain" | "clientId" | "clientSecret"
+      "kindeDomain" | "clientId" | "clientSecret" | "audience"
     > = {
       kindeDomain: "https://test.com",
       clientSecret: "testClientSecret",
+      audience: undefined as unknown as string,
     };
 
     init(testConfig);
@@ -92,4 +94,40 @@ describe("init method", () => {
       init();
     }).toThrow("kindeDomain or env KINDE_DOMAIN is not set");
   });
+
+
+  it("should accept a custom audience via config and use it", () => {
+    process.env.KINDE_DOMAIN = "https://example.com";
+    process.env.KINDE_MANAGEMENT_CLIENT_ID = "testClientIdEnv";
+    process.env.KINDE_MANAGEMENT_CLIENT_SECRET = "testClientSecretEnv";
+
+    const customAudience = "https://custom-api.example.com/api";
+    init({ kindeDomain: "https://example.com", audience: customAudience });
+
+    expect(kindeConfig.audience).toBe(customAudience);
+  });
+
+  it("should prefer KINDE_AUDIENCE env over domain-based audience", () => {
+    process.env.KINDE_DOMAIN = "https://example.com";
+    process.env.KINDE_AUDIENCE = "https://env-audience.example.com/api";
+    process.env.KINDE_MANAGEMENT_CLIENT_ID = "testClientIdEnv";
+    process.env.KINDE_MANAGEMENT_CLIENT_SECRET = "testClientSecretEnv";
+
+    init();
+
+    expect(kindeConfig.audience).toBe(process.env.KINDE_AUDIENCE);
+  });
+
+  it("should prefer explicit config.audience over KINDE_AUDIENCE env", () => {
+    process.env.KINDE_DOMAIN = "https://example.com";
+    process.env.KINDE_AUDIENCE = "https://env-audience.example.com/api";
+    process.env.KINDE_MANAGEMENT_CLIENT_ID = "testClientIdEnv";
+    process.env.KINDE_MANAGEMENT_CLIENT_SECRET = "testClientSecretEnv";
+
+    const explicitAudience = "https://explicit.example.com/api";
+    init({ kindeDomain: "https://example.com", audience: explicitAudience });
+
+    expect(kindeConfig.audience).toBe(explicitAudience);
+  });
+
 });
