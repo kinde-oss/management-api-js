@@ -718,6 +718,27 @@ export type create_organization_response = {
   };
 };
 
+export type create_user_billing_customer_response = {
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Response code.
+   */
+  code?: string;
+  billing_customer?: {
+    /**
+     * The billing customer id.
+     */
+    id?: string;
+    /**
+     * The billing agreement id created for the assigned plan.
+     */
+    agreement_id?: string;
+  };
+};
+
 export type user_identity = {
   /**
    * The type of identity object created.
@@ -770,6 +791,25 @@ export type get_identities_response = {
    * Whether more records exist.
    */
   has_more?: boolean;
+};
+
+export type identities_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  identities?: Array<
+    identity & {
+      /**
+       * The unique ID of the user the identity belongs to.
+       */
+      user_id?: string;
+    }
+  >;
 };
 
 export type get_user_sessions_response = {
@@ -1461,26 +1501,26 @@ export type identity = {
    */
   type?: string;
   /**
-   * Whether the identity is confirmed
+   * Whether the identity is confirmed. Null for identity types that do not record confirmation, such as username.
    */
-  is_confirmed?: boolean;
+  is_confirmed?: boolean | null;
   /**
    * Date of user creation in ISO 8601 format
    */
   created_on?: string;
   /**
-   * Date of last login in ISO 8601 format
+   * Date of last login in ISO 8601 format. Null if the identity has never been used to sign in.
    */
-  last_login_on?: string;
+  last_login_on?: string | null;
   total_logins?: number;
   /**
    * The value of the identity
    */
   name?: string;
   /**
-   * The associated email of the identity
+   * The associated email of the identity. Null for phone and username identities.
    */
-  email?: string;
+  email?: string | null;
   /**
    * The social or enterprise connection ID associated with the identity. Null for email, phone, username, and passkey identities.
    */
@@ -1997,6 +2037,10 @@ export type add_organization_users_response = {
    */
   message?: string;
   users_added?: Array<string>;
+  /**
+   * Users that were not added because directory sync manages them in another organization. A directory-managed user belongs only to the organization their directory owns.
+   */
+  users_blocked?: Array<string>;
 };
 
 export type update_role_permissions_response = {
@@ -2019,6 +2063,10 @@ export type update_organization_users_response = {
   users_added?: Array<string>;
   users_updated?: Array<string>;
   users_removed?: Array<string>;
+  /**
+   * Users that were not added because directory sync manages them in another organization. A directory-managed user belongs only to the organization their directory owns.
+   */
+  users_blocked?: Array<string>;
 };
 
 export type connected_apps_auth_url = {
@@ -2609,6 +2657,133 @@ export type get_billing_entitlements_response = {
   }>;
 };
 
+export type get_billing_one_time_purchases_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  /**
+   * A list of current one-time purchases
+   */
+  one_time_purchases?: Array<{
+    /**
+     * The friendly id of the one-time purchase
+     */
+    id?: string;
+    /**
+     * The friendly id of the billing agreement the purchase belongs to
+     */
+    agreement_id?: string;
+    /**
+     * The feature code of the purchased one-time feature
+     */
+    feature_code?: string;
+    /**
+     * The feature name of the purchased one-time feature
+     */
+    feature_name?: string;
+    /**
+     * The number of units granted by this purchase. Null when the purchase grants unlimited usage.
+     *
+     */
+    units_granted?: number | null;
+    /**
+     * The amount paid for this purchase, in major currency units
+     */
+    amount?: number;
+    /**
+     * The ISO currency code of the amount paid
+     */
+    currency_code?: string;
+    /**
+     * When the purchase was paid
+     */
+    purchased_on?: string;
+    /**
+     * When the purchase expires. Null when the purchase never expires.
+     */
+    expires_on?: string | null;
+    /**
+     * The expiration policy captured at purchase time
+     */
+    expiration_policy_code?: "none" | "end_of_current_billing_cycle";
+    /**
+     * Whether usage is reported against this purchased feature
+     */
+    is_metered?: boolean;
+  }>;
+  /**
+   * Per-feature totals for all current purchases matching the filters. Present only when feature_totals=true.
+   *
+   */
+  feature_totals?: Array<{
+    /**
+     * The friendly id of the billing agreement the purchases belong to
+     */
+    agreement_id?: string;
+    /**
+     * The feature code of the purchased one-time feature
+     */
+    feature_code?: string;
+    /**
+     * The feature name of the purchased one-time feature
+     */
+    feature_name?: string;
+    /**
+     * The sum of units granted by current purchases of this feature. Null when any current purchase grants unlimited usage.
+     *
+     */
+    units_granted?: number | null;
+    /**
+     * The sum of amounts paid for current purchases of this feature, in major currency units
+     */
+    amount?: number;
+    /**
+     * The ISO currency code of the aggregated amount
+     */
+    currency_code?: string;
+    /**
+     * The number of current purchases included in this total
+     */
+    purchase_count?: number;
+    /**
+     * When this feature was last purchased
+     */
+    last_purchased_on?: string;
+    /**
+     * Expiry from the latest current purchase of this feature. Null when that purchase never expires.
+     *
+     */
+    expires_on?: string | null;
+    /**
+     * The expiration policy from the latest current purchase of this feature
+     */
+    expiration_policy_code?: "none" | "end_of_current_billing_cycle";
+    /**
+     * Whether usage is reported against this purchased feature
+     */
+    is_metered?: boolean;
+    /**
+     * The current billing cycle running total for this agreement and feature. Present only on metered features when the agreement has a current cycle. Same ingest-order absolute/delta rules as POST meter_usage, scoped to the current cycle. Resets when a new cycle starts.
+     *
+     */
+    current_billing_cycle_usage?: number;
+    /**
+     * The ingest-order lifetime running total for this agreement and feature. Absolute replaces it; delta adds to it. Includes every accepted record on the meter, including those reported before the first paid purchase. Does not reset when the billing cycle rolls. Present only on metered features. Comparable to units_granted on this total. Same number as current_usage on GET/POST meter_usage when the latest current purchase never expires.
+     *
+     */
+    usage_since_first_purchased?: number;
+  }>;
+};
+
 export type get_billing_agreements_response = {
   /**
    * Response code.
@@ -2677,6 +2852,91 @@ export type create_meter_usage_record_response = {
    * Response code.
    */
   code?: string;
+  /**
+   * The friendly id of the created meter usage record
+   */
+  id?: string;
+  /**
+   * Units currently granted for this agreement and feature. For one-time features this is the sum of current paid purchases. For plan-metered entitlements this is the entitlement or plan limit. Omitted when there is no current grant, and when the grant is unlimited (any current one-time purchase has a null unit grant, or the entitlement has no numeric cap). An unlimited one-time grant still returns expiration_policy_code.
+   *
+   */
+  units_granted?: number;
+  /**
+   * Expiration policy of the latest current one-time purchase of this feature. Omitted for plan-metered entitlements and when there is no current one-time grant.
+   *
+   */
+  expiration_policy_code?: "none" | "end_of_current_billing_cycle";
+  /**
+   * Usage against the current grant after this record is included. For end_of_current_billing_cycle one-time features and plan-metered entitlements this is the current billing cycle running total (resets each cycle). For none it is the ingest-order lifetime total for this agreement and feature, including records reported before the first paid purchase. Absolute replaces that total; delta adds to it. meter_usage_timestamp does not change the arithmetic. Omitted when there is no current grant.
+   *
+   */
+  current_usage?: number;
+};
+
+export type get_billing_meter_usage_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  /**
+   * Whether more records exist.
+   */
+  has_more?: boolean;
+  /**
+   * The billing agreement this page is scoped to.
+   */
+  customer_agreement_id?: string;
+  /**
+   * The feature this page is scoped to.
+   */
+  feature_code?: string;
+  /**
+   * Units currently granted for this agreement and feature. For one-time features this is the sum of current paid purchases. For plan-metered entitlements this is the entitlement or plan limit. Omitted when there is no current grant, and when the grant is unlimited (any current one-time purchase has a null unit grant, or the entitlement has no numeric cap). An unlimited one-time grant still returns expiration_policy_code. Not limited to the current page.
+   *
+   */
+  units_granted?: number;
+  /**
+   * Expiration policy of the latest current one-time purchase of this feature. Omitted for plan-metered entitlements and when there is no current one-time grant.
+   *
+   */
+  expiration_policy_code?: "none" | "end_of_current_billing_cycle";
+  /**
+   * Usage against the current grant. For end_of_current_billing_cycle one-time features and plan-metered entitlements this is the current billing cycle running total (resets each cycle). For none it is the ingest-order lifetime total for this agreement and feature, including records reported before the first paid purchase. Absolute replaces that total; delta adds to it. Not limited to the current page. Omitted when there is no current grant.
+   *
+   */
+  current_usage?: number;
+  /**
+   * A list of meter usage records
+   */
+  meter_usages?: Array<{
+    /**
+     * The friendly id of the meter usage record
+     */
+    id?: string;
+    /**
+     * The value recorded on this usage row
+     */
+    meter_value?: number;
+    /**
+     * How this record updated the running total. `absolute` replaced it with meter_value. `delta` added meter_value to the last calculated total.
+     *
+     */
+    meter_type_code?: "absolute" | "delta";
+    /**
+     * When this event happened, as supplied by the caller (or the server time if omitted). Stored only. Not used to calculate the running total.
+     *
+     */
+    meter_usage_timestamp?: string;
+    /**
+     * The current-billing-cycle running total after and including this record, using the same ingest-order absolute/delta rules as POST. Independent of the never-expires lifetime total.
+     *
+     */
+    current_cycle_absolute_usage?: number | null;
+  }>;
 };
 
 export type get_api_keys_response = {
@@ -2967,6 +3227,18 @@ export type delete_directory_response = {
    * The ID of the deleted SCIM directory.
    */
   directory_id?: string;
+};
+
+export type rotate_directory_secret_response = {
+  /**
+   * Response code.
+   */
+  code?: string;
+  /**
+   * Response message.
+   */
+  message?: string;
+  directory?: directory;
 };
 
 export type directory = {
@@ -4429,7 +4701,7 @@ export type GetApplicationPropertyValuesResponse =
 export type UpdateApplicationsPropertyData = {
   body: {
     /**
-     * The new value for the property
+     * The new value for the property. Send an empty string to unset the property, so it reads back as not set.
      */
     value: string | boolean;
   };
@@ -4599,6 +4871,67 @@ export type GetBillingEntitlementsResponses = {
 export type GetBillingEntitlementsResponse =
   GetBillingEntitlementsResponses[keyof GetBillingEntitlementsResponses];
 
+export type GetBillingOneTimePurchasesData = {
+  body?: never;
+  path?: never;
+  query: {
+    /**
+     * Number of results per page. Defaults to 10 if parameter not sent.
+     */
+    page_size?: number | null;
+    /**
+     * The ID of the one-time purchase to start after.
+     */
+    starting_after?: string | null;
+    /**
+     * The ID of the one-time purchase to end before.
+     */
+    ending_before?: string | null;
+    /**
+     * The ID of the billing customer to retrieve one-time purchases for
+     */
+    customer_id: string;
+    /**
+     * The feature code to filter by purchases of that feature only
+     */
+    feature_code?: string | null;
+    /**
+     * When true, include feature_totals aggregated from every current purchase that matches the filters. Defaults to false. The property is omitted when false.
+     *
+     */
+    feature_totals?: boolean | null;
+  };
+  url: "/api/v1/billing/one_time_purchases";
+};
+
+export type GetBillingOneTimePurchasesErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Request was throttled.
+   */
+  429: unknown;
+};
+
+export type GetBillingOneTimePurchasesError =
+  GetBillingOneTimePurchasesErrors[keyof GetBillingOneTimePurchasesErrors];
+
+export type GetBillingOneTimePurchasesResponses = {
+  /**
+   * Billing one-time purchases successfully retrieved.
+   */
+  200: get_billing_one_time_purchases_response;
+};
+
+export type GetBillingOneTimePurchasesResponse =
+  GetBillingOneTimePurchasesResponses[keyof GetBillingOneTimePurchasesResponses];
+
 export type GetBillingAgreementsData = {
   body?: never;
   path?: never;
@@ -4665,7 +4998,7 @@ export type CreateBillingAgreementData = {
      */
     customer_id: string;
     /**
-     * The code of the billing plan the new agreement will be based on
+     * The code of the billing plan the new agreement will be based on. The plan can be in a different billing group from the customer's current agreement, but it must match the customer type (organization or user).
      */
     plan_code: string;
     /**
@@ -4710,6 +5043,108 @@ export type CreateBillingAgreementResponses = {
 export type CreateBillingAgreementResponse =
   CreateBillingAgreementResponses[keyof CreateBillingAgreementResponses];
 
+export type DeleteBillingAgreementData = {
+  body?: never;
+  path: {
+    /**
+     * The ID of the billing agreement to cancel.
+     */
+    agreement_id: string;
+  };
+  query?: never;
+  url: "/api/v1/billing/agreements/{agreement_id}";
+};
+
+export type DeleteBillingAgreementErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type DeleteBillingAgreementError =
+  DeleteBillingAgreementErrors[keyof DeleteBillingAgreementErrors];
+
+export type DeleteBillingAgreementResponses = {
+  /**
+   * Billing agreement successfully cancelled.
+   */
+  200: success_response;
+};
+
+export type DeleteBillingAgreementResponse =
+  DeleteBillingAgreementResponses[keyof DeleteBillingAgreementResponses];
+
+export type GetBillingMeterUsageData = {
+  body?: never;
+  path?: never;
+  query: {
+    /**
+     * Number of results per page. Defaults to the API page size limit if parameter not sent. Must be between 1 and that limit.
+     *
+     */
+    page_size?: number | null;
+    /**
+     * The ID of the meter usage record to start after.
+     */
+    starting_after?: string | null;
+    /**
+     * The ID of the meter usage record to end before.
+     */
+    ending_before?: string | null;
+    /**
+     * The billing agreement to retrieve meter usage for
+     */
+    customer_agreement_id: string;
+    /**
+     * The feature code to retrieve meter usage for
+     */
+    feature_code: string;
+    /**
+     * When true, include usage records from every billing cycle. Defaults to false (current cycle only). The grant snapshot stays grant-relative and is not the listed page.
+     *
+     */
+    all_cycles?: boolean | null;
+  };
+  url: "/api/v1/billing/meter_usage";
+};
+
+export type GetBillingMeterUsageErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type GetBillingMeterUsageError =
+  GetBillingMeterUsageErrors[keyof GetBillingMeterUsageErrors];
+
+export type GetBillingMeterUsageResponses = {
+  /**
+   * Billing meter usage successfully retrieved.
+   */
+  200: get_billing_meter_usage_response;
+};
+
+export type GetBillingMeterUsageResponse =
+  GetBillingMeterUsageResponses[keyof GetBillingMeterUsageResponses];
+
 export type CreateMeterUsageRecordData = {
   /**
    * Meter usage record
@@ -4724,15 +5159,18 @@ export type CreateMeterUsageRecordData = {
      */
     billing_feature_code: string;
     /**
-     * The value of usage to record
+     * The value of usage to record. Must be greater than zero. For absolute this becomes the new running total. For delta this is added to the last calculated running total.
+     *
      */
-    meter_value: string;
+    meter_value: number;
     /**
-     * The date and time the usage needs to be recorded for (defaults to current date/time)
+     * When this event happened. Defaults to the current date and time. Stored on the record and, for plan-metered entitlements, sent to the billing provider. Not used to choose a billing cycle, to order this record against earlier ones, or to calculate the running total. A timestamp in the past still replaces (absolute) or adds to (delta) the last calculated total.
+     *
      */
     meter_usage_timestamp?: string;
     /**
-     * Absolutes overrides the current usage
+     * How this record updates the running total. `absolute` replaces the last calculated total with `meter_value`. `delta` adds `meter_value` to the last calculated total. The caller is responsible for sending the correct type. See the operation description for which total is updated (current billing cycle vs never-expires lifetime).
+     *
      */
     meter_type_code?: "absolute" | "delta";
   };
@@ -5611,9 +6049,19 @@ export type CreateConnectionData = {
            */
           is_create_missing_user?: boolean;
           /**
-           * Force showing the SSO button for this connection.
+           * Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+           *
+           * @deprecated
            */
           is_force_show_sso_button?: boolean;
+          /**
+           * Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+           */
+          sso_button_display?: "auto" | "show" | "hide";
+          /**
+           * When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+           */
+          is_strict_mode?: boolean;
           /**
            * Additional upstream parameters to pass to the identity provider.
            */
@@ -5684,9 +6132,19 @@ export type CreateConnectionData = {
            */
           is_create_missing_user?: boolean;
           /**
-           * Force showing the SSO button for this connection.
+           * Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+           *
+           * @deprecated
            */
           is_force_show_sso_button?: boolean;
+          /**
+           * Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+           */
+          sso_button_display?: "auto" | "show" | "hide";
+          /**
+           * When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+           */
+          is_strict_mode?: boolean;
           /**
            * Additional upstream parameters to pass to the identity provider.
            */
@@ -5905,9 +6363,19 @@ export type UpdateConnectionData = {
            */
           is_create_missing_user?: boolean;
           /**
-           * Force showing the SSO button for this connection.
+           * Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+           *
+           * @deprecated
            */
           is_force_show_sso_button?: boolean;
+          /**
+           * Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+           */
+          sso_button_display?: "auto" | "show" | "hide";
+          /**
+           * When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+           */
+          is_strict_mode?: boolean;
           /**
            * Additional upstream parameters to pass to the identity provider.
            */
@@ -5978,9 +6446,19 @@ export type UpdateConnectionData = {
            */
           is_create_missing_user?: boolean;
           /**
-           * Force showing the SSO button for this connection.
+           * Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+           *
+           * @deprecated
            */
           is_force_show_sso_button?: boolean;
+          /**
+           * Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+           */
+          sso_button_display?: "auto" | "show" | "hide";
+          /**
+           * When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+           */
+          is_strict_mode?: boolean;
           /**
            * Additional upstream parameters to pass to the identity provider.
            */
@@ -6121,9 +6599,19 @@ export type ReplaceConnectionData = {
            */
           is_create_missing_user?: boolean;
           /**
-           * Force showing the SSO button for this connection.
+           * Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+           *
+           * @deprecated
            */
           is_force_show_sso_button?: boolean;
+          /**
+           * Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+           */
+          sso_button_display?: "auto" | "show" | "hide";
+          /**
+           * When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+           */
+          is_strict_mode?: boolean;
           /**
            * Additional upstream parameters to pass to the identity provider.
            */
@@ -6190,9 +6678,19 @@ export type ReplaceConnectionData = {
            */
           is_create_missing_user?: boolean;
           /**
-           * Force showing the SSO button for this connection.
+           * Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+           *
+           * @deprecated
            */
           is_force_show_sso_button?: boolean;
+          /**
+           * Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+           */
+          sso_button_display?: "auto" | "show" | "hide";
+          /**
+           * When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+           */
+          is_strict_mode?: boolean;
           /**
            * Additional upstream parameters to pass to the identity provider.
            */
@@ -6314,13 +6812,17 @@ export type CreateDirectoryData = {
      */
     org_code: string;
     /**
-     * A descriptive name for the SCIM directory.
+     * An optional descriptive name for the SCIM directory.
      */
-    directory_name: string;
+    directory_name?: string;
     /**
-     * The SCIM provider code to use for this directory.
+     * The SCIM provider code to use for this directory. When omitted, the provider
+     * is inferred from the organization enterprise authentication method. If the
+     * inferred (or explicit) provider is disabled or missing endpoint configuration,
+     * INVALID_PROVIDER is returned.
+     *
      */
-    provider_code:
+    provider_code?:
       | "entra_id_azure_ad"
       | "okta"
       | "google_workspace"
@@ -6348,7 +6850,9 @@ export type CreateDirectoryErrors = {
    */
   400: error_response;
   /**
-   * Unauthorized - invalid credentials.
+   * Unauthorized - invalid credentials, or the business plan does not allow
+   * another SCIM directory.
+   *
    */
   403: error_response;
   /**
@@ -6509,6 +7013,50 @@ export type UpdateDirectoryResponses = {
 
 export type UpdateDirectoryResponse =
   UpdateDirectoryResponses[keyof UpdateDirectoryResponses];
+
+export type RotateDirectorySecretData = {
+  body?: never;
+  path: {
+    /**
+     * The directory's ID.
+     */
+    directory_id: string;
+  };
+  query?: never;
+  url: "/api/v1/directories/{directory_id}/rotate_secret";
+};
+
+export type RotateDirectorySecretErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Directory not found.
+   */
+  404: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type RotateDirectorySecretError =
+  RotateDirectorySecretErrors[keyof RotateDirectorySecretErrors];
+
+export type RotateDirectorySecretResponses = {
+  /**
+   * SCIM directory secret token successfully rotated.
+   */
+  200: rotate_directory_secret_response;
+};
+
+export type RotateDirectorySecretResponse =
+  RotateDirectorySecretResponses[keyof RotateDirectorySecretResponses];
 
 export type GetEnvironmentData = {
   body?: never;
@@ -7210,6 +7758,59 @@ export type UpdateFeatureFlagResponses = {
 export type UpdateFeatureFlagResponse =
   UpdateFeatureFlagResponses[keyof UpdateFeatureFlagResponses];
 
+export type GetIdentitiesData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * The email address to find. Matched in full, and case-insensitively.
+     */
+    email?: string | null;
+    /**
+     * The phone number to find, in E.164 format. Matched in full.
+     */
+    phone?: string | null;
+    /**
+     * The username to find. Matched in full, and case-insensitively.
+     */
+    username?: string | null;
+    /**
+     * Also search the social or enterprise identities on this connection for the
+     * given email. Can only be combined with `email`.
+     *
+     */
+    connection_id?: string | null;
+  };
+  url: "/api/v1/identities";
+};
+
+export type GetIdentitiesErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type GetIdentitiesError = GetIdentitiesErrors[keyof GetIdentitiesErrors];
+
+export type GetIdentitiesResponses = {
+  /**
+   * Identities successfully retrieved.
+   */
+  200: identities_response;
+};
+
+export type GetIdentitiesResponse =
+  GetIdentitiesResponses[keyof GetIdentitiesResponses];
+
 export type DeleteIdentityData = {
   body?: never;
   path: {
@@ -7881,7 +8482,10 @@ export type UpdateOrganizationData = {
    */
   body?: {
     /**
-     * The organization's name.
+     * The organization's name. If the organization is a billing
+     * customer, this update is also propagated to the corresponding
+     * billing customer details.
+     *
      */
     name?: string;
     /**
@@ -9082,7 +9686,7 @@ export type UpdateOrganizationPropertyData = {
   };
   query: {
     /**
-     * The new property value
+     * The new property value. Send an empty string to unset the property, so it reads back as not set.
      */
     value: string;
   };
@@ -9163,7 +9767,7 @@ export type UpdateOrganizationPropertiesData = {
    */
   body: {
     /**
-     * Property keys and values
+     * Property keys and values. Set a value to an empty string or null to unset it.
      */
     properties: {
       [key: string]: unknown;
@@ -11403,6 +12007,65 @@ export type RefreshUserClaimsResponses = {
 export type RefreshUserClaimsResponse =
   RefreshUserClaimsResponses[keyof RefreshUserClaimsResponses];
 
+export type CreateUserBillingCustomerData = {
+  /**
+   * Billing customer details.
+   */
+  body: {
+    /**
+     * The organization code the user belongs to. The billing customer is linked to this organization.
+     */
+    org_code: string;
+    /**
+     * The email address used for billing purposes for the user.
+     */
+    billing_email: string;
+    /**
+     * Code of a published user billing plan to assign to the new billing customer.
+     * If omitted, the default user plan is used.
+     * Organization plans and unpublished plans are rejected.
+     *
+     */
+    billing_plan_code?: string;
+  };
+  path: {
+    /**
+     * The user's ID.
+     */
+    user_id: string;
+  };
+  query?: never;
+  url: "/api/v1/users/{user_id}/billing_customer";
+};
+
+export type CreateUserBillingCustomerErrors = {
+  /**
+   * Invalid request.
+   */
+  400: error_response;
+  /**
+   * Unauthorized - invalid credentials.
+   */
+  403: error_response;
+  /**
+   * Too many requests. Request was throttled.
+   */
+  429: error_response;
+};
+
+export type CreateUserBillingCustomerError =
+  CreateUserBillingCustomerErrors[keyof CreateUserBillingCustomerErrors];
+
+export type CreateUserBillingCustomerResponses = {
+  /**
+   * Billing customer successfully created.
+   */
+  200: create_user_billing_customer_response;
+};
+
+export type CreateUserBillingCustomerResponse =
+  CreateUserBillingCustomerResponses[keyof CreateUserBillingCustomerResponses];
+
 export type DeleteUserData = {
   body?: never;
   path?: never;
@@ -11494,11 +12157,17 @@ export type UpdateUserData = {
    */
   body: {
     /**
-     * User's first name.
+     * User's first name. If the user is the owner of a family
+     * billing customer, this update is also propagated to the
+     * corresponding billing customer details.
+     *
      */
     given_name?: string;
     /**
-     * User's last name.
+     * User's last name. If the user is the owner of a family
+     * billing customer, this update is also propagated to the
+     * corresponding billing customer details.
+     *
      */
     family_name?: string;
     /**
@@ -11577,7 +12246,7 @@ export type CreateUserData = {
       picture?: string;
     };
     /**
-     * The unique code associated with the organization you want the user to join.
+     * The unique code associated with the organization you want the user to join. If omitted, the user is added to the default registration organization when that setting is enabled.
      */
     organization_code?: string;
     /**
@@ -11713,7 +12382,7 @@ export type UpdateUserPropertyData = {
   };
   query: {
     /**
-     * The new property value
+     * The new property value. Send an empty string to unset the property, so it reads back as not set.
      */
     value: string;
   };
@@ -11794,7 +12463,7 @@ export type UpdateUserPropertiesData = {
    */
   body: {
     /**
-     * Property keys and values
+     * Property keys and values. Set a value to an empty string or null to unset it.
      */
     properties: {
       [key: string]: unknown;
