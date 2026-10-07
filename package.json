@@ -8,14 +8,9 @@
   "version": "0.19.0",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/main.d.ts",
-        "default": "./dist/kinde-management-api-js.mjs"
-      },
-      "require": {
-        "types": "./dist/main.d.cts",
-        "default": "./dist/kinde-management-api-js.cjs"
-      }
+      "types": "./dist/main.d.ts",
+      "import": "./dist/kinde-management-api-js.mjs",
+      "require": "./dist/kinde-management-api-js.cjs"
     }
   },
   "main": "./dist/kinde-management-api-js.cjs",
@@ -24,7 +19,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > lib/version.ts",
-    "build": "tsc && vite build && node -e \"require('fs').copyFileSync('dist/main.d.ts', 'dist/main.d.cts')\"",
+    "build": "tsc && vite build",
     "prepare": "npm run build",
     "preview": "vite preview",
     "test": "vitest",
