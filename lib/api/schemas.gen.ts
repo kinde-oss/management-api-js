@@ -1110,6 +1110,38 @@ export const $create_organization_response = {
   },
 } as const;
 
+export const $create_user_billing_customer_response = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    billing_customer: {
+      type: "object",
+      properties: {
+        id: {
+          description: "The billing customer id.",
+          type: "string",
+          example: "customer_1245adbc6789",
+        },
+        agreement_id: {
+          description:
+            "The billing agreement id created for the assigned plan.",
+          type: "string",
+          example: "agreement_a1234b",
+        },
+      },
+    },
+  },
+} as const;
+
 export const $user_identity = {
   type: "object",
   properties: {
@@ -1192,6 +1224,41 @@ export const $get_identities_response = {
     has_more: {
       description: "Whether more records exist.",
       type: "boolean",
+    },
+  },
+} as const;
+
+export const $identities_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+    },
+    identities: {
+      type: "array",
+      items: {
+        allOf: [
+          {
+            $ref: "#/components/schemas/identity",
+          },
+          {
+            type: "object",
+            properties: {
+              user_id: {
+                type: "string",
+                description:
+                  "The unique ID of the user the identity belongs to.",
+                example: "kp_0ba7c433e5d648cf992621ce99d42817",
+              },
+            },
+          },
+        ],
+      },
     },
   },
 } as const;
@@ -2479,7 +2546,9 @@ export const $identity = {
     },
     is_confirmed: {
       type: "boolean",
-      description: "Whether the identity is confirmed",
+      description:
+        "Whether the identity is confirmed. Null for identity types that do not record confirmation, such as username.",
+      nullable: true,
       example: true,
     },
     created_on: {
@@ -2489,7 +2558,9 @@ export const $identity = {
     },
     last_login_on: {
       type: "string",
-      description: "Date of last login in ISO 8601 format",
+      description:
+        "Date of last login in ISO 8601 format. Null if the identity has never been used to sign in.",
+      nullable: true,
       example: "2025-01-05T00:00:00Z",
     },
     total_logins: {
@@ -2503,7 +2574,9 @@ export const $identity = {
     },
     email: {
       type: "string",
-      description: "The associated email of the identity",
+      description:
+        "The associated email of the identity. Null for phone and username identities.",
+      nullable: true,
       example: "sally@example.com",
     },
     connection_id: {
@@ -3388,6 +3461,14 @@ export const $add_organization_users_response = {
         type: "string",
       },
     },
+    users_blocked: {
+      type: "array",
+      description:
+        "Users that were not added because directory sync manages them in another organization. A directory-managed user belongs only to the organization their directory owns.",
+      items: {
+        type: "string",
+      },
+    },
   },
 } as const;
 
@@ -3466,6 +3547,15 @@ export const $update_organization_users_response = {
     },
     users_removed: {
       type: "array",
+      items: {
+        type: "string",
+        example: "kp_057ee6debc624c70947b6ba512908c35",
+      },
+    },
+    users_blocked: {
+      type: "array",
+      description:
+        "Users that were not added because directory sync manages them in another organization. A directory-managed user belongs only to the organization their directory owns.",
       items: {
         type: "string",
         example: "kp_057ee6debc624c70947b6ba512908c35",
@@ -4319,6 +4409,187 @@ export const $get_billing_entitlements_response = {
   },
 } as const;
 
+export const $get_billing_one_time_purchases_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+    one_time_purchases: {
+      type: "array",
+      description: "A list of current one-time purchases",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The friendly id of the one-time purchase",
+            example: "one_off_purchase_0195ac80a14e8d71f42b98e75d3c61ad",
+          },
+          agreement_id: {
+            type: "string",
+            description:
+              "The friendly id of the billing agreement the purchase belongs to",
+            example: "agreement_0195ac80a14c2ca2cec97d026d864de0",
+          },
+          feature_code: {
+            type: "string",
+            description: "The feature code of the purchased one-time feature",
+            example: "extra_api_calls",
+          },
+          feature_name: {
+            type: "string",
+            description: "The feature name of the purchased one-time feature",
+            example: "Extra API calls",
+          },
+          units_granted: {
+            type: "integer",
+            nullable: true,
+            description:
+              "The number of units granted by this purchase. Null when the purchase grants unlimited usage.\n",
+            example: 1000,
+          },
+          amount: {
+            type: "number",
+            description:
+              "The amount paid for this purchase, in major currency units",
+            example: 25,
+          },
+          currency_code: {
+            type: "string",
+            description: "The ISO currency code of the amount paid",
+            example: "AUD",
+          },
+          purchased_on: {
+            type: "string",
+            format: "date-time",
+            description: "When the purchase was paid",
+            example: "2026-09-11T08:00:00Z",
+          },
+          expires_on: {
+            type: "string",
+            format: "date-time",
+            nullable: true,
+            description:
+              "When the purchase expires. Null when the purchase never expires.",
+            example: "2026-10-06T12:53:57Z",
+          },
+          expiration_policy_code: {
+            type: "string",
+            description: "The expiration policy captured at purchase time",
+            example: "none",
+            enum: ["none", "end_of_current_billing_cycle"],
+          },
+          is_metered: {
+            type: "boolean",
+            description:
+              "Whether usage is reported against this purchased feature",
+          },
+        },
+      },
+    },
+    feature_totals: {
+      type: "array",
+      description:
+        "Per-feature totals for all current purchases matching the filters. Present only when feature_totals=true.\n",
+      items: {
+        type: "object",
+        properties: {
+          agreement_id: {
+            type: "string",
+            description:
+              "The friendly id of the billing agreement the purchases belong to",
+            example: "agreement_0195ac80a14c2ca2cec97d026d864de0",
+          },
+          feature_code: {
+            type: "string",
+            description: "The feature code of the purchased one-time feature",
+            example: "extra_api_calls",
+          },
+          feature_name: {
+            type: "string",
+            description: "The feature name of the purchased one-time feature",
+            example: "Extra API calls",
+          },
+          units_granted: {
+            type: "integer",
+            nullable: true,
+            description:
+              "The sum of units granted by current purchases of this feature. Null when any current purchase grants unlimited usage.\n",
+            example: 4800,
+          },
+          amount: {
+            type: "number",
+            description:
+              "The sum of amounts paid for current purchases of this feature, in major currency units",
+            example: 128,
+          },
+          currency_code: {
+            type: "string",
+            description: "The ISO currency code of the aggregated amount",
+            example: "AUD",
+          },
+          purchase_count: {
+            type: "integer",
+            description:
+              "The number of current purchases included in this total",
+            example: 3,
+          },
+          last_purchased_on: {
+            type: "string",
+            format: "date-time",
+            description: "When this feature was last purchased",
+            example: "2026-09-11T08:10:58Z",
+          },
+          expires_on: {
+            type: "string",
+            format: "date-time",
+            nullable: true,
+            description:
+              "Expiry from the latest current purchase of this feature. Null when that purchase never expires.\n",
+            example: "2026-10-06T12:53:57Z",
+          },
+          expiration_policy_code: {
+            type: "string",
+            description:
+              "The expiration policy from the latest current purchase of this feature",
+            example: "none",
+            enum: ["none", "end_of_current_billing_cycle"],
+          },
+          is_metered: {
+            type: "boolean",
+            description:
+              "Whether usage is reported against this purchased feature",
+          },
+          current_billing_cycle_usage: {
+            type: "integer",
+            description:
+              "The current billing cycle running total for this agreement and feature. Present only on metered features when the agreement has a current cycle. Same ingest-order absolute/delta rules as POST meter_usage, scoped to the current cycle. Resets when a new cycle starts.\n",
+            example: 80,
+          },
+          usage_since_first_purchased: {
+            type: "integer",
+            description:
+              "The ingest-order lifetime running total for this agreement and feature. Absolute replaces it; delta adds to it. Includes every accepted record on the meter, including those reported before the first paid purchase. Does not reset when the billing cycle rolls. Present only on metered features. Comparable to units_granted on this total. Same number as current_usage on GET/POST meter_usage when the latest current purchase never expires.\n",
+            example: 50,
+          },
+        },
+      },
+    },
+  },
+} as const;
+
 export const $get_billing_agreements_response = {
   type: "object",
   properties: {
@@ -4421,6 +4692,119 @@ export const $create_meter_usage_record_response = {
       type: "string",
       description: "Response code.",
       example: "OK",
+    },
+    id: {
+      type: "string",
+      description: "The friendly id of the created meter usage record",
+      example: "kbmu_0195ac80a14e8d71f42b98e75d3c61ad",
+    },
+    units_granted: {
+      type: "integer",
+      description:
+        "Units currently granted for this agreement and feature. For one-time features this is the sum of current paid purchases. For plan-metered entitlements this is the entitlement or plan limit. Omitted when there is no current grant, and when the grant is unlimited (any current one-time purchase has a null unit grant, or the entitlement has no numeric cap). An unlimited one-time grant still returns expiration_policy_code.\n",
+      example: 4800,
+    },
+    expiration_policy_code: {
+      type: "string",
+      description:
+        "Expiration policy of the latest current one-time purchase of this feature. Omitted for plan-metered entitlements and when there is no current one-time grant.\n",
+      example: "none",
+      enum: ["none", "end_of_current_billing_cycle"],
+    },
+    current_usage: {
+      type: "integer",
+      description:
+        "Usage against the current grant after this record is included. For end_of_current_billing_cycle one-time features and plan-metered entitlements this is the current billing cycle running total (resets each cycle). For none it is the ingest-order lifetime total for this agreement and feature, including records reported before the first paid purchase. Absolute replaces that total; delta adds to it. meter_usage_timestamp does not change the arithmetic. Omitted when there is no current grant.\n",
+      example: 50,
+    },
+  },
+} as const;
+
+export const $get_billing_meter_usage_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "OK",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "Success",
+    },
+    has_more: {
+      description: "Whether more records exist.",
+      type: "boolean",
+    },
+    customer_agreement_id: {
+      type: "string",
+      description: "The billing agreement this page is scoped to.",
+      example: "agreement_0195ac80a14c2ca2cec97d026d864de0",
+    },
+    feature_code: {
+      type: "string",
+      description: "The feature this page is scoped to.",
+      example: "extra_api_calls",
+    },
+    units_granted: {
+      type: "integer",
+      description:
+        "Units currently granted for this agreement and feature. For one-time features this is the sum of current paid purchases. For plan-metered entitlements this is the entitlement or plan limit. Omitted when there is no current grant, and when the grant is unlimited (any current one-time purchase has a null unit grant, or the entitlement has no numeric cap). An unlimited one-time grant still returns expiration_policy_code. Not limited to the current page.\n",
+      example: 4800,
+    },
+    expiration_policy_code: {
+      type: "string",
+      description:
+        "Expiration policy of the latest current one-time purchase of this feature. Omitted for plan-metered entitlements and when there is no current one-time grant.\n",
+      example: "none",
+      enum: ["none", "end_of_current_billing_cycle"],
+    },
+    current_usage: {
+      type: "integer",
+      description:
+        "Usage against the current grant. For end_of_current_billing_cycle one-time features and plan-metered entitlements this is the current billing cycle running total (resets each cycle). For none it is the ingest-order lifetime total for this agreement and feature, including records reported before the first paid purchase. Absolute replaces that total; delta adds to it. Not limited to the current page. Omitted when there is no current grant.\n",
+      example: 50,
+    },
+    meter_usages: {
+      type: "array",
+      description: "A list of meter usage records",
+      items: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The friendly id of the meter usage record",
+            example: "kbmu_0195ac80a14e8d71f42b98e75d3c61ad",
+          },
+          meter_value: {
+            type: "integer",
+            description: "The value recorded on this usage row",
+            example: 200,
+          },
+          meter_type_code: {
+            type: "string",
+            description:
+              "How this record updated the running total. `absolute` replaced it with meter_value. `delta` added meter_value to the last calculated total.\n",
+            example: "delta",
+            enum: ["absolute", "delta"],
+          },
+          meter_usage_timestamp: {
+            type: "string",
+            format: "date-time",
+            description:
+              "When this event happened, as supplied by the caller (or the server time if omitted). Stored only. Not used to calculate the running total.\n",
+            example: "2026-09-11T08:10:58Z",
+          },
+          current_cycle_absolute_usage: {
+            type: "integer",
+            nullable: true,
+            description:
+              "The current-billing-cycle running total after and including this record, using the same ingest-order absolute/delta rules as POST. Independent of the never-expires lifetime total.\n",
+            example: 1200,
+          },
+        },
+      },
     },
   },
 } as const;
@@ -4867,6 +5251,25 @@ export const $delete_directory_response = {
       type: "string",
       description: "The ID of the deleted SCIM directory.",
       example: "directory_0192b1941f125645fa15bf28a662a0b3",
+    },
+  },
+} as const;
+
+export const $rotate_directory_secret_response = {
+  type: "object",
+  properties: {
+    code: {
+      type: "string",
+      description: "Response code.",
+      example: "DIRECTORY_SECRET_ROTATED",
+    },
+    message: {
+      type: "string",
+      description: "Response message.",
+      example: "SCIM directory secret token rotated successfully",
+    },
+    directory: {
+      $ref: "#/components/schemas/directory",
     },
   },
 } as const;
