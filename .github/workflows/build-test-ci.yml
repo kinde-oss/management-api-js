@@ -20,8 +20,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-      - name: Enabling pre-post scripts
-        run: pnpm config set enable-pre-post-scripts true
       - run: pnpm install
       - run: pnpm lint
       - name: Cache pnpm modules
@@ -32,4 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
       - run: pnpm build
+      - name: Check types resolve under nodenext
+        run: pnpm exec tsc -p tests/types
       - run: pnpm test:coverage
