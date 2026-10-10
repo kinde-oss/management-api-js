@@ -41,7 +41,7 @@ importers:
         version: 8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3)
       vite-plugin-dts:
         specifier: ^5.0.0
-        version: 5.1.1(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3))
+        version: 5.1.2(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3))
       vitest:
         specifier: ^4.1.5
         version: 4.1.11(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3))
@@ -736,8 +736,8 @@ packages:
   undici-types@7.24.6:
     resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
 
-  unplugin-dts@1.1.1:
-    resolution: {integrity: sha512-Z2VcabC0hjYuzF62oWmZXVoxagkM8bUWgqUy+dotoJTPnooR5mNaxbpv63JCmcaxdGCW2Bb75omK6FOryOYCRg==}
+  unplugin-dts@1.1.2:
+    resolution: {integrity: sha512-RDqy90XUmFj6rz4U5YoTMdYdaCJe2ZnQZaWIjkWS4952Gv0zBTQyqWtlGgVMPYHa982dURvyoc+sUOFIcDFv+w==}
     peerDependencies:
       '@microsoft/api-extractor': '>=7'
       '@rspack/core': ^1
@@ -770,8 +770,8 @@ packages:
     resolution: {integrity: sha512-5uKD0nqiYVzlmCRs01Fhs2BdkEgBS3SAVP6ndrBsuK42iC2+JHyxM05Rm9G8+5mkmRtzMZGY8Ct5+mliZxU/Ww==}
     engines: {node: '>=18.12.0'}
 
-  vite-plugin-dts@5.1.1:
-    resolution: {integrity: sha512-U5dyX3DPFvHB+gaJIULn90kKGsXNYllyJ3vn491Y+LGu2nL5Fb8z7YgurN/Pi6ZFlnGljh2wSM0ZbFogSh4yAg==}
+  vite-plugin-dts@5.1.2:
+    resolution: {integrity: sha512-1bXUz836sWq6ewEMQre3ZtNFVfZk/92DppgCCKP8tWx/NWwV2wHuXlRHb2TztHjbikPxvyAGLGu7hVh94Plwww==}
     peerDependencies:
       '@microsoft/api-extractor': '>=7'
       rollup: '>=3'
@@ -1487,7 +1487,7 @@ snapshots:
 
   undici-types@7.24.6: {}
 
-  unplugin-dts@1.1.1(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3)):
+  unplugin-dts@1.1.2(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3)):
     dependencies:
       '@rollup/pluginutils': 5.4.0
       '@volar/typescript': 2.4.28
@@ -1512,9 +1512,9 @@ snapshots:
       picomatch: 4.0.7
       webpack-virtual-modules: 0.6.2
 
-  vite-plugin-dts@5.1.1(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3)):
+  vite-plugin-dts@5.1.2(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3)):
     dependencies:
-      unplugin-dts: 1.1.1(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3))
+      unplugin-dts: 1.1.2(rolldown@1.2.13)(typescript@6.0.3)(vite@8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3))
     optionalDependencies:
       vite: 8.3.2(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.8.3)
     transitivePeerDependencies:
