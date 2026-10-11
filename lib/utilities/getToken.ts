@@ -65,8 +65,19 @@ async function generateM2MToken() {
     `${kindeConfig.kindeDomain}/oauth2/token`,
     config,
   );
-  const payload: {
-    access_token: string;
-  } = (await response.json()) as { access_token: string };
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(
+      `Token request failed: ${response.status} ${response.statusText} — ${errorBody}`,
+    );
+  }
+
+  const payload = (await response.json()) as { access_token?: string };
+  if (!payload.access_token) {
+    throw new Error(
+      "Token request succeeded but returned no access_token in the response body",
+    );
+  }
   return payload.access_token;
 }
