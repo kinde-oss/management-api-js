@@ -33,12 +33,12 @@
     "@hey-api/client-fetch": "^0.13.0",
     "@hey-api/openapi-ts": "^0.96.0",
     "@types/node": "^24.0.0",
-    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/coverage-v8": "^5.0.0",
     "prettier": "^3.2.5",
     "typescript": "^6.0.0",
     "vite": "^8.0.12",
     "vite-plugin-dts": "^5.0.0",
-    "vitest": "^4.1.5",
+    "vitest": "^5.0.0",
     "vitest-fetch-mock": "^0.4.5"
   },
   "dependencies": {
