@@ -92,6 +92,9 @@ import type {
   CreateSubscriberData,
   CreateSubscriberErrors,
   CreateSubscriberResponses,
+  CreateUserBillingCustomerData,
+  CreateUserBillingCustomerErrors,
+  CreateUserBillingCustomerResponses,
   CreateUserData,
   CreateUserErrors,
   CreateUserIdentityData,
@@ -116,6 +119,9 @@ import type {
   DeleteApplicationData,
   DeleteApplicationErrors,
   DeleteApplicationResponses,
+  DeleteBillingAgreementData,
+  DeleteBillingAgreementErrors,
+  DeleteBillingAgreementResponses,
   DeleteCallbackUrlsData,
   DeleteCallbackUrlsErrors,
   DeleteCallbackUrlsResponses,
@@ -239,6 +245,12 @@ import type {
   GetBillingEntitlementsData,
   GetBillingEntitlementsErrors,
   GetBillingEntitlementsResponses,
+  GetBillingMeterUsageData,
+  GetBillingMeterUsageErrors,
+  GetBillingMeterUsageResponses,
+  GetBillingOneTimePurchasesData,
+  GetBillingOneTimePurchasesErrors,
+  GetBillingOneTimePurchasesResponses,
   GetBusinessData,
   GetBusinessErrors,
   GetBusinessResponses,
@@ -284,6 +296,9 @@ import type {
   GetEventTypesData,
   GetEventTypesErrors,
   GetEventTypesResponses,
+  GetIdentitiesData,
+  GetIdentitiesErrors,
+  GetIdentitiesResponses,
   GetIdentityData,
   GetIdentityErrors,
   GetIdentityResponses,
@@ -455,6 +470,9 @@ import type {
   RotateApiKeyData,
   RotateApiKeyErrors,
   RotateApiKeyResponses,
+  RotateDirectorySecretData,
+  RotateDirectorySecretErrors,
+  RotateDirectorySecretResponses,
   SearchUsersData,
   SearchUsersErrors,
   SearchUsersResponses,
@@ -1484,6 +1502,50 @@ export class BillingEntitlements {
   }
 }
 
+export class BillingOneTimePurchases {
+  /**
+   * Get billing one-time purchases
+   *
+   * Returns the current one-time purchases a billing customer has. A
+   * purchase is current when it is paid, belongs to an active
+   * agreement, and has not expired (`expires_on` is null or in the
+   * future). Pending, failed, void, and expired purchases are omitted.
+   *
+   * Changing plan (`POST /api/v1/billing/agreements`) or cancelling
+   * the agreement (`DELETE /api/v1/billing/agreements/{agreement_id}`)
+   * leaves those purchases on the previous agreement. They are no
+   * longer current, so they do not appear in this list.
+   *
+   * Each item is one purchase row. Repeat buys of the same feature are
+   * separate items. Pass `feature_totals=true` for per-feature
+   * aggregates across all current purchases matching the filters,
+   * not just the current page. Metered totals include
+   * `current_billing_cycle_usage` (this billing period) and
+   * `usage_since_first_purchased` (the ingest-order lifetime
+   * total for that agreement and feature).
+   *
+   * <div>
+   * <code>read:billing_one_time_purchases</code>
+   * </div>
+   *
+   */
+  public static getBillingOneTimePurchases<
+    ThrowOnError extends boolean = false,
+  >(options: Options<GetBillingOneTimePurchasesData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetBillingOneTimePurchasesResponses,
+      GetBillingOneTimePurchasesErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/billing/one_time_purchases",
+      ...options,
+    });
+  }
+}
+
 export class BillingAgreements {
   /**
    * Get billing agreements
@@ -1514,7 +1576,12 @@ export class BillingAgreements {
   /**
    * Create billing agreement
    *
-   * Creates a new billing agreement based on the plan code passed, and cancels the customer's existing agreements
+   * Creates a new billing agreement based on the plan code passed, and cancels the customer's existing agreements. Existing agreements are cancelled even if they belong to a different billing group. The new plan must be the same customer type as the customer (organization or user).
+   *
+   * Changing plan starts a new subscription. One-time purchases stay
+   * on the previous agreement and are no longer current. Buying the
+   * same item on the new plan is a new purchase. This does not refund
+   * what was already paid.
    *
    * <div>
    * <code>create:billing_agreements</code>
@@ -1540,13 +1607,139 @@ export class BillingAgreements {
       },
     });
   }
+
+  /**
+   * Cancel billing agreement
+   *
+   * Cancels a billing agreement. This expires the agreement in Kinde
+   * (sets `expires_on`) and cancels the linked billing-provider
+   * subscription when one exists. The same action as Cancel plan in
+   * the self-serve portal and on the admin billing page.
+   *
+   * One-time purchases stay on this agreement. Once it expires they
+   * are no longer current and do not appear on GET one-time
+   * purchases. This does not refund what was already paid.
+   *
+   * Invoice-now and proration on cancellation follow the environment
+   * billing settings; they cannot be overridden on this request.
+   *
+   * If a live `user:plan_cancellation_request` workflow is attached,
+   * it runs first. A deny response returns HTTP 400 with
+   * `PLAN_CANCELLATION_BLOCKED_BY_WORKFLOW` and the agreement is not
+   * cancelled.
+   *
+   * <div>
+   * <code>delete:billing_agreements</code>
+   * </div>
+   *
+   */
+  public static deleteBillingAgreement<ThrowOnError extends boolean = false>(
+    options: Options<DeleteBillingAgreementData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).delete<
+      DeleteBillingAgreementResponses,
+      DeleteBillingAgreementErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/billing/agreements/{agreement_id}",
+      ...options,
+    });
+  }
 }
 
 export class BillingMeterUsage {
   /**
+   * Get billing meter usage
+   *
+   * Returns meter usage records for one billing agreement and feature.
+   *
+   * By default only records in the customer's current billing cycle
+   * are returned. Pass `all_cycles=true` to page every record for
+   * that meter.
+   *
+   * The response includes the same grant snapshot as POST
+   * (`units_granted`, `current_usage`, and
+   * `expiration_policy_code` when the grant is a one-time
+   * purchase). `current_usage` is the grant-relative running
+   * total after every accepted record — not the page sum. For
+   * never-expires one-time features that is the lifetime total
+   * (ingest-order absolute/delta). For cycle-end one-time
+   * features and plan-metered entitlements that is the current
+   * billing cycle total. Grant fields are omitted when there is
+   * no current grant. `units_granted` is also omitted when the
+   * grant is unlimited; an unlimited one-time grant still
+   * returns `expiration_policy_code`. `customer_agreement_id`
+   * and `feature_code` are on the response, not repeated on each
+   * record.
+   *
+   * <div>
+   * <code>read:meter_usage</code>
+   * </div>
+   *
+   */
+  public static getBillingMeterUsage<ThrowOnError extends boolean = false>(
+    options: Options<GetBillingMeterUsageData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).get<
+      GetBillingMeterUsageResponses,
+      GetBillingMeterUsageErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/billing/meter_usage",
+      ...options,
+    });
+  }
+
+  /**
    * Create meter usage record
    *
-   * Create a new meter usage record
+   * Create a new meter usage record against a billing agreement
+   * and feature.
+   *
+   * Metered one-time features can receive usage after the customer
+   * has completed their first purchase of that feature.
+   *
+   * `meter_type_code` chooses how this record updates the running
+   * total. The caller is responsible for sending the correct type
+   * and value. `meter_usage_timestamp` is stored on the record
+   * (and, for plan-metered entitlements, sent to the billing
+   * provider). It does not choose a billing cycle, does not
+   * insert the record in timestamp order, and does not change
+   * the running-total arithmetic.
+   *
+   * Running-total rules:
+   *
+   * - `absolute` (default): replaces the running total with
+   * `meter_value`.
+   * - `delta`: adds `meter_value` to the last calculated running
+   * total.
+   *
+   * Which running total is updated:
+   *
+   * - Plan-metered entitlements, and one-time features that expire
+   * at the end of the current billing cycle: the current
+   * billing cycle total. A new cycle starts at 0.
+   * - One-time features that never expire: a lifetime total for
+   * that agreement and feature. Every accepted record updates
+   * it, including records whose `meter_usage_timestamp` is
+   * before the first paid purchase. This total does not reset
+   * when the billing cycle rolls.
+   *
+   * The response includes the created record `id` and a grant
+   * snapshot (`units_granted`, `current_usage`, and
+   * `expiration_policy_code` when the grant is a one-time
+   * purchase) so the caller can tell whether usage has exceeded
+   * the grant without a follow-up GET. `current_usage` is that
+   * grant-relative running total after this record. Grant fields
+   * are omitted when there is no current grant. `units_granted`
+   * is also omitted when the grant is unlimited; an unlimited
+   * one-time grant still returns `expiration_policy_code`.
    *
    * <div>
    * <code>create:meter_usage</code>
@@ -2302,6 +2495,32 @@ export class Directories {
       },
     });
   }
+
+  /**
+   * Rotate SCIM directory secret token
+   *
+   * Rotate the SCIM directory bearer token. The previous token stops working immediately.
+   *
+   * <div>
+   * <code>update:scim_directories</code>
+   * </div>
+   *
+   */
+  public static rotateDirectorySecret<ThrowOnError extends boolean = false>(
+    options: Options<RotateDirectorySecretData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).post<
+      RotateDirectorySecretResponses,
+      RotateDirectorySecretErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/directories/{directory_id}/rotate_secret",
+      ...options,
+    });
+  }
 }
 
 export class Environments {
@@ -2807,9 +3026,47 @@ export class FeatureFlags {
 
 export class Identities {
   /**
+   * Get identities
+   *
+   * Find identities by their exact value and return the user each one belongs to.
+   *
+   * Use this to resolve a user from any of their identities, including email
+   * addresses that are not their primary one. Exactly one of `email`, `phone` or
+   * `username` must be supplied, and the value is matched in full - this endpoint
+   * does not do partial or fuzzy matching.
+   *
+   * Email, phone and username identities are unique across the environment and are
+   * always searched. Social and enterprise identities are keyed on the ID the
+   * provider issued rather than on the email address, so they are only searched
+   * when `connection_id` names the connection to look in.
+   *
+   * <div>
+   * <code>read:identities</code>
+   * </div>
+   *
+   */
+  public static getIdentities<ThrowOnError extends boolean = false>(
+    options?: Options<GetIdentitiesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? client).get<
+      GetIdentitiesResponses,
+      GetIdentitiesErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/identities",
+      ...options,
+    });
+  }
+
+  /**
    * Delete identity
    *
    * Delete identity by ID.
+   *
+   * Identities cannot be deleted from a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
    *
    * <div>
    * <code>delete:identities</code>
@@ -2862,6 +3119,8 @@ export class Identities {
    * Update identity
    *
    * Update identity by ID.
+   *
+   * Identities cannot be updated on a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
    *
    * <div>
    * <code>update:identities</code>
@@ -3117,6 +3376,10 @@ export class Organizations {
    *
    * Update an organization.
    *
+   * When the organization name is updated and the organization is a billing
+   * customer, the change is also propagated to the corresponding billing
+   * customer details.
+   *
    * <div>
    * <code>update:organizations</code>
    * </div>
@@ -3173,6 +3436,8 @@ export class Organizations {
    *
    * Update users that belong to an organization.
    *
+   * Users in organizations managed by directory sync cannot be updated (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
+   *
    * <div>
    * <code>update:organization_users</code>
    * </div>
@@ -3202,6 +3467,8 @@ export class Organizations {
    * Add Organization Users
    *
    * Add existing users to an organization.
+   *
+   * Users cannot be added to organizations that are managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
    *
    * <div>
    * <code>create:organization_users</code>
@@ -3259,6 +3526,8 @@ export class Organizations {
    *
    * Add role to an organization user.
    *
+   * Roles cannot be added to users in organizations managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
+   *
    * <div>
    * <code>create:organization_user_roles</code>
    * </div>
@@ -3288,6 +3557,8 @@ export class Organizations {
    * Delete Organization User Role
    *
    * Delete role for an organization user.
+   *
+   * Roles cannot be removed from users in organizations managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
    *
    * <div>
    * <code>delete:organization_user_roles</code>
@@ -3489,6 +3760,8 @@ export class Organizations {
    * Remove Organization User
    *
    * Remove user from an organization.
+   *
+   * Users cannot be removed from organizations that are managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
    *
    * <div>
    * <code>delete:organization_users</code>
@@ -5065,9 +5338,49 @@ export class Users {
   }
 
   /**
+   * Create user billing customer
+   *
+   * Creates a billing customer for a user in an organization, and assigns a published user billing plan.
+   *
+   * This mirrors the admin "Start billing customer" action on the user billing page.
+   *
+   * At most one billing customer is created per user in an organization. If one
+   * already exists, the request fails with `BILLING_CUSTOMER_EXISTS`. Concurrent
+   * creates that both pass the existence check before either finishes may both
+   * return success with the same customer and agreement ids (onboarding reuses
+   * the row created under the advisory lock).
+   *
+   * <div>
+   * <code>create:user_billing_customers</code>
+   * </div>
+   *
+   */
+  public static createUserBillingCustomer<ThrowOnError extends boolean = false>(
+    options: Options<CreateUserBillingCustomerData, ThrowOnError>,
+  ) {
+    return (options.client ?? client).post<
+      CreateUserBillingCustomerResponses,
+      CreateUserBillingCustomerErrors,
+      ThrowOnError,
+      "data"
+    >({
+      responseStyle: "data",
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/users/{user_id}/billing_customer",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+
+  /**
    * Delete user
    *
    * Delete a user record.
+   *
+   * Users managed by directory sync cannot be deleted (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
    *
    * <div>
    * <code>delete:users</code>
@@ -5121,6 +5434,12 @@ export class Users {
    *
    * Update a user record.
    *
+   * When `given_name` or `family_name` is updated and the user is the
+   * owner of a family billing customer, the change is also propagated to
+   * the corresponding billing customer details.
+   *
+   * Users managed by directory sync cannot be updated (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
+   *
    * <div>
    * <code>update:users</code>
    * </div>
@@ -5151,6 +5470,8 @@ export class Users {
    *
    * Creates a user record and optionally zero or more identities for the user. An example identity could be the email
    * address of the user.
+   *
+   * Users cannot be created in an organization managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider. If `organization_code` is omitted, this also applies to the default registration organization.
    *
    * <div>
    * <code>create:users</code>
@@ -5290,6 +5611,8 @@ export class Users {
    *
    * Set user password.
    *
+   * Passwords cannot be set on a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
+   *
    * <div>
    * <code>update:user_passwords</code>
    * </div>
@@ -5345,6 +5668,8 @@ export class Users {
    * Create identity
    *
    * Creates an identity for a user.
+   *
+   * Identities cannot be added to a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
    *
    * <div>
    * <code>create:user_identities</code>

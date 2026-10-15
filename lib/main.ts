@@ -10,6 +10,7 @@ export {
   BillingAgreements,
   BillingEntitlements,
   BillingMeterUsage,
+  BillingOneTimePurchases,
   Business,
   ConnectedApps,
   Connections,

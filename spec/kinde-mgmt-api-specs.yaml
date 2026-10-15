@@ -35,6 +35,8 @@ tags:
     x-displayName: Applications
   - name: Billing Entitlements
     x-displayName: Billing Entitlements
+  - name: Billing One-time Purchases
+    x-displayName: Billing One-time Purchases
   - name: Billing Agreements
     x-displayName: Billing Agreements
   - name: Billing Meter Usage
@@ -1582,7 +1584,7 @@ paths:
                   oneOf:
                     - type: string
                     - type: boolean
-                  description: The new value for the property
+                  description: The new value for the property. Send an empty string to unset the property, so it reads back as not set.
                   example: Some new value
               required:
                 - value
@@ -1754,6 +1756,114 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/billing/one_time_purchases:
+    servers: []
+    get:
+      tags:
+        - Billing One-time Purchases
+      operationId: getBillingOneTimePurchases
+      x-scope: read:billing_one_time_purchases
+      description: |
+        Returns the current one-time purchases a billing customer has. A
+        purchase is current when it is paid, belongs to an active
+        agreement, and has not expired (`expires_on` is null or in the
+        future). Pending, failed, void, and expired purchases are omitted.
+
+        Changing plan (`POST /api/v1/billing/agreements`) or cancelling
+        the agreement (`DELETE /api/v1/billing/agreements/{agreement_id}`)
+        leaves those purchases on the previous agreement. They are no
+        longer current, so they do not appear in this list.
+
+        Each item is one purchase row. Repeat buys of the same feature are
+        separate items. Pass `feature_totals=true` for per-feature
+        aggregates across all current purchases matching the filters,
+        not just the current page. Metered totals include
+        `current_billing_cycle_usage` (this billing period) and
+        `usage_since_first_purchased` (the ingest-order lifetime
+        total for that agreement and feature).
+
+        <div>
+          <code>read:billing_one_time_purchases</code>
+        </div>
+      summary: Get billing one-time purchases
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: Number of results per page. Defaults to 10 if parameter not sent.
+          schema:
+            type: integer
+            nullable: true
+        - name: starting_after
+          in: query
+          required: false
+          description: The ID of the one-time purchase to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: ending_before
+          in: query
+          required: false
+          description: The ID of the one-time purchase to end before.
+          schema:
+            type: string
+            nullable: true
+        - name: customer_id
+          in: query
+          description: The ID of the billing customer to retrieve one-time purchases for
+          required: true
+          schema:
+            type: string
+            nullable: false
+          example: customer_0195ac80a14c2ca2cec97d026d864de0
+        - name: feature_code
+          in: query
+          required: false
+          description: The feature code to filter by purchases of that feature only
+          schema:
+            type: string
+            nullable: true
+        - name: feature_totals
+          in: query
+          required: false
+          description: |
+            When true, include feature_totals aggregated from every current purchase that matches the filters. Defaults to false. The property is omitted when false.
+          schema:
+            type: boolean
+            nullable: true
+            default: false
+      responses:
+        '200':
+          description: Billing one-time purchases successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_billing_one_time_purchases_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_billing_one_time_purchases_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '403':
+          description: Invalid credentials.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '429':
+          description: Request was throttled.
+      security:
+        - kindeBearerAuth: []
   /api/v1/billing/agreements:
     servers: []
     get:
@@ -1841,7 +1951,12 @@ paths:
         - Billing Agreements
       operationId: createBillingAgreement
       description: |
-        Creates a new billing agreement based on the plan code passed, and cancels the customer's existing agreements
+        Creates a new billing agreement based on the plan code passed, and cancels the customer's existing agreements. Existing agreements are cancelled even if they belong to a different billing group. The new plan must be the same customer type as the customer (organization or user).
+
+        Changing plan starts a new subscription. One-time purchases stay
+        on the previous agreement and are no longer current. Buying the
+        same item on the new plan is a new purchase. This does not refund
+        what was already paid.
 
         <div>
           <code>create:billing_agreements</code>
@@ -1863,7 +1978,7 @@ paths:
                   type: string
                   example: customer_0195ac80a14c2ca2cec97d026d864de0
                 plan_code:
-                  description: The code of the billing plan the new agreement will be based on
+                  description: The code of the billing plan the new agreement will be based on. The plan can be in a different billing group from the customer's current agreement, but it must match the customer type (organization or user).
                   type: string
                   example: pro
                 is_invoice_now:
@@ -1889,15 +2004,209 @@ paths:
           $ref: '#/components/responses/too_many_requests'
       security:
         - kindeBearerAuth: []
+  /api/v1/billing/agreements/{agreement_id}:
+    servers: []
+    delete:
+      tags:
+        - Billing Agreements
+      operationId: deleteBillingAgreement
+      x-scope: delete:billing_agreements
+      description: |
+        Cancels a billing agreement. This expires the agreement in Kinde
+        (sets `expires_on`) and cancels the linked billing-provider
+        subscription when one exists. The same action as Cancel plan in
+        the self-serve portal and on the admin billing page.
+
+        One-time purchases stay on this agreement. Once it expires they
+        are no longer current and do not appear on GET one-time
+        purchases. This does not refund what was already paid.
+
+        Invoice-now and proration on cancellation follow the environment
+        billing settings; they cannot be overridden on this request.
+
+        If a live `user:plan_cancellation_request` workflow is attached,
+        it runs first. A deny response returns HTTP 400 with
+        `PLAN_CANCELLATION_BLOCKED_BY_WORKFLOW` and the agreement is not
+        cancelled.
+
+        <div>
+          <code>delete:billing_agreements</code>
+        </div>
+      summary: Cancel billing agreement
+      parameters:
+        - name: agreement_id
+          in: path
+          description: The ID of the billing agreement to cancel.
+          required: true
+          schema:
+            type: string
+            nullable: false
+          example: agreement_0195ac80a14c2ca2cec97d026d864de0
+      responses:
+        '200':
+          description: Billing agreement successfully cancelled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/success_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/success_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/billing/meter_usage:
     servers: []
+    get:
+      tags:
+        - Billing Meter Usage
+      operationId: getBillingMeterUsage
+      x-scope: read:meter_usage
+      summary: Get billing meter usage
+      description: |
+        Returns meter usage records for one billing agreement and feature.
+
+        By default only records in the customer's current billing cycle
+        are returned. Pass `all_cycles=true` to page every record for
+        that meter.
+
+        The response includes the same grant snapshot as POST
+        (`units_granted`, `current_usage`, and
+        `expiration_policy_code` when the grant is a one-time
+        purchase). `current_usage` is the grant-relative running
+        total after every accepted record — not the page sum. For
+        never-expires one-time features that is the lifetime total
+        (ingest-order absolute/delta). For cycle-end one-time
+        features and plan-metered entitlements that is the current
+        billing cycle total. Grant fields are omitted when there is
+        no current grant. `units_granted` is also omitted when the
+        grant is unlimited; an unlimited one-time grant still
+        returns `expiration_policy_code`. `customer_agreement_id`
+        and `feature_code` are on the response, not repeated on each
+        record.
+
+        <div>
+          <code>read:meter_usage</code>
+        </div>
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: |
+            Number of results per page. Defaults to the API page size limit if parameter not sent. Must be between 1 and that limit.
+          schema:
+            type: integer
+            nullable: true
+            default: 500
+        - name: starting_after
+          in: query
+          required: false
+          description: The ID of the meter usage record to start after.
+          schema:
+            type: string
+            nullable: true
+        - name: ending_before
+          in: query
+          required: false
+          description: The ID of the meter usage record to end before.
+          schema:
+            type: string
+            nullable: true
+        - name: customer_agreement_id
+          in: query
+          required: true
+          description: The billing agreement to retrieve meter usage for
+          schema:
+            type: string
+            nullable: false
+          example: agreement_0195ac80a14c2ca2cec97d026d864de0
+        - name: feature_code
+          in: query
+          required: true
+          description: The feature code to retrieve meter usage for
+          schema:
+            type: string
+            nullable: false
+          example: extra_api_calls
+        - name: all_cycles
+          in: query
+          required: false
+          description: |
+            When true, include usage records from every billing cycle. Defaults to false (current cycle only). The grant snapshot stays grant-relative and is not the listed page.
+          schema:
+            type: boolean
+            nullable: true
+            default: false
+      responses:
+        '200':
+          description: Billing meter usage successfully retrieved.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/get_billing_meter_usage_response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_billing_meter_usage_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
     post:
       tags:
         - Billing Meter Usage
       operationId: createMeterUsageRecord
       summary: Create meter usage record
       description: |
-        Create a new meter usage record
+        Create a new meter usage record against a billing agreement
+        and feature.
+
+        Metered one-time features can receive usage after the customer
+        has completed their first purchase of that feature.
+
+        `meter_type_code` chooses how this record updates the running
+        total. The caller is responsible for sending the correct type
+        and value. `meter_usage_timestamp` is stored on the record
+        (and, for plan-metered entitlements, sent to the billing
+        provider). It does not choose a billing cycle, does not
+        insert the record in timestamp order, and does not change
+        the running-total arithmetic.
+
+        Running-total rules:
+
+        - `absolute` (default): replaces the running total with
+          `meter_value`.
+        - `delta`: adds `meter_value` to the last calculated running
+          total.
+
+        Which running total is updated:
+
+        - Plan-metered entitlements, and one-time features that expire
+          at the end of the current billing cycle: the current
+          billing cycle total. A new cycle starts at 0.
+        - One-time features that never expire: a lifetime total for
+          that agreement and feature. Every accepted record updates
+          it, including records whose `meter_usage_timestamp` is
+          before the first paid purchase. This total does not reset
+          when the billing cycle rolls.
+
+        The response includes the created record `id` and a grant
+        snapshot (`units_granted`, `current_usage`, and
+        `expiration_policy_code` when the grant is a one-time
+        purchase) so the caller can tell whether usage has exceeded
+        the grant without a follow-up GET. `current_usage` is that
+        grant-relative running total after this record. Grant fields
+        are omitted when there is no current grant. `units_granted`
+        is also omitted when the grant is unlimited; an unlimited
+        one-time grant still returns `expiration_policy_code`.
 
         <div>
           <code>create:meter_usage</code>
@@ -1923,20 +2232,24 @@ paths:
                   type: string
                   example: pro_gym
                 meter_value:
-                  description: The value of usage to record
-                  type: string
-                  example: pro_gym
+                  description: |
+                    The value of usage to record. Must be greater than zero. For absolute this becomes the new running total. For delta this is added to the last calculated running total.
+                  type: integer
+                  example: 200
                 meter_usage_timestamp:
                   type: string
                   format: date-time
-                  description: The date and time the usage needs to be recorded for (defaults to current date/time)
+                  description: |
+                    When this event happened. Defaults to the current date and time. Stored on the record and, for plan-metered entitlements, sent to the billing provider. Not used to choose a billing cycle, to order this record against earlier ones, or to calculate the running total. A timestamp in the past still replaces (absolute) or adds to (delta) the last calculated total.
                   example: '2024-11-18T13:32:03+11'
                 meter_type_code:
                   type: string
                   enum:
                     - absolute
                     - delta
-                  description: Absolutes overrides the current usage
+                  default: absolute
+                  description: |
+                    How this record updates the running total. `absolute` replaces the last calculated total with `meter_value`. `delta` adds `meter_value` to the last calculated total. The caller is responsible for sending the correct type. See the operation description for which total is updated (current billing cycle vs never-expires lifetime).
       responses:
         '200':
           description: Meter usage record successfully created.
@@ -2902,8 +3215,21 @@ paths:
                           example: true
                         is_force_show_sso_button:
                           type: boolean
-                          description: Force showing the SSO button for this connection.
+                          description: Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+                          deprecated: true
                           example: false
+                        sso_button_display:
+                          type: string
+                          enum:
+                            - auto
+                            - show
+                            - hide
+                          description: Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+                          example: auto
+                        is_strict_mode:
+                          type: boolean
+                          description: When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+                          example: true
                         upstream_params:
                           type: object
                           description: Additional upstream parameters to pass to the identity provider.
@@ -2991,8 +3317,21 @@ paths:
                           example: true
                         is_force_show_sso_button:
                           type: boolean
-                          description: Force showing the SSO button for this connection.
+                          description: Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+                          deprecated: true
                           example: false
+                        sso_button_display:
+                          type: string
+                          enum:
+                            - auto
+                            - show
+                            - hide
+                          description: Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+                          example: auto
+                        is_strict_mode:
+                          type: boolean
+                          description: When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+                          example: true
                         upstream_params:
                           type: object
                           description: Additional upstream parameters to pass to the identity provider.
@@ -3186,8 +3525,21 @@ paths:
                           example: true
                         is_force_show_sso_button:
                           type: boolean
-                          description: Force showing the SSO button for this connection.
+                          description: Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+                          deprecated: true
                           example: false
+                        sso_button_display:
+                          type: string
+                          enum:
+                            - auto
+                            - show
+                            - hide
+                          description: Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+                          example: auto
+                        is_strict_mode:
+                          type: boolean
+                          description: When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+                          example: true
                         upstream_params:
                           type: object
                           description: Additional upstream parameters to pass to the identity provider.
@@ -3275,8 +3627,21 @@ paths:
                           example: true
                         is_force_show_sso_button:
                           type: boolean
-                          description: Force showing the SSO button for this connection.
+                          description: Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+                          deprecated: true
                           example: false
+                        sso_button_display:
+                          type: string
+                          enum:
+                            - auto
+                            - show
+                            - hide
+                          description: Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+                          example: auto
+                        is_strict_mode:
+                          type: boolean
+                          description: When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+                          example: true
                         upstream_params:
                           type: object
                           description: Additional upstream parameters to pass to the identity provider.
@@ -3433,8 +3798,21 @@ paths:
                           example: true
                         is_force_show_sso_button:
                           type: boolean
-                          description: Force showing the SSO button for this connection.
+                          description: Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+                          deprecated: true
                           example: false
+                        sso_button_display:
+                          type: string
+                          enum:
+                            - auto
+                            - show
+                            - hide
+                          description: Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+                          example: auto
+                        is_strict_mode:
+                          type: boolean
+                          description: When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+                          example: true
                         upstream_params:
                           type: object
                           description: Additional upstream parameters to pass to the identity provider.
@@ -3518,8 +3896,21 @@ paths:
                           example: true
                         is_force_show_sso_button:
                           type: boolean
-                          description: Force showing the SSO button for this connection.
+                          description: Deprecated - Use 'sso_button_display' instead. True maps to "show", false maps to "auto". Ignored when sso_button_display is also sent.
+                          deprecated: true
                           example: false
+                        sso_button_display:
+                          type: string
+                          enum:
+                            - auto
+                            - show
+                            - hide
+                          description: Controls when the SSO sign-in button is shown for this connection. Replaces is_force_show_sso_button. "auto" shows the button unless a home realm domain is set, "show" always shows it, "hide" never shows it. Takes precedence over is_force_show_sso_button when both are sent.
+                          example: auto
+                        is_strict_mode:
+                          type: boolean
+                          description: When true (the default), users who sign in with this enterprise connection can only use SSO. Set false to let them also sign in with the email already provided by the connection.
+                          example: true
                         upstream_params:
                           type: object
                           description: Additional upstream parameters to pass to the identity provider.
@@ -3675,11 +4066,15 @@ paths:
                   example: org_1ccfb819462
                 directory_name:
                   type: string
-                  description: A descriptive name for the SCIM directory.
+                  description: An optional descriptive name for the SCIM directory.
                   example: Production Directory
                 provider_code:
                   type: string
-                  description: The SCIM provider code to use for this directory.
+                  description: |
+                    The SCIM provider code to use for this directory. When omitted, the provider
+                    is inferred from the organization enterprise authentication method. If the
+                    inferred (or explicit) provider is disabled or missing endpoint configuration,
+                    INVALID_PROVIDER is returned.
                   enum:
                     - entra_id_azure_ad
                     - okta
@@ -3699,8 +4094,6 @@ paths:
                   example: conn_01h9xyzabc123
               required:
                 - org_code
-                - directory_name
-                - provider_code
       responses:
         '201':
           description: SCIM directory successfully created.
@@ -3722,22 +4115,13 @@ paths:
                       - code: ORGANIZATION_REQUIRED
                         message: Organization code is required
                         field: org_code
-                directory_name_required:
-                  summary: Directory name required
-                  value:
-                    errors:
-                      - code: DIRECTORY_NAME_REQUIRED
-                        message: Directory name is required
-                        field: directory_name
-                provider_code_required:
-                  summary: Provider code required
-                  value:
-                    errors:
-                      - code: PROVIDER_CODE_REQUIRED
-                        message: Provider code is required
-                        field: provider_code
                 invalid_provider:
-                  summary: Invalid provider code
+                  summary: Invalid or disabled provider
+                  description: |
+                    Returned when provider_code is invalid or disabled, or when the provider
+                    inferred from the enterprise connection is disabled. Also used when the
+                    provider has no directory endpoint configuration (see
+                    provider_endpoint_not_configured).
                   value:
                     errors:
                       - code: INVALID_PROVIDER
@@ -3759,6 +4143,9 @@ paths:
                         field: org_code
                 enterprise_connection_required:
                   summary: Enterprise connection selection required
+                  description: |
+                    Returned when the organization has multiple enterprise connections and
+                    enterprise_connection_id was omitted.
                   value:
                     errors:
                       - code: ENTERPRISE_CONNECTION_REQUIRED
@@ -3766,6 +4153,9 @@ paths:
                         field: enterprise_connection_id
                 invalid_enterprise_connection:
                   summary: Invalid enterprise connection for organization
+                  description: |
+                    Returned when enterprise_connection_id does not match an enabled enterprise
+                    connection for the organization.
                   value:
                     errors:
                       - code: INVALID_ENTERPRISE_CONNECTION
@@ -3779,7 +4169,23 @@ paths:
                         message: Provider directory endpoint is not configured
                         field: provider_code
         '403':
-          $ref: '#/components/responses/forbidden'
+          description: |
+            Unauthorized - invalid credentials, or the business plan does not allow
+            another SCIM directory.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                plan_limit_reached:
+                  summary: SCIM directories are not included in the plan
+                  description: |
+                    SCIM directories are a Scale plan feature. Scale includes three; each
+                    additional directory is charged monthly rather than refused.
+                  value:
+                    errors:
+                      - code: PLAN_LIMIT_REACHED
+                        message: SCIM directory sync is not available on your current plan. Please upgrade to Scale to provision users from your identity provider.
         '409':
           description: Conflict - Directory already exists.
           content:
@@ -3946,6 +4352,67 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/delete_directory_response'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_id_required:
+                  summary: Directory ID required
+                  value:
+                    errors:
+                      - code: DIRECTORY_ID_REQUIRED
+                        message: Directory ID is required
+                        field: directory_id
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          description: Directory not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+              examples:
+                directory_not_found:
+                  summary: Directory not found
+                  value:
+                    errors:
+                      - code: DIRECTORY_NOT_FOUND
+                        message: Directory not found
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
+  /api/v1/directories/{directory_id}/rotate_secret:
+    servers: []
+    parameters:
+      - name: directory_id
+        in: path
+        description: The directory's ID.
+        required: true
+        schema:
+          type: string
+          example: directory_0192b1941f125645fa15bf28a662a0b3
+    post:
+      tags:
+        - Directories
+      operationId: rotateDirectorySecret
+      summary: Rotate SCIM directory secret token
+      description: |
+        Rotate the SCIM directory bearer token. The previous token stops working immediately.
+
+        <div>
+          <code>update:scim_directories</code>
+        </div>
+      responses:
+        '200':
+          description: SCIM directory secret token successfully rotated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rotate_directory_secret_response'
         '400':
           description: Invalid request.
           content:
@@ -4705,6 +5172,75 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/identities:
+    servers: []
+    get:
+      tags:
+        - Identities
+      operationId: getIdentities
+      x-scope: read:identities
+      description: |
+        Find identities by their exact value and return the user each one belongs to.
+
+        Use this to resolve a user from any of their identities, including email
+        addresses that are not their primary one. Exactly one of `email`, `phone` or
+        `username` must be supplied, and the value is matched in full - this endpoint
+        does not do partial or fuzzy matching.
+
+        Email, phone and username identities are unique across the environment and are
+        always searched. Social and enterprise identities are keyed on the ID the
+        provider issued rather than on the email address, so they are only searched
+        when `connection_id` names the connection to look in.
+
+        <div>
+          <code>read:identities</code>
+        </div>
+      summary: Get identities
+      parameters:
+        - name: email
+          in: query
+          description: The email address to find. Matched in full, and case-insensitively.
+          schema:
+            type: string
+            nullable: true
+        - name: phone
+          in: query
+          description: The phone number to find, in E.164 format. Matched in full.
+          schema:
+            type: string
+            nullable: true
+        - name: username
+          in: query
+          description: The username to find. Matched in full, and case-insensitively.
+          schema:
+            type: string
+            nullable: true
+        - name: connection_id
+          in: query
+          description: |
+            Also search the social or enterprise identities on this connection for the
+            given email. Can only be combined with `email`.
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Identities successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/identities_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/identities_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/identities/{identity_id}:
     servers: []
     get:
@@ -4766,6 +5302,8 @@ paths:
       description: |
         Update identity by ID.
 
+        Identities cannot be updated on a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
+
         <div>
           <code>update:identities</code>
         </div>
@@ -4821,6 +5359,8 @@ paths:
       x-scope: delete:identities
       description: |
         Delete identity by ID.
+
+        Identities cannot be deleted from a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
 
         <div>
           <code>delete:identities</code>
@@ -5394,6 +5934,10 @@ paths:
       description: |
         Update an organization.
 
+        When the organization name is updated and the organization is a billing
+        customer, the change is also propagated to the corresponding billing
+        customer details.
+
         <div>
           <code>update:organizations</code>
         </div>
@@ -5424,7 +5968,10 @@ paths:
               type: object
               properties:
                 name:
-                  description: The organization's name.
+                  description: |
+                    The organization's name. If the organization is a billing
+                    customer, this update is also propagated to the corresponding
+                    billing customer details.
                   type: string
                   example: Acme Corp
                 external_id:
@@ -5650,6 +6197,8 @@ paths:
       description: |
         Add existing users to an organization.
 
+        Users cannot be added to organizations that are managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
+
         <div>
           <code>create:organization_users</code>
         </div>
@@ -5712,6 +6261,8 @@ paths:
       operationId: UpdateOrganizationUsers
       description: |
         Update users that belong to an organization.
+
+        Users in organizations managed by directory sync cannot be updated (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
 
         <div>
           <code>update:organization_users</code>
@@ -5825,6 +6376,8 @@ paths:
       description: |
         Add role to an organization user.
 
+        Roles cannot be added to users in organizations managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
+
         <div>
           <code>create:organization_user_roles</code>
         </div>
@@ -5879,6 +6432,8 @@ paths:
       operationId: DeleteOrganizationUserRole
       description: |
         Delete role for an organization user.
+
+        Roles cannot be removed from users in organizations managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
 
         <div>
           <code>delete:organization_user_roles</code>
@@ -6311,6 +6866,8 @@ paths:
       operationId: RemoveOrganizationUser
       description: |
         Remove user from an organization.
+
+        Users cannot be removed from organizations that are managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider.
 
         <div>
           <code>delete:organization_users</code>
@@ -6827,7 +7384,7 @@ paths:
             type: string
         - name: value
           in: query
-          description: The new property value
+          description: The new property value. Send an empty string to unset the property, so it reads back as not set.
           required: true
           schema:
             type: string
@@ -6929,7 +7486,7 @@ paths:
               type: object
               properties:
                 properties:
-                  description: Property keys and values
+                  description: Property keys and values. Set a value to an empty string or null to unset it.
                   type: object
                   nullable: false
               required:
@@ -9554,6 +10111,80 @@ paths:
           description: Request was throttled.
       security:
         - kindeBearerAuth: []
+  /api/v1/users/{user_id}/billing_customer:
+    servers: []
+    post:
+      tags:
+        - Users
+      operationId: createUserBillingCustomer
+      x-scope: create:user_billing_customers
+      description: |
+        Creates a billing customer for a user in an organization, and assigns a published user billing plan.
+
+        This mirrors the admin "Start billing customer" action on the user billing page.
+
+        At most one billing customer is created per user in an organization. If one
+        already exists, the request fails with `BILLING_CUSTOMER_EXISTS`. Concurrent
+        creates that both pass the existence check before either finishes may both
+        return success with the same customer and agreement ids (onboarding reuses
+        the row created under the advisory lock).
+
+        <div>
+          <code>create:user_billing_customers</code>
+        </div>
+      summary: Create user billing customer
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's ID.
+          required: true
+          schema:
+            type: string
+            example: kp_c3143a4b50ad43c88e541d9077681782
+      requestBody:
+        description: Billing customer details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - org_code
+                - billing_email
+              properties:
+                org_code:
+                  type: string
+                  example: org_1ccfb819462
+                  description: The organization code the user belongs to. The billing customer is linked to this organization.
+                billing_email:
+                  type: string
+                  example: billing@example.com
+                  description: The email address used for billing purposes for the user.
+                billing_plan_code:
+                  type: string
+                  example: pro
+                  description: |
+                    Code of a published user billing plan to assign to the new billing customer.
+                    If omitted, the default user plan is used.
+                    Organization plans and unpublished plans are rejected.
+      responses:
+        '200':
+          description: Billing customer successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_user_billing_customer_response'
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/create_user_billing_customer_response'
+        '400':
+          $ref: '#/components/responses/bad_request'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+      security:
+        - kindeBearerAuth: []
   /api/v1/user:
     servers: []
     get:
@@ -9606,6 +10237,8 @@ paths:
         Creates a user record and optionally zero or more identities for the user. An example identity could be the email
         address of the user.
 
+        Users cannot be created in an organization managed by directory sync (`ORGANIZATION_MANAGED_BY_DIRECTORY_SYNC`); user and role changes for those organizations must be made in the upstream identity provider. If `organization_code` is omitted, this also applies to the default registration organization.
+
         <div>
           <code>create:users</code>
         </div>
@@ -9632,7 +10265,7 @@ paths:
                       type: string
                       description: The user's profile picture.
                 organization_code:
-                  description: The unique code associated with the organization you want the user to join.
+                  description: The unique code associated with the organization you want the user to join. If omitted, the user is added to the default registration organization when that setting is enabled.
                   type: string
                 provided_id:
                   description: An external id to reference the user.
@@ -9710,6 +10343,12 @@ paths:
       description: |
         Update a user record.
 
+        When `given_name` or `family_name` is updated and the user is the
+        owner of a family billing customer, the change is also propagated to
+        the corresponding billing customer details.
+
+        Users managed by directory sync cannot be updated (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
+
         <div>
           <code>update:users</code>
         </div>
@@ -9732,10 +10371,16 @@ paths:
               properties:
                 given_name:
                   type: string
-                  description: User's first name.
+                  description: |
+                    User's first name. If the user is the owner of a family
+                    billing customer, this update is also propagated to the
+                    corresponding billing customer details.
                 family_name:
                   type: string
-                  description: User's last name.
+                  description: |
+                    User's last name. If the user is the owner of a family
+                    billing customer, this update is also propagated to the
+                    corresponding billing customer details.
                 picture:
                   type: string
                   description: The user's profile picture.
@@ -9769,6 +10414,8 @@ paths:
       operationId: deleteUser
       description: |
         Delete a user record.
+
+        Users managed by directory sync cannot be deleted (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
 
         <div>
           <code>delete:users</code>
@@ -9890,7 +10537,7 @@ paths:
             type: string
         - name: value
           in: query
-          description: The new property value
+          description: The new property value. Send an empty string to unset the property, so it reads back as not set.
           required: true
           schema:
             type: string
@@ -9992,7 +10639,7 @@ paths:
               type: object
               properties:
                 properties:
-                  description: Property keys and values
+                  description: Property keys and values. Set a value to an empty string or null to unset it.
                   type: object
                   nullable: false
               required:
@@ -10030,6 +10677,8 @@ paths:
       operationId: SetUserPassword
       description: |
         Set user password.
+
+        Passwords cannot be set on a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
 
         <div>
           <code>update:user_passwords</code>
@@ -10187,6 +10836,8 @@ paths:
       operationId: CreateUserIdentity
       description: |
         Creates an identity for a user.
+
+        Identities cannot be added to a user managed by directory sync (`USER_MANAGED_BY_DIRECTORY_SYNC`); user and role changes must be made in the upstream identity provider.
 
         <div>
           <code>create:user_identities</code>
@@ -11642,6 +12293,28 @@ components:
               description: The billing customer id if the organization was created with the is_create_billing_customer as true
               type: string
               example: customer_1245adbc6789
+    create_user_billing_customer_response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        billing_customer:
+          type: object
+          properties:
+            id:
+              description: The billing customer id.
+              type: string
+              example: customer_1245adbc6789
+            agreement_id:
+              description: The billing agreement id created for the assigned plan.
+              type: string
+              example: agreement_a1234b
     user_identity:
       type: object
       properties:
@@ -11697,6 +12370,26 @@ components:
         has_more:
           description: Whether more records exist.
           type: boolean
+    identities_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+        message:
+          type: string
+          description: Response message.
+        identities:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/identity'
+              - type: object
+                properties:
+                  user_id:
+                    type: string
+                    description: The unique ID of the user the identity belongs to.
+                    example: kp_0ba7c433e5d648cf992621ce99d42817
     get_user_sessions_response:
       type: object
       properties:
@@ -12609,7 +13302,8 @@ components:
           example: email
         is_confirmed:
           type: boolean
-          description: Whether the identity is confirmed
+          description: Whether the identity is confirmed. Null for identity types that do not record confirmation, such as username.
+          nullable: true
           example: true
         created_on:
           type: string
@@ -12617,7 +13311,8 @@ components:
           example: '2025-01-01T00:00:00Z'
         last_login_on:
           type: string
-          description: Date of last login in ISO 8601 format
+          description: Date of last login in ISO 8601 format. Null if the identity has never been used to sign in.
+          nullable: true
           example: '2025-01-05T00:00:00Z'
         total_logins:
           type: integer
@@ -12628,7 +13323,8 @@ components:
           example: sally@example.com
         email:
           type: string
-          description: The associated email of the identity
+          description: The associated email of the identity. Null for phone and username identities.
+          nullable: true
           example: sally@example.com
         connection_id:
           type: string
@@ -13244,6 +13940,11 @@ components:
           type: array
           items:
             type: string
+        users_blocked:
+          type: array
+          description: Users that were not added because directory sync manages them in another organization. A directory-managed user belongs only to the organization their directory owns.
+          items:
+            type: string
     update_role_permissions_response:
       type: object
       properties:
@@ -13295,6 +13996,12 @@ components:
             example: kp_057ee6debc624c70947b6ba512908c35
         users_removed:
           type: array
+          items:
+            type: string
+            example: kp_057ee6debc624c70947b6ba512908c35
+        users_blocked:
+          type: array
+          description: Users that were not added because directory sync manages them in another organization. A directory-managed user belongs only to the organization their directory owns.
           items:
             type: string
             example: kp_057ee6debc624c70947b6ba512908c35
@@ -13883,6 +14590,146 @@ components:
                 type: string
                 format: date-time
                 example: '2024-11-18T13:32:03+11'
+    get_billing_one_time_purchases_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        has_more:
+          description: Whether more records exist.
+          type: boolean
+        one_time_purchases:
+          type: array
+          description: A list of current one-time purchases
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The friendly id of the one-time purchase
+                example: one_off_purchase_0195ac80a14e8d71f42b98e75d3c61ad
+              agreement_id:
+                type: string
+                description: The friendly id of the billing agreement the purchase belongs to
+                example: agreement_0195ac80a14c2ca2cec97d026d864de0
+              feature_code:
+                type: string
+                description: The feature code of the purchased one-time feature
+                example: extra_api_calls
+              feature_name:
+                type: string
+                description: The feature name of the purchased one-time feature
+                example: Extra API calls
+              units_granted:
+                type: integer
+                nullable: true
+                description: |
+                  The number of units granted by this purchase. Null when the purchase grants unlimited usage.
+                example: 1000
+              amount:
+                type: number
+                description: The amount paid for this purchase, in major currency units
+                example: 25
+              currency_code:
+                type: string
+                description: The ISO currency code of the amount paid
+                example: AUD
+              purchased_on:
+                type: string
+                format: date-time
+                description: When the purchase was paid
+                example: '2026-09-11T08:00:00Z'
+              expires_on:
+                type: string
+                format: date-time
+                nullable: true
+                description: When the purchase expires. Null when the purchase never expires.
+                example: '2026-10-06T12:53:57Z'
+              expiration_policy_code:
+                type: string
+                description: The expiration policy captured at purchase time
+                example: none
+                enum:
+                  - none
+                  - end_of_current_billing_cycle
+              is_metered:
+                type: boolean
+                description: Whether usage is reported against this purchased feature
+        feature_totals:
+          type: array
+          description: |
+            Per-feature totals for all current purchases matching the filters. Present only when feature_totals=true.
+          items:
+            type: object
+            properties:
+              agreement_id:
+                type: string
+                description: The friendly id of the billing agreement the purchases belong to
+                example: agreement_0195ac80a14c2ca2cec97d026d864de0
+              feature_code:
+                type: string
+                description: The feature code of the purchased one-time feature
+                example: extra_api_calls
+              feature_name:
+                type: string
+                description: The feature name of the purchased one-time feature
+                example: Extra API calls
+              units_granted:
+                type: integer
+                nullable: true
+                description: |
+                  The sum of units granted by current purchases of this feature. Null when any current purchase grants unlimited usage.
+                example: 4800
+              amount:
+                type: number
+                description: The sum of amounts paid for current purchases of this feature, in major currency units
+                example: 128
+              currency_code:
+                type: string
+                description: The ISO currency code of the aggregated amount
+                example: AUD
+              purchase_count:
+                type: integer
+                description: The number of current purchases included in this total
+                example: 3
+              last_purchased_on:
+                type: string
+                format: date-time
+                description: When this feature was last purchased
+                example: '2026-09-11T08:10:58Z'
+              expires_on:
+                type: string
+                format: date-time
+                nullable: true
+                description: |
+                  Expiry from the latest current purchase of this feature. Null when that purchase never expires.
+                example: '2026-10-06T12:53:57Z'
+              expiration_policy_code:
+                type: string
+                description: The expiration policy from the latest current purchase of this feature
+                example: none
+                enum:
+                  - none
+                  - end_of_current_billing_cycle
+              is_metered:
+                type: boolean
+                description: Whether usage is reported against this purchased feature
+              current_billing_cycle_usage:
+                type: integer
+                description: |
+                  The current billing cycle running total for this agreement and feature. Present only on metered features when the agreement has a current cycle. Same ingest-order absolute/delta rules as POST meter_usage, scoped to the current cycle. Resets when a new cycle starts.
+                example: 80
+              usage_since_first_purchased:
+                type: integer
+                description: |
+                  The ingest-order lifetime running total for this agreement and feature. Absolute replaces it; delta adds to it. Includes every accepted record on the meter, including those reported before the first paid purchase. Does not reset when the billing cycle rolls. Present only on metered features. Comparable to units_granted on this total. Same number as current_usage on GET/POST meter_usage when the latest current purchase never expires.
+                example: 50
     get_billing_agreements_response:
       type: object
       properties:
@@ -13960,6 +14807,102 @@ components:
           type: string
           description: Response code.
           example: OK
+        id:
+          type: string
+          description: The friendly id of the created meter usage record
+          example: kbmu_0195ac80a14e8d71f42b98e75d3c61ad
+        units_granted:
+          type: integer
+          description: |
+            Units currently granted for this agreement and feature. For one-time features this is the sum of current paid purchases. For plan-metered entitlements this is the entitlement or plan limit. Omitted when there is no current grant, and when the grant is unlimited (any current one-time purchase has a null unit grant, or the entitlement has no numeric cap). An unlimited one-time grant still returns expiration_policy_code.
+          example: 4800
+        expiration_policy_code:
+          type: string
+          description: |
+            Expiration policy of the latest current one-time purchase of this feature. Omitted for plan-metered entitlements and when there is no current one-time grant.
+          example: none
+          enum:
+            - none
+            - end_of_current_billing_cycle
+        current_usage:
+          type: integer
+          description: |
+            Usage against the current grant after this record is included. For end_of_current_billing_cycle one-time features and plan-metered entitlements this is the current billing cycle running total (resets each cycle). For none it is the ingest-order lifetime total for this agreement and feature, including records reported before the first paid purchase. Absolute replaces that total; delta adds to it. meter_usage_timestamp does not change the arithmetic. Omitted when there is no current grant.
+          example: 50
+    get_billing_meter_usage_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: OK
+        message:
+          type: string
+          description: Response message.
+          example: Success
+        has_more:
+          description: Whether more records exist.
+          type: boolean
+        customer_agreement_id:
+          type: string
+          description: The billing agreement this page is scoped to.
+          example: agreement_0195ac80a14c2ca2cec97d026d864de0
+        feature_code:
+          type: string
+          description: The feature this page is scoped to.
+          example: extra_api_calls
+        units_granted:
+          type: integer
+          description: |
+            Units currently granted for this agreement and feature. For one-time features this is the sum of current paid purchases. For plan-metered entitlements this is the entitlement or plan limit. Omitted when there is no current grant, and when the grant is unlimited (any current one-time purchase has a null unit grant, or the entitlement has no numeric cap). An unlimited one-time grant still returns expiration_policy_code. Not limited to the current page.
+          example: 4800
+        expiration_policy_code:
+          type: string
+          description: |
+            Expiration policy of the latest current one-time purchase of this feature. Omitted for plan-metered entitlements and when there is no current one-time grant.
+          example: none
+          enum:
+            - none
+            - end_of_current_billing_cycle
+        current_usage:
+          type: integer
+          description: |
+            Usage against the current grant. For end_of_current_billing_cycle one-time features and plan-metered entitlements this is the current billing cycle running total (resets each cycle). For none it is the ingest-order lifetime total for this agreement and feature, including records reported before the first paid purchase. Absolute replaces that total; delta adds to it. Not limited to the current page. Omitted when there is no current grant.
+          example: 50
+        meter_usages:
+          type: array
+          description: A list of meter usage records
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The friendly id of the meter usage record
+                example: kbmu_0195ac80a14e8d71f42b98e75d3c61ad
+              meter_value:
+                type: integer
+                description: The value recorded on this usage row
+                example: 200
+              meter_type_code:
+                type: string
+                description: |
+                  How this record updated the running total. `absolute` replaced it with meter_value. `delta` added meter_value to the last calculated total.
+                example: delta
+                enum:
+                  - absolute
+                  - delta
+              meter_usage_timestamp:
+                type: string
+                format: date-time
+                description: |
+                  When this event happened, as supplied by the caller (or the server time if omitted). Stored only. Not used to calculate the running total.
+                example: '2026-09-11T08:10:58Z'
+              current_cycle_absolute_usage:
+                type: integer
+                nullable: true
+                description: |
+                  The current-billing-cycle running total after and including this record, using the same ingest-order absolute/delta rules as POST. Independent of the never-expires lifetime total.
+                example: 1200
     get_api_keys_response:
       type: object
       properties:
@@ -14299,6 +15242,19 @@ components:
           type: string
           description: The ID of the deleted SCIM directory.
           example: directory_0192b1941f125645fa15bf28a662a0b3
+    rotate_directory_secret_response:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Response code.
+          example: DIRECTORY_SECRET_ROTATED
+        message:
+          type: string
+          description: Response message.
+          example: SCIM directory secret token rotated successfully
+        directory:
+          $ref: '#/components/schemas/directory'
     directory:
       type: object
       properties:
